@@ -12,7 +12,6 @@ namespace PattyPetitGiant
 {
     class Entity
     {
-
         public static List<Entity> level_entity_list = null;
         protected float width = 47.9f;
         protected float height = 47.9f;
@@ -25,6 +24,11 @@ namespace PattyPetitGiant
 
         public Entity()
         {
+        }
+
+        public Entity(List<Entity> entity_list)
+        {
+            level_entity_list = entity_list;
         }
 
         protected void creation()
@@ -41,6 +45,15 @@ namespace PattyPetitGiant
         public virtual void update(GameTime currentTime)
         {
             return;
+        }
+
+        public bool hitTest(Entity other)
+        {
+            if (horizontal_pos > other.horizontal_pos + other.dimensions.X || horizontal_pos + dimensions.X < other.horizontal_pos || vertical_pos > other.vertical_pos + other.dimensions.Y || vertical_pos + dimensions.Y < other.vertical_pos)
+            {
+                return false;
+            }
+            return true;
         }
 
         public virtual void draw(SpriteBatch sb)
