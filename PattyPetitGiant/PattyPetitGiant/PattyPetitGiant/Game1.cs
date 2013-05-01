@@ -59,7 +59,8 @@ namespace PattyPetitGiant
 
             whitePixel = Content.Load<Texture2D>("whitePixel");
 
-            // TODO: use this.Content to load your game content here
+            TextureLib ts = new TextureLib(GraphicsDevice);
+            TextureLib.loadTexture("derek.png");
         }
 
         /// <summary>
@@ -119,6 +120,8 @@ namespace PattyPetitGiant
             {
                 en.draw(spriteBatch);
             }
+            spriteBatch.Draw(TextureLib.getLoadedTexture("derek.png"), Vector2.Zero, Color.White);
+
             spriteBatch.End();
             base.Draw(gameTime);
         }

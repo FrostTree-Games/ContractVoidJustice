@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.IO;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -12,13 +12,15 @@ namespace PattyPetitGiant
     /// </summary>
     class TextureLib
     {
-        private string graphicsDirectory = "Content/gfx/";
+        private static string graphicsDirectory = "Content/gfx/";
 
+        private static GraphicsDevice device = null;
         private static Dictionary<string, Texture2D> dict = null;
 
-        public TextureLib()
+        public TextureLib(GraphicsDevice device)
         {
             initTextureLib();
+            setDevice(device);
         }
 
         public static void initTextureLib()
@@ -29,14 +31,60 @@ namespace PattyPetitGiant
             }
         }
 
+        public static void setDevice(GraphicsDevice device)
+        {
+            TextureLib.device = device;
+        }
+
         public static bool loadTexture(string filename)
         {
-            return false;
+            if (device == null || dict == null)
+            {
+                throw new TextureLibNotInitializedException();
+            }
+
+            Texture2D texture = null;
+            FileStream fs = null;
+
+            try
+            {
+                fs = new FileStream(graphicsDirectory + filename, FileMode.Open);
+                texture = Texture2D.FromStream(device, fs);
+            }
+            catch (FileNotFoundException)
+            {
+                return false;
+            }
+
+            dict.Add(filename, texture);
+
+            return true;
         }
 
         public static Texture2D getLoadedTexture(string filename)
         {
-            return null;
+            if (device == null || dict == null)
+            {
+                throw new TextureLibNotInitializedException();
+            }
+
+            try
+            {
+                return dict[filename];
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
+            catch (ArgumentNullException)
+            {
+                return null;
+            }
+        }
+
+        public class TextureLibNotInitializedException : Exception
+        {
+            //
         }
     }
 }

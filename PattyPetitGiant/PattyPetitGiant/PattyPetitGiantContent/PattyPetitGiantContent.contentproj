@@ -46,11 +46,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="gfx\derek.png">
+    <None Include="gfx\derek.png">
       <Name>derek</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="sfx\unlockDoor.wav">
