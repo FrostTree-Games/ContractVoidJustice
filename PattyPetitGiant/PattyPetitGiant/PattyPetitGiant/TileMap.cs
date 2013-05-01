@@ -153,12 +153,13 @@ namespace PattyPetitGiant
                 {
                     newLocation.X = Math.Min((tilesPositionPlusHitBox.x * tileSize.X) - hitBox.X, newPosition.X);
                     break;
-                } 
+                }
             }
 
             // do the same for the vertical
             for (int i = tilesPosition.x; i <= tilesPositionPlusHitBox.x; i++)
             {
+  
                 if (map[i, tilesPosition.y] != TileType.NoWall)
                 {
                     newLocation.Y = Math.Max((tilesPosition.y * tileSize.Y) + tileSize.Y, newPosition.Y);

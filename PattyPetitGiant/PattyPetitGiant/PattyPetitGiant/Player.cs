@@ -110,6 +110,13 @@ namespace PattyPetitGiant
                 }
             }
 
+            Vector2 pos = new Vector2(horizontal_pos, vertical_pos);
+           /* Vector2 nextStep = new Vector2(horizontal_pos + velocity.X, vertical_pos + velocity.Y);
+
+            Vector2 finalPos = Game1.map.reloactePosition(pos, nextStep, dimensions);
+            horizontal_pos = finalPos.X;
+            vertical_pos = finalPos.Y;
+            Console.WriteLine(velocity.X);*/
             //updates the position of the entity
             horizontal_pos += velocity.X;
             vertical_pos += velocity.Y;

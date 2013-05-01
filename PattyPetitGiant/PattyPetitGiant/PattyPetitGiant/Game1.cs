@@ -21,8 +21,9 @@ namespace PattyPetitGiant
         SpriteBatch spriteBatch;
 
         public static Texture2D whitePixel = null;
-        //private static Vector2 tileSize = new Vector2(48, 48);
-        //public static TileMap map = new TileMap(new TileMap.TileDimensions(50, 50), tileSize);
+
+        private static Vector2 tileSize = new Vector2(48, 48);
+        public static TileMap map = new TileMap(new TileMap.TileDimensions(50, 50), tileSize);
 
         //creating new list
         private static List<Entity> level_entity_list = null;
@@ -63,6 +64,8 @@ namespace PattyPetitGiant
 
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadTexture("derek.png");
+
+            map.blobTestWalls();
         }
 
         /// <summary>
@@ -117,6 +120,7 @@ namespace PattyPetitGiant
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
+            map.render(spriteBatch, 1.0f);
             spriteBatch.Draw(Game1.whitePixel, new Vector2(100, 100), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
 
             foreach (Entity en in level_entity_list)
