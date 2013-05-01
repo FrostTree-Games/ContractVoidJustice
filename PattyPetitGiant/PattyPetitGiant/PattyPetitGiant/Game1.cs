@@ -120,7 +120,6 @@ namespace PattyPetitGiant
             {
                 en.draw(spriteBatch);
             }
-            spriteBatch.Draw(TextureLib.getLoadedTexture("derek.png"), Vector2.Zero, Color.White);
 
             spriteBatch.End();
             base.Draw(gameTime);
