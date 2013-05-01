@@ -11,15 +11,6 @@ namespace PattyPetitGiant
 {
     class Enemy : Entity
     {
-        protected float width = 47.9f;
-        protected float height = 47.9f;
-
-        protected float horizontal_pos = 150.0f;
-        protected float vertical_pos = 150.0f;
-
-        protected Vector2 velocity = Vector2.Zero;
-        protected Vector2 dimensions = Vector2.Zero;
-
         public Enemy()
         {
         }
@@ -33,14 +24,14 @@ namespace PattyPetitGiant
             dimensions.Y = 47.9f;
         }
 
-        public virtual void update(GameTime currentTime)
+        public override void update(GameTime currentTime)
         {
             return;
         }
 
-        public virtual void draw(SpriteBatch sb)
+        public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), Color.White);
+            sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
         }
     }
 }

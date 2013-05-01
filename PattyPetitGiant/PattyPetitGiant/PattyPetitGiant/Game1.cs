@@ -21,6 +21,8 @@ namespace PattyPetitGiant
         SpriteBatch spriteBatch;
 
         public static Texture2D whitePixel = null;
+        //private static Vector2 tileSize = new Vector2(48, 48);
+        //public static TileMap map = new TileMap(new TileMap.TileDimensions(50, 50), tileSize);
 
         //creating new list
         private static List<Entity> level_entity_list = null;
@@ -89,6 +91,7 @@ namespace PattyPetitGiant
                 level_entity_list = new List<Entity>();
                 level_entity_list.Add(new Player(position_x, position_y));
                 level_entity_list.Add(new Enemy(enemy_pos_x, enemy_pos_y));
+                new Entity(level_entity_list);
             }
 
             foreach (Entity en in level_entity_list)

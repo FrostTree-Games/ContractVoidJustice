@@ -12,6 +12,9 @@ namespace PattyPetitGiant
     class Player : Entity
     {
 
+        private bool disable_movement = false;
+        private float disable_movement_time = 0.0f;
+
         public Player()
         {
             creation();
@@ -37,41 +40,84 @@ namespace PattyPetitGiant
             double delta = currentTime.ElapsedGameTime.Milliseconds;
             KeyboardState ks = Keyboard.GetState();
 
-            if (ks.IsKeyDown(Keys.Right) == true)
+            if (disable_movement == false)
             {
-                velocity.X = 0.2f;
-            }
-            else if (ks.IsKeyDown(Keys.Left) == true)
-            {
-                velocity.X = -0.2f;
-            }
-            else
-            {
-                velocity.X = 0.0f;
+                if (ks.IsKeyDown(Keys.Right) == true)
+                {
+                    velocity.X = 1.0f;
+                }
+                else if (ks.IsKeyDown(Keys.Left) == true)
+                {
+                    velocity.X = -1.0f;
+                }
+                else
+                {
+                    velocity.X = 0.0f;
+                }
+
+                if (ks.IsKeyDown(Keys.Up) == true)
+                {
+                    velocity.Y = -1.0f;
+                }
+                else if (ks.IsKeyDown(Keys.Down) == true)
+                {
+                    velocity.Y = 1.0f;
+                }
+                else
+                {
+                    velocity.Y = 0.0f;
+                }
             }
 
-            if (ks.IsKeyDown(Keys.Up) == true)
+            if (disable_movement == true)
             {
-                velocity.Y = -0.2f;
+                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                if (disable_movement_time > 300)
+                {
+                    velocity = Vector2.Zero;
+                    disable_movement = false;
+                    disable_movement_time = 0;
+                }
             }
-            else if (ks.IsKeyDown(Keys.Down) == true)
+
+            //checking if player hits another entity if he does then disables player movement and knocks player back
+            foreach (Entity en in level_entity_list)
             {
-                velocity.Y = 0.2f;
+                if (hitTest(en))
+                {
+                    if (en is Enemy)
+                    {
+                        disable_movement = true;
+
+                        if (velocity.X > 0)
+                        {
+                            velocity.X = -5.0f;
+                        }
+                        else if (velocity.X < 0)
+                        {
+                            velocity.X = 5.0f;
+                        }
+
+                        if (velocity.Y > 0)
+                        {
+                            velocity.Y = -5.0f;
+                        }
+                        else if (velocity.Y < 0)
+                        {
+                            velocity.Y = 5.0f;
+                        }
+                    }
+                }
             }
-            else
-            {
-                velocity.Y = 0.0f;
-            }
+
+            //updates the position of the entity
             horizontal_pos += velocity.X;
             vertical_pos += velocity.Y;
         }
 
         public override void draw(SpriteBatch sb)
         {
-            //sb.Begin();
             sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), null, Color.White, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
-            //sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), Color.White);
-            //sb.End();
         }
 
     }
