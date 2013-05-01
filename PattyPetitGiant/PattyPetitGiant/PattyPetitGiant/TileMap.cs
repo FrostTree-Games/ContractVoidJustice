@@ -98,10 +98,10 @@ namespace PattyPetitGiant
         }
 
         /// <summary>
-        ///  Hit-checks a point against the map. Will return false if point is outside the bounds of the map.
+        ///  Hit-checks a point against the map. Useful for ray-casting or mouse clicks.
         /// </summary>
         /// <param name="position"></param>
-        /// <returns></returns>
+        /// <returns>True if position overlaps a solid wall tile, false if otherwis.</returns>
         public bool hitTestWall(Vector2 position)
         {
             if (position.X < 0 || position.Y < 0 || position.X >= size.x * tileSize.X || position.Y >= size.y * tileSize.Y)
@@ -119,6 +119,59 @@ namespace PattyPetitGiant
                     return false;
                 }
             }
+        }
+
+        /// <summary>
+        ///  (UNTESTED) Determines if a moved hitbox intersects with a tilemap. Gives a new, valid solution if the new position is not valid.
+        /// </summary>
+        /// <param name="currentPosition">current position of the hitbox</param>
+        /// <param name="newPosition">new position of the hitbox</param>
+        /// <param name="hitBox">dimensions of the hitbox</param>
+        /// <returns>A Vector2 determining the hitbox's potentially new location.</returns>
+        public Vector2 reloactePosition(Vector2 currentPosition, Vector2 newPosition, Vector2 hitBox)
+        {
+            if (currentPosition.X < 0 || currentPosition.Y < 0 || currentPosition.X >= size.x * tileSize.X || currentPosition.Y >= size.y * tileSize.Y)
+            {
+                return newPosition;
+            }
+
+            // get tile coordinates for entity+hitbox
+            TileDimensions tilesPosition = new TileDimensions((int)(currentPosition.X / tileSize.X), (int)(currentPosition.Y / tileSize.Y));
+            TileDimensions tilesPositionPlusHitBox = new TileDimensions((int)((currentPosition.X + hitBox.X) / tileSize.X), (int)((currentPosition.Y + hitBox.Y) / tileSize.Y));
+
+            Vector2 newLocation = new Vector2(newPosition.X, newPosition.Y);
+
+            // step and refactor the horizontal position if the entity is going to hit a wall
+            for (int i = tilesPosition.y; i <= tilesPositionPlusHitBox.y; i++)
+            {
+                if (map[tilesPosition.x, i] != TileType.NoWall)
+                {
+                    newLocation.X = Math.Max((tilesPosition.x * tileSize.X) + tileSize.X, newPosition.X);
+                    break;
+                }
+                if (map[tilesPositionPlusHitBox.x, i] != TileType.NoWall)
+                {
+                    newLocation.X = Math.Min((tilesPositionPlusHitBox.x * tileSize.X) - hitBox.X, newPosition.X);
+                    break;
+                } 
+            }
+
+            // do the same for the vertical
+            for (int i = tilesPosition.x; i <= tilesPositionPlusHitBox.x; i++)
+            {
+                if (map[i, tilesPosition.y] != TileType.NoWall)
+                {
+                    newLocation.Y = Math.Max((tilesPosition.y * tileSize.Y) + tileSize.Y, newPosition.Y);
+                    break;
+                }
+                if (map[i, tilesPositionPlusHitBox.y] != TileType.NoWall)
+                {
+                    newLocation.Y = Math.Min((tilesPositionPlusHitBox.y * tileSize.Y) - hitBox.Y, newPosition.Y);
+                    break;
+                }
+            }
+
+            return newLocation;
         }
 
         /// <summary>
