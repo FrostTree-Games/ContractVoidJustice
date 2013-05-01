@@ -114,12 +114,12 @@ namespace PattyPetitGiant
 
             spriteBatch.Begin();
             spriteBatch.Draw(Game1.whitePixel, new Vector2(100, 100), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
-            spriteBatch.End();
 
             foreach (Entity en in level_entity_list)
             {
                 en.draw(spriteBatch);
             }
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

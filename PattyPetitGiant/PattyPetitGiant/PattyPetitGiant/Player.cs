@@ -12,9 +12,6 @@ namespace PattyPetitGiant
     class Player : Entity
     {
 
-        protected Vector2 velocity = Vector2.Zero;
-        protected Vector2 dimensions = Vector2.Zero;
-
         public Player()
         {
             creation();
@@ -71,10 +68,10 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Begin();
+            //sb.Begin();
             sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), null, Color.White, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
             //sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), Color.White);
-            sb.End();
+            //sb.End();
         }
 
     }

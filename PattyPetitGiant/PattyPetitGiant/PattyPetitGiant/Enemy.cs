@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PattyPetitGiant
 {
-    class Enemy
+    class Enemy : Entity
     {
         protected float width = 47.9f;
         protected float height = 47.9f;
@@ -42,6 +42,5 @@ namespace PattyPetitGiant
         {
             sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), Color.White);
         }
-    }
     }
 }

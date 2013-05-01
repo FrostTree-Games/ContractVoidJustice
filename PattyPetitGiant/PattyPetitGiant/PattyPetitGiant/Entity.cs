@@ -20,17 +20,11 @@ namespace PattyPetitGiant
         protected float horizontal_pos = 150.0f;
         protected float vertical_pos = 150.0f;
 
+        protected Vector2 velocity = Vector2.Zero;
+        protected Vector2 dimensions = Vector2.Zero;
+
         public Entity()
         {
-        }
-
-        public Entity(float initialx, float initialy)
-        {
-            horizontal_pos = initial_x;
-            vertical_pos = initial_y;
-
-            dimensions.X = 47.9f;
-            dimensions.Y = 47.9f;
         }
 
         protected void creation()
