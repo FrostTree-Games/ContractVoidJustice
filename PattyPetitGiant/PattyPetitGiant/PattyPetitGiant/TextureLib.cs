@@ -23,6 +23,9 @@ namespace PattyPetitGiant
             setDevice(device);
         }
 
+        /// <summary>
+        /// Initializes the texture storage.
+        /// </summary>
         public static void initTextureLib()
         {
             if (dict == null)
@@ -31,11 +34,20 @@ namespace PattyPetitGiant
             }
         }
 
+        /// <summary>
+        /// Sets the graphics device to load the textures to.
+        /// </summary>
+        /// <param name="device"></param>
         public static void setDevice(GraphicsDevice device)
         {
             TextureLib.device = device;
         }
 
+        /// <summary>
+        /// Loads a texture into memory.
+        /// </summary>
+        /// <param name="filename">The filename of the texture.</param>
+        /// <returns></returns>
         public static bool loadTexture(string filename)
         {
             if (device == null || dict == null)
@@ -61,6 +73,11 @@ namespace PattyPetitGiant
             return true;
         }
 
+        /// <summary>
+        /// Get a texture loaded into memory.
+        /// </summary>
+        /// <param name="filename">The filename of the texture.</param>
+        /// <returns></returns>
         public static Texture2D getLoadedTexture(string filename)
         {
             if (device == null || dict == null)
@@ -80,6 +97,23 @@ namespace PattyPetitGiant
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Removes a texture from TextureLib. The texture will be unloaded from memory once collected by C#'s garbage collector.
+        /// </summary>
+        /// <param name="filename">The filename of the texture.</param>
+        public static void removeTexture(string filename)
+        {
+            dict.Remove(filename);
+        }
+
+        /// <summary>
+        /// Removes all textures from TextureLib. The textures will be unloaded from memory once collected by C#'s garbage collector.
+        /// </summary>
+        public static void removeAllTextures()
+        {
+            dict.Clear();
         }
 
         public class TextureLibNotInitializedException : Exception
