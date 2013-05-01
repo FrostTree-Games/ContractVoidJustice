@@ -19,6 +19,8 @@ namespace PattyPetitGiant
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        public static Texture2D whitePixel = null;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -46,6 +48,8 @@ namespace PattyPetitGiant
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            whitePixel = Content.Load<Texture2D>("whitePixel");
 
             // TODO: use this.Content to load your game content here
         }
@@ -83,7 +87,9 @@ namespace PattyPetitGiant
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            spriteBatch.Draw(Game1.whitePixel, new Vector2(100, 100), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
