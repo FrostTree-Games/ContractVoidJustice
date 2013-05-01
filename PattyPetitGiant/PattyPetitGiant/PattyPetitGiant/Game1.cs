@@ -23,9 +23,11 @@ namespace PattyPetitGiant
         public static Texture2D whitePixel = null;
 
         //creating new list
-        private static List<Entity> global_entity_list = null;
+        private static List<Entity> level_entity_list = null;
         private static float position_x = 150.0f;
         private static float position_y = 150.0f;
+        private static float enemy_pos_x = 300.0f;
+        private static float enemy_pos_y = 300.0f;
 
         public Game1()
         {
@@ -82,18 +84,19 @@ namespace PattyPetitGiant
 
             // TODO: Add your update logic here
 
-            if(global_entity_list == null)
+            if(level_entity_list == null)
             {
-                global_entity_list = new List<Entity>();
-                global_entity_list.Add(new Player(position_x, position_y));
+                level_entity_list = new List<Entity>();
+                level_entity_list.Add(new Player(position_x, position_y));
+                level_entity_list.Add(new Enemy(enemy_pos_x, enemy_pos_y));
             }
 
-            foreach (Entity en in global_entity_list)
+            foreach (Entity en in level_entity_list)
             {
                 en.update(gameTime);
             }
 
-           /* foreach (Entity en in global_entity_list)
+           /* foreach (Entity en in level_entity_list)
             {
                 en.draw(spriteBatch);
             }*/
@@ -113,7 +116,7 @@ namespace PattyPetitGiant
             spriteBatch.Draw(Game1.whitePixel, new Vector2(100, 100), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
             spriteBatch.End();
 
-            foreach (Entity en in global_entity_list)
+            foreach (Entity en in level_entity_list)
             {
                 en.draw(spriteBatch);
             }

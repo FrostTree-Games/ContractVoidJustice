@@ -13,7 +13,7 @@ namespace PattyPetitGiant
     class Entity
     {
 
-        public static List<Entity> global_entity_list = null;
+        public static List<Entity> level_entity_list = null;
         protected float width = 47.9f;
         protected float height = 47.9f;
 
@@ -24,18 +24,23 @@ namespace PattyPetitGiant
         {
         }
 
-        /*public Entity(float initialx, float initialy)
+        public Entity(float initialx, float initialy)
         {
-        }*/
+            horizontal_pos = initial_x;
+            vertical_pos = initial_y;
+
+            dimensions.X = 47.9f;
+            dimensions.Y = 47.9f;
+        }
 
         protected void creation()
         {
-            if (global_entity_list == null)
+            if (level_entity_list == null)
             {
-                global_entity_list = new List<Entity>();
+                level_entity_list = new List<Entity>();
             }
 
-            global_entity_list.Add(this);
+            level_entity_list.Add(this);
 
         }
 
