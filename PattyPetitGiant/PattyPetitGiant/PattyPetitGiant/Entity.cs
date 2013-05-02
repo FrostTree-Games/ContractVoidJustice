@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PattyPetitGiant
 {
-    class Entity
+    public class Entity
     {
         public static List<Entity> level_entity_list = null;
         protected float width = 47.9f;

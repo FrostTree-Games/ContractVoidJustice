@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PattyPetitGiant
 {
-    public abstract class ScreenState
+    abstract class ScreenState
     {
         protected bool pause = false;
         public bool Pause { get { return pause; } set { pause = value; } }
@@ -24,6 +24,6 @@ namespace PattyPetitGiant
 
         protected abstract void doUpdate(GameTime currentTime);
 
-        protected abstract void draw(SpriteBatch sb);
+        public abstract void draw(SpriteBatch sb);
     }
 }
