@@ -35,12 +35,11 @@ namespace PattyPetitGiant
 
         public LevelState()
         {
-            map = new TileMap(GlobalGameConstants.StandardMapSize, GlobalGameConstants.TileSize);
+            map = new TileMap(DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y), GlobalGameConstants.TileSize);
 
             entityList = new List<Entity>();
 
 #if TEST_ENTITIES
-            map.blobTestWalls();
 
             entityList.Add(new Player(this, 150, 150));
             entityList.Add(new Enemy(this, 300, 272));

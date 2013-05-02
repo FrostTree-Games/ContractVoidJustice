@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PattyPetitGiant
 {
-    class DungeonGenerator
+    public class DungeonGenerator
     {
         private class DungeonRoomClass
         {

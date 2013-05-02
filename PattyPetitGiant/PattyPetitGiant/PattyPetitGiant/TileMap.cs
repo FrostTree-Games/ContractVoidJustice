@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define PROTOTYPE_ROOMS
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -54,6 +56,56 @@ namespace PattyPetitGiant
             this.tileSize = tileSize;
 
             map = new TileType[size.x, size.y];
+            blobTestWalls();
+        }
+
+        public TileMap(DungeonGenerator.DungeonRoom[,] room, Vector2 tileSize)
+        {
+            this.size = new TileDimensions(room.GetLength(0) * GlobalGameConstants.TilesPerRoomWide, room.GetLength(1)  * GlobalGameConstants.TilesPerRoomHigh);
+            this.tileSize = tileSize;
+
+            map = new TileType[size.x, size.y];
+
+            for (int i = 0; i < room.GetLength(0); i++)
+            {
+                for (int j = 0; j < room.GetLength(1); j++)
+                {
+#if PROTOTYPE_ROOMS
+                    for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
+                    {
+                        for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                        {
+                            if ((q == 0 || q == 1) && ((p == GlobalGameConstants.TilesPerRoomWide / 2) || (p == GlobalGameConstants.TilesPerRoomWide / 2 - 1)) && room[i, j].north)
+                            {
+                                continue;
+                            }
+                            if ((q == GlobalGameConstants.TilesPerRoomHigh - 1 || q == GlobalGameConstants.TilesPerRoomHigh - 2) && ((p == GlobalGameConstants.TilesPerRoomWide / 2) || (p == GlobalGameConstants.TilesPerRoomWide / 2 - 1)) && room[i, j].south)
+                            {
+                                continue;
+                            }
+
+                            if ((p == 0 || p == 1) && ((q == GlobalGameConstants.TilesPerRoomHigh / 2) || (q == GlobalGameConstants.TilesPerRoomHigh / 2 - 1)) && room[i, j].west)
+                            {
+                                continue;
+                            }
+                            if ((p == GlobalGameConstants.TilesPerRoomWide - 1 || p == GlobalGameConstants.TilesPerRoomWide - 2) && ((q == GlobalGameConstants.TilesPerRoomWide / 2) || (q == GlobalGameConstants.TilesPerRoomWide / 2 - 1)) && room[i, j].east)
+                            {
+                                continue;
+                            }
+
+                            if (p == 0 || p == 1 || p == GlobalGameConstants.TilesPerRoomWide - 1 || p == GlobalGameConstants.TilesPerRoomWide - 2)
+                            {
+                                map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = TileType.TestWall;
+                            }
+                            if (q == 0 || q == 1 || q == GlobalGameConstants.TilesPerRoomHigh - 1 || q == GlobalGameConstants.TilesPerRoomHigh - 2)
+                            {
+                                map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = TileType.TestWall;
+                            }
+                        }
+                    }
+#endif
+                }
+            }
         }
 
         public TileMap(TileDimensions size, Vector2 tileSize, TileType initType)
