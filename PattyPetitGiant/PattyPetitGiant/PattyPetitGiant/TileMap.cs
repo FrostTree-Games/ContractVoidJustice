@@ -139,40 +139,106 @@ namespace PattyPetitGiant
             TileDimensions tilesPosition = new TileDimensions((int)(currentPosition.X / tileSize.X), (int)(currentPosition.Y / tileSize.Y));
             TileDimensions tilesPositionPlusHitBox = new TileDimensions((int)((currentPosition.X + hitBox.X) / tileSize.X), (int)((currentPosition.Y + hitBox.Y) / tileSize.Y));
 
-            Vector2 newLocation = new Vector2(newPosition.X, newPosition.Y);
+            Vector2 delta = newPosition - currentPosition;
+            Vector2 resultLocation = newPosition;
 
-            // step and refactor the horizontal position if the entity is going to hit a wall
-            for (int i = tilesPosition.y; i <= tilesPositionPlusHitBox.y; i++)
+            if (delta.X > 0)
             {
-                if (map[tilesPosition.x, i] != TileType.NoWall)
+                bool breakLoop = false;
+                TileDimensions pos = new TileDimensions(-1, -1);
+
+                for (int i = tilesPositionPlusHitBox.x; i < size.x && !breakLoop; i++)
                 {
-                    newLocation.X = Math.Max((tilesPosition.x * tileSize.X) + tileSize.X, newPosition.X);
-                    break;
+                    for (int j = tilesPosition.y; j <= tilesPositionPlusHitBox.y && j < size.y && !breakLoop; j++)
+                    {
+                        if (map[i, j] != TileType.NoWall)
+                        {
+                            breakLoop = true;
+                            pos = new TileDimensions(i, j);
+                        }
+                    }
                 }
-                if (map[tilesPositionPlusHitBox.x, i] != TileType.NoWall)
+
+                if (breakLoop)
                 {
-                    newLocation.X = Math.Min((tilesPositionPlusHitBox.x * tileSize.X) - hitBox.X, newPosition.X);
-                    break;
+                    resultLocation.X = Math.Min(newPosition.X, (pos.x * tileSize.X) - (hitBox.X + 1));
+
+                    tilesPosition = new TileDimensions((int)(resultLocation.X / tileSize.X), (int)(currentPosition.Y / tileSize.Y));
+                    tilesPositionPlusHitBox = new TileDimensions((int)((resultLocation.X + hitBox.X) / tileSize.X), (int)((currentPosition.Y + hitBox.Y) / tileSize.Y));
+                }
+            }
+            else if (delta.X < 0)
+            {
+                bool breakLoop = false;
+                TileDimensions pos = new TileDimensions(-1, -1);
+
+                for (int i = tilesPosition.x; i >= 0 && !breakLoop; i--)
+                {
+                    for (int j = tilesPosition.y; j <= tilesPositionPlusHitBox.y && j < size.y && !breakLoop; j++)
+                    {
+                        if (map[i, j] != TileType.NoWall)
+                        {
+                            breakLoop = true;
+                            pos = new TileDimensions(i, j);
+                        }
+                    }
+                }
+
+                if (breakLoop)
+                {
+                    resultLocation.X = Math.Max(newPosition.X, ((pos.x + 1) * tileSize.X));
+
+                    tilesPosition = new TileDimensions((int)(resultLocation.X / tileSize.X), (int)(currentPosition.Y / tileSize.Y));
+                    tilesPositionPlusHitBox = new TileDimensions((int)((resultLocation.X + hitBox.X) / tileSize.X), (int)((currentPosition.Y + hitBox.Y) / tileSize.Y));
                 }
             }
 
-            // do the same for the vertical
-            for (int i = tilesPosition.x; i <= tilesPositionPlusHitBox.x; i++)
+            if (delta.Y > 0)
             {
-  
-                if (map[i, tilesPosition.y] != TileType.NoWall)
+                bool breakLoop = false;
+                TileDimensions pos = new TileDimensions(-1, -1);
+
+                for (int i = tilesPositionPlusHitBox.y; i < size.y && !breakLoop; i++)
                 {
-                    newLocation.Y = Math.Max((tilesPosition.y * tileSize.Y) + tileSize.Y, newPosition.Y);
-                    break;
+                    for (int j = tilesPosition.x; j <= tilesPositionPlusHitBox.x && j < size.x && !breakLoop; j++)
+                    {
+                        if (map[j, i] != TileType.NoWall)
+                        {
+                            breakLoop = true;
+                            pos = new TileDimensions(j, i);
+                        }
+                    }
                 }
-                if (map[i, tilesPositionPlusHitBox.y] != TileType.NoWall)
+
+                if (breakLoop)
                 {
-                    newLocation.Y = Math.Min((tilesPositionPlusHitBox.y * tileSize.Y) - hitBox.Y, newPosition.Y);
-                    break;
+                    resultLocation.Y = Math.Min(newPosition.Y, (pos.y * tileSize.Y) - (hitBox.Y + 1));
                 }
             }
+            else if (delta.Y < 0)
+            {
+                bool breakLoop = false;
+                TileDimensions pos = new TileDimensions(-1, -1);
 
-            return newLocation;
+                for (int i = tilesPositionPlusHitBox.y; i > 0 && !breakLoop; i--)
+                {
+                    for (int j = tilesPosition.x; j <= tilesPositionPlusHitBox.x && j < size.x && !breakLoop; j++)
+                    {
+                        if (map[j, i] != TileType.NoWall)
+                        {
+                            breakLoop = true;
+                            pos = new TileDimensions(j, i);
+                        }
+                    }
+                }
+
+                if (breakLoop)
+                {
+                    resultLocation.Y = Math.Max(newPosition.Y, (pos.y + 1) * tileSize.Y);
+                }
+            }
+            
+            return resultLocation;
         }
 
         /// <summary>
