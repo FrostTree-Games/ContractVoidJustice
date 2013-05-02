@@ -15,13 +15,18 @@ namespace PattyPetitGiant
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
  
-        public Sword(Vector2 position)
+        public Sword(Vector2 initial_position)
         {
-
+            position = initial_position;
+            hitbox.X = 16.0f;
+            hitbox.Y = 16.0f;
         }
 
         public void update(Player parent, GameTime currentTime)
         {
+            /*foreach (Entity en in )
+            {
+            }*/
         }
 
         public void draw(SpriteBatch sb)

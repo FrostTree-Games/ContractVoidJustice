@@ -11,14 +11,22 @@ namespace PattyPetitGiant
 {
     class Enemy : Entity
     {
+        private bool item_hit;
+        public bool Item_Hit
+        { 
+            set { this.item_hit = value; }
+            get { return item_hit; }
+        }
+
+
         public Enemy()
         {
         }
 
         public Enemy(float initialx, float initialy)
         {
-            horizontal_pos = initialx;
-            vertical_pos = initialy;
+            position.X = initialx;
+            position.Y = initialy;
 
             dimensions.X = 47.9f;
             dimensions.Y = 47.9f;
@@ -31,7 +39,7 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
+            sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
         }
     }
 }

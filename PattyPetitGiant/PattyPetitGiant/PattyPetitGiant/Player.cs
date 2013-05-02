@@ -18,14 +18,12 @@ namespace PattyPetitGiant
         private Item player_item_1 = null;
         private Item player_item_2 = null;
 
-        private Vector2 position = Vector2.Zero;
-
         public Player()
         {
             creation();
 
-            horizontal_pos = 300.0f;
-            vertical_pos = 300.0f;
+            position.X = 300.0f;
+            position.Y = 300.0f;
 
             dimensions.X = 47.9f;
             dimensions.Y = 47.9f;
@@ -33,13 +31,13 @@ namespace PattyPetitGiant
 
         public Player(float initial_x, float initial_y)
         {
-            horizontal_pos = initial_x;
-            vertical_pos = initial_y;
+            position.X = initial_x;
+            position.Y = initial_y;
 
             dimensions.X = 47.9f;
             dimensions.Y = 47.9f;
 
-            //player_item_1 = new Sword(position);
+            player_item_1 = new Sword(position);
         }
 
         public override void update(GameTime currentTime)
@@ -49,11 +47,11 @@ namespace PattyPetitGiant
 
             if (disable_movement == false)
             {
-                if (ks.IsKeyDown(Keys.Right) == true)
+                if (ks.IsKeyDown(Keys.Right))
                 {
                     velocity.X = 1.0f;
                 }
-                else if (ks.IsKeyDown(Keys.Left) == true)
+                else if (ks.IsKeyDown(Keys.Left))
                 {
                     velocity.X = -1.0f;
                 }
@@ -62,17 +60,22 @@ namespace PattyPetitGiant
                     velocity.X = 0.0f;
                 }
 
-                if (ks.IsKeyDown(Keys.Up) == true)
+                if (ks.IsKeyDown(Keys.Up))
                 {
                     velocity.Y = -1.0f;
                 }
-                else if (ks.IsKeyDown(Keys.Down) == true)
+                else if (ks.IsKeyDown(Keys.Down))
                 {
                     velocity.Y = 1.0f;
                 }
                 else
                 {
                     velocity.Y = 0.0f;
+                }
+
+                if (ks.IsKeyDown(Keys.A))
+                {
+                    player_item_1.update(this, currentTime);
                 }
             }
 
@@ -117,21 +120,21 @@ namespace PattyPetitGiant
                 }
             }
 
-            Vector2 pos = new Vector2(horizontal_pos, vertical_pos);
-           /* Vector2 nextStep = new Vector2(horizontal_pos + velocity.X, vertical_pos + velocity.Y);
+            Vector2 pos = new Vector2(position.X, position.Y);
+           /* Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
 
             Vector2 finalPos = Game1.map.reloactePosition(pos, nextStep, dimensions);
-            horizontal_pos = finalPos.X;
-            vertical_pos = finalPos.Y;
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
             Console.WriteLine(velocity.X);*/
             //updates the position of the entity
-            horizontal_pos += velocity.X;
-            vertical_pos += velocity.Y;
+            position.X += velocity.X;
+            position.Y += velocity.Y;
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, new Vector2(horizontal_pos, vertical_pos), null, Color.White, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
+            sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
         }
 
     }
