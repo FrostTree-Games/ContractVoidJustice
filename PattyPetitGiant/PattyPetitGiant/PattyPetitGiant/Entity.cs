@@ -19,6 +19,8 @@ namespace PattyPetitGiant
         protected float horizontal_pos = 150.0f;
         protected float vertical_pos = 150.0f;
 
+        protected Vector2 Position; 
+
         protected Vector2 velocity = Vector2.Zero;
         protected Vector2 dimensions = Vector2.Zero;
 

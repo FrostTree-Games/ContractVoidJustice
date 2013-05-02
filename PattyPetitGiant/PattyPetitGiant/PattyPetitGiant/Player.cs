@@ -18,6 +18,8 @@ namespace PattyPetitGiant
         private Item player_item_1 = null;
         private Item player_item_2 = null;
 
+        private Vector2 position = Vector2.Zero;
+
         public Player()
         {
             creation();
@@ -36,6 +38,8 @@ namespace PattyPetitGiant
 
             dimensions.X = 47.9f;
             dimensions.Y = 47.9f;
+
+            //player_item_1 = new Sword(position);
         }
 
         public override void update(GameTime currentTime)

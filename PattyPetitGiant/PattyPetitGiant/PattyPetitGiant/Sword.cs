@@ -14,9 +14,10 @@ namespace PattyPetitGiant
         private Vector2 hitbox = Vector2.Zero;
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
-
-        public Sword()
+ 
+        public Sword(Vector2 position)
         {
+
         }
 
         public void update(Player parent, GameTime currentTime)
