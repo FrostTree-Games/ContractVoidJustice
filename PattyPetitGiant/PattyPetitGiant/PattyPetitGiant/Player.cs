@@ -15,6 +15,9 @@ namespace PattyPetitGiant
         private bool disable_movement = false;
         private float disable_movement_time = 0.0f;
 
+        private Item player_item_1 = null;
+        private Item player_item_2 = null;
+
         public Player()
         {
             creation();
