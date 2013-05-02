@@ -263,7 +263,7 @@ namespace PattyPetitGiant
             {
                 for (int i = 0; i < size.x; i++)
                 {
-                    if (i % 4 == 2 || i % 4 == 1 || j % 4 == 2 || j % 4 == 1)
+                    if (!(i % 4 == 0 || i % 4 == 3 || j % 4 == 2 || j % 4 == 1))
                     {
                         map[i, j] = TileType.TestWall;
                     }
