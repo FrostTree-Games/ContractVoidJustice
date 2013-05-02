@@ -10,9 +10,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PattyPetitGiant
 {
-    public class Entity
+    public abstract class Entity
     {
-        public static List<Entity> level_entity_list = null;
         protected float width = 47.9f;
         protected float height = 47.9f;
         
@@ -21,30 +20,7 @@ namespace PattyPetitGiant
         protected Vector2 velocity = Vector2.Zero;
         protected Vector2 dimensions = Vector2.Zero;
 
-        public Entity()
-        {
-        }
-
-        public Entity(List<Entity> entity_list)
-        {
-            level_entity_list = entity_list;
-        }
-
-        protected void creation()
-        {
-            if (level_entity_list == null)
-            {
-                level_entity_list = new List<Entity>();
-            }
-
-            level_entity_list.Add(this);
-
-        }
-
-        public virtual void update(GameTime currentTime)
-        {
-            return;
-        }
+        protected LevelState parentWorld = null;
 
         public bool hitTest(Entity other)
         {
@@ -52,12 +28,12 @@ namespace PattyPetitGiant
             {
                 return false;
             }
+
             return true;
         }
 
-        public virtual void draw(SpriteBatch sb)
-        {
-            sb.Draw(Game1.whitePixel, new Vector2(position.X, position.Y), Color.White);
-        }
+        public abstract void update(GameTime currentTime);
+
+        public abstract void draw(SpriteBatch sb);
     }
 }

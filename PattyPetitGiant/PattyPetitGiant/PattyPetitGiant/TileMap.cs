@@ -271,7 +271,18 @@ namespace PattyPetitGiant
                     {
                         map[i, j] = TileType.NoWall;
                     }
+
+                    map[i, size.y - 1] = TileType.TestWall;
+                    map[i, size.y - 2] = TileType.TestWall;
+                    map[i, 0] = TileType.TestWall;
+                    map[i, 1] = TileType.TestWall;
+                    map[i, 2] = TileType.TestWall;
                 }
+
+                map[size.x - 1, j] = TileType.TestWall;
+                map[size.x - 2, j] = TileType.TestWall;
+                map[1, j] = TileType.TestWall;
+                map[0, j] = TileType.TestWall;
             }
         }
     }

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PattyPetitGiant
 {
-    class LevelState : ScreenState
+    public class LevelState : ScreenState
     {
         private enum LoadingState
         {
@@ -38,8 +38,8 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
             map.blobTestWalls();
 
-            entityList.Add(new Player(150, 150));
-            entityList.Add(new Enemy(300, 300));
+            entityList.Add(new Player(this, 150, 150));
+            entityList.Add(new Enemy(this, 300, 272));
 #endif
 
             state = LoadingState.Running;
@@ -53,9 +53,11 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void render(SpriteBatch sb)
         {
             sb.Begin();
+
+            map.render(sb, 0.7f);
 
             foreach (Entity en in entityList)
             {

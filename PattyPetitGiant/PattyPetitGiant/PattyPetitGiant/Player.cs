@@ -18,18 +18,7 @@ namespace PattyPetitGiant
         private Item player_item_1 = null;
         private Item player_item_2 = null;
 
-        public Player()
-        {
-            creation();
-
-            position.X = 300.0f;
-            position.Y = 300.0f;
-
-            dimensions.X = 47.9f;
-            dimensions.Y = 47.9f;
-        }
-
-        public Player(float initial_x, float initial_y)
+        public Player(LevelState parentWorld, float initial_x, float initial_y)
         {
             position.X = initial_x;
             position.Y = initial_y;
@@ -38,6 +27,8 @@ namespace PattyPetitGiant
             dimensions.Y = 47.9f;
 
             player_item_1 = new Sword(position);
+
+            this.parentWorld = parentWorld;
         }
 
         public override void update(GameTime currentTime)
@@ -91,8 +82,13 @@ namespace PattyPetitGiant
             }
 
             //checking if player hits another entity if he does then disables player movement and knocks player back
-            foreach (Entity en in level_entity_list)
+            foreach (Entity en in parentWorld.EntityList)
             {
+                if (en == this)
+                {
+                    continue;
+                }
+
                 if (hitTest(en))
                 {
                     if (en is Enemy)
@@ -121,15 +117,11 @@ namespace PattyPetitGiant
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
-           /* Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
 
-            Vector2 finalPos = Game1.map.reloactePosition(pos, nextStep, dimensions);
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
             position.Y = finalPos.Y;
-            Console.WriteLine(velocity.X);*/
-            //updates the position of the entity
-            position.X += velocity.X;
-            position.Y += velocity.Y;
         }
 
         public override void draw(SpriteBatch sb)

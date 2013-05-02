@@ -22,15 +22,7 @@ namespace PattyPetitGiant
 
         public static Texture2D whitePixel = null;
 
-        private static Vector2 tileSize = new Vector2(48, 48);
-        public static TileMap map = new TileMap(new TileMap.TileDimensions(50, 50), tileSize);
-
-        //creating new list
-        private static List<Entity> level_entity_list = null;
-        private static float position_x = 150.0f;
-        private static float position_y = 150.0f;
-        private static float enemy_pos_x = 300.0f;
-        private static float enemy_pos_y = 300.0f;
+        private ScreenState currentGameScreen = null;
 
         public Game1()
         {
@@ -65,7 +57,7 @@ namespace PattyPetitGiant
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadTexture("derek.png");
 
-            map.blobTestWalls();
+            currentGameScreen = new LevelState();
         }
 
         /// <summary>
@@ -88,25 +80,7 @@ namespace PattyPetitGiant
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
-
-            if(level_entity_list == null)
-            {
-                level_entity_list = new List<Entity>();
-                level_entity_list.Add(new Player(position_x, position_y));
-                level_entity_list.Add(new Enemy(enemy_pos_x, enemy_pos_y));
-                new Entity(level_entity_list);
-            }
-
-            foreach (Entity en in level_entity_list)
-            {
-                en.update(gameTime);
-            }
-
-           /* foreach (Entity en in level_entity_list)
-            {
-                en.draw(spriteBatch);
-            }*/
+            currentGameScreen.update(gameTime);
 
             base.Update(gameTime);
         }
@@ -119,17 +93,7 @@ namespace PattyPetitGiant
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
-            map.render(spriteBatch, 1.0f);
-            spriteBatch.Draw(Game1.whitePixel, new Vector2(100, 100), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
-
-            foreach (Entity en in level_entity_list)
-            {
-                en.draw(spriteBatch);
-            }
-
-            spriteBatch.End();
-            base.Draw(gameTime);
+            currentGameScreen.render(spriteBatch);
         }
     }
 }

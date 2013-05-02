@@ -18,18 +18,15 @@ namespace PattyPetitGiant
             get { return item_hit; }
         }
 
-
-        public Enemy()
-        {
-        }
-
-        public Enemy(float initialx, float initialy)
+        public Enemy(LevelState parentWorld, float initialx, float initialy)
         {
             position.X = initialx;
             position.Y = initialy;
 
             dimensions.X = 47.9f;
             dimensions.Y = 47.9f;
+
+            this.parentWorld = parentWorld;
         }
 
         public override void update(GameTime currentTime)
