@@ -15,7 +15,9 @@ namespace PattyPetitGiant
         protected float width = 47.9f;
         protected float height = 47.9f;
         
-        protected Vector2 position = Vector2.Zero; 
+        protected Vector2 position = Vector2.Zero;
+        public Vector2 Position { get { return position; } }
+        public Vector2 CenterPoint { get { return new Vector2(position.X + width/2, position.Y + height/2); } }
 
         protected Vector2 velocity = Vector2.Zero;
         protected Vector2 dimensions = Vector2.Zero;

@@ -8,6 +8,12 @@ namespace PattyPetitGiant
 {
     public class GlobalGameConstants
     {
+        private static int gameResolutionWidth = 1280;
+        private static int gameResolutionHeight = 720;
+        public static int GameResolutionWidth { get { return gameResolutionWidth; } }
+        public static int GameResolutionHeight { get { return gameResolutionHeight; } }
+
+
         private static Vector2 tileSize = new Vector2(48, 48);
         public static Vector2 TileSize { get { return tileSize; } }
 

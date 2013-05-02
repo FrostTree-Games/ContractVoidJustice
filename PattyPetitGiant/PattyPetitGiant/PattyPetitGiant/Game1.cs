@@ -27,6 +27,9 @@ namespace PattyPetitGiant
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = GlobalGameConstants.GameResolutionWidth;
+            graphics.PreferredBackBufferHeight = GlobalGameConstants.GameResolutionHeight;
+
             Content.RootDirectory = "Content";
         }
 
@@ -38,8 +41,6 @@ namespace PattyPetitGiant
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
