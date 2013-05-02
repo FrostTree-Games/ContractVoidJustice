@@ -14,19 +14,33 @@ namespace PattyPetitGiant
         private Vector2 hitbox = Vector2.Zero;
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
+        private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
+        private float item_state_time = 0.0f;
  
         public Sword(Vector2 initial_position)
         {
             position = initial_position;
             hitbox.X = 16.0f;
             hitbox.Y = 16.0f;
+            item_state_time = 0.0f;
         }
 
-        public void update(Player parent, GameTime currentTime)
+        public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            /*foreach (Entity en in )
+            item_state_time += currentTime.ElapsedGameTime.Milliseconds;
+            
+            position = parent.Position;
+            item_direction = parent.Direction_Facing;
+
+            Console.WriteLine("Direction Item Facing: " + item_direction);
+
+            if(item_state_time > 400)
             {
-            }*/
+                Console.WriteLine("state changes");
+                parent.State = Player.playerState.Moving;
+                item_state_time = 0.0f;
+                parent.Disable_Movement = true;
+            }
         }
 
         public void draw(SpriteBatch sb)

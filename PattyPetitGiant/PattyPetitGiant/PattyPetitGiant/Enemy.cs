@@ -31,7 +31,22 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            return;
+            //checking if player hits another entity if he does then disables player movement and knocks player back
+            foreach (Entity en in parentWorld.EntityList)
+            {
+                if (en == this)
+                {
+                    continue;
+                }
+
+                if (hitTest(en))
+                {
+                    if (en is Player)
+                    {
+                        en.knockBack(en);
+                    }
+                }
+            }
         }
 
         public override void draw(SpriteBatch sb)

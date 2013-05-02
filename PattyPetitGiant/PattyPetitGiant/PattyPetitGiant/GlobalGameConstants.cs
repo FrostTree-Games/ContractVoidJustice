@@ -8,6 +8,14 @@ namespace PattyPetitGiant
 {
     public class GlobalGameConstants
     {
+        public enum Direction
+        {
+            Up,
+            Down,
+            Left,
+            Right
+        }
+
         private static int gameResolutionWidth = 1280;
         private static int gameResolutionHeight = 720;
         public static int GameResolutionWidth { get { return gameResolutionWidth; } }

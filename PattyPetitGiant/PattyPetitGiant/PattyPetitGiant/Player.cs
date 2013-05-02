@@ -11,13 +11,24 @@ namespace PattyPetitGiant
 {
     class Player : Entity
     {
-
-        private bool disable_movement = false;
-        private float disable_movement_time = 0.0f;
+        public enum playerState
+        {
+            Moving,
+            Item1,
+            Item2
+        }
 
         private Item player_item_1 = null;
         private Item player_item_2 = null;
 
+        private playerState state = playerState.Moving;
+        public playerState State
+        {
+            set { state = value; }
+            get { return state;  }
+
+        }
+        
         public Player(LevelState parentWorld, float initial_x, float initial_y)
         {
             position.X = initial_x;
@@ -28,6 +39,12 @@ namespace PattyPetitGiant
 
             player_item_1 = new Sword(position);
 
+            state = playerState.Moving;
+
+            disable_movement = false;
+
+            direction_facing = GlobalGameConstants.Direction.Right;
+
             this.parentWorld = parentWorld;
         }
 
@@ -36,84 +53,66 @@ namespace PattyPetitGiant
             double delta = currentTime.ElapsedGameTime.Milliseconds;
             KeyboardState ks = Keyboard.GetState();
 
-            if (disable_movement == false)
+            Console.WriteLine("Direction Player Facing: " + direction_facing);
+
+            if (state == playerState.Item1)
             {
-                if (ks.IsKeyDown(Keys.Right))
-                {
-                    velocity.X = 1.0f;
-                }
-                else if (ks.IsKeyDown(Keys.Left))
-                {
-                    velocity.X = -1.0f;
-                }
-                else
-                {
-                    velocity.X = 0.0f;
-                }
+                player_item_1.update(this, currentTime, parentWorld);
+            }
 
-                if (ks.IsKeyDown(Keys.Up))
-                {
-                    velocity.Y = -1.0f;
-                }
-                else if (ks.IsKeyDown(Keys.Down))
-                {
-                    velocity.Y = 1.0f;
-                }
-                else
-                {
-                    velocity.Y = 0.0f;
-                }
-
+            if (state == playerState.Moving)
+            {
                 if (ks.IsKeyDown(Keys.A))
                 {
-                    player_item_1.update(this, currentTime);
-                }
-            }
-
-            if (disable_movement == true)
-            {
-                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
-                if (disable_movement_time > 300)
-                {
+                    state = playerState.Item1;
                     velocity = Vector2.Zero;
-                    disable_movement = false;
-                    disable_movement_time = 0;
-                }
-            }
-
-            //checking if player hits another entity if he does then disables player movement and knocks player back
-            foreach (Entity en in parentWorld.EntityList)
-            {
-                if (en == this)
-                {
-                    continue;
+                    disable_movement = true;
                 }
 
-                if (hitTest(en))
+                if (disable_movement == false)
                 {
-                    if (en is Enemy)
+                    if (ks.IsKeyDown(Keys.Right))
                     {
-                        disable_movement = true;
+                        velocity.X = 1.0f;
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                    }
+                    else if (ks.IsKeyDown(Keys.Left))
+                    {
+                        velocity.X = -1.0f;
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                    }
+                    else
+                    {
+                        velocity.X = 0.0f;
+                    }
 
-                        if (velocity.X > 0)
-                        {
-                            velocity.X = -5.0f;
-                        }
-                        else if (velocity.X < 0)
-                        {
-                            velocity.X = 5.0f;
-                        }
-
-                        if (velocity.Y > 0)
-                        {
-                            velocity.Y = -5.0f;
-                        }
-                        else if (velocity.Y < 0)
-                        {
-                            velocity.Y = 5.0f;
-                        }
+                    if (ks.IsKeyDown(Keys.Up))
+                    {
+                        velocity.Y = -1.0f;
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                    }
+                    else if (ks.IsKeyDown(Keys.Down))
+                    {
+                        velocity.Y = 1.0f;
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                    }
+                    else
+                    {
+                        velocity.Y = 0.0f;
                     }
                 }
+
+                if (disable_movement == true)
+                {
+                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                    if (disable_movement_time > 300)
+                    {
+                        velocity = Vector2.Zero;
+                        disable_movement = false;
+                        disable_movement_time = 0;
+                    }
+                }
+
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
@@ -128,6 +127,5 @@ namespace PattyPetitGiant
         {
             sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
         }
-
     }
 }
