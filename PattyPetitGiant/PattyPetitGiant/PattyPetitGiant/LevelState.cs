@@ -41,8 +41,8 @@ namespace PattyPetitGiant
 
 #if TEST_ENTITIES
 
-            entityList.Add(new Player(this, 150, 150));
-            entityList.Add(new Enemy(this, 300, 272));
+            entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
+            entityList.Add(new Enemy(this, map.StartPosition.X + 60, map.StartPosition.Y + 60));
 
             foreach (Entity en in entityList)
             {

@@ -50,6 +50,9 @@ namespace PattyPetitGiant
 
         private TileType[,] map = null;
 
+        private Vector2 startPosition;
+        public Vector2 StartPosition { get { return startPosition; } }
+
         public TileMap(TileDimensions size, Vector2 tileSize)
         {
             this.size = size;
@@ -70,6 +73,15 @@ namespace PattyPetitGiant
             {
                 for (int j = 0; j < room.GetLength(1); j++)
                 {
+                    if (room[i, j].attributes != null)
+                    {
+                        if (room[i, j].attributes.Contains("start"))
+                        {
+                            startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + (48 * 3);
+                            startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + (48 * 3);
+                        }
+                    }
+
 #if PROTOTYPE_ROOMS
                     for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
                     {

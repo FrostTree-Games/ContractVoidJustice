@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace PattyPetitGiant
 {
@@ -19,15 +20,22 @@ namespace PattyPetitGiant
             private DungeonRoomClass parent = null;
 
             private DungeonRoomClass[] children = null;
-            public DungeonRoomClass[] Children { get { return Children; } }
+            public DungeonRoomClass[] Children { get { return children; } }
 
             private List<string> attributes = null;
             public List<String> Attributes { get { return attributes; } }
 
-            public DungeonRoomClass(DungeonRoomClass parent)
+            private int x, y;
+            public int X { get { return x; } }
+            public int Y { get { return y; } }
+
+            public DungeonRoomClass(DungeonRoomClass parent, int X, int Y)
             {
                 this.parent = parent;
                 this.children = new DungeonRoomClass[4];
+
+                x = X;
+                y = Y;
 
                 this.attributes = new List<string>();
             }
@@ -54,6 +62,7 @@ namespace PattyPetitGiant
                 }
 
                 output.attributes = this.attributes;
+                Debug.Assert(output.attributes != null);
 
                 return output;
             }
@@ -72,15 +81,89 @@ namespace PattyPetitGiant
         public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight)
         {
             DungeonRoom[,] output = new DungeonRoom[desiredWidth, desiredHeight];
+            DungeonRoomClass[,] model = new DungeonRoomClass[desiredWidth, desiredHeight];
 
+            Random rand = new Random();
+            List<DungeonRoomClass> addedRooms = new List<DungeonRoomClass>();
+
+            //place initial room
+            int randX = (rand.Next() % (desiredWidth - 2)) + 1;
+            int randY = (rand.Next() % (desiredHeight - 2)) + 1;
+            DungeonRoomClass startingRoom = new DungeonRoomClass(null, randX, randY);
+            startingRoom.Attributes.Add("start");
+            addedRooms.Add(startingRoom);
+            model[randX, randY] = startingRoom;
+
+            //iterate and expand the dungeon according to the constraints
+            int iterate = 0;
+            const int maxIterations = 20;
+            int globalIterations = 0;
+            while (iterate < 10 && globalIterations < maxIterations)
+            {
+                globalIterations++;
+
+                DungeonRoomClass room = addedRooms[rand.Next() % addedRooms.Count];
+
+                int newDir = rand.Next() % 4;
+                
+                //don't create a new room outside of the boundaries
+                if ((newDir == 0 && room.Y == 0) || (newDir == 1 && room.X == desiredWidth - 1) || ((newDir == 2 && room.Y == desiredHeight - 1)) || (newDir == 3 && room.X == 0))
+                {
+                    continue;
+                }
+
+                //don't create a new room on top of an old one
+                if ((newDir == 0 && model[room.X, room.Y - 1] != null) || (newDir == 1 && model[room.X + 1, room.Y] != null) || ((newDir == 2 && model[room.X, room.Y + 1] != null)) || (newDir == 3 && model[room.X - 1, room.Y] != null))
+                {
+                    continue;
+                }
+
+                //don't replace an already-existing connection
+                if (room.Children[newDir] != null)
+                {
+                    continue;
+                }
+
+                switch ((DungeonRoomClass.ChildDirection)newDir)
+                {
+                    case DungeonRoomClass.ChildDirection.North:
+                        room.Children[newDir] = new DungeonRoomClass(room, room.X, room.Y - 1);
+                        room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.South)] = room;
+                        model[room.X, room.Y - 1] = room.Children[newDir];
+                        addedRooms.Add(room.Children[newDir]);
+                        break;
+                    case DungeonRoomClass.ChildDirection.South:
+                        room.Children[newDir] = new DungeonRoomClass(room, room.X, room.Y + 1);
+                        room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.North)] = room;
+                        model[room.X, room.Y + 1] = room.Children[newDir];
+                        addedRooms.Add(room.Children[newDir]);
+                        break;
+                    case DungeonRoomClass.ChildDirection.East:
+                        room.Children[newDir] = new DungeonRoomClass(room, room.X + 1, room.Y);
+                        room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.West)] = room;
+                        model[room.X + 1, room.Y] = room.Children[newDir];
+                        addedRooms.Add(room.Children[newDir]);
+                        break;
+                    case DungeonRoomClass.ChildDirection.West:
+                        room.Children[newDir] = new DungeonRoomClass(room, room.X - 1, room.Y);
+                        room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.East)] = room;
+                        model[room.X - 1, room.Y] = room.Children[newDir];
+                        addedRooms.Add(room.Children[newDir]);
+                        break;
+                }
+
+                iterate++;
+            }
+
+            //convert the class data to a room strucutre model
             for (int i = 0; i < output.GetLength(0); i++)
             {
                 for (int j = 0; j < output.GetLength(1); j++)
                 {
-                    output[i, j].north = true;
-                    output[i, j].south = true;
-                    output[i, j].east = true;
-                    output[i, j].west = true;
+                    if (model[i, j] != null)
+                    {
+                        output[i, j] = model[i, j].outputStruct();
+                    }
                 }
             }
 
