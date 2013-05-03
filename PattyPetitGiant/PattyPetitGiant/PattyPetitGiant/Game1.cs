@@ -59,6 +59,21 @@ namespace PattyPetitGiant
             TextureLib.loadTexture("derek.png");
 
             currentGameScreen = new LevelState();
+
+            ChunkManager.Chunk c = new ChunkManager.Chunk();
+            c.Name = "Test Chunk";
+            c.tilemap = new int[GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TilesPerRoomHigh];
+            c.Attributes = new ChunkManager.Chunk.ChunkAttribute[3];
+            c.Attributes[0] = new ChunkManager.Chunk.ChunkAttribute();
+            c.Attributes[0].AttributeName = "north";
+            c.Attributes[1] = new ChunkManager.Chunk.ChunkAttribute();
+            c.Attributes[1].AttributeName = "south";
+            c.Attributes[2] = new ChunkManager.Chunk.ChunkAttribute();
+            c.Attributes[2].AttributeName = "shopkeeper";
+            c.Attributes[2].Metadata = new string[2];
+            c.Attributes[2].Metadata[0] = "sword";
+            c.Attributes[2].Metadata[1] = "dance potion";
+            ChunkManager.testWriteToDisk(c);
         }
 
         /// <summary>

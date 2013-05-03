@@ -87,6 +87,12 @@ namespace PattyPetitGiant
                     {
                         for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
                         {
+                            if (!room[i, j].north && !room[i, j].south && !room[i, j].west && !room[i, j].east)
+                            {
+                                map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = TileType.TestWall;
+                                continue;
+                            }
+
                             if ((q == 0 || q == 1) && ((p == GlobalGameConstants.TilesPerRoomWide / 2) || (p == GlobalGameConstants.TilesPerRoomWide / 2 - 1)) && room[i, j].north)
                             {
                                 continue;
