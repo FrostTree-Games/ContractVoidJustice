@@ -66,7 +66,7 @@ namespace PattyPetitGiant
                 }
                 
             }
-            else if (state == playerState.Item2 && player_item_2 != null)
+            else if (state == playerState.Item2 )
             {
                 if (player_item_1 == null)
                 {
