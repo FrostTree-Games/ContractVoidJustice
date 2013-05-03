@@ -11,7 +11,8 @@ namespace PattyPetitGiant
 {
     interface Item
     {
-        void update(Player parent, GameTime currentTime);
+        GlobalGameConstants.itemType itemCheck { get; }
+        void update(Player parent, GameTime currentTime, LevelState parentWorld);
         void draw(SpriteBatch sb);
     }
 }
