@@ -20,7 +20,7 @@ namespace PattyPetitGiant
 
         private Item player_item_1 = null;
         private Item player_item_2 = null;
-
+        
         private playerState state = playerState.Moving;
         public playerState State
         {
@@ -53,14 +53,27 @@ namespace PattyPetitGiant
             double delta = currentTime.ElapsedGameTime.Milliseconds;
             KeyboardState ks = Keyboard.GetState();
 
-            Console.WriteLine("Direction Player Facing: " + direction_facing);
-
             if (state == playerState.Item1)
             {
-                player_item_1.update(this, currentTime, parentWorld);
+                //itemType = player_item_1.itemCheck;
+                if (player_item_1 == null)
+                {
+                    state = playerState.Moving;
+                }
+                else
+                {
+                    player_item_1.update(this, currentTime, parentWorld);
+                }
+                
             }
-
-            if (state == playerState.Moving)
+            else if (state == playerState.Item2 && player_item_2 != null)
+            {
+                if (player_item_1 == null)
+                {
+                    state = playerState.Moving;
+                }
+            }
+            else if (state == playerState.Moving)
             {
                 if (ks.IsKeyDown(Keys.A))
                 {
@@ -68,17 +81,21 @@ namespace PattyPetitGiant
                     velocity = Vector2.Zero;
                     disable_movement = true;
                 }
+                if (ks.IsKeyDown(Keys.S))
+                {
+                    state = playerState.Item2;
+                }
 
                 if (disable_movement == false)
                 {
                     if (ks.IsKeyDown(Keys.Right))
                     {
-                        velocity.X = 1.0f;
+                        velocity.X = 1.5f;
                         direction_facing = GlobalGameConstants.Direction.Right;
                     }
                     else if (ks.IsKeyDown(Keys.Left))
                     {
-                        velocity.X = -1.0f;
+                        velocity.X = -1.5f;
                         direction_facing = GlobalGameConstants.Direction.Left;
                     }
                     else
@@ -88,12 +105,12 @@ namespace PattyPetitGiant
 
                     if (ks.IsKeyDown(Keys.Up))
                     {
-                        velocity.Y = -1.0f;
+                        velocity.Y = -1.5f;
                         direction_facing = GlobalGameConstants.Direction.Up;
                     }
                     else if (ks.IsKeyDown(Keys.Down))
                     {
-                        velocity.Y = 1.0f;
+                        velocity.Y = 1.5f;
                         direction_facing = GlobalGameConstants.Direction.Down;
                     }
                     else

@@ -26,6 +26,11 @@ namespace PattyPetitGiant
             dimensions.X = 47.9f;
             dimensions.Y = 47.9f;
 
+            disable_movement = false;
+            disable_movement_time = 0.0f;
+
+            velocity = Vector2.Zero;
+
             this.parentWorld = parentWorld;
         }
 
@@ -43,11 +48,32 @@ namespace PattyPetitGiant
                 {
                     if (en is Player)
                     {
-                        en.knockBack(en);
+                        this.knockBack(en, this.position, this.dimensions);
                     }
                 }
             }
+
+            if (disable_movement == true)
+            {
+                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                if (disable_movement_time > 300)
+                {
+                    velocity = Vector2.Zero;
+                    disable_movement = false;
+                    disable_movement_time = 0;
+                }
+            }
+
+            //updates enemies position
+
+            Vector2 pos = new Vector2(position.X, position.Y);
+            Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
         }
+
 
         public override void draw(SpriteBatch sb)
         {

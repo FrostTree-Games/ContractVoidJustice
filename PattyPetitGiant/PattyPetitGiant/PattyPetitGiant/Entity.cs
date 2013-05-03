@@ -26,6 +26,7 @@ namespace PattyPetitGiant
 
         protected Vector2 velocity = Vector2.Zero;
         protected Vector2 dimensions = Vector2.Zero;
+        public Vector2 Dimensions { get { return dimensions; } }
 
         protected LevelState parentWorld = null;
 
@@ -45,28 +46,61 @@ namespace PattyPetitGiant
             return true;
         }
 
-        public void knockBack(Entity other)
+        //checks the position of the entity getting knocked back with the current position
+        public void knockBack(Entity other, Vector2 position, Vector2 dimensions)
         {
+            //Enemy knocks back player
             if (other is Player)
             {
                 other.disable_movement = true;
 
-                if (velocity.X > 0)
+                if ((position.X + dimensions.X > other.position.X) && other.velocity.X > 0)
                 {
-                    velocity.X = -5.0f;
+                    //pushes left
+                    other.velocity.X = -5.0f;
                 }
-                else if (velocity.X < 0)
+                else if ((position.X < other.position.X + other.dimensions.X) && other.velocity.X < 0)
                 {
-                    velocity.X = 5.0f;
+                    //push right
+                    other.velocity.X = 5.0f;
                 }
 
-                if (velocity.Y > 0)
+                if ((position.Y < other.position.Y + other.dimensions.Y) && other.velocity.Y > 0)
                 {
-                    velocity.Y = -5.0f;
+                    //pushes up
+                    other.velocity.Y = -5.0f;
                 }
-                else if (velocity.Y < 0)
+                else if ((position.Y + dimensions.Y > other.position.Y) && other.velocity.Y < 0)
                 {
-                    velocity.Y = 5.0f;
+                    //pushes down
+                    other.velocity.Y = 5.0f;
+                }
+            }
+                //items knock back enemy
+            else if (other is Enemy)
+            {
+                other.disable_movement = true;
+
+                if (position.X < other.position.X + other.dimensions.X && this.direction_facing == GlobalGameConstants.Direction.Left)
+                {
+                    //pushes left
+                    other.velocity.X = -5.0f;
+                }
+                else if (position.X + dimensions.X > other.position.X && this.direction_facing == GlobalGameConstants.Direction.Right)
+                {
+                    //push right
+                    other.velocity.X = 5.0f;
+                }
+
+                if (position.Y < other.position.Y + other.dimensions.Y && this.direction_facing == GlobalGameConstants.Direction.Up)
+                {
+                    //pushes up
+                    other.velocity.Y = -5.0f;
+                }
+                else if (position.Y + dimensions.Y > other.position.Y && this.direction_facing == GlobalGameConstants.Direction.Down)
+                {
+                    //pushes down
+                    other.velocity.Y = 5.0f;
                 }
             }
         }
