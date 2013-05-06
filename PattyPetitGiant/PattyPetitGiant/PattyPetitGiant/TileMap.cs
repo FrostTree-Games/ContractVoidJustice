@@ -99,8 +99,6 @@ namespace PattyPetitGiant
                                 {
                                     startX = rand.Next() % GlobalGameConstants.TilesPerRoomWide;
                                     startY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
-
-                                    Console.WriteLine("{0}, {1}, {2}", startX, startY, c.Name);
                                 }
 
                                 startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * startX);

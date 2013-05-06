@@ -65,7 +65,7 @@ namespace PattyPetitGiant
 
             if (cameraFocus != null)
             {
-                camera = Matrix.Identity * Matrix.CreateScale(0.1f);
+                camera = Matrix.Identity * Matrix.CreateTranslation(new Vector3((cameraFocus.CenterPoint.X * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (cameraFocus.CenterPoint.Y * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
             }
         }
 
