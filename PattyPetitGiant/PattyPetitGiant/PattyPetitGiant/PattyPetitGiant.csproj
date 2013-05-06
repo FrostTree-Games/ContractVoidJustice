@@ -76,6 +76,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioLib.cs" />
+    <Compile Include="ChaseEnemy.cs" />
+    <Compile Include="ChunkLib.cs" />
     <Compile Include="ChunkManager.cs" />
     <Compile Include="DungeonGenerator.cs" />
     <Compile Include="Enemy.cs" />
