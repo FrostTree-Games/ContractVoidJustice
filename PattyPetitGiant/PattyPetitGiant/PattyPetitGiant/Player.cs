@@ -22,6 +22,7 @@ namespace PattyPetitGiant
         private Item player_item_2 = null;
         
         private playerState state = playerState.Moving;
+
         public playerState State
         {
             set { state = value; }
@@ -66,11 +67,12 @@ namespace PattyPetitGiant
                 }
                 
             }
-            else if (state == playerState.Item2 && player_item_2 != null)
+            else if (state == playerState.Item2 )
             {
-                if (player_item_1 == null)
+                if (player_item_2 == null)
                 {
                     state = playerState.Moving;
+                    disable_movement = false;
                 }
             }
             else if (state == playerState.Moving)
@@ -84,6 +86,7 @@ namespace PattyPetitGiant
                 if (ks.IsKeyDown(Keys.S))
                 {
                     state = playerState.Item2;
+                    disable_movement = true;
                 }
 
                 if (disable_movement == false)

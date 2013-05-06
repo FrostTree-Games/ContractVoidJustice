@@ -11,11 +11,24 @@ namespace PattyPetitGiant
 {
     class Enemy : Entity
     {
+        public enum EnemyState
+        {
+            Moving
+        }
+
+        protected EnemyState state = EnemyState.Moving;
+
         private bool item_hit;
         public bool Item_Hit
         { 
             set { this.item_hit = value; }
             get { return item_hit; }
+        }
+
+        public Enemy()
+        {
+            velocity = Vector2.Zero;
+            disable_movement = false;
         }
 
         public Enemy(LevelState parentWorld, float initialx, float initialy)
@@ -30,6 +43,8 @@ namespace PattyPetitGiant
             disable_movement_time = 0.0f;
 
             velocity = Vector2.Zero;
+
+            state = EnemyState.Moving;
 
             this.parentWorld = parentWorld;
         }
