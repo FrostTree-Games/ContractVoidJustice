@@ -90,8 +90,17 @@ namespace PattyPetitGiant
             }
             else
             {
-                Random rand = new Random();
-                return potentials[rand.Next() % potentials.Count];
+                int lowestIndex = 0;
+
+                for (int i = 0; i < potentials.Count; i++)
+                {
+                    if (potentials[i].Attributes.Length < potentials[lowestIndex].Attributes.Length)
+                    {
+                        lowestIndex = i;
+                    }
+                }
+
+                return potentials[lowestIndex];
             }
         }
     }
