@@ -54,7 +54,7 @@ namespace PattyPetitGiant
             {
                 other.disable_movement = true;
 
-                if ((position.X + dimensions.X > other.position.X) && other.velocity.X > 0)
+                if ((position.X + dimensions.X > other.position.X) && other.velocity.X >= 0)
                 {
                     //pushes left
                     other.velocity.X = -5.0f;
@@ -65,7 +65,7 @@ namespace PattyPetitGiant
                     other.velocity.X = 5.0f;
                 }
 
-                if ((position.Y < other.position.Y + other.dimensions.Y) && other.velocity.Y > 0)
+                if ((position.Y < other.position.Y + other.dimensions.Y) && other.velocity.Y >= 0)
                 {
                     //pushes up
                     other.velocity.Y = -5.0f;

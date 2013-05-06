@@ -13,7 +13,8 @@ namespace PattyPetitGiant
     {
         public enum EnemyState
         {
-            Moving
+            Moving,
+            Pause
         }
 
         protected EnemyState state = EnemyState.Moving;

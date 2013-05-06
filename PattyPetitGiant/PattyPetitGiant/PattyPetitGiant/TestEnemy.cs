@@ -11,7 +11,11 @@ namespace PattyPetitGiant
 {
     class TestEnemy : Enemy
     {
+
         private float neg_direction = -1;
+        private float change_direction_time = 0.0f;
+        private int change_direction;
+
         public TestEnemy()
         {
         }
@@ -24,7 +28,12 @@ namespace PattyPetitGiant
 
             state = EnemyState.Moving;
 
-            velocity = new Vector2(1.0f, 3.0f);
+            direction_facing = GlobalGameConstants.Direction.Right;
+
+            velocity = new Vector2(1.0f, 0.0f);
+
+            change_direction_time = 0.0f;
+            change_direction = 0;
 
             this.parentWorld = parentWorld;
         }
@@ -33,6 +42,8 @@ namespace PattyPetitGiant
         {
             if(state == EnemyState.Moving)
             {
+
+                change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
                 foreach (Entity en in parentWorld.EntityList)
                 {
@@ -50,11 +61,50 @@ namespace PattyPetitGiant
                     }
                 }
 
-                Vector2 pos = new Vector2(position.X, position.Y);
+                if (disable_movement == true)
+                {
+                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                    if (disable_movement_time > 300)
+                    {
+                        velocity = Vector2.Zero;
+                        disable_movement = false;
+                        disable_movement_time = 0;
+                    }
+                }
 
-                Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+                if (change_direction_time > 1000)
+                {
+                    Random rand = new Random();
+                    change_direction = rand.Next(4);
+                    Console.WriteLine("change_direction: " + change_direction);
+                    change_direction_time = 0.0f;
+                }
 
-                bool on_wall = parentWorld.Map.hitTestWall(nextStep);
+                if (change_direction == 0)
+                {
+                    velocity.X = 1.0f;
+                    velocity.Y = 0.0f;
+                    direction_facing = GlobalGameConstants.Direction.Right;
+                }
+                else if (change_direction == 1)
+                {
+                    velocity.X = -1.0f;
+                    velocity.Y = 0.0f;
+                    direction_facing = GlobalGameConstants.Direction.Left;
+                }
+                else if (change_direction == 2)
+                {
+                    velocity.X = 0.0f;
+                    velocity.Y = -1.0f;
+                    direction_facing = GlobalGameConstants.Direction.Up;
+                }
+                else if (change_direction == 3)
+                {
+                    velocity.X = 0.0f;
+                    velocity.Y = 1.0f;
+                    direction_facing = GlobalGameConstants.Direction.Down;
+                }
+              /*  bool on_wall = parentWorld.Map.hitTestWall(nextStep);
 
                 Console.WriteLine("on_wall: " + on_wall);
 
@@ -119,10 +169,14 @@ namespace PattyPetitGiant
 
                     check_corners++;
                 }
-               
-            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-            position.X = finalPos.X;
-            position.Y = finalPos.Y;
+               */
+
+                Vector2 pos = new Vector2(position.X, position.Y);
+
+                Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+                Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+                position.X = finalPos.X;
+                position.Y = finalPos.Y;
             }
         }
 
