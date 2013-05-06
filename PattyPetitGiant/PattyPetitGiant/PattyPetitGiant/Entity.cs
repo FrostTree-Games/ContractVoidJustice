@@ -54,54 +54,49 @@ namespace PattyPetitGiant
             {
                 other.disable_movement = true;
 
-                if ((position.X + dimensions.X > other.position.X) && other.velocity.X >= 0)
-                {
-                    //pushes left
-                    other.velocity.X = -5.0f;
-                }
-                else if ((position.X < other.position.X + other.dimensions.X) && other.velocity.X < 0)
-                {
-                    //push right
-                    other.velocity.X = 5.0f;
-                }
+                Vector2 player_center = new Vector2(other.position.X - 24.0f, other.position.Y - 24);
+                Vector2 enemy_center = new Vector2(position.X - 24, position.Y - 24);
 
-                if ((position.Y < other.position.Y + other.dimensions.Y) && other.velocity.Y >= 0)
-                {
-                    //pushes up
-                    other.velocity.Y = -5.0f;
-                }
-                else if ((position.Y + dimensions.Y > other.position.Y) && other.velocity.Y < 0)
-                {
-                    //pushes down
-                    other.velocity.Y = 5.0f;
-                }
+                other.velocity = player_center - enemy_center;
+
+                other.velocity.X = other.velocity.X / 10.0f;
+                other.velocity.Y = other.velocity.Y / 10.0f;
+                Console.WriteLine(other.velocity);
             }
                 //items knock back enemy
             else if (other is Enemy)
             {
                 other.disable_movement = true;
 
-                if (position.X < other.position.X + other.dimensions.X && this.direction_facing == GlobalGameConstants.Direction.Left)
+                Vector2 player_center = new Vector2(position.X - 24, position.Y - 24);
+                Vector2 enemy_center = new Vector2(other.position.X - 24.0f, other.position.Y - 24);
+
+                other.velocity = (enemy_center - player_center)/15;
+
+                if (Math.Abs(enemy_center.X - player_center.X) > Math.Abs(enemy_center.Y - player_center.Y))
                 {
-                    //pushes left
-                    other.velocity.X = -5.0f;
+                    if (other.velocity.X < 0)
+                    {
+                        other.velocity.X = -5.0f;
+                    }
+                    else
+                    {
+                        other.velocity.X = 5.0f;
+                    }
                 }
-                else if (position.X + dimensions.X > other.position.X && this.direction_facing == GlobalGameConstants.Direction.Right)
+                else
                 {
-                    //push right
-                    other.velocity.X = 5.0f;
+                    if (other.velocity.Y < 0)
+                    {
+                        other.velocity.Y = -5.0f;
+                    }
+                    else
+                    {
+                        other.velocity.Y = 5.0f;
+                    }
                 }
 
-                if (position.Y < other.position.Y + other.dimensions.Y && this.direction_facing == GlobalGameConstants.Direction.Up)
-                {
-                    //pushes up
-                    other.velocity.Y = -5.0f;
-                }
-                else if (position.Y + dimensions.Y > other.position.Y && this.direction_facing == GlobalGameConstants.Direction.Down)
-                {
-                    //pushes down
-                    other.velocity.Y = 5.0f;
-                }
+                Console.WriteLine("Enemy Velocity " + other.velocity);
             }
         }
 

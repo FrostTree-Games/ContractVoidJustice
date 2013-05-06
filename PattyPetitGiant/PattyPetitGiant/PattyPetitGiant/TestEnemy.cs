@@ -28,9 +28,9 @@ namespace PattyPetitGiant
 
             state = EnemyState.Moving;
 
-            direction_facing = GlobalGameConstants.Direction.Right;
+            direction_facing = GlobalGameConstants.Direction.Up;
 
-            velocity = new Vector2(1.0f, 0.0f);
+            velocity = new Vector2(0.0f, -1.0f);
 
             change_direction_time = 0.0f;
             change_direction = 0;
@@ -72,104 +72,97 @@ namespace PattyPetitGiant
                     }
                 }
 
-                if (change_direction_time > 1000)
-                {
-                    Random rand = new Random();
-                    change_direction = rand.Next(4);
-                    Console.WriteLine("change_direction: " + change_direction);
-                    change_direction_time = 0.0f;
-                }
-
-                if (change_direction == 0)
-                {
-                    velocity.X = 1.0f;
-                    velocity.Y = 0.0f;
-                    direction_facing = GlobalGameConstants.Direction.Right;
-                }
-                else if (change_direction == 1)
-                {
-                    velocity.X = -1.0f;
-                    velocity.Y = 0.0f;
-                    direction_facing = GlobalGameConstants.Direction.Left;
-                }
-                else if (change_direction == 2)
-                {
-                    velocity.X = 0.0f;
-                    velocity.Y = -1.0f;
-                    direction_facing = GlobalGameConstants.Direction.Up;
-                }
-                else if (change_direction == 3)
-                {
-                    velocity.X = 0.0f;
-                    velocity.Y = 1.0f;
-                    direction_facing = GlobalGameConstants.Direction.Down;
-                }
-              /*  bool on_wall = parentWorld.Map.hitTestWall(nextStep);
-
-                Console.WriteLine("on_wall: " + on_wall);
-
                 int check_corners = 0;
-
+                Vector2 nextStep_temp = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+                bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                
                 while (check_corners != 4)
                 {
-                    if (on_wall)
-                    {
-                        Random rand = new Random();
-                        Random temp = new Random();
-
-                        neg_direction = temp.Next(2);
-
-                        Console.WriteLine("neg_direction: " + neg_direction);
-                        if (neg_direction % 2 == 0)
-                        {
-                            neg_direction = 1.0f;
-                        }
-                        else
-                        {
-                            neg_direction = -1.0f;
-                        }
-
-                        float new_horz_velocity = (float)(rand.NextDouble() * 5);
-                        velocity.X = (neg_direction) * (new_horz_velocity);
-
-                        neg_direction = temp.Next(2);
-                        if (neg_direction % 2 == 0)
-                        {
-                            neg_direction = 1.0f;
-                        }
-                        else
-                        {
-                            neg_direction = -1.0f;
-                        }
-
-                        float new_vert_velocity = (float)(rand.NextDouble() * 5);
-                        velocity.X = (neg_direction) * (new_vert_velocity);
-                        break;
-                    }
-                    else
+                    if (on_wall != true)
                     {
                         if (check_corners == 0)
                         {
-                            nextStep = new Vector2(position.X + dimensions.X + velocity.X, position.Y + velocity.Y);
+                            nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + velocity.Y);
                         }
                         else if (check_corners == 1)
                         {
-                            nextStep = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                            nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
                         }
                         else if (check_corners == 2)
                         {
-                            nextStep = new Vector2(position.X + dimensions.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                            nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
                         }
                         else
                         {
                             break;
                         }
                     }
-                    on_wall = parentWorld.Map.hitTestWall(nextStep);
+                    else
+                    {
+                        if (direction_facing == GlobalGameConstants.Direction.Right)
+                        {
+                            direction_facing = GlobalGameConstants.Direction.Left;
+                            velocity.X = -1.0f;
+                            velocity.Y = 0.0f;
+                            break;
+                        }
+                        else if (direction_facing == GlobalGameConstants.Direction.Left)
+                        {
+                            direction_facing = GlobalGameConstants.Direction.Right;
+                            velocity.X = 1.0f;
+                            velocity.Y = 0.0f;
+                            break;
+                        }
+                        else if (direction_facing == GlobalGameConstants.Direction.Up)
+                        {
+                            direction_facing = GlobalGameConstants.Direction.Down;
+                            velocity.Y = 1.0f;
+                            velocity.X = 0.0f;
+                            break;
+                        }
+                        else if(direction_facing == GlobalGameConstants.Direction.Down)
+                        {
+                            direction_facing = GlobalGameConstants.Direction.Up;
+                            velocity.Y = -1.0f;
+                            velocity.X = 0.0f;
+                            break;
+                        }
 
+                    }
+                    on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
                     check_corners++;
                 }
-               */
+
+                if (change_direction_time > 1000)
+                {
+                    Random rand = new Random();
+                    change_direction = rand.Next(4);
+                    change_direction_time = 0.0f;
+                    if (change_direction == 0)
+                    {
+                        velocity.X = 1.0f;
+                        velocity.Y = 0.0f;
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                    }
+                    else if (change_direction == 1)
+                    {
+                        velocity.X = -1.0f;
+                        velocity.Y = 0.0f;
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                    }
+                    else if (change_direction == 2)
+                    {
+                        velocity.X = 0.0f;
+                        velocity.Y = -1.0f;
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                    }
+                    else if (change_direction == 3)
+                    {
+                        velocity.X = 0.0f;
+                        velocity.Y = 1.0f;
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                    }
+                }
 
                 Vector2 pos = new Vector2(position.X, position.Y);
 
