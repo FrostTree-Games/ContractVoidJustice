@@ -76,11 +76,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioLib.cs" />
+    <Compile Include="Chase.cs" />
     <Compile Include="ChaseEnemy.cs" />
     <Compile Include="ChunkLib.cs" />
     <Compile Include="ChunkManager.cs" />
     <Compile Include="DungeonGenerator.cs" />
     <Compile Include="Enemy.cs" />
+    <Compile Include="EnemyComponents.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GlobalGameConstants.cs" />
     <Compile Include="Item.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="TestEnemy.cs" />
     <Compile Include="TextureLib.cs" />
     <Compile Include="TileMap.cs" />
+    <Compile Include="Walk.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

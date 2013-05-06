@@ -14,7 +14,8 @@ namespace PattyPetitGiant
         public enum EnemyState
         {
             Moving,
-            Pause
+            Pause,
+            Chase
         }
 
         protected EnemyState state = EnemyState.Moving;
@@ -26,6 +27,13 @@ namespace PattyPetitGiant
             get { return item_hit; }
         }
 
+        protected float change_direction_time = 0.0f;
+        public float Change_Direction_Time 
+        { 
+            set { change_direction_time = value; } 
+            get { return change_direction_time; } 
+        }
+        
         public Enemy()
         {
             velocity = Vector2.Zero;

@@ -25,6 +25,12 @@ namespace PattyPetitGiant
         public Vector2 CenterPoint { get { return new Vector2(position.X + width/2, position.Y + height/2); } }
 
         protected Vector2 velocity = Vector2.Zero;
+        public Vector2 Velocity 
+        {
+            set { velocity = value; }
+            get { return velocity; }
+        }
+
         protected Vector2 dimensions = Vector2.Zero;
         public Vector2 Dimensions { get { return dimensions; } }
 
@@ -33,6 +39,7 @@ namespace PattyPetitGiant
         protected GlobalGameConstants.Direction direction_facing = GlobalGameConstants.Direction.Right;
         public GlobalGameConstants.Direction Direction_Facing
         {
+            set { direction_facing = value; }
             get { return direction_facing; }
         }
 
@@ -61,7 +68,6 @@ namespace PattyPetitGiant
 
                 other.velocity.X = other.velocity.X / 10.0f;
                 other.velocity.Y = other.velocity.Y / 10.0f;
-                Console.WriteLine(other.velocity);
             }
                 //items knock back enemy
             else if (other is Enemy)
@@ -95,8 +101,6 @@ namespace PattyPetitGiant
                         other.velocity.Y = 5.0f;
                     }
                 }
-
-                Console.WriteLine("Enemy Velocity " + other.velocity);
             }
         }
 
