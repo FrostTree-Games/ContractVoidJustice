@@ -51,49 +51,78 @@ namespace PattyPetitGiant
                 }
 
                 Vector2 pos = new Vector2(position.X, position.Y);
+
                 Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
 
                 bool on_wall = parentWorld.Map.hitTestWall(nextStep);
 
                 Console.WriteLine("on_wall: " + on_wall);
 
-                if (on_wall)
+                int check_corners = 0;
+
+                while (check_corners != 4)
                 {
-                    Random rand = new Random();
-                    Random temp = new Random();
-
-                    neg_direction = temp.Next(2);
-
-                    Console.WriteLine("neg_direction: " + neg_direction);
-                    if(neg_direction%2 == 0)
+                    if (on_wall)
                     {
-                        neg_direction = 1.0f;
+                        Random rand = new Random();
+                        Random temp = new Random();
+
+                        neg_direction = temp.Next(2);
+
+                        Console.WriteLine("neg_direction: " + neg_direction);
+                        if (neg_direction % 2 == 0)
+                        {
+                            neg_direction = 1.0f;
+                        }
+                        else
+                        {
+                            neg_direction = -1.0f;
+                        }
+
+                        float new_horz_velocity = (float)(rand.NextDouble() * 5);
+                        velocity.X = (neg_direction) * (new_horz_velocity);
+
+                        neg_direction = temp.Next(2);
+                        if (neg_direction % 2 == 0)
+                        {
+                            neg_direction = 1.0f;
+                        }
+                        else
+                        {
+                            neg_direction = -1.0f;
+                        }
+
+                        float new_vert_velocity = (float)(rand.NextDouble() * 5);
+                        velocity.X = (neg_direction) * (new_vert_velocity);
+                        break;
                     }
                     else
-                    { 
-                        neg_direction = -1.0f;
-                    }
-
-                    float new_horz_velocity = (float)(rand.NextDouble()*5);
-                    velocity.X = (neg_direction) * (new_horz_velocity);
-
-                    neg_direction = temp.Next(2);
-                    if (neg_direction % 2 == 0)
                     {
-                        neg_direction = 1.0f;
+                        if (check_corners == 0)
+                        {
+                            nextStep = new Vector2(position.X + dimensions.X + velocity.X, position.Y + velocity.Y);
+                        }
+                        else if (check_corners == 1)
+                        {
+                            nextStep = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                        }
+                        else if (check_corners == 2)
+                        {
+                            nextStep = new Vector2(position.X + dimensions.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
-                    else
-                    {
-                        neg_direction = -1.0f;
-                    }
+                    on_wall = parentWorld.Map.hitTestWall(nextStep);
 
-                    float new_vert_velocity = (float)(rand.NextDouble() * 5);
-                    velocity.X = (neg_direction) * (new_vert_velocity);
+                    check_corners++;
                 }
-
-                Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-                position.X = finalPos.X;
-                position.Y = finalPos.Y;
+               
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
             }
         }
 
