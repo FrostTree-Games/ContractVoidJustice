@@ -60,6 +60,8 @@ namespace PattyPetitGiant
 
             map = new TileType[size.x, size.y];
             blobTestWalls();
+
+            startPosition = new Vector2(0, 0);
         }
 
         public TileMap(DungeonGenerator.DungeonRoom[,] room, Vector2 tileSize)
@@ -75,12 +77,6 @@ namespace PattyPetitGiant
                 {
                     if (room[i, j].attributes != null)
                     {
-                        if (room[i, j].attributes.Contains("start"))
-                        {
-                            startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + (48 * 3);
-                            startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + (48 * 3);
-                        }
-
                         ChunkManager.Chunk c = ChunkLib.getRandomChunkByValues(room[i, j].attributes.ToArray());
 
                         if (c != null)
@@ -91,6 +87,44 @@ namespace PattyPetitGiant
                                 {
                                     map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = (TileType)(c.tilemap[(q * GlobalGameConstants.TilesPerRoomHigh) + p]);
                                 }
+                            }
+
+                            if (room[i, j].attributes.Contains("start"))
+                            {
+                                Random rand = new Random();
+                                int startX = 0;
+                                int startY = 0;
+
+                                while (c.tilemap[startY * GlobalGameConstants.TilesPerRoomHigh + startX] == 1)
+                                {
+                                    startX = rand.Next() % GlobalGameConstants.TilesPerRoomWide;
+                                    startY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
+
+                                    Console.WriteLine("{0}, {1}, {2}", startX, startY, c.Name);
+                                }
+
+                                startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * startX);
+                                startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * startY);
+                            }
+                        }
+                        else
+                        {
+                            for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
+                            {
+                                for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                                {
+                                    map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = TileType.TestWall;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
+                        {
+                            for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                            {
+                                map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = TileType.TestWall;
                             }
                         }
                     }
