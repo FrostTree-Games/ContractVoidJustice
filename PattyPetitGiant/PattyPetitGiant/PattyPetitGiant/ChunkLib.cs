@@ -50,5 +50,49 @@ namespace PattyPetitGiant
 
             manifestLoaded = true;
         }
+
+        public static ChunkManager.Chunk getRandomChunkByValues(string[] requiredAttributes)
+        {
+            List<ChunkManager.Chunk> potentials = new List<ChunkManager.Chunk>();
+
+            foreach (KeyValuePair<string, ChunkManager.Chunk> val in dict)
+            {
+                int remainingValues = requiredAttributes.Length;
+
+                foreach (string requiredAttribute in requiredAttributes)
+                {
+                    foreach (ChunkManager.Chunk.ChunkAttribute attr in val.Value.Attributes)
+                    {
+                        if (attr.AttributeName == "north" || attr.AttributeName == "south" || attr.AttributeName == "east" || attr.AttributeName == "west")
+                        {
+                            if (!requiredAttributes.Contains(attr.AttributeName))
+                            {
+                                continue;
+                            }
+                        }
+
+                        if (attr.AttributeName == requiredAttribute)
+                        {
+                            remainingValues--;
+                        }
+                    }
+                }
+
+                if (remainingValues < 1)
+                {
+                    potentials.Add(val.Value);
+                }
+            }
+
+            if (potentials.Count < 1)
+            {
+                return null;
+            }
+            else
+            {
+                Random rand = new Random();
+                return potentials[rand.Next() % potentials.Count];
+            }
+        }
     }
 }

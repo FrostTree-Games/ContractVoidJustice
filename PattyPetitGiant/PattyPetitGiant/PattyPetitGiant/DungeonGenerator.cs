@@ -64,6 +64,11 @@ namespace PattyPetitGiant
                 output.attributes = this.attributes;
                 Debug.Assert(output.attributes != null);
 
+                if (output.north) { attributes.Add("north"); }
+                if (output.south) { attributes.Add("south"); }
+                if (output.east) { attributes.Add("east"); }
+                if (output.west) { attributes.Add("west"); }
+
                 return output;
             }
         }

@@ -272,5 +272,8 @@
     <ChunkAttribute>
       <AttributeName>west</AttributeName>
     </ChunkAttribute>
+    <ChunkAttribute>
+      <AttributeName>start</AttributeName>
+    </ChunkAttribute>
   </Attributes>
 </Chunk>

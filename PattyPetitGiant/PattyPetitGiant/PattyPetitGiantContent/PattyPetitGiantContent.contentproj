@@ -82,6 +82,22 @@
       <Name>testK</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="chunk\testL.ftc">
+      <Name>testL</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testM.ftc">
+      <Name>testM</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testN.ftc">
+      <Name>testN</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testO.ftc">
+      <Name>testO</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="gfx\sheet.png">
       <Name>sheet</Name>
       <Importer>TextureImporter</Importer>
