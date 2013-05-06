@@ -1,4 +1,4 @@
-﻿#define PROTOTYPE_ROOMS
+﻿//#define PROTOTYPE_ROOMS
 
 using System;
 using System.Collections.Generic;
@@ -79,6 +79,19 @@ namespace PattyPetitGiant
                         {
                             startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + (48 * 3);
                             startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + (48 * 3);
+                        }
+
+                        ChunkManager.Chunk c = ChunkLib.getRandomChunkByValues(room[i, j].attributes.ToArray());
+
+                        if (c != null)
+                        {
+                            for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
+                            {
+                                for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                                {
+                                    map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = (TileType)(c.tilemap[(q * GlobalGameConstants.TilesPerRoomHigh) + p]);
+                                }
+                            }
                         }
                     }
 
