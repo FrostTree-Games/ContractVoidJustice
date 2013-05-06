@@ -58,6 +58,8 @@ namespace PattyPetitGiant
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadTexture("derek.png");
 
+            ChunkLib cs = new ChunkLib();
+
             currentGameScreen = new LevelState();
         }
 
