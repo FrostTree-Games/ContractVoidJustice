@@ -36,6 +36,7 @@ namespace PattyPetitGiant
         public LevelState()
         {
             map = new TileMap(DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y), GlobalGameConstants.TileSize);
+            map.TileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
 
             entityList = new List<Entity>();
 
@@ -71,7 +72,7 @@ namespace PattyPetitGiant
 
         public override void render(SpriteBatch sb)
         {
-            sb.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, camera);
+            sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, camera);
 
             map.render(sb, 0.0f);
 

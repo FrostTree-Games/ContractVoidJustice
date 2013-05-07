@@ -41,6 +41,18 @@ namespace PattyPetitGiant
             TestWall = 1,
         }
 
+        private enum FloorType
+        {
+            A = 0,
+            B = 1,
+            C = 2,
+            D = 3,
+            E = 4,
+            F = 5,
+            G = 6,
+            H = 7,
+        }
+
         private TileDimensions size;
         public TileDimensions SizeInTiles { get { return size; } }
         public Vector2 SizeInPixels { get { return new Vector2(size.x * tileSize.X, size.y * tileSize.Y); } }
@@ -49,10 +61,15 @@ namespace PattyPetitGiant
         public Vector2 TileSize { get { return tileSize; } }
 
         private TileType[,] map = null;
+        private FloorType[,] floorMap = null;
 
         private Vector2 startPosition;
         public Vector2 StartPosition { get { return startPosition; } }
 
+        private Texture2D tileSkin = null;
+        public Texture2D TileSkin { get { return tileSkin; } set { tileSkin = value; } }
+
+        /*
         public TileMap(TileDimensions size, Vector2 tileSize)
         {
             this.size = size;
@@ -64,12 +81,36 @@ namespace PattyPetitGiant
             startPosition = new Vector2(0, 0);
         }
 
+        public TileMap(TileDimensions size, Vector2 tileSize, Texture2D tileMap)
+        {
+            this.size = size;
+            this.tileSize = tileSize;
+
+            map = new TileType[size.x, size.y];
+            blobTestWalls();
+
+            startPosition = new Vector2(0, 0);
+
+            this.tileSkin = tileMap;
+        } */
+
         public TileMap(DungeonGenerator.DungeonRoom[,] room, Vector2 tileSize)
         {
             this.size = new TileDimensions(room.GetLength(0) * GlobalGameConstants.TilesPerRoomWide, room.GetLength(1)  * GlobalGameConstants.TilesPerRoomHigh);
             this.tileSize = tileSize;
 
             map = new TileType[size.x, size.y];
+            floorMap = new FloorType[size.x, size.y];
+
+            Random rand = new Random();
+
+            for (int i = 0; i < floorMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < floorMap.GetLength(1); j++)
+                {
+                    floorMap[i, j] = ((FloorType)(rand.Next() % Enum.GetNames(typeof(FloorType)).Length));
+                }
+            }
 
             for (int i = 0; i < room.GetLength(0); i++)
             {
@@ -91,7 +132,6 @@ namespace PattyPetitGiant
 
                             if (room[i, j].attributes.Contains("start"))
                             {
-                                Random rand = new Random();
                                 int startX = 0;
                                 int startY = 0;
 
@@ -197,12 +237,58 @@ namespace PattyPetitGiant
             {
                 for (int i = 0; i < size.x; i++)
                 {
+                    if (map[i, j] != TileType.NoWall)
+                    {
+                        continue;
+                    }
+
+                    switch (floorMap[i,j])
+                    {
+                        case FloorType.A:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case FloorType.B:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case FloorType.C:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case FloorType.D:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case FloorType.E:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case FloorType.F:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case FloorType.G:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case FloorType.H:
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                    }
+                }
+            }
+
+            for (int j = 0; j < size.y; j++)
+            {
+                for (int i = 0; i < size.x; i++)
+                {
                     switch (map[i, j])
                     {
                         case TileType.NoWall:
                             break;
                         case TileType.TestWall:
-                            spriteBatch.Draw(Game1.whitePixel, new Vector2(i * tileSize.X, j * tileSize.Y), null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(tileSize.X, tileSize.Y), SpriteEffects.None, depth);
+                            if (tileSkin == null)
+                            {
+                                spriteBatch.Draw(Game1.whitePixel, new Vector2(i * tileSize.X, j * tileSize.Y), null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(tileSize.X, tileSize.Y), SpriteEffects.None, depth);
+                            }
+                            else
+                            {
+                                spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(1 * GlobalGameConstants.TileSize.Y + 1), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            }
                             break;
                         default:
                             spriteBatch.Draw(Game1.whitePixel, new Vector2(i * tileSize.X, j * tileSize.Y), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(tileSize.X, tileSize.Y), SpriteEffects.None, depth);

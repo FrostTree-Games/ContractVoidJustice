@@ -57,6 +57,7 @@ namespace PattyPetitGiant
 
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadTexture("derek.png");
+            TextureLib.loadTexture("tileTemplate.png");
 
             ChunkLib cs = new ChunkLib();
 
