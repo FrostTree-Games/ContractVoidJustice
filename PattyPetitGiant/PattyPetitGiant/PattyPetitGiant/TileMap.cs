@@ -53,6 +53,9 @@ namespace PattyPetitGiant
             WallK = 12,
             WallL = 13,
             WallM = 14,
+            WallN = 15,
+            WallO = 16,
+            WallP = 17,
         }
 
         private enum FloorType
@@ -223,6 +226,8 @@ namespace PattyPetitGiant
 #endif
                 }
             }
+
+            convertTestWallsToWalls();
         }
 
         public TileMap(TileDimensions size, Vector2 tileSize, TileType initType)
@@ -240,6 +245,9 @@ namespace PattyPetitGiant
             }
         }
 
+        /// <summary>
+        /// Takes all of the tiles labelled "TestWall" in the map and converts them into walls depending on their adjacency
+        /// </summary>
         private void convertTestWallsToWalls()
         {
             for (int i = 0; i < map.GetLength(0); i++)
@@ -248,7 +256,103 @@ namespace PattyPetitGiant
                 {
                     if (map[i, j] == TileType.TestWall)
                     {
-                        //
+                        byte adjacencyValue = 0;
+                        byte flag = 1;
+
+                        for (int l = j - 1; l < j + 2; l++)
+                        {
+                            for (int k = i - 1; k < i + 2; k++)
+                            {
+                                if (k == i && l == j)
+                                {
+                                    continue;
+                                }
+
+                                if (k < 0 || k >= map.GetLength(0) || l < 0 || l >= map.GetLength(1))
+                                {
+                                    flag <<= 1;
+                                    continue;
+                                }
+
+                                if (map[k, l] != TileType.NoWall)
+                                {
+                                    adjacencyValue |= flag;
+                                }
+
+                                flag <<= 1;
+                            }
+                        }
+
+                        switch (adjacencyValue)
+                        {
+                            case 43:
+                            case 47:
+                            case 39:
+                            case 11:
+                            case 15:
+                                map[i, j] = TileType.WallM;
+                                break;
+                            case 22:
+                            case 150:
+                            case 151:
+                            case 23:
+                                map[i, j] = TileType.WallK;
+                                break;
+                            case 208:
+                            case 212:
+                            case 240:
+                            case 244:
+                                map[i, j] = TileType.WallA;
+                                break;
+                            case 104:
+                            case 105:
+                            case 232:
+                            case 233:
+                                map[i, j] = TileType.WallC;
+                                break;
+                            case 248:
+                            case 249:
+                            case 252:
+                            case 253:
+                                map[i, j] = TileType.WallB;
+                                break;
+                            case 31:
+                            case 63:
+                            case 159:
+                            case 191:
+                                map[i, j] = TileType.WallL;
+                                break;
+                            case 214:
+                            case 215:
+                            case 246:
+                            case 247:
+                                map[i, j] = TileType.WallF;
+                                break;
+                            case 107:
+                            case 111:
+                            case 235:
+                            case 239:
+                                map[i, j] = TileType.WallH;
+                                break;
+                            case 251:
+                                map[i, j] = TileType.WallI;
+                                break;
+                            case 127:
+                                map[i, j] = TileType.WallD;
+                                break;
+                            case 254:
+                                map[i, j] = TileType.WallJ;
+                                break;
+                            case 223:
+                                map[i, j] = TileType.WallE; //lol pixar
+                                break;
+                            case 255:
+                                map[i, j] = TileType.WallG;
+                                break;
+                            default:
+                                map[i, j] = TileType.WallUnidentified;
+                                break;
+                        }
                     }
                 }
             }
@@ -304,22 +408,40 @@ namespace PattyPetitGiant
             {
                 for (int i = 0; i < size.x; i++)
                 {
+                    int tileX;
+                    int tileY;
+
                     switch (map[i, j])
                     {
                         case TileType.NoWall:
                             break;
                         case TileType.TestWall:
                             if (tileSkin == null)
-                            {
                                 spriteBatch.Draw(Game1.whitePixel, new Vector2(i * tileSize.X, j * tileSize.Y), null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(tileSize.X, tileSize.Y), SpriteEffects.None, depth);
-                            }
-                            else
-                            {
-                                spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(1 * GlobalGameConstants.TileSize.Y + 1), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            }
                             break;
+                        case TileType.WallA:
+                        case TileType.WallB:
+                        case TileType.WallC:
+                        case TileType.WallD:
+                        case TileType.WallE:
+                        case TileType.WallF:
+                        case TileType.WallG:
+                        case TileType.WallH:
+                        case TileType.WallI:
+                        case TileType.WallJ:
+                        case TileType.WallK:
+                        case TileType.WallL:
+                        case TileType.WallM:
+                        case TileType.WallN:
+                        case TileType.WallO:
+                        case TileType.WallP:
+                            tileX = ((int)(map[i, j]) - 2) % 5;
+                            tileY = ((int)(map[i, j]) - 2) / 5;
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(tileX * GlobalGameConstants.TileSize.X + tileX), (int)(tileY * GlobalGameConstants.TileSize.Y + tileY), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            break;
+                        case TileType.WallUnidentified:
                         default:
-                            spriteBatch.Draw(Game1.whitePixel, new Vector2(i * tileSize.X, j * tileSize.Y), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(tileSize.X, tileSize.Y), SpriteEffects.None, depth);
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
                             break;
                     }
                 }
