@@ -37,8 +37,22 @@ namespace PattyPetitGiant
         /// </summary>
         public enum TileType
         {
+            WallUnidentified = -1,
             NoWall = 0,
             TestWall = 1,
+            WallA = 2,
+            WallB = 3,
+            WallC = 4,
+            WallD = 5,
+            WallE = 6,
+            WallF = 7,
+            WallG = 8,
+            WallH = 9,
+            WallI = 10,
+            WallJ = 11,
+            WallK = 12,
+            WallL = 13,
+            WallM = 14,
         }
 
         private enum FloorType
@@ -222,6 +236,20 @@ namespace PattyPetitGiant
                 for (int j = 0; j < size.y; j++)
                 {
                     map[i, j] = initType;
+                }
+            }
+        }
+
+        private void convertTestWallsToWalls()
+        {
+            for (int i = 0; i < map.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.GetLength(1); j++)
+                {
+                    if (map[i, j] == TileType.TestWall)
+                    {
+                        //
+                    }
                 }
             }
         }
