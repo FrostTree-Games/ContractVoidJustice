@@ -17,11 +17,12 @@ namespace PattyPetitGiant
 
         private struct SpineAnimation
         {
+            /*
             public string fileName;
             public Spine.Atlas atlas;
             public Skeleton skeleton;
             public Animation animation;
-            public float animationTime;
+            public float animationTime; */
         }
 
         public AnimationLib(GraphicsDevice gd, SpriteBatch spriteBatch)
