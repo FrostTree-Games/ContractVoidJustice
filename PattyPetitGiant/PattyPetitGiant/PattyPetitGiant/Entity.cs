@@ -101,6 +101,8 @@ namespace PattyPetitGiant
                         other.velocity.Y = 5.0f;
                     }
                 }
+
+                Console.WriteLine("Enemy knockback velocity: " + other.velocity);
             }
         }
 

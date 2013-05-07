@@ -98,5 +98,9 @@ namespace PattyPetitGiant
                 }
             }
         }
+        public void update(Enemy parent, Entity player, GameTime currentTime, LevelState parentWorld)
+        {
+            return;
+        }
     }
 }

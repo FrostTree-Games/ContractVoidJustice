@@ -50,26 +50,10 @@ namespace PattyPetitGiant
                     if (en is Player)
                     {
                         float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y),2.0));
-                        if (hitTest(en))
-                        {
-                            this.knockBack(en, this.position, this.dimensions);
-                        }
-
-                        if (distance < 300)
+                        if(distance < 300)
                         {
                             state = EnemyState.Chase;
                         }
-                    }
-                }
-
-                if (disable_movement == true)
-                {
-                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
-                    if (disable_movement_time > 300)
-                    {
-                        velocity = Vector2.Zero;
-                        disable_movement = false;
-                        disable_movement_time = 0;
                     }
                 }
 
@@ -89,22 +73,51 @@ namespace PattyPetitGiant
             }
             else if (state == EnemyState.Chase)
             {
-                foreach (Entity en in parentWorld.EntityList)
-                {
-                    if (en == this)
-                        continue;
 
-                    if (en is Player)
+                if (disable_movement == true)
+                {
+                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                    if (disable_movement_time > 300)
                     {
-                        float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
-                        if (distance > 300)
-                        {
-                            state = EnemyState.Moving;
-                        }
+                        velocity = Vector2.Zero;
+                        disable_movement = false;
+                        disable_movement_time = 0;
                     }
                 }
-                
-                velocity = Vector2.Zero;
+                else
+                {
+                    foreach (Entity en in parentWorld.EntityList)
+                    {
+                        if (en == this)
+                            continue;
+
+                        if (en is Player)
+                        {
+                            float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
+                            if (hitTest(en))
+                            {
+                                this.knockBack(en, this.position, this.dimensions);
+                            }
+                            else if (distance > 300)
+                            {
+                                state = EnemyState.Moving;
+                            }
+                            else
+                            {
+                                component.update(this, en, currentTime, parentWorld);
+                            }
+                        }
+                    }
+
+                    //velocity = Vector2.Zero;
+                }
+                Vector2 pos = new Vector2(position.X, position.Y);
+
+                Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+                Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+                position.X = finalPos.X;
+                position.Y = finalPos.Y;
+
                 if (state == EnemyState.Moving)
                 {
                     component = new Walk();
