@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PattyPetitGiant", "PattyPetitGiant\PattyPetitGiant\PattyPetitGiant.csproj", "{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}"
 EndProject
-Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "PattyPetitGiantContent", "PattyPetitGiant\PattyPetitGiantContent\PattyPetitGiantContent.contentproj", "{C7026D23-2447-4ABB-9806-BA9CD5F3AC66}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PattyPetitGiantContent", "PattyPetitGiant\PattyPetitGiantContent\PattyPetitGiantContent.contentproj", "{C7026D23-2447-4ABB-9806-BA9CD5F3AC66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spine-FrostTree", "FrostTree-Spine\Spine-FrostTree.csproj", "{4F93BFBE-C1AF-483E-A055-128D59E57C14}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +19,10 @@ Global
 		{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}.Release|x86.Build.0 = Release|x86
 		{C7026D23-2447-4ABB-9806-BA9CD5F3AC66}.Debug|x86.ActiveCfg = Debug|x86
 		{C7026D23-2447-4ABB-9806-BA9CD5F3AC66}.Release|x86.ActiveCfg = Release|x86
+		{4F93BFBE-C1AF-483E-A055-128D59E57C14}.Debug|x86.ActiveCfg = Debug|x86
+		{4F93BFBE-C1AF-483E-A055-128D59E57C14}.Debug|x86.Build.0 = Debug|x86
+		{4F93BFBE-C1AF-483E-A055-128D59E57C14}.Release|x86.ActiveCfg = Release|x86
+		{4F93BFBE-C1AF-483E-A055-128D59E57C14}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

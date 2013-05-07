@@ -75,6 +75,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationLib.cs" />
     <Compile Include="AudioLib.cs" />
     <Compile Include="Chase.cs" />
     <Compile Include="ChaseEnemy.cs" />
@@ -105,9 +106,14 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FrostTree-Spine\Spine-FrostTree.csproj">
+      <Project>{4F93BFBE-C1AF-483E-A055-128D59E57C14}</Project>
+      <Name>Spine-FrostTree</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PattyPetitGiantContent\PattyPetitGiantContent.contentproj">
-      <Name>PattyPetitGiantContent</Name>
+      <Name>PattyPetitGiantContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{C7026D23-2447-4ABB-9806-BA9CD5F3AC66}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
