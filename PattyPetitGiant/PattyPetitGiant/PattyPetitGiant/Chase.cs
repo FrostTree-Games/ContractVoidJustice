@@ -17,8 +17,6 @@ namespace PattyPetitGiant
         }
         public void update(Enemy parent, Entity player, GameTime currentTime, LevelState parentWorld)
         {
-            Console.WriteLine("Inside the Chase Component");
-
             //distance in the X direction
             float direction_x = (player.Position.X + (parent.Dimensions.X/2.0f)) - parent.CenterPoint.X;
             float direction_y = (player.Position.Y + (parent.Dimensions.Y / 2.0f)) - parent.CenterPoint.Y;
@@ -45,11 +43,6 @@ namespace PattyPetitGiant
                     parent.Velocity = new Vector2(direction_x / 100f, 1.51f);
                 }
             }
-
-            Console.WriteLine("player center minus enemy Center: " + direction_x);
-            
-            
-            Console.WriteLine("Enemy Velocity: " + parent.Velocity);
         }
     }
 }

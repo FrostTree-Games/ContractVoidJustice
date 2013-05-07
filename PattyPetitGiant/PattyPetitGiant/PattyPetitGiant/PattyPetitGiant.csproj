@@ -86,6 +86,7 @@
     <Compile Include="EnemyComponents.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GlobalGameConstants.cs" />
+    <Compile Include="Gun.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="LevelState.cs" />
     <Compile Include="Player.cs" />

@@ -39,6 +39,7 @@ namespace PattyPetitGiant
             dimensions.Y = 47.9f;
 
             player_item_1 = new Sword(position);
+            player_item_2 = new Gun(position);
 
             state = playerState.Moving;
 
@@ -60,6 +61,7 @@ namespace PattyPetitGiant
                 if (player_item_1 == null)
                 {
                     state = playerState.Moving;
+                    disable_movement = false;
                 }
                 else
                 {
@@ -73,6 +75,10 @@ namespace PattyPetitGiant
                 {
                     state = playerState.Moving;
                     disable_movement = false;
+                }
+                else
+                {
+                    player_item_2.update(this, currentTime, parentWorld);
                 }
             }
             else if (state == playerState.Moving)
@@ -133,6 +139,14 @@ namespace PattyPetitGiant
                     }
                 }
 
+                if (player_item_1 != null)
+                {
+                    player_item_1.daemonupdate(currentTime, parentWorld);
+                }
+                if (player_item_2 != null)
+                {
+                    player_item_2.daemonupdate(currentTime, parentWorld);
+                }
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
@@ -146,6 +160,14 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
             sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
+            if (player_item_1 != null)
+            {
+                player_item_1.draw(sb);
+            }
+            if (player_item_2 != null)
+            {
+                player_item_2.draw(sb);
+            }
         }
     }
 }

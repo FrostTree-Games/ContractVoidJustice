@@ -15,15 +15,9 @@ namespace PattyPetitGiant
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
-
+        private float max_item_state_time = 20.0f;
         private float item_state_time = 0.0f;
-
-        private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Melee;
-
-        public GlobalGameConstants.itemType itemCheck
-        {
-            get { return item_type; }
-        }
+        private bool sword_swing = false;
 
         public Sword(Vector2 initial_position)
         {
@@ -39,13 +33,6 @@ namespace PattyPetitGiant
             item_direction = parent.Direction_Facing;
 
             item_state_time += currentTime.ElapsedGameTime.Milliseconds;
-
-            if (item_state_time > 10)
-            {
-                parent.State = Player.playerState.Moving;
-                item_state_time = 0.0f;
-                parent.Disable_Movement = true;
-            }
 
             //sword is on the right hand side of the player, if hitboxes are different dimensions, need to adjust the position of sword.
             if (item_direction == GlobalGameConstants.Direction.Right)
@@ -75,15 +62,31 @@ namespace PattyPetitGiant
                 {
                     if (hitTest(en))
                     {
-                        parent.knockBack(en, position, hitbox);
+                        parent.knockBack(en, parent.Position, parent.Dimensions);
                     }
                 }
             }
-            
+            sword_swing = true;
+            if (item_state_time > max_item_state_time)
+            {
+                parent.State = Player.playerState.Moving;
+                item_state_time = 0.0f;
+                parent.Disable_Movement = true;
+                sword_swing = false;
+            }
+        }
+
+        public void daemonupdate(GameTime currentTime, LevelState parentWorld)
+        {
+            return;
         }
 
         public void draw(SpriteBatch sb)
         {
+            if (sword_swing)
+            {
+                sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
+            }
         }
 
         public bool hitTest(Entity other)

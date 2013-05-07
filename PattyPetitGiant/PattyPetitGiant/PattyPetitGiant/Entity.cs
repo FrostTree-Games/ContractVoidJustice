@@ -61,8 +61,8 @@ namespace PattyPetitGiant
             {
                 other.disable_movement = true;
 
-                Vector2 player_center = new Vector2(other.position.X - 24.0f, other.position.Y - 24);
-                Vector2 enemy_center = new Vector2(position.X - 24, position.Y - 24);
+                Vector2 player_center = new Vector2(other.position.X + (other.Dimensions.X / 2), other.position.Y + (other.Dimensions.Y / 2));
+                Vector2 enemy_center = new Vector2(position.X + (dimensions.X/2), position.Y + (dimensions.Y/2));
 
                 other.velocity = player_center - enemy_center;
 
@@ -74,12 +74,15 @@ namespace PattyPetitGiant
             {
                 other.disable_movement = true;
 
-                Vector2 player_center = new Vector2(position.X - 24, position.Y - 24);
-                Vector2 enemy_center = new Vector2(other.position.X - 24.0f, other.position.Y - 24);
+                Vector2 player_center = new Vector2(position.X + (dimensions.X / 2), position.Y + (dimensions.X / 2));
+                Vector2 enemy_center = new Vector2(other.position.X + (other.dimensions.X/2), other.position.Y + (other.dimensions.Y/2));
 
-                other.velocity = (enemy_center - player_center)/15;
+                other.velocity = (enemy_center - player_center);
+                //Console.WriteLine(other.velocity);
+                other.velocity.X = other.velocity.X / 10.0f;
+                other.velocity.Y = other.velocity.Y / 10.0f;
 
-                if (Math.Abs(enemy_center.X - player_center.X) > Math.Abs(enemy_center.Y - player_center.Y))
+                /*if (Math.Abs(enemy_center.X - player_center.X) > Math.Abs(enemy_center.Y - player_center.Y))
                 {
                     if (other.velocity.X < 0)
                     {
@@ -100,9 +103,7 @@ namespace PattyPetitGiant
                     {
                         other.velocity.Y = 5.0f;
                     }
-                }
-
-                Console.WriteLine("Enemy knockback velocity: " + other.velocity);
+                }*/
             }
         }
 

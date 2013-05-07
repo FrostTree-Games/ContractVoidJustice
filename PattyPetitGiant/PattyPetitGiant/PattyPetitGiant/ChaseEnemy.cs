@@ -73,7 +73,7 @@ namespace PattyPetitGiant
             }
             else if (state == EnemyState.Chase)
             {
-
+                Console.WriteLine("Enemy Velocity: " +velocity);
                 if (disable_movement == true)
                 {
                     disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
