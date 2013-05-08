@@ -115,6 +115,8 @@ namespace PattyPetitGiant
             }
 
             sb.End();
+
+            AnimationLib.renderSpineEntities(camera, entityList);
         }
     }
 }
