@@ -11,11 +11,8 @@ namespace PattyPetitGiant
 {
     class TestEnemy : Enemy
     {
-
-        private float neg_direction = -1;
-        private float change_direction_time = 0.0f;
         private int change_direction;
-
+       
         public TestEnemy()
         {
         }
@@ -36,6 +33,10 @@ namespace PattyPetitGiant
             change_direction = 0;
 
             this.parentWorld = parentWorld;
+
+            enemy_life = 10;
+            enemy_damage = 1;
+            damage_player_time = 0.0f;
         }
 
         public override void update(GameTime currentTime)
@@ -56,7 +57,7 @@ namespace PattyPetitGiant
                     {
                         if (en is Player)
                         {
-                            this.knockBack(en, this.position, this.dimensions);
+                            this.knockBack(en, this.position, this.dimensions, enemy_damage);
                         }
                     }
                 }
@@ -170,6 +171,11 @@ namespace PattyPetitGiant
                 Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
                 position.X = finalPos.X;
                 position.Y = finalPos.Y;
+            }
+
+            if (enemy_life == 0)
+            {
+                remove_from_list = true;
             }
         }
 

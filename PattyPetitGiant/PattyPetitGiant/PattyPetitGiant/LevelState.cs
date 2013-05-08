@@ -43,7 +43,6 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-
             testPopulateEnemies();
 
             foreach (Entity en in entityList)
@@ -97,6 +96,8 @@ namespace PattyPetitGiant
                 en.update(currentTime);
             }
 
+            entityList.RemoveAll(en=>en.Remove_From_List==true);
+
             if (cameraFocus != null)
             {
                 camera = Matrix.Identity * Matrix.CreateTranslation(new Vector3((cameraFocus.CenterPoint.X * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (cameraFocus.CenterPoint.Y * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
@@ -113,9 +114,7 @@ namespace PattyPetitGiant
             {
                 en.draw(sb);
             }
-            
-            //SpriteFont font = Content.Load<SpriteFont>("Courier New");
-            
+
             sb.End();
 
             sb.Begin();

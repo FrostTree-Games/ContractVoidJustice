@@ -43,6 +43,9 @@ namespace PattyPetitGiant
             get { return direction_facing; }
         }
 
+        protected bool remove_from_list = false;
+        public bool Remove_From_List { get { return remove_from_list; } }
+
         public bool hitTest(Entity other)
         {
             if (position.X > other.position.X + other.dimensions.X || position.X + dimensions.X < other.position.X || position.Y > other.position.Y + other.dimensions.Y || position.Y + dimensions.Y < other.position.Y)
@@ -54,58 +57,51 @@ namespace PattyPetitGiant
         }
 
         //checks the position of the entity getting knocked back with the current position
-        public void knockBack(Entity other, Vector2 position, Vector2 dimensions)
+        /// <summary>
+        /// Players and Enemies get knocked back a certain velocity away
+        /// </summary>
+        /// <param name="other">Entity that is either the player or the enemy depending on who is hitting who</param>
+        /// <param name="position">center position of object that hits other is</param>
+        /// <param name="dimensions">size of object that hits other is</param>
+        public void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
         {
             //Enemy knocks back player
             if (other is Player)
             {
-                other.disable_movement = true;
+                Player player = (Player)other;
+                Console.WriteLine(player.disable_movement_time);
+                if (player.disable_movement_time == 0.0)
+                {
+                    player.disable_movement = true;
+                    //temporary fix will consult dan to be sure.
 
-                Vector2 player_center = new Vector2(other.position.X + (other.Dimensions.X / 2), other.position.Y + (other.Dimensions.Y / 2));
-                Vector2 enemy_center = new Vector2(position.X + (dimensions.X/2), position.Y + (dimensions.Y/2));
+                    Vector2 player_center = new Vector2(player.position.X + (player.Dimensions.X / 2), player.position.Y + (player.Dimensions.Y / 2));
+                    Vector2 enemy_center = new Vector2(position.X + (dimensions.X / 2), position.Y + (dimensions.Y / 2));
 
-                other.velocity = player_center - enemy_center;
+                    player.velocity = player_center - enemy_center;
 
-                other.velocity.X = other.velocity.X / 10.0f;
-                other.velocity.Y = other.velocity.Y / 10.0f;
+                    player.velocity.X = player.velocity.X / 10.0f;
+                    player.velocity.Y = player.velocity.Y / 10.0f;
 
-                GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - 1.0f;
+                    GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - damage;
+                }
             }
-                //items knock back enemy
+            //items knock back enemy
             else if (other is Enemy)
             {
-                other.disable_movement = true;
+                Enemy enemy = (Enemy)other;
+                enemy.disable_movement = true;
+
+                Console.WriteLine(enemy.disable_movement_time);
 
                 Vector2 player_center = new Vector2(position.X + (dimensions.X / 2), position.Y + (dimensions.X / 2));
-                Vector2 enemy_center = new Vector2(other.position.X + (other.dimensions.X/2), other.position.Y + (other.dimensions.Y/2));
+                Vector2 enemy_center = new Vector2(enemy.position.X + (enemy.dimensions.X / 2), enemy.position.Y + (enemy.dimensions.Y / 2));
 
-                other.velocity = (enemy_center - player_center);
-                //Console.WriteLine(other.velocity);
-                other.velocity.X = other.velocity.X / 10.0f;
-                other.velocity.Y = other.velocity.Y / 10.0f;
+                enemy.velocity = (enemy_center - player_center);
+                enemy.velocity.X = enemy.velocity.X / 10.0f;
+                enemy.velocity.Y = enemy.velocity.Y / 10.0f;
 
-                /*if (Math.Abs(enemy_center.X - player_center.X) > Math.Abs(enemy_center.Y - player_center.Y))
-                {
-                    if (other.velocity.X < 0)
-                    {
-                        other.velocity.X = -5.0f;
-                    }
-                    else
-                    {
-                        other.velocity.X = 5.0f;
-                    }
-                }
-                else
-                {
-                    if (other.velocity.Y < 0)
-                    {
-                        other.velocity.Y = -5.0f;
-                    }
-                    else
-                    {
-                        other.velocity.Y = 5.0f;
-                    }
-                }*/
+                enemy.Enemy_Life = enemy.Enemy_Life - damage;
             }
         }
 

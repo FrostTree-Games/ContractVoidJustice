@@ -33,7 +33,21 @@ namespace PattyPetitGiant
             set { change_direction_time = value; } 
             get { return change_direction_time; } 
         }
-        
+
+        protected int enemy_life = 100;
+        public int Enemy_Life
+        {
+            set { enemy_life = value; }
+            get { return enemy_life; }
+        }
+        protected int enemy_damage = 0;
+        public int Enemy_Damage
+        {
+            get { return enemy_damage; }
+        }
+
+        protected float damage_player_time = 0.0f;
+
         public Enemy()
         {
             velocity = Vector2.Zero;
@@ -56,6 +70,8 @@ namespace PattyPetitGiant
             state = EnemyState.Moving;
 
             this.parentWorld = parentWorld;
+
+            remove_from_list = false;
         }
 
         public override void update(GameTime currentTime)
@@ -72,7 +88,7 @@ namespace PattyPetitGiant
                 {
                     if (en is Player)
                     {
-                        this.knockBack(en, this.position, this.dimensions);
+                        this.knockBack(en, this.position, this.dimensions, enemy_damage);
                     }
                 }
             }

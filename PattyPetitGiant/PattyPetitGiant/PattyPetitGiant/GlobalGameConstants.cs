@@ -47,8 +47,8 @@ namespace PattyPetitGiant
             set { player_health = value; }
             get { return player_health; } 
         }
-        private static int player_ammunition = 100;
-        public static int Player_Ammunition
+        private static float player_ammunition = 100;
+        public static float Player_Ammunition
         {
             set { player_ammunition = value; }
             get { return player_ammunition; }
