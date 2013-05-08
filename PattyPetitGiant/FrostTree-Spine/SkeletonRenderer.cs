@@ -56,6 +56,11 @@ namespace Spine {
 			Bone.yDown = true;
 		}
 
+        public void setCameraMatrix(Matrix camera)
+        {
+            effect.View = Matrix.CreateLookAt(new Vector3(0.0f, 0.0f, 1.0f), Vector3.Zero, Vector3.Up) * camera;
+        }
+
 		public void Begin () {
 			device.RasterizerState = rasterizerState;
 			device.BlendState = BlendState;
