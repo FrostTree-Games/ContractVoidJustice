@@ -194,7 +194,7 @@ namespace PattyPetitGiant
 
         public void spinerender(SkeletonRenderer renderer)
         {
-            walk_down.Skeleton.RootBone.X = CenterPoint.X;
+            walk_down.Skeleton.RootBone.X = CenterPoint.X * (walk_down.Skeleton.FlipX ? -1 : 1);
             walk_down.Skeleton.RootBone.Y = CenterPoint.Y +(dimensions.Y / 2);
 
             walk_down.Skeleton.RootBone.ScaleX = 0.1f;
