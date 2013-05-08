@@ -18,6 +18,7 @@ namespace PattyPetitGiant
         private float max_item_state_time = 20.0f;
         private float item_state_time = 0.0f;
         private bool sword_swing = false;
+        protected int sword_damage;
 
         public Sword(Vector2 initial_position)
         {
@@ -25,6 +26,7 @@ namespace PattyPetitGiant
             hitbox.X = 48.0f;
             hitbox.Y = 48.0f;
             item_state_time = 0.0f;
+            sword_damage = 5;
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -62,7 +64,11 @@ namespace PattyPetitGiant
                 {
                     if (hitTest(en))
                     {
-                        parent.knockBack(en, parent.Position, parent.Dimensions);
+                        if (item_state_time > max_item_state_time)
+                        {
+                            parent.knockBack(en, parent.Position, parent.Dimensions, sword_damage);
+                            item_state_time = 0.0f;
+                        }
                     }
                 }
             }

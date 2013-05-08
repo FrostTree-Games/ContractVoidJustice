@@ -14,6 +14,7 @@ namespace PattyPetitGiant
         public Vector2 hitbox;
         public Vector2 position;
         public Vector2 velocity;
+        public int bullet_damage;
         public GlobalGameConstants.Direction bullet_direction;
     }
     class Gun : Item
@@ -43,6 +44,7 @@ namespace PattyPetitGiant
             {
                 bullet.hitbox = new Vector2(10.0f, 10.0f);
                 bullet.velocity = new Vector2(0.0f, 0.0f);
+                bullet.bullet_damage = 2;
                 bullet_alive = true;
 
                 GlobalGameConstants.Player_Ammunition = GlobalGameConstants.Player_Ammunition - 1;
@@ -98,7 +100,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            en.knockBack(en, bullet.position, bullet.hitbox);
+                            en.knockBack(en, bullet.position, bullet.hitbox, bullet.bullet_damage);
                             bullet_alive = false;
                         }
                     }

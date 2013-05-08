@@ -48,6 +48,8 @@ namespace PattyPetitGiant
             direction_facing = GlobalGameConstants.Direction.Right;
 
             this.parentWorld = parentWorld;
+
+            remove_from_list = false;
         }
 
         public override void update(GameTime currentTime)
