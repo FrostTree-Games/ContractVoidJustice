@@ -78,6 +78,7 @@ namespace PattyPetitGiant
         public Vector2 TileSize { get { return tileSize; } }
 
         private TileType[,] map = null;
+        public TileType[,] Map { get { return map; } }
         private FloorType[,] floorMap = null;
 
         private Vector2 startPosition;

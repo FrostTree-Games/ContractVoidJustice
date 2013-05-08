@@ -43,7 +43,8 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new ChaseEnemy(this, map.StartPosition.X + 60, map.StartPosition.Y + 60));
+
+            testPopulateEnemies();
 
             foreach (Entity en in entityList)
             {
@@ -55,6 +56,38 @@ namespace PattyPetitGiant
 #endif
 
             state = LoadingState.Running;
+        }
+
+        /// <summary>
+        /// Really crudle
+        /// </summary>
+        private void testPopulateEnemies()
+        {
+            if (map == null)
+            {
+                return;
+            }
+
+            Random rand = new Random();
+            for (int i = 0; i < 50; i++ )
+            {
+                int placeX = rand.Next() % map.Map.GetLength(0);
+                int placeY = rand.Next() % map.Map.GetLength(1);
+
+                if (map.Map[placeX, placeY] == TileMap.TileType.NoWall)
+                {
+                    switch (rand.Next() % 2)
+                    {
+                        case 1:
+                            entityList.Add(new ChaseEnemy(this, placeX * GlobalGameConstants.TileSize.X, placeY * GlobalGameConstants.TileSize.Y + 60));
+                            break;
+                        case 0:
+                        default:
+                            entityList.Add(new TestEnemy(this, placeX * GlobalGameConstants.TileSize.X, placeY * GlobalGameConstants.TileSize.Y + 60));
+                            break;
+                    }
+                }
+            }
         }
 
         protected override void doUpdate(Microsoft.Xna.Framework.GameTime currentTime)
