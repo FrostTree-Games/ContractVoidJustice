@@ -41,5 +41,11 @@ namespace PattyPetitGiant
         public static int TilesPerRoomWide { get { return tilesPerRoomWide; } }
         public static int TilesPerRoomHigh { get { return tilesPerRoomHigh; } }
 
+        private static float player_health = 100.00f;
+        public static float Player_Health 
+        {
+            set { player_health = value; }
+            get { return player_health; } 
+        }
     }
 }

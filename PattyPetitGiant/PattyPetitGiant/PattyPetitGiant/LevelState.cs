@@ -80,7 +80,16 @@ namespace PattyPetitGiant
             {
                 en.draw(sb);
             }
+            
+            //SpriteFont font = Content.Load<SpriteFont>("Courier New");
+            
+            sb.End();
 
+            sb.Begin();
+
+            string output = "hello world";
+
+            sb.DrawString(Game1.font, output, new Vector2(10, 10), Color.Black);
             sb.End();
         }
     }

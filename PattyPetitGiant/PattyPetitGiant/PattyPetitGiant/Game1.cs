@@ -19,7 +19,7 @@ namespace PattyPetitGiant
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
+        public static SpriteFont font;
         public static Texture2D whitePixel = null;
 
         private ScreenState currentGameScreen = null;
@@ -58,6 +58,8 @@ namespace PattyPetitGiant
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadTexture("derek.png");
             TextureLib.loadTexture("tileTemplate.png");
+
+            font = Content.Load<SpriteFont>("testFont");
 
             ChunkLib cs = new ChunkLib();
 

@@ -73,7 +73,6 @@ namespace PattyPetitGiant
             }
             else if (state == EnemyState.Chase)
             {
-                Console.WriteLine("Enemy Velocity: " +velocity);
                 if (disable_movement == true)
                 {
                     disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -108,8 +107,6 @@ namespace PattyPetitGiant
                             }
                         }
                     }
-
-                    //velocity = Vector2.Zero;
                 }
                 Vector2 pos = new Vector2(position.X, position.Y);
 
