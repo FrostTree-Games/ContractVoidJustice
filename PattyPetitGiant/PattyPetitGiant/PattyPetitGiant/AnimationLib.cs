@@ -91,7 +91,7 @@ namespace PattyPetitGiant
 
             foreach (Entity en in entList)
             {
-                if (en is Player)
+                /*if (en is Player)
                 {
                     Skeleton sk = getSkeleton("jensenDown").Skeleton;
                     Animation an = getSkeleton("jensenDown").Animation;
@@ -105,6 +105,11 @@ namespace PattyPetitGiant
 
                     an.Apply(sk, 0.0f, true);
                     skeletonRenderer.Draw(sk);
+                } */
+
+                if (en is SpineEntity)
+                {
+                    ((SpineEntity)en).spinerender(skeletonRenderer);
                 }
             }
 

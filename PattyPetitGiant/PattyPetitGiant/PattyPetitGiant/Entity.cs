@@ -6,15 +6,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 //using FuncWorks.XNA.XTiled;
 
 namespace PattyPetitGiant
 {
     public abstract class Entity
     {
-        protected float width = 47.9f;
-        protected float height = 47.9f;
-
         protected bool disable_movement = false;
         protected float disable_movement_time = 0.0f;
 
@@ -22,7 +20,7 @@ namespace PattyPetitGiant
 
         protected Vector2 position = Vector2.Zero;
         public Vector2 Position { get { return position; } }
-        public Vector2 CenterPoint { get { return new Vector2(position.X + width/2, position.Y + height/2); } }
+        public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X/2, position.Y + dimensions.Y/2); } }
 
         protected Vector2 velocity = Vector2.Zero;
         public Vector2 Velocity 
@@ -108,5 +106,10 @@ namespace PattyPetitGiant
         public abstract void update(GameTime currentTime);
 
         public abstract void draw(SpriteBatch sb);
+    }
+
+    public interface SpineEntity
+    {
+        void spinerender(SkeletonRenderer renderer);
     }
 }
