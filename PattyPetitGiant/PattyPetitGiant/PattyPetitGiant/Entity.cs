@@ -68,6 +68,8 @@ namespace PattyPetitGiant
 
                 other.velocity.X = other.velocity.X / 10.0f;
                 other.velocity.Y = other.velocity.Y / 10.0f;
+
+                GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - 1.0f;
             }
                 //items knock back enemy
             else if (other is Enemy)

@@ -47,5 +47,17 @@ namespace PattyPetitGiant
             set { player_health = value; }
             get { return player_health; } 
         }
+        private static int player_ammunition = 100;
+        public static int Player_Ammunition
+        {
+            set { player_ammunition = value; }
+            get { return player_ammunition; }
+        }
+        private static int player_coin_amount = 0;
+        public static int Player_Coin_Amount
+        {
+            set { player_coin_amount = value; }
+            get { return player_coin_amount; }
+        }
     }
 }

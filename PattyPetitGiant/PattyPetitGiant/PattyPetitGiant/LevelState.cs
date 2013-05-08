@@ -87,9 +87,17 @@ namespace PattyPetitGiant
 
             sb.Begin();
 
-            string output = "hello world";
 
-            sb.DrawString(Game1.font, output, new Vector2(10, 10), Color.Black);
+
+            string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
+            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
+
+            string ammunition_amount_display = "Ammunition: " + GlobalGameConstants.Player_Ammunition;
+            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.Black);
+
+            string coin_amount_display = "Coin: " + GlobalGameConstants.Player_Coin_Amount;
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
+
             sb.End();
         }
     }

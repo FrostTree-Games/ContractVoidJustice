@@ -45,6 +45,8 @@ namespace PattyPetitGiant
                 bullet.velocity = new Vector2(0.0f, 0.0f);
                 bullet_alive = true;
 
+                GlobalGameConstants.Player_Ammunition = GlobalGameConstants.Player_Ammunition - 1;
+
                 bullet_alive_time = 0.0f;
 
                 if (item_direction == GlobalGameConstants.Direction.Right)

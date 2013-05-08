@@ -41,6 +41,7 @@
       <Name>testFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
     <None Include="gfx\tileTemplate.png">
       <Name>tileTemplate</Name>
