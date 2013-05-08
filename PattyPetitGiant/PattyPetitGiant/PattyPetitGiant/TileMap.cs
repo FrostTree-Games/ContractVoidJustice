@@ -492,7 +492,7 @@ namespace PattyPetitGiant
                 bool breakLoop = false;
                 TileDimensions pos = new TileDimensions(-1, -1);
 
-                for (int i = tilesPositionPlusHitBox.y; i > 0 && !breakLoop; i--)
+                for (int i = tilesPositionPlusHitBox.y; i > 0 && i < size.y && !breakLoop; i--)
                 {
                     for (int j = tilesPosition.x; j <= tilesPositionPlusHitBox.x && j < size.x && !breakLoop; j++)
                     {
