@@ -64,9 +64,7 @@ namespace PattyPetitGiant
             ChunkLib cs = new ChunkLib();
 
             AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
-            AnimationLib.loadAnimation("jensenDown");
-            AnimationLib.loadAnimation("jensenRight");
-            AnimationLib.loadAnimation("jensenUp");
+            AnimationLib.loadSpineFromManifest();
 
             currentGameScreen = new LevelState();
         }

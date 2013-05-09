@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.IO;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,12 +11,14 @@ namespace PattyPetitGiant
     public class AnimationLib
     {
         private static string spineAnimationDirectory = "Content/animation/spine/";
-        private static string manifestFile = "Content/animation/spine/manifest.txt";
+        private static string spineManifestFile = "Content/animation/spine/manifest.txt";
 
         private static XnaTextureLoader textureLoader = null;
         private static SkeletonRenderer skeletonRenderer = null;
 
         private static SpriteBatch spriteBatch = null;
+
+        private static bool manifestLoaded = false;
 
         private static Dictionary<string, SpineAnimationSet> dict = null;
 
@@ -57,6 +59,23 @@ namespace PattyPetitGiant
             {
                 dict = new Dictionary<string, SpineAnimationSet>();
             }
+        }
+
+        public static void loadSpineFromManifest()
+        {
+            if (manifestLoaded || dict == null)
+            {
+                return;
+            }
+
+            string[] spineAnims = File.ReadAllLines(spineManifestFile);
+
+            foreach (string line in spineAnims)
+            {
+                loadAnimation(line);
+            }
+
+            manifestLoaded = true;
         }
 
         public static bool loadAnimation(string animationName)
