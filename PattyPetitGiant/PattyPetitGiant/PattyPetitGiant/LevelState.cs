@@ -43,6 +43,7 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
+            entityList.Add(new Pickup(this, map.StartPosition.X + GlobalGameConstants.TileSize.X, map.StartPosition.Y + GlobalGameConstants.TileSize.Y + 60));
             //testPopulateEnemies();
 
             foreach (Entity en in entityList)
@@ -129,6 +130,12 @@ namespace PattyPetitGiant
 
             string coin_amount_display = "Coin: " + GlobalGameConstants.Player_Coin_Amount;
             sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
+
+            string player_item_1 = "Item 1: " + GlobalGameConstants.Player_Item_1;
+            sb.DrawString(Game1.font, player_item_1, new Vector2(320,10), Color.Black);
+
+            string player_item_2 = "Item 1: " + GlobalGameConstants.Player_Item_2;
+            sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.Black);
 
             sb.End();
 
