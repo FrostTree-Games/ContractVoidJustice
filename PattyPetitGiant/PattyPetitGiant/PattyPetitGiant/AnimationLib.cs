@@ -111,7 +111,7 @@ namespace PattyPetitGiant
                 sb.Draw(sheet, position, new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), Color.White);
             }
 
-            public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Color color)
+            public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Vector2 scale, float depth)
             {
                 int frame = (int)(time / frameDuration);
 
@@ -124,7 +124,7 @@ namespace PattyPetitGiant
                     frame = frameCount - 1;
                 }
 
-                sb.Draw(sheet, position, new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), color);
+                sb.Draw(sheet, position, new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
             }
         }
 
