@@ -16,7 +16,8 @@ namespace PattyPetitGiant
         {
             Moving,
             Item1,
-            Item2
+            Item2,
+            Item_Pickup
         }
 
         private Item player_item_1 = null;
@@ -25,9 +26,10 @@ namespace PattyPetitGiant
         private AnimationLib.SpineAnimationSet walk_down = null;
         private AnimationLib.SpineAnimationSet walk_right = null;
         private AnimationLib.SpineAnimationSet walk_up = null;
-        private AnimationLib.SpineAnimationSet walk_left = null;
         private AnimationLib.SpineAnimationSet current_skeleton = null;
         private float animation_time = 0.0f;
+
+        private float switch_weapon_interval = 0.0f;
 
         private playerState state = playerState.Moving;
         public playerState State
@@ -39,14 +41,15 @@ namespace PattyPetitGiant
         
         public Player(LevelState parentWorld, float initial_x, float initial_y)
         {
-            position.X = initial_x;
-            position.Y = initial_y;
+            position = new Vector2(initial_x, initial_y);
 
-            dimensions.X = 32.0f;
-            dimensions.Y = 78.0f;
-
+            dimensions = new Vector2(32.0f, 78.0f);
+            
             player_item_1 = new Sword(position);
             player_item_2 = new Gun(position);
+            GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
+            GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
+            switch_weapon_interval = 0.0f;
 
             state = playerState.Moving;
 
@@ -71,11 +74,9 @@ namespace PattyPetitGiant
 
             if (state == playerState.Item1)
             {
-                //itemType = player_item_1.itemCheck;
                 if (player_item_1 == null)
                 {
                     state = playerState.Moving;
-                    disable_movement = false;
                 }
                 else
                 {
@@ -88,7 +89,6 @@ namespace PattyPetitGiant
                 if (player_item_2 == null)
                 {
                     state = playerState.Moving;
-                    disable_movement = false;
                 }
                 else
                 {
@@ -97,16 +97,15 @@ namespace PattyPetitGiant
             }
             else if (state == playerState.Moving)
             {
+                switch_weapon_interval += currentTime.ElapsedGameTime.Milliseconds;
                 if (ks.IsKeyDown(Keys.A))
                 {
                     state = playerState.Item1;
                     velocity = Vector2.Zero;
-                    disable_movement = true;
                 }
                 if (ks.IsKeyDown(Keys.S))
                 {
                     state = playerState.Item2;
-                    disable_movement = true;
                 }
 
                 if (disable_movement == false)
@@ -174,7 +173,29 @@ namespace PattyPetitGiant
                 //Check to see if player has encountered a pickup item
                 foreach (Entity en in parentWorld.EntityList)
                 {
+                    if (en == this)
+                        continue;
 
+                    if (en is Pickup)
+                    {
+                        if (hitTest(en))
+                        {
+                            if (switch_weapon_interval > 100)
+                            {
+                                if (ks.IsKeyDown(Keys.Q))
+                                {
+                                    player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
+                                    GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
+                                }
+                                else if (ks.IsKeyDown(Keys.W))
+                                {
+                                    player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
+                                    GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
+                                }
+                                switch_weapon_interval = 0.0f;
+                            }
+                        }
+                    }
                 }
 
             }

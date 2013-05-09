@@ -11,15 +11,10 @@ namespace PattyPetitGiant
 {
     class Coin : Entity
     {
-        private bool coin_collected;
-        public Coin()
-        {
-        }
         public Coin(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
             this.parentWorld = parentWorld;
-            coin_collected = false;
             dimensions = new Vector2(20.0f, 20.0f);
         }
         public override void update(GameTime currentTime)

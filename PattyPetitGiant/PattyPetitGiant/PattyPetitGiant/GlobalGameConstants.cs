@@ -58,5 +58,8 @@ namespace PattyPetitGiant
             set { player_coin_amount = value; }
             get { return player_coin_amount; }
         }
+
+        public static string Player_Item_1 = null;
+        public static string Player_Item_2 = null;
     }
 }

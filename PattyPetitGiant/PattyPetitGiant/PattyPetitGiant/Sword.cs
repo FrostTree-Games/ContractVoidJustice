@@ -15,6 +15,7 @@ namespace PattyPetitGiant
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
+        private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Sword;
         private float max_item_state_time = 20.0f;
         private float item_state_time = 0.0f;
         private bool sword_swing = false;
@@ -39,7 +40,7 @@ namespace PattyPetitGiant
             //sword is on the right hand side of the player, if hitboxes are different dimensions, need to adjust the position of sword.
             if (item_direction == GlobalGameConstants.Direction.Right)
             {
-                position.X = parent.Position.X + parent.Dimensions.X;
+                position.X = parent.Position.X + parent.Dimensions.X/2;
                // position.Y = parent.Position.Y;
             }
             else if(item_direction == GlobalGameConstants.Direction.Left)
@@ -87,6 +88,16 @@ namespace PattyPetitGiant
             return;
         }
 
+        public GlobalGameConstants.itemType ItemType()
+        {
+            return item_type;
+        }
+
+        public string getEnumType()
+        {
+            return item_type.ToString(); 
+        }
+         
         public void draw(SpriteBatch sb)
         {
             if (sword_swing)
