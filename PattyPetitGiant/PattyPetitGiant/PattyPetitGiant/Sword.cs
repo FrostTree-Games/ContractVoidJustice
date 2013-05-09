@@ -19,6 +19,7 @@ namespace PattyPetitGiant
         private float item_state_time = 0.0f;
         private bool sword_swing = false;
         protected int sword_damage;
+        private AnimationLib.FrameAnimationSet swordAnim;
 
         public Sword(Vector2 initial_position)
         {
@@ -27,6 +28,8 @@ namespace PattyPetitGiant
             hitbox.Y = 48.0f;
             item_state_time = 0.0f;
             sword_damage = 5;
+
+            swordAnim = AnimationLib.getFrameAnimationSet("swordPic");
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -91,7 +94,8 @@ namespace PattyPetitGiant
         {
             if (sword_swing)
             {
-                sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
+                //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
+                swordAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(4, 4), 0.5f);
             }
         }
 
