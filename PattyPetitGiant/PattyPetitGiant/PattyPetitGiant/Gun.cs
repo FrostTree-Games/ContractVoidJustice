@@ -22,7 +22,7 @@ namespace PattyPetitGiant
         private Vector2 hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
-        
+        private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Gun;
         private bool bullet_alive = false;
         private float bullet_alive_time = 0.0f;
 
@@ -34,6 +34,7 @@ namespace PattyPetitGiant
             position = initial_position;
             bullet_alive_time = 0.0f;
             bullet_alive = false;
+            item_type = GlobalGameConstants.itemType.Gun;
         }
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
@@ -151,6 +152,17 @@ namespace PattyPetitGiant
             }
 
         }
+
+        public GlobalGameConstants.itemType ItemType()
+        {
+            return item_type;
+        }
+
+        public string getEnumType()
+        {
+            return item_type.ToString();
+        }
+
         public void draw(SpriteBatch sb)
         {
             if (bullet_alive)
