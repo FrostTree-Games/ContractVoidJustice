@@ -43,7 +43,7 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            testPopulateEnemies();
+            //testPopulateEnemies();
 
             foreach (Entity en in entityList)
             {

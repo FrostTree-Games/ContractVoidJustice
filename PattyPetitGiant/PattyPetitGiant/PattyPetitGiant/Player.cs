@@ -169,6 +169,14 @@ namespace PattyPetitGiant
                 {
                     player_item_2.daemonupdate(currentTime, parentWorld);
                 }
+
+
+                //Check to see if player has encountered a pickup item
+                foreach (Entity en in parentWorld.EntityList)
+                {
+
+                }
+
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);

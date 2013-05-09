@@ -18,10 +18,9 @@ namespace PattyPetitGiant
 
         public enum itemType
         {
-            Melee,
-            Range,
-            Bomb,
-            Shield
+            Sword,
+            Gun,
+            Bomb
         }
 
         private static int gameResolutionWidth = 1280;
