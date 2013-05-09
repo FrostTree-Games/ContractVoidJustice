@@ -5,35 +5,16 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -44,28 +25,28 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -76,10 +57,12 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -94,8 +77,8 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -110,8 +93,8 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -121,13 +104,13 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -137,13 +120,13 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -158,8 +141,8 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -174,7 +157,8 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -183,6 +167,12 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -193,6 +183,12 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -205,6 +201,8 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -219,6 +217,8 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -261,10 +261,10 @@
   </tilemap>
   <Attributes>
     <ChunkAttribute>
-      <AttributeName>north</AttributeName>
+      <AttributeName>start</AttributeName>
     </ChunkAttribute>
     <ChunkAttribute>
-      <AttributeName>start</AttributeName>
+      <AttributeName>north</AttributeName>
     </ChunkAttribute>
   </Attributes>
 </Chunk>

@@ -101,9 +101,9 @@ namespace PattyPetitGiant
 
             //iterate and expand the dungeon according to the constraints
             int iterate = 0;
-            const int maxIterations = 20;
+            const int maxIterations = 1000;
             int globalIterations = 0;
-            while (iterate < 10 && globalIterations < maxIterations)
+            while (iterate < 100 && globalIterations < maxIterations)
             {
                 globalIterations++;
 
