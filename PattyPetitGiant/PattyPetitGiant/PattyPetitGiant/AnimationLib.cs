@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Xml;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Spine;
@@ -13,14 +14,19 @@ namespace PattyPetitGiant
         private static string spineAnimationDirectory = "Content/animation/spine/";
         private static string spineManifestFile = "Content/animation/spine/manifest.txt";
 
+        private static string frameAnimationDirectory = "Content/animation/frame/";
+        private static string frameManifestFile = "Content/animation/frame/manifest.txt";
+
         private static XnaTextureLoader textureLoader = null;
         private static SkeletonRenderer skeletonRenderer = null;
 
         private static SpriteBatch spriteBatch = null;
 
-        private static bool manifestLoaded = false;
+        private static bool spineManifestLoaded = false;
+        private static bool frameManifestLoaded = false;
 
-        private static Dictionary<string, SpineAnimationSet> dict = null;
+        private static Dictionary<string, SpineAnimationSet> spineDict = null;
+        private static Dictionary<string, FrameAnimationSet> frameDict = null;
 
         /// <summary>
         /// Stores a Spine animation
@@ -48,22 +54,121 @@ namespace PattyPetitGiant
             }
         }
 
+        public class FrameAnimationSet
+        {
+            private Texture2D sheet = null;
+            public Texture2D Sheet { get { return sheet; } }
+
+            private int x, y;
+            public int InitialX { get { return x; } }
+            public int InitialY { get { return y; } }
+
+            private int offsetX, offsetY;
+            public int OffsetX { get { return offsetX; } }
+            public int OffsetY { get { return offsetY; } }
+
+            private int frameWidth, frameHeight;
+            public int FrameWidth { get { return frameWidth; } }
+            public int FrameHeight { get { return frameHeight; } }
+
+            private int frameCount = 0;
+            public int FrameCount { get { return frameCount; } }
+
+            private float frameDuration;
+            public float FrameDuration { get { return frameDuration; } }
+
+            private bool loop = false;
+            public bool Loop { get { return loop; } }
+
+            public FrameAnimationSet(SerializableAnimationData data)
+            {
+                x = data.initalX;
+                y = data.initalY;
+                offsetX = data.offsetX;
+                offsetY = data.offsetY;
+                frameWidth = data.frameWidth;
+                frameHeight = data.frameHeight;
+                frameCount = data.frameCount;
+                frameDuration = data.frameSpeed;
+                loop = data.loop;
+
+                sheet = TextureLib.getLoadedTexture(data.sheetName);
+            }
+
+            public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position)
+            {
+                int frame = (int)(time / frameDuration);
+
+                if (loop)
+                {
+                    frame = frame % frameCount;
+                }
+                else
+                {
+                    frame = frameCount - 1;
+                }
+
+                sb.Draw(sheet, position, new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), Color.White);
+            }
+
+            public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Color color)
+            {
+                int frame = (int)(time / frameDuration);
+
+                if (loop)
+                {
+                    frame = frame % frameCount;
+                }
+                else
+                {
+                    frame = frameCount - 1;
+                }
+
+                sb.Draw(sheet, position, new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), color);
+            }
+        }
+
+        public class SerializableAnimationData
+        {
+            public string name;
+
+            public string sheetName;
+
+            public int initalX = 0, initalY = 0;
+            public int offsetX = 0, offsetY = 0;
+            public int frameWidth, frameHeight;
+            public int frameCount;
+            public float frameSpeed;
+            public bool loop;
+        }
+
         public AnimationLib(GraphicsDevice gd, SpriteBatch spriteBatch)
         {
-            AnimationLib.spriteBatch = spriteBatch;
-
-            AnimationLib.textureLoader = new XnaTextureLoader(gd);
-            AnimationLib.skeletonRenderer = new SkeletonRenderer(gd);
-
-            if (dict == null)
+            if (AnimationLib.spriteBatch == null)
             {
-                dict = new Dictionary<string, SpineAnimationSet>();
+                AnimationLib.spriteBatch = spriteBatch;
+            }
+
+            if (AnimationLib.textureLoader == null || AnimationLib.skeletonRenderer == null)
+            {
+                AnimationLib.textureLoader = new XnaTextureLoader(gd);
+                AnimationLib.skeletonRenderer = new SkeletonRenderer(gd);
+            }
+
+            if (spineDict == null)
+            {
+                spineDict = new Dictionary<string, SpineAnimationSet>();
+            }
+
+            if (frameDict == null)
+            {
+                frameDict = new Dictionary<string, FrameAnimationSet>();
             }
         }
 
         public static void loadSpineFromManifest()
         {
-            if (manifestLoaded || dict == null)
+            if (spineManifestLoaded || spineDict == null)
             {
                 return;
             }
@@ -72,19 +177,63 @@ namespace PattyPetitGiant
 
             foreach (string line in spineAnims)
             {
-                loadAnimation(line);
+                loadSpineAnimation(line);
             }
 
-            manifestLoaded = true;
+            spineManifestLoaded = true;
         }
 
-        public static bool loadAnimation(string animationName)
+        public static void loadFrameFromManifest()
+        {
+            if (frameManifestLoaded || frameDict == null)
+            {
+                return;
+            }
+
+            string[] frameAnims = File.ReadAllLines(frameManifestFile);
+
+            foreach (string line in frameAnims)
+            {
+                loadFrameAnimation(line);
+            }
+
+            frameManifestLoaded = true;
+        }
+
+        public static bool loadSpineAnimation(string animationName)
         {
             SpineAnimationSet s = new SpineAnimationSet(animationName);
 
-            dict.Add(animationName, s);
+            spineDict.Add(animationName, s);
 
             return true;
+        }
+
+        public static bool loadFrameAnimation(string animationName)
+        {
+            SerializableAnimationData serialized = loadFrameAnimationFromFile(frameAnimationDirectory + animationName + ".zpy");
+
+            FrameAnimationSet fas = new FrameAnimationSet(serialized);
+
+            frameDict.Add(animationName, fas);
+
+            return true;
+        }
+
+        public static FrameAnimationSet getFrameAnimationSet(string animationName)
+        {
+            FrameAnimationSet output = null;
+
+            try
+            {
+                output = frameDict[animationName];
+
+                return output;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
 
         public static SpineAnimationSet getSkeleton(string folderName)
@@ -93,7 +242,7 @@ namespace PattyPetitGiant
 
             try
             {
-                output = dict[folderName];
+                output = spineDict[folderName];
 
                 return output;
             }
@@ -110,22 +259,6 @@ namespace PattyPetitGiant
 
             foreach (Entity en in entList)
             {
-                /*if (en is Player)
-                {
-                    Skeleton sk = getSkeleton("jensenDown").Skeleton;
-                    Animation an = getSkeleton("jensenDown").Animation;
-
-                    sk.RootBone.X = en.CenterPoint.X;
-                    sk.RootBone.Y = en.CenterPoint.Y + (en.Dimensions.Y/2);
-                    sk.RootBone.ScaleX = 0.1f;
-                    sk.RootBone.ScaleY = 0.1f;
-
-                    sk.UpdateWorldTransform();
-
-                    an.Apply(sk, 0.0f, true);
-                    skeletonRenderer.Draw(sk);
-                } */
-
                 if (en is SpineEntity)
                 {
                     ((SpineEntity)en).spinerender(skeletonRenderer);
@@ -133,6 +266,17 @@ namespace PattyPetitGiant
             }
 
             skeletonRenderer.End();
+        }
+
+        private static SerializableAnimationData loadFrameAnimationFromFile(string path)
+        {
+            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(SerializableAnimationData));
+
+            StreamReader stream = new StreamReader(path);
+
+            SerializableAnimationData s = (SerializableAnimationData)serializer.Deserialize(stream);
+
+            return s;
         }
     }
 }

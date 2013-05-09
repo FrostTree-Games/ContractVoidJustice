@@ -65,6 +65,7 @@ namespace PattyPetitGiant
 
             AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
             AnimationLib.loadSpineFromManifest();
+            AnimationLib.loadFrameFromManifest();
 
             currentGameScreen = new LevelState();
         }
