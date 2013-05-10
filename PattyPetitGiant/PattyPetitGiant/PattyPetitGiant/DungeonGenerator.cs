@@ -29,6 +29,9 @@ namespace PattyPetitGiant
             public int X { get { return x; } }
             public int Y { get { return y; } }
 
+            private float intensity;
+            public float Intensity { get { return intensity; } set { intensity = value; } }
+
             public DungeonRoomClass(DungeonRoomClass parent, int X, int Y)
             {
                 this.parent = parent;
@@ -36,6 +39,8 @@ namespace PattyPetitGiant
 
                 x = X;
                 y = Y;
+
+                intensity = 0;
 
                 this.attributes = new List<string>();
             }
@@ -64,6 +69,8 @@ namespace PattyPetitGiant
                 output.attributes = this.attributes;
                 Debug.Assert(output.attributes != null);
 
+                output.intensity = this.intensity;
+
                 if (output.north) { this.attributes.Add("north"); }
                 if (output.south) { this.attributes.Add("south"); }
                 if (output.east) { this.attributes.Add("east"); }
@@ -79,6 +86,8 @@ namespace PattyPetitGiant
             public bool south;
             public bool west;
             public bool east;
+
+            public float intensity;
 
             public List<string> attributes;
         }
@@ -159,6 +168,8 @@ namespace PattyPetitGiant
 
                 iterate++;
             }
+
+            //compute intensity values
 
             //convert the class data to a room strucutre model
             for (int i = 0; i < output.GetLength(0); i++)
