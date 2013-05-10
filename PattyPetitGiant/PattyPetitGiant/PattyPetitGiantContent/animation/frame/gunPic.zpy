@@ -2,8 +2,8 @@
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <name>swordPic</name>
   <sheetName>derek.png</sheetName>
-  <initalX>32</initalX>
-  <initalY>48</initalY>
+  <initalX>64</initalX>
+  <initalY>176</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
   <frameWidth>16</frameWidth>

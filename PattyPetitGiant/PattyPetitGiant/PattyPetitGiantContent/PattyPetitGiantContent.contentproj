@@ -43,6 +43,14 @@
       <Processor>FontDescriptionProcessor</Processor>
       <SubType>Designer</SubType>
     </Compile>
+    <None Include="animation\frame\bombPic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>bombPic</Name>
+    </None>
+    <None Include="animation\frame\gunPic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>gunPic</Name>
+    </None>
     <None Include="animation\frame\swordPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>swordPic</Name>
