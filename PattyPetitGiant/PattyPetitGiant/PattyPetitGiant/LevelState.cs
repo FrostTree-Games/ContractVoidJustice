@@ -35,11 +35,16 @@ namespace PattyPetitGiant
         public Entity CameraFocus { get { return cameraFocus; } set { value = cameraFocus; } }
         Matrix camera;
 
+        private bool endFlagReached;
+        public bool EndFlagReached { get { return endFlagReached; } set { endFlagReached = value; } }
+
         public LevelState()
         {
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y);
             map = new TileMap(nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
+
+            endFlagReached = false;
 
             entityList = new List<Entity>();
 
@@ -143,6 +148,18 @@ namespace PattyPetitGiant
             sb.End();
 
             AnimationLib.renderSpineEntities(camera, entityList);
+        }
+
+        public override ScreenState.ScreenStateType nextLevelState()
+        {
+            if (endFlagReached)
+            {
+                return ScreenStateType.LevelState;
+            }
+            else
+            {
+                return ScreenStateType.InvalidScreenState;
+            }
         }
     }
 }
