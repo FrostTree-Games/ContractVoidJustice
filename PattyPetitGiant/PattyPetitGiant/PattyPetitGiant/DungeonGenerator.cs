@@ -92,6 +92,33 @@ namespace PattyPetitGiant
             public List<string> attributes;
         }
 
+        private static void computeDungeonIntensity(DungeonRoomClass[,] dungeonModel, int startingRoomX, int startingRoomY)
+        {
+            if (dungeonModel == null)
+            {
+                throw new Exception("No dungeon model passed into intensity");
+            }
+
+            Queue<DungeonRoomClass> bfsQueue = new Queue<DungeonRoomClass>();
+            bfsQueue.Enqueue(dungeonModel[startingRoomX, startingRoomY]);
+
+            while (bfsQueue.Count != 0)
+            {
+                DungeonRoomClass room = bfsQueue.Dequeue();
+
+                for (int i = 0; i < 4; i++)
+                {
+                    if (room.Children[i] != null && !(bfsQueue.Contains(room.Children[i])) && !(room.Children[i].Intensity > 0))
+                    {
+                        room.Children[i].Intensity = room.Intensity + 1;
+                        bfsQueue.Enqueue(room.Children[i]);
+                    }
+                }
+            }
+
+            //
+        }
+
         public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight)
         {
             DungeonRoom[,] output = new DungeonRoom[desiredWidth, desiredHeight];
