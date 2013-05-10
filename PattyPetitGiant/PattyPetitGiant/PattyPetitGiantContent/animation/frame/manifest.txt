@@ -2,3 +2,5 @@ test
 swordPic
 bombPic
 gunPic
+enemyPic
+chasePic

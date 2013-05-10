@@ -12,6 +12,7 @@ namespace PattyPetitGiant
     class ChaseEnemy : Enemy
     {
         private EnemyComponents component = null;
+        private AnimationLib.FrameAnimationSet chaseAnim;
 
         public ChaseEnemy(LevelState parentWorld, float initialx, float initialy)
         {
@@ -34,6 +35,8 @@ namespace PattyPetitGiant
 
             enemy_damage = 1;
             enemy_life = 15;
+
+            chaseAnim = AnimationLib.getFrameAnimationSet("chasePic");
         }
 
         public override void update(GameTime currentTime)
@@ -124,6 +127,16 @@ namespace PattyPetitGiant
                 }
 
             }
+            if (enemy_life <= 0)
+            {
+                remove_from_list = true;
+            }
+        }
+
+        public override void draw(SpriteBatch sb)
+        {
+            //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
+            chaseAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
         }
     }
 }

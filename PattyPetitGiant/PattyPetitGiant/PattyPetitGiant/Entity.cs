@@ -71,7 +71,6 @@ namespace PattyPetitGiant
             if (other is Player)
             {
                 Player player = (Player)other;
-                Console.WriteLine(player.disable_movement_time);
                 if (player.disable_movement_time == 0.0)
                 {
                     player.disable_movement = true;

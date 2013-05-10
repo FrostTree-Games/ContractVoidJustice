@@ -47,6 +47,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>bombPic</Name>
     </None>
+    <None Include="animation\frame\chasePic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>chasePic</Name>
+    </None>
     <None Include="animation\frame\gunPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>gunPic</Name>
@@ -213,6 +217,14 @@
     <None Include="animation\frame\manifest.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>manifest</Name>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\frame\enemyPic.zpy">
+      <Name>enemyPic</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

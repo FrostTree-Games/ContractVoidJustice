@@ -43,7 +43,7 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new Pickup(this, map.StartPosition.X + GlobalGameConstants.TileSize.X, map.StartPosition.Y + GlobalGameConstants.TileSize.Y + 60));
+            entityList.Add(new ChaseEnemy(this, map.StartPosition.X + GlobalGameConstants.TileSize.X, map.StartPosition.Y + GlobalGameConstants.TileSize.Y + 60));
             //testPopulateEnemies();
 
             foreach (Entity en in entityList)

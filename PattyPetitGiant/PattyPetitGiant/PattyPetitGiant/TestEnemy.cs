@@ -12,6 +12,7 @@ namespace PattyPetitGiant
     class TestEnemy : Enemy
     {
         private int change_direction;
+        private AnimationLib.FrameAnimationSet enemyAnim;
        
         public TestEnemy()
         {
@@ -37,6 +38,8 @@ namespace PattyPetitGiant
             enemy_life = 10;
             enemy_damage = 1;
             damage_player_time = 0.0f;
+
+            enemyAnim = AnimationLib.getFrameAnimationSet("enemyPic");
         }
 
         public override void update(GameTime currentTime)
@@ -100,71 +103,74 @@ namespace PattyPetitGiant
                     }
                     else
                     {
-                        if (direction_facing == GlobalGameConstants.Direction.Right)
-                        {
-                            direction_facing = GlobalGameConstants.Direction.Left;
-                            velocity.X = -1.0f;
-                            velocity.Y = 0.0f;
-                            break;
-                        }
-                        else if (direction_facing == GlobalGameConstants.Direction.Left)
-                        {
-                            direction_facing = GlobalGameConstants.Direction.Right;
-                            velocity.X = 1.0f;
-                            velocity.Y = 0.0f;
-                            break;
-                        }
-                        else if (direction_facing == GlobalGameConstants.Direction.Up)
-                        {
-                            direction_facing = GlobalGameConstants.Direction.Down;
-                            velocity.Y = 1.0f;
-                            velocity.X = 0.0f;
-                            break;
-                        }
-                        else if(direction_facing == GlobalGameConstants.Direction.Down)
-                        {
-                            direction_facing = GlobalGameConstants.Direction.Up;
-                            velocity.Y = -1.0f;
-                            velocity.X = 0.0f;
-                            break;
-                        }
 
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Right:
+                                direction_facing = GlobalGameConstants.Direction.Left;
+                                velocity.X = -1.0f;
+                                velocity.Y = 0.0f;
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                direction_facing = GlobalGameConstants.Direction.Right;
+                                velocity.X = 1.0f;
+                                velocity.Y = 0.0f;
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                direction_facing = GlobalGameConstants.Direction.Down;
+                                velocity.Y = 1.0f;
+                                velocity.X = 0.0f;
+                                break;
+                            default:
+                                direction_facing = GlobalGameConstants.Direction.Up;
+                                velocity.Y = -1.0f;
+                                velocity.X = 0.0f;
+                                break;
+                        }
+                        break;
                     }
                     on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
                     check_corners++;
                 }
 
-                if (change_direction_time > 1000)
+                if (change_direction_time > 2000)
                 {
                     Random rand = new Random();
                     change_direction = rand.Next(4);
-                    change_direction_time = 0.0f;
-                    if (change_direction == 0)
+                    //change_direction_time = 0.0f;
+                    if (change_direction_time > 2300)
                     {
-                        velocity.X = 1.0f;
-                        velocity.Y = 0.0f;
-                        direction_facing = GlobalGameConstants.Direction.Right;
+                        switch (change_direction)
+                        {
+                            case 0:
+                                velocity.X = 1.0f;
+                                velocity.Y = 0.0f;
+                                direction_facing = GlobalGameConstants.Direction.Right;
+                                break;
+                            case 1:
+                                velocity.X = -1.0f;
+                                velocity.Y = 0.0f;
+                                direction_facing = GlobalGameConstants.Direction.Left;
+                                break;
+                            case 2:
+                                velocity.X = 0.0f;
+                                velocity.Y = -1.0f;
+                                direction_facing = GlobalGameConstants.Direction.Up;
+                                break;
+                            default:
+                                velocity.X = 0.0f;
+                                velocity.Y = 1.0f;
+                                direction_facing = GlobalGameConstants.Direction.Down;
+                                break;
+                        }
+                        change_direction_time = 0.0f;
                     }
-                    else if (change_direction == 1)
+                    else
                     {
-                        velocity.X = -1.0f;
-                        velocity.Y = 0.0f;
-                        direction_facing = GlobalGameConstants.Direction.Left;
-                    }
-                    else if (change_direction == 2)
-                    {
-                        velocity.X = 0.0f;
-                        velocity.Y = -1.0f;
-                        direction_facing = GlobalGameConstants.Direction.Up;
-                    }
-                    else if (change_direction == 3)
-                    {
-                        velocity.X = 0.0f;
-                        velocity.Y = 1.0f;
-                        direction_facing = GlobalGameConstants.Direction.Down;
+                        velocity = Vector2.Zero;
                     }
                 }
-
+                
                 Vector2 pos = new Vector2(position.X, position.Y);
 
                 Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
@@ -173,7 +179,7 @@ namespace PattyPetitGiant
                 position.Y = finalPos.Y;
             }
 
-            if (enemy_life == 0)
+            if (enemy_life <= 0)
             {
                 remove_from_list = true;
             }
@@ -181,7 +187,8 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
+            enemyAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
         }
     }
 }
