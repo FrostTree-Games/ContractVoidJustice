@@ -42,7 +42,28 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            AnimationLib.FrameAnimationSet dropAnim = null;
+
+            switch (item_type)
+            {
+                case GlobalGameConstants.itemType.Sword:
+                    dropAnim = AnimationLib.getFrameAnimationSet("swordPic");
+                    break;
+                case GlobalGameConstants.itemType.Gun:
+                    dropAnim = AnimationLib.getFrameAnimationSet("gunPic");
+                    break;
+                case GlobalGameConstants.itemType.Bomb:
+                    dropAnim = AnimationLib.getFrameAnimationSet("bombPic");
+                    break;
+                default:
+                    sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+                    break;
+            }
+
+            if (dropAnim != null)
+            {
+                dropAnim.drawAnimationFrame(0.0f, sb, Position, new Vector2(3.0f, 3.0f), 0.5f);
+            }
         }
     }
 }
