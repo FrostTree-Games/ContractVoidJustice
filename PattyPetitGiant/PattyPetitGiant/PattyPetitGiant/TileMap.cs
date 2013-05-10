@@ -134,8 +134,8 @@ namespace PattyPetitGiant
                                     startY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
                                 }
 
-                                startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * startX);
-                                startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * startY);
+                                startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
+                                startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
                             }
                         }
                         else

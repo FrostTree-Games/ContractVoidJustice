@@ -2,3 +2,4 @@ test
 swordPic
 bombPic
 gunPic
+flagPic

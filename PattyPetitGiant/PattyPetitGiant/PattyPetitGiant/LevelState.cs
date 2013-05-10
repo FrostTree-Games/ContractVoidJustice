@@ -51,8 +51,8 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new Pickup(this, map.StartPosition.X + GlobalGameConstants.TileSize.X, map.StartPosition.Y + GlobalGameConstants.TileSize.Y + 60));
-            testPopulateEnemies();
+            entityList.Add(new BetaEndLevelFag(this, map.StartPosition + new Vector2(64, 64)));
+            //testPopulateEnemies();
 
             foreach (Entity en in entityList)
             {
@@ -127,8 +127,6 @@ namespace PattyPetitGiant
             sb.End();
 
             sb.Begin();
-
-
 
             string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
             sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
