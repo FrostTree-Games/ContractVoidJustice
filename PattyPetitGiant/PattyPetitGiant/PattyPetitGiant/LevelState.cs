@@ -51,7 +51,8 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new BetaEndLevelFag(this, map.StartPosition + new Vector2(64, 64)));
+            entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
+            Console.WriteLine("end level flag is placed at {0}", map.EndFlagPosition);
             //testPopulateEnemies();
 
             foreach (Entity en in entityList)
