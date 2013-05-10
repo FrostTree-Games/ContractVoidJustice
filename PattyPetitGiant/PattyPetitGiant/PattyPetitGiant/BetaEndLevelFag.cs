@@ -22,7 +22,16 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            //
+            foreach (Entity en in parentWorld.EntityList)
+            {
+                if (en is Player)
+                {
+                    if (hitTest(en))
+                    {
+                        parentWorld.EndFlagReached = true;
+                    }
+                }
+            }
         }
 
         public override void draw(SpriteBatch sb)
