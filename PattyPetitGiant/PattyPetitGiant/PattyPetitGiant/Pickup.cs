@@ -42,7 +42,7 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, position, null, Color.Orange, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
         }
     }
 }

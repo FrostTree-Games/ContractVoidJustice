@@ -89,6 +89,8 @@ namespace PattyPetitGiant
                     if (en is Player)
                     {
                         this.knockBack(en, this.position, this.dimensions, enemy_damage);
+                        en.Disable_Movement = true;
+                        ((Player)en).State = Player.playerState.Moving;
                     }
                 }
             }

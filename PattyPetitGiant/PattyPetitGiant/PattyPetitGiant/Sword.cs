@@ -37,29 +37,30 @@ namespace PattyPetitGiant
         {
             position = parent.Position;
             item_direction = parent.Direction_Facing;
+            parent.Velocity = Vector2.Zero;
 
             item_state_time += currentTime.ElapsedGameTime.Milliseconds;
 
             //sword is on the right hand side of the player, if hitboxes are different dimensions, need to adjust the position of sword.
             if (item_direction == GlobalGameConstants.Direction.Right)
             {
-                position.X = parent.Position.X + parent.Dimensions.X/2;
-               // position.Y = parent.Position.Y;
+                position.X = parent.Position.X + parent.Dimensions.X;
+                position.Y = parent.Position.Y + parent.Dimensions.Y / 4;
             }
             else if(item_direction == GlobalGameConstants.Direction.Left)
             {
                 position.X = parent.Position.X - hitbox.X;
-               // position.Y = parent.Position.Y;
+                position.Y = parent.Position.Y + parent.Dimensions.Y/4;
             }
             else if (item_direction == GlobalGameConstants.Direction.Up)
             {
-                position.Y = parent.Position.Y - hitbox.X;
-                //position.X = parent.Position.X;
+                position.Y = parent.Position.Y - hitbox.Y;
+                position.X = parent.CenterPoint.X - hitbox.X/2;
             }
             else
             {
-                position.Y = parent.Position.Y + parent.Dimensions.Y;
-                //position.X = parent.Position.X;
+                position.Y = parent.CenterPoint.Y + parent.Dimensions.Y/2;
+                position.X = parent.CenterPoint.X - hitbox.X/2;
             }
 
             foreach (Entity en in parentWorld.EntityList)
@@ -71,7 +72,6 @@ namespace PattyPetitGiant
                         if (item_state_time > max_item_state_time)
                         {
                             parent.knockBack(en, parent.Position, parent.Dimensions, sword_damage);
-                            item_state_time = 0.0f;
                         }
                     }
                 }
@@ -84,6 +84,7 @@ namespace PattyPetitGiant
                 parent.Disable_Movement = true;
                 sword_swing = false;
             }
+            
         }
 
         public void daemonupdate(GameTime currentTime, LevelState parentWorld)
@@ -106,7 +107,7 @@ namespace PattyPetitGiant
             if (sword_swing)
             {
                 //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
-                swordAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(4, 4), 0.5f);
+                swordAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
             }
         }
 

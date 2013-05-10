@@ -64,7 +64,7 @@ namespace PattyPetitGiant
             walk_down = AnimationLib.getSkeleton("jensenDown");
             walk_right = AnimationLib.getSkeleton("jensenRight");
             walk_up = AnimationLib.getSkeleton("jensenUp");
-            current_skeleton = walk_down;
+            current_skeleton = walk_right;
         }
 
         public override void update(GameTime currentTime)
@@ -98,57 +98,6 @@ namespace PattyPetitGiant
             else if (state == playerState.Moving)
             {
                 switch_weapon_interval += currentTime.ElapsedGameTime.Milliseconds;
-                if (ks.IsKeyDown(Keys.A))
-                {
-                    state = playerState.Item1;
-                    velocity = Vector2.Zero;
-                }
-                if (ks.IsKeyDown(Keys.S))
-                {
-                    state = playerState.Item2;
-                }
-
-                if (disable_movement == false)
-                {
-                    if (ks.IsKeyDown(Keys.Right))
-                    {
-                        velocity.X = 1.5f;
-                        direction_facing = GlobalGameConstants.Direction.Right;
-                        current_skeleton = AnimationLib.getSkeleton("jensenRight");
-                        current_skeleton.Skeleton.FlipX = false;
-                    }
-                    else if (ks.IsKeyDown(Keys.Left))
-                    {
-                        velocity.X = -1.5f;
-                        direction_facing = GlobalGameConstants.Direction.Left;
-                        current_skeleton = AnimationLib.getSkeleton("jensenRight");
-                        current_skeleton.Skeleton.FlipX = true;
-                    }
-                    else
-                    {
-                        velocity.X = 0.0f;
-                    }
-
-                    if (ks.IsKeyDown(Keys.Up))
-                    {
-                        velocity.Y = -1.5f;
-                        direction_facing = GlobalGameConstants.Direction.Up;
-                        current_skeleton = AnimationLib.getSkeleton("jensenUp");
-                        current_skeleton.Skeleton.FlipX = false;
-                    }
-                    else if (ks.IsKeyDown(Keys.Down))
-                    {
-                        velocity.Y = 1.5f;
-                        direction_facing = GlobalGameConstants.Direction.Down;
-                        current_skeleton = AnimationLib.getSkeleton("jensenDown");
-                        current_skeleton.Skeleton.FlipX = false;
-                    }
-                    else
-                    {
-                        velocity.Y = 0.0f;
-                    }
-                }
-
                 if (disable_movement == true)
                 {
                     disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -159,7 +108,59 @@ namespace PattyPetitGiant
                         disable_movement_time = 0;
                     }
                 }
+                else
+                {
+                    if (ks.IsKeyDown(Keys.A))
+                    {
+                        state = playerState.Item1;
 
+                    }
+                    if (ks.IsKeyDown(Keys.S))
+                    {
+                        state = playerState.Item2;
+                    }
+
+                    if (disable_movement == false)
+                    {
+                        if (ks.IsKeyDown(Keys.Right))
+                        {
+                            velocity.X = 1.5f;
+                            direction_facing = GlobalGameConstants.Direction.Right;
+                            current_skeleton = AnimationLib.getSkeleton("jensenRight");
+                            current_skeleton.Skeleton.FlipX = false;
+                        }
+                        else if (ks.IsKeyDown(Keys.Left))
+                        {
+                            velocity.X = -1.5f;
+                            direction_facing = GlobalGameConstants.Direction.Left;
+                            current_skeleton = AnimationLib.getSkeleton("jensenRight");
+                            current_skeleton.Skeleton.FlipX = true;
+                        }
+                        else
+                        {
+                            velocity.X = 0.0f;
+                        }
+
+                        if (ks.IsKeyDown(Keys.Up))
+                        {
+                            velocity.Y = -1.5f;
+                            direction_facing = GlobalGameConstants.Direction.Up;
+                            current_skeleton = AnimationLib.getSkeleton("jensenUp");
+                            current_skeleton.Skeleton.FlipX = false;
+                        }
+                        else if (ks.IsKeyDown(Keys.Down))
+                        {
+                            velocity.Y = 1.5f;
+                            direction_facing = GlobalGameConstants.Direction.Down;
+                            current_skeleton = AnimationLib.getSkeleton("jensenDown");
+                            current_skeleton.Skeleton.FlipX = false;
+                        }
+                        else
+                        {
+                            velocity.Y = 0.0f;
+                        }
+                    }
+                }
                 if (player_item_1 != null)
                 {
                     player_item_1.daemonupdate(currentTime, parentWorld);
@@ -213,7 +214,7 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
             if (player_item_1 != null)
             {
                 player_item_1.draw(sb);
@@ -227,7 +228,7 @@ namespace PattyPetitGiant
         public void spinerender(SkeletonRenderer renderer)
         {
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
-            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y +(dimensions.Y / 2);
 
             current_skeleton.Skeleton.RootBone.ScaleX = 0.1f;
             current_skeleton.Skeleton.RootBone.ScaleY = 0.1f;

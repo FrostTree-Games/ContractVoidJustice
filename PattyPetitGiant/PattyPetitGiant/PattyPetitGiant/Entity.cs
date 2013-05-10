@@ -16,7 +16,11 @@ namespace PattyPetitGiant
         protected bool disable_movement = false;
         protected float disable_movement_time = 0.0f;
 
-        public bool Disable_Movement { set { disable_movement = value; } }
+        public bool Disable_Movement 
+        {
+            get { return disable_movement; }
+            set { disable_movement = value; } 
+        }
 
         protected Vector2 position = Vector2.Zero;
         public Vector2 Position { get { return position; } }
