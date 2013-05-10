@@ -23,6 +23,8 @@ namespace PattyPetitGiant
 
         private LoadingState state = LoadingState.UninitializedAndWaiting;
 
+        private DungeonGenerator.DungeonRoom[,] nodeMap = null;
+
         private TileMap map = null;
         public TileMap Map { get { return map; } }
 
@@ -35,7 +37,8 @@ namespace PattyPetitGiant
 
         public LevelState()
         {
-            map = new TileMap(DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y), GlobalGameConstants.TileSize);
+            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y);
+            map = new TileMap(nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
 
             entityList = new List<Entity>();
@@ -44,7 +47,7 @@ namespace PattyPetitGiant
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
             entityList.Add(new Pickup(this, map.StartPosition.X + GlobalGameConstants.TileSize.X, map.StartPosition.Y + GlobalGameConstants.TileSize.Y + 60));
-            //testPopulateEnemies();
+            testPopulateEnemies();
 
             foreach (Entity en in entityList)
             {
