@@ -9,8 +9,23 @@ namespace PattyPetitGiant
 {
     public abstract class ScreenState
     {
+        public enum ScreenStateType
+        {
+            InvalidScreenState = -1,
+            TitleScreen = 0,
+            LevelState = 1,
+            OptionsMenu = 2,
+            GameSetupMenu = 3,
+        }
+
         protected bool pause = false;
         public bool Pause { get { return pause; } set { pause = value; } }
+
+        protected bool isComplete = false;
+        /// <summary>
+        /// Used to determine if the state is to be switched or not.
+        /// </summary>
+        public bool IsComplete { get { return isComplete; } }
 
         public void update(GameTime currentTime)
         {
@@ -29,5 +44,18 @@ namespace PattyPetitGiant
         /// </summary>
         /// <param name="sb"></param>
         public abstract void render(SpriteBatch sb);
+
+        public static ScreenState SwitchToNewScreen(ScreenStateType type)
+        {
+            switch (type)
+            {
+                case ScreenStateType.LevelState:
+                    return new LevelState();
+                default:
+                    return null;
+            }
+        }
+
+        public abstract ScreenStateType nextLevelState();
     }
 }

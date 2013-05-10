@@ -90,6 +90,11 @@ namespace PattyPetitGiant
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            if (currentGameScreen.IsComplete)
+            {
+                currentGameScreen = ScreenState.SwitchToNewScreen(currentGameScreen.nextLevelState());
+            }
+
             currentGameScreen.update(gameTime);
 
             base.Update(gameTime);

@@ -23,6 +23,8 @@ namespace PattyPetitGiant
 
         private LoadingState state = LoadingState.UninitializedAndWaiting;
 
+        private DungeonGenerator.DungeonRoom[,] nodeMap = null;
+
         private TileMap map = null;
         public TileMap Map { get { return map; } }
 
@@ -33,17 +35,23 @@ namespace PattyPetitGiant
         public Entity CameraFocus { get { return cameraFocus; } set { value = cameraFocus; } }
         Matrix camera;
 
+        private bool endFlagReached;
+        public bool EndFlagReached { get { return endFlagReached; } set { endFlagReached = value; } }
+
         public LevelState()
         {
-            map = new TileMap(DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y), GlobalGameConstants.TileSize);
+            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y);
+            map = new TileMap(nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
+
+            endFlagReached = false;
 
             entityList = new List<Entity>();
 
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new ChaseEnemy(this, map.StartPosition.X + GlobalGameConstants.TileSize.X, map.StartPosition.Y + GlobalGameConstants.TileSize.Y + 60));
+            entityList.Add(new BetaEndLevelFag(this, map.StartPosition + new Vector2(64, 64)));
             //testPopulateEnemies();
 
             foreach (Entity en in entityList)
@@ -120,8 +128,6 @@ namespace PattyPetitGiant
 
             sb.Begin();
 
-
-
             string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
             sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
 
@@ -140,6 +146,18 @@ namespace PattyPetitGiant
             sb.End();
 
             AnimationLib.renderSpineEntities(camera, entityList);
+        }
+
+        public override ScreenState.ScreenStateType nextLevelState()
+        {
+            if (endFlagReached)
+            {
+                return ScreenStateType.LevelState;
+            }
+            else
+            {
+                return ScreenStateType.InvalidScreenState;
+            }
         }
     }
 }

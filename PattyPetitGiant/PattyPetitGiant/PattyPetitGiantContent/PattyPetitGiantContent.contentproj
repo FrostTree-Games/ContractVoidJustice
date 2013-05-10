@@ -51,6 +51,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>chasePic</Name>
     </None>
+    <None Include="animation\frame\flagPic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>flagPic</Name>
+    </None>
     <None Include="animation\frame\gunPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>gunPic</Name>

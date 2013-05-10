@@ -40,7 +40,7 @@ namespace PattyPetitGiant
                 x = X;
                 y = Y;
 
-                intensity = 0;
+                intensity = -1;
 
                 this.attributes = new List<string>();
             }
@@ -92,6 +92,18 @@ namespace PattyPetitGiant
             public List<string> attributes;
         }
 
+        private static int recurseDungeonIntensity(DungeonRoomClass room, int intensity)
+        {
+            if (room == null || room.Intensity != -1)
+            {
+                return 0;
+            }
+
+            room.Intensity = intensity;
+
+            return Math.Max(intensity, Math.Max(Math.Max(recurseDungeonIntensity(room.Children[0], intensity + 1), recurseDungeonIntensity(room.Children[1], intensity + 1)), Math.Max(recurseDungeonIntensity(room.Children[2], intensity + 1), recurseDungeonIntensity(room.Children[3], intensity + 1))));
+        }
+
         private static void computeDungeonIntensity(DungeonRoomClass[,] dungeonModel, int startingRoomX, int startingRoomY)
         {
             if (dungeonModel == null)
@@ -99,24 +111,15 @@ namespace PattyPetitGiant
                 throw new Exception("No dungeon model passed into intensity");
             }
 
-            Queue<DungeonRoomClass> bfsQueue = new Queue<DungeonRoomClass>();
-            bfsQueue.Enqueue(dungeonModel[startingRoomX, startingRoomY]);
+            int maxIntensity = recurseDungeonIntensity(dungeonModel[startingRoomX, startingRoomY], 0);
 
-            while (bfsQueue.Count != 0)
+            for (int i = 0; i < dungeonModel.GetLength(0); i++)
             {
-                DungeonRoomClass room = bfsQueue.Dequeue();
-
-                for (int i = 0; i < 4; i++)
+                for (int j = 0; j < dungeonModel.GetLength(1); j++)
                 {
-                    if (room.Children[i] != null && !(bfsQueue.Contains(room.Children[i])) && !(room.Children[i].Intensity > 0))
-                    {
-                        room.Children[i].Intensity = room.Intensity + 1;
-                        bfsQueue.Enqueue(room.Children[i]);
-                    }
+                    dungeonModel[i, j].Intensity /= maxIntensity;
                 }
             }
-
-            //
         }
 
         public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight)
@@ -197,6 +200,7 @@ namespace PattyPetitGiant
             }
 
             //compute intensity values
+            computeDungeonIntensity(model, startingRoom.X, startingRoom.Y);
 
             //convert the class data to a room strucutre model
             for (int i = 0; i < output.GetLength(0); i++)
