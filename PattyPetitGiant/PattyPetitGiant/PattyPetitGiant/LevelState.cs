@@ -51,7 +51,7 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new BetaEndLevelFag(this, map.StartPosition + new Vector2(64, 64)));
+            entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
             //testPopulateEnemies();
 
             foreach (Entity en in entityList)
@@ -110,6 +110,13 @@ namespace PattyPetitGiant
             if (cameraFocus != null)
             {
                 camera = Matrix.Identity * Matrix.CreateTranslation(new Vector3((cameraFocus.CenterPoint.X * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (cameraFocus.CenterPoint.Y * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
+            }
+
+            if (endFlagReached)
+            {
+                //maybe have some nicer animation here later
+
+                isComplete = true;
             }
         }
 

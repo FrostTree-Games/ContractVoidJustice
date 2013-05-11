@@ -83,6 +83,8 @@ namespace PattyPetitGiant
 
         private Vector2 startPosition;
         public Vector2 StartPosition { get { return startPosition; } }
+        private Vector2 endFlagPosition = new Vector2(-1, -1);
+        public Vector2 EndFlagPosition { get { return endFlagPosition; } }
 
         private Texture2D tileSkin = null;
         public Texture2D TileSkin { get { return tileSkin; } set { tileSkin = value; } }
@@ -136,6 +138,12 @@ namespace PattyPetitGiant
 
                                 startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
                                 startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
+                            }
+
+                            if (room[i, j].intensity > 0.95f)
+                            {
+                                endFlagPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
+                                endFlagPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
                             }
                         }
                         else
