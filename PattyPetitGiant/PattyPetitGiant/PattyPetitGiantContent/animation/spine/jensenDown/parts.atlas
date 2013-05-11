@@ -1,108 +1,116 @@
+
 img.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-testGuySpine/testGuySpineDown/torso copy
+torso copy
   rotate: false
-  xy: 1, 214
-  size: 252, 279
-  orig: 252, 279
+  xy: 1, 231
+  size: 300, 279
+  orig: 300, 279
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/lThigh
+machete
   rotate: false
-  xy: 1, 17
+  xy: 1, 1
+  size: 162, 228
+  orig: 162, 228
+  offset: 0, 0
+  index: -1
+lThigh
+  rotate: false
+  xy: 303, 315
   size: 125, 195
   orig: 125, 195
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/rThigh copy
+rThigh copy
   rotate: false
-  xy: 255, 298
+  xy: 165, 34
   size: 125, 195
   orig: 125, 195
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/lCalf
+lCalf
   rotate: false
-  xy: 128, 1
+  xy: 430, 299
   size: 107, 211
   orig: 107, 211
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/rCalf copy
+rCalf copy
   rotate: false
-  xy: 382, 282
+  xy: 539, 299
   size: 107, 211
   orig: 107, 211
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/pelvis copy
+pelvis copy
   rotate: false
-  xy: 491, 345
+  xy: 648, 362
   size: 153, 148
   orig: 153, 148
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/head copy
+head copy
   rotate: false
-  xy: 646, 295
+  xy: 803, 312
   size: 101, 198
   orig: 101, 198
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/lShoulder copy
+lShoulder copy
   rotate: false
-  xy: 749, 306
+  xy: 906, 323
   size: 67, 187
   orig: 67, 187
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/rShoulder
+lForearm copy
   rotate: false
-  xy: 818, 306
+  xy: 975, 402
+  size: 48, 108
+  orig: 48, 108
+  offset: 0, 0
+  index: -1
+rForearm
+  rotate: false
+  xy: 975, 292
+  size: 48, 108
+  orig: 48, 108
+  offset: 0, 0
+  index: -1
+rShoulder
+  rotate: false
+  xy: 292, 42
   size: 67, 187
   orig: 67, 187
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/lFoot
+lFoot
   rotate: false
-  xy: 887, 388
+  xy: 648, 255
   size: 67, 105
   orig: 67, 105
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/rFoot copy
+rFoot copy
   rotate: false
-  xy: 956, 388
+  xy: 717, 255
   size: 67, 105
   orig: 67, 105
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/lForearm copy
+lHand
   rotate: false
-  xy: 255, 188
-  size: 48, 108
-  orig: 48, 108
-  offset: 0, 0
-  index: -1
-testGuySpine/testGuySpineDown/rForearm
-  rotate: false
-  xy: 305, 188
-  size: 48, 108
-  orig: 48, 108
-  offset: 0, 0
-  index: -1
-testGuySpine/testGuySpineDown/lHand
-  rotate: false
-  xy: 887, 314
+  xy: 303, 241
   size: 40, 72
   orig: 40, 72
   offset: 0, 0
   index: -1
-testGuySpine/testGuySpineDown/rHand
+rHand
   rotate: false
-  xy: 929, 314
+  xy: 345, 241
   size: 40, 72
   orig: 40, 72
   offset: 0, 0

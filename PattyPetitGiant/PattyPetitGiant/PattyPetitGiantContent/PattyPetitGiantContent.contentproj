@@ -51,6 +51,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>chasePic</Name>
     </None>
+    <None Include="animation\frame\bombExplosion.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>bombExplosion</Name>
+    </None>
     <None Include="animation\frame\flagPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>flagPic</Name>
@@ -228,6 +232,14 @@
       <Name>enemyPic</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\explosionlarge2.png">
+      <Name>explosionlarge2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

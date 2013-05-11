@@ -37,10 +37,10 @@ namespace PattyPetitGiant
             public Atlas Atlas { get { return atlas; } }
 
             private Skeleton skeleton;
-            public Skeleton Skeleton { get { return skeleton; } }
+            public Skeleton Skeleton { get { return skeleton; } set { skeleton = value; } }
 
             private Animation animation;
-            public Animation Animation { get { return animation; } }
+            public Animation Animation { get { return animation; } set { animation = value; } }
 
             public SpineAnimationSet(string folderName)
             {
@@ -108,7 +108,7 @@ namespace PattyPetitGiant
                     frame = frameCount - 1;
                 }
 
-                sb.Draw(sheet, position, new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), Color.White);
+                sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), Color.White);
             }
 
             public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Vector2 scale, float depth)
@@ -124,7 +124,7 @@ namespace PattyPetitGiant
                     frame = frameCount - 1;
                 }
 
-                sb.Draw(sheet, position, new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
+                sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
             }
         }
 

@@ -22,12 +22,15 @@ namespace PattyPetitGiant
         private Vector2 hitbox = Vector2.Zero;
         private Vector2 hitbox_placed = new Vector2(48.0f, 48.0f);
         private Vector2 hitbox_exploded = new Vector2(48.0f * 3.0f, 48.0f * 3.0f);
+        private Vector2 center_placed_bomb = Vector2.Zero;
         private int bomb_damage = 5;
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
         private float time_explosion = 0.0f;
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Bomb;
         Bomb_State bomb_state = Bomb_State.reset;
+        private AnimationLib.FrameAnimationSet bombAnim;
+        private float animation_time;
 
         public Bomb(Vector2 initial_position)
         {
@@ -36,11 +39,13 @@ namespace PattyPetitGiant
             time_explosion = 0.0f;
             bomb_state = Bomb_State.reset;
             bomb_damage = 5;
+            bombAnim = AnimationLib.getFrameAnimationSet("bombPic");
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             position = parent.CenterPoint - hitbox/2;
+            center_placed_bomb = position + hitbox / 2;
             time_explosion = 0.0f;
             parent.State = Player.playerState.Moving;
             bomb_state = Bomb_State.placed;
@@ -55,9 +60,10 @@ namespace PattyPetitGiant
                     if (time_explosion > 1000)
                     {
                         hitbox = hitbox_exploded;
-                        position = new Vector2(position.X - hitbox.X / 2, position.Y - hitbox.Y / 2);
+                        position = new Vector2(center_placed_bomb.X - hitbox.X / 2, center_placed_bomb.Y - hitbox.Y / 2);
                         bomb_state = Bomb_State.exploded;
                         time_explosion = 0.0f;
+                        bombAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
                     }
                     break;
                 case Bomb_State.exploded:
@@ -87,11 +93,15 @@ namespace PattyPetitGiant
                             }
                         }
                     }
+                    animation_time += currentTime.ElapsedGameTime.Milliseconds;
                     break;
                 default:
+                    bombAnim = AnimationLib.getFrameAnimationSet("bombPic");
                     hitbox = hitbox_placed;
+                    animation_time = 0.0f;
                     break;
             }
+            
         }
 
         public GlobalGameConstants.itemType ItemType()
@@ -106,9 +116,17 @@ namespace PattyPetitGiant
 
         public void draw(SpriteBatch sb)
         {
-            if (bomb_state != Bomb_State.reset)
+            switch(bomb_state)
             {
-                sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
+                case Bomb_State.placed:
+                    bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(2.25f, 2.25f), 0.5f);
+                    break;
+                case Bomb_State.exploded:
+                    bombAnim.drawAnimationFrame(animation_time, sb, position , new Vector2(2.25f, 2.25f), 0.5f);
+                    //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
+                    break;
+                default:
+                    break;
             }
         }
 

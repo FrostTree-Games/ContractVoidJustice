@@ -5,3 +5,4 @@ gunPic
 enemyPic
 chasePic
 flagPic
+bombExplosion

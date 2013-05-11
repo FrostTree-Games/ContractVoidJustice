@@ -16,7 +16,7 @@ namespace PattyPetitGiant
         private Vector2 position = Vector2.Zero;
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Sword;
-        private float max_item_state_time = 20.0f;
+        private float max_item_state_time = 100.0f;
         private float item_state_time = 0.0f;
         private bool sword_swing = false;
         protected int sword_damage;
@@ -45,12 +45,13 @@ namespace PattyPetitGiant
             if (item_direction == GlobalGameConstants.Direction.Right)
             {
                 position.X = parent.Position.X + parent.Dimensions.X;
-                position.Y = parent.Position.Y + parent.Dimensions.Y / 4;
+                position.Y = parent.Position.Y; //+ parent.Dimensions.Y / 4;
+
             }
             else if(item_direction == GlobalGameConstants.Direction.Left)
             {
                 position.X = parent.Position.X - hitbox.X;
-                position.Y = parent.Position.Y + parent.Dimensions.Y/4;
+                position.Y = parent.Position.Y;// + parent.Dimensions.Y/4;
             }
             else if (item_direction == GlobalGameConstants.Direction.Up)
             {

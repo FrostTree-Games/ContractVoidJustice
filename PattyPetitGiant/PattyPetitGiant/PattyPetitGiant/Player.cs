@@ -27,6 +27,9 @@ namespace PattyPetitGiant
         private AnimationLib.SpineAnimationSet walk_right = null;
         private AnimationLib.SpineAnimationSet walk_up = null;
         private AnimationLib.SpineAnimationSet current_skeleton = null;
+        private AnimationLib.SpineAnimationSet right_slash = null;
+        
+
         private float animation_time = 0.0f;
 
         private float switch_weapon_interval = 0.0f;
@@ -43,7 +46,7 @@ namespace PattyPetitGiant
         {
             position = new Vector2(initial_x, initial_y);
 
-            dimensions = new Vector2(32.0f, 78.0f);
+            dimensions = new Vector2(32.0f, 58.5f);
             
             player_item_1 = new Sword(position);
             player_item_2 = new Gun(position);
@@ -65,6 +68,7 @@ namespace PattyPetitGiant
             walk_right = AnimationLib.getSkeleton("jensenRight");
             walk_up = AnimationLib.getSkeleton("jensenUp");
             current_skeleton = walk_right;
+            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
         }
 
         public override void update(GameTime currentTime)
@@ -80,6 +84,7 @@ namespace PattyPetitGiant
                 }
                 else
                 {
+                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("rSlash");
                     player_item_1.update(this, currentTime, parentWorld);
                 }
                 
@@ -126,18 +131,21 @@ namespace PattyPetitGiant
                         {
                             velocity.X = 1.5f;
                             direction_facing = GlobalGameConstants.Direction.Right;
-                            current_skeleton = AnimationLib.getSkeleton("jensenRight");
+                            current_skeleton = walk_right ;
                             current_skeleton.Skeleton.FlipX = false;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else if (ks.IsKeyDown(Keys.Left))
                         {
                             velocity.X = -1.5f;
                             direction_facing = GlobalGameConstants.Direction.Left;
-                            current_skeleton = AnimationLib.getSkeleton("jensenRight");
+                            current_skeleton = walk_right;
                             current_skeleton.Skeleton.FlipX = true;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else
                         {
+                            //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                             velocity.X = 0.0f;
                         }
 
@@ -145,18 +153,21 @@ namespace PattyPetitGiant
                         {
                             velocity.Y = -1.5f;
                             direction_facing = GlobalGameConstants.Direction.Up;
-                            current_skeleton = AnimationLib.getSkeleton("jensenUp");
+                            current_skeleton = walk_up;
                             current_skeleton.Skeleton.FlipX = false;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else if (ks.IsKeyDown(Keys.Down))
                         {
                             velocity.Y = 1.5f;
                             direction_facing = GlobalGameConstants.Direction.Down;
-                            current_skeleton = AnimationLib.getSkeleton("jensenDown");
+                            current_skeleton = walk_down;
                             current_skeleton.Skeleton.FlipX = false;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else
                         {
+                            //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                             velocity.Y = 0.0f;
                         }
                     }
@@ -228,7 +239,7 @@ namespace PattyPetitGiant
         public void spinerender(SkeletonRenderer renderer)
         {
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
-            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y +(dimensions.Y / 2);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y+(dimensions.Y/2f);
 
             current_skeleton.Skeleton.RootBone.ScaleX = 0.1f;
             current_skeleton.Skeleton.RootBone.ScaleY = 0.1f;

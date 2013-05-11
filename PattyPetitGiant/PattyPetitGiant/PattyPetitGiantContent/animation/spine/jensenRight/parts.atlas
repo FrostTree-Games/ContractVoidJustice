@@ -6,20 +6,27 @@ repeat: none
 torso copy
   rotate: false
   xy: 1, 189
-  size: 227, 300
-  orig: 227, 300
+  size: 240, 320
+  orig: 240, 320
+  offset: 0, 0
+  index: -1
+machete
+  rotate: false
+  xy: 243, 281
+  size: 162, 228
+  orig: 162, 228
   offset: 0, 0
   index: -1
 leftThigh copy
   rotate: false
-  xy: 230, 280
+  xy: 407, 300
   size: 135, 209
   orig: 135, 209
   offset: 0, 0
   index: -1
 rightThigh copy
   rotate: false
-  xy: 367, 271
+  xy: 544, 291
   size: 114, 218
   orig: 114, 218
   offset: 0, 0
@@ -33,7 +40,7 @@ rightCalf copy
   index: -1
 head copy
   rotate: false
-  xy: 483, 321
+  xy: 660, 341
   size: 120, 168
   orig: 120, 168
   offset: 0, 0
@@ -47,70 +54,70 @@ leftCalf copy
   index: -1
 leftBicep copy
   rotate: false
-  xy: 605, 330
+  xy: 782, 350
   size: 103, 159
   orig: 103, 159
   offset: 0, 0
   index: -1
 rightBicep copy
   rotate: false
-  xy: 710, 291
+  xy: 887, 311
   size: 87, 198
   orig: 87, 198
   offset: 0, 0
   index: -1
+pelvis copy
+  rotate: false
+  xy: 243, 183
+  size: 146, 96
+  orig: 146, 96
+  offset: 0, 0
+  index: -1
 guntest copy
   rotate: false
-  xy: 799, 346
+  xy: 224, 38
   size: 100, 143
   orig: 100, 143
   offset: 0, 0
   index: -1
-rightFoot copy
-  rotate: false
-  xy: 230, 195
-  size: 135, 83
-  orig: 135, 83
-  offset: 0, 0
-  index: -1
 leftForearm copy
   rotate: false
-  xy: 901, 366
+  xy: 326, 58
   size: 94, 123
   orig: 94, 123
   offset: 0, 0
   index: -1
 leftFoot copy
   rotate: false
-  xy: 367, 186
+  xy: 660, 256
   size: 127, 83
   orig: 127, 83
   offset: 0, 0
   index: -1
 rightForearm copy
   rotate: false
-  xy: 496, 207
+  xy: 789, 236
   size: 94, 112
   orig: 94, 112
   offset: 0, 0
   index: -1
-pelvis copy
+rightFoot copy
   rotate: false
-  xy: 799, 248
-  size: 146, 96
-  orig: 146, 96
+  xy: 407, 215
+  size: 135, 83
+  orig: 135, 83
   offset: 0, 0
   index: -1
 rightHand copy
   rotate: false
-  xy: 947, 279
+  xy: 544, 204
   size: 65, 85
   orig: 65, 85
   offset: 0, 0
   index: -1
 leftHand copy
   rotate: false
-  xy: 947, 209
+  xy: 885, 241
   size: 52, 68
   orig: 52, 68
   offset: 0, 0
