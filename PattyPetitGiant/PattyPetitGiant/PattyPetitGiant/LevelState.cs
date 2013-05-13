@@ -52,7 +52,7 @@ namespace PattyPetitGiant
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
             entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
-            //testPopulateEnemies();
+            testPopulateEnemies();
 
             foreach (Entity en in entityList)
             {

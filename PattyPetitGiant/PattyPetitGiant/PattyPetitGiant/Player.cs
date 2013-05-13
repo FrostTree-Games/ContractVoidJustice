@@ -27,11 +27,10 @@ namespace PattyPetitGiant
         private AnimationLib.SpineAnimationSet walk_right = null;
         private AnimationLib.SpineAnimationSet walk_up = null;
         private AnimationLib.SpineAnimationSet current_skeleton = null;
-        private AnimationLib.SpineAnimationSet right_slash = null;
-        
+        public AnimationLib.SpineAnimationSet LoadAnimaton { set { current_skeleton = value; } get { return current_skeleton; } }
 
         private float animation_time = 0.0f;
-
+        public float Animation_Time { set { animation_time = value; } get { return animation_time; } }
         private float switch_weapon_interval = 0.0f;
 
         private playerState state = playerState.Moving;
@@ -84,7 +83,6 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("rSlash");
                     player_item_1.update(this, currentTime, parentWorld);
                 }
                 
@@ -103,6 +101,7 @@ namespace PattyPetitGiant
             else if (state == playerState.Moving)
             {
                 switch_weapon_interval += currentTime.ElapsedGameTime.Milliseconds;
+                //knocked back
                 if (disable_movement == true)
                 {
                     disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -133,7 +132,6 @@ namespace PattyPetitGiant
                             direction_facing = GlobalGameConstants.Direction.Right;
                             current_skeleton = walk_right ;
                             current_skeleton.Skeleton.FlipX = false;
-                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else if (ks.IsKeyDown(Keys.Left))
                         {
@@ -141,11 +139,9 @@ namespace PattyPetitGiant
                             direction_facing = GlobalGameConstants.Direction.Left;
                             current_skeleton = walk_right;
                             current_skeleton.Skeleton.FlipX = true;
-                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else
                         {
-                            //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                             velocity.X = 0.0f;
                         }
 
@@ -155,7 +151,6 @@ namespace PattyPetitGiant
                             direction_facing = GlobalGameConstants.Direction.Up;
                             current_skeleton = walk_up;
                             current_skeleton.Skeleton.FlipX = false;
-                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else if (ks.IsKeyDown(Keys.Down))
                         {
@@ -163,14 +158,24 @@ namespace PattyPetitGiant
                             direction_facing = GlobalGameConstants.Direction.Down;
                             current_skeleton = walk_down;
                             current_skeleton.Skeleton.FlipX = false;
-                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         else
                         {
-                            //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                             velocity.Y = 0.0f;
                         }
+
+                        //if player stands still then animation returns to idle
+                        if (velocity.X == 0.0f && velocity.Y == 0.0f)
+                        {
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        }
+                        else
+                        {
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                        }
                     }
+
+                    
                 }
                 if (player_item_1 != null)
                 {
@@ -220,6 +225,7 @@ namespace PattyPetitGiant
             position.Y = finalPos.Y;
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            Console.WriteLine(current_skeleton.Animation.Name.ToString());
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 

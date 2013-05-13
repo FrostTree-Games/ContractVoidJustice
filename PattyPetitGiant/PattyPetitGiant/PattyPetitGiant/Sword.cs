@@ -11,12 +11,19 @@ namespace PattyPetitGiant
 {
     class Sword : Item
     {
+        private enum Sword_State
+        {
+            preslash,
+            slash,
+            endslash
+        }
+        private Sword_State sword_state = Sword_State.preslash;
         private Vector2 hitbox = Vector2.Zero;
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Sword;
-        private float max_item_state_time = 100.0f;
+        private float delay = 100.0f;
         private float item_state_time = 0.0f;
         private bool sword_swing = false;
         protected int sword_damage;
@@ -30,62 +37,72 @@ namespace PattyPetitGiant
             item_state_time = 0.0f;
             sword_damage = 5;
 
+            sword_state = Sword_State.preslash;
+
             swordAnim = AnimationLib.getFrameAnimationSet("swordPic");
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            position = parent.Position;
             item_direction = parent.Direction_Facing;
             parent.Velocity = Vector2.Zero;
 
             item_state_time += currentTime.ElapsedGameTime.Milliseconds;
 
-            //sword is on the right hand side of the player, if hitboxes are different dimensions, need to adjust the position of sword.
-            if (item_direction == GlobalGameConstants.Direction.Right)
+            if (sword_state == Sword_State.preslash)
             {
-                position.X = parent.Position.X + parent.Dimensions.X;
-                position.Y = parent.Position.Y; //+ parent.Dimensions.Y / 4;
-
-            }
-            else if(item_direction == GlobalGameConstants.Direction.Left)
-            {
-                position.X = parent.Position.X - hitbox.X;
-                position.Y = parent.Position.Y;// + parent.Dimensions.Y/4;
-            }
-            else if (item_direction == GlobalGameConstants.Direction.Up)
-            {
-                position.Y = parent.Position.Y - hitbox.Y;
-                position.X = parent.CenterPoint.X - hitbox.X/2;
-            }
-            else
-            {
-                position.Y = parent.CenterPoint.Y + parent.Dimensions.Y/2;
-                position.X = parent.CenterPoint.X - hitbox.X/2;
-            }
-
-            foreach (Entity en in parentWorld.EntityList)
-            {
-                if(en is Enemy)
+                //sword is on the right hand side of the player, if hitboxes are different dimensions, need to adjust the position of sword.
+                parent.Animation_Time = 0.0f;
+                parent.LoadAnimaton.Animation = parent.LoadAnimaton.Skeleton.Data.FindAnimation("rSlash");
+                switch (item_direction)
                 {
-                    if (hitTest(en))
+                    case GlobalGameConstants.Direction.Right:
+                        position.X = parent.Position.X + parent.Dimensions.X;
+                        position.Y = parent.Position.Y;
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        position.X = parent.Position.X - hitbox.X;
+                        position.Y = parent.Position.Y;
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        position.Y = parent.Position.Y - hitbox.Y;
+                        position.X = parent.CenterPoint.X - hitbox.X / 2;
+                        break;
+                    default:
+                        position.Y = parent.CenterPoint.Y + parent.Dimensions.Y / 2;
+                        position.X = parent.CenterPoint.X - hitbox.X / 2;
+                        break;
+                }
+                if (item_state_time > delay)
+                {
+                    sword_state = Sword_State.slash;
+                    sword_swing = true;
+                }
+            }
+            else if (sword_state == Sword_State.slash)
+            {
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en is Enemy)
                     {
-                        if (item_state_time > max_item_state_time)
+                        if (hitTest(en))
                         {
                             parent.knockBack(en, parent.Position, parent.Dimensions, sword_damage);
                         }
                     }
                 }
+                
+                sword_state = Sword_State.endslash;
             }
-            sword_swing = true;
-            if (item_state_time > max_item_state_time)
+            //time delay for the player to be in this state
+            else if (sword_state == Sword_State.endslash)
             {
                 parent.State = Player.playerState.Moving;
                 item_state_time = 0.0f;
                 parent.Disable_Movement = true;
                 sword_swing = false;
+                sword_state = Sword_State.preslash;
             }
-            
         }
 
         public void daemonupdate(GameTime currentTime, LevelState parentWorld)

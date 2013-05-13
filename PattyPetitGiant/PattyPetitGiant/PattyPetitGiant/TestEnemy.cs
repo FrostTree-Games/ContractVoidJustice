@@ -13,6 +13,8 @@ namespace PattyPetitGiant
     {
         private int change_direction;
         private AnimationLib.FrameAnimationSet enemyAnim;
+
+        private Random rand;
        
         public TestEnemy()
         {
@@ -38,6 +40,8 @@ namespace PattyPetitGiant
             enemy_life = 10;
             enemy_damage = 1;
             damage_player_time = 0.0f;
+
+            rand = new Random(DateTime.Now.Millisecond);
 
             enemyAnim = AnimationLib.getFrameAnimationSet("enemyPic");
         }
@@ -135,7 +139,6 @@ namespace PattyPetitGiant
 
                 if (change_direction_time > 2000)
                 {
-                    Random rand = new Random();
                     change_direction = rand.Next(4);
                     //change_direction_time = 0.0f;
                     if (change_direction_time > 2300)
