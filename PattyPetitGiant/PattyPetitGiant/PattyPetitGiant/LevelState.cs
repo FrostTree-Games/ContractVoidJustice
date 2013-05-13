@@ -130,7 +130,7 @@ namespace PattyPetitGiant
                 en.update(currentTime);
             }
 
-            entityList.RemoveAll(en=>en.Remove_From_List==true);
+            //entityList.RemoveAll(en=>en.Remove_From_List==true);
 
             if (cameraFocus != null)
             {

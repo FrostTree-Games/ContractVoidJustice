@@ -173,12 +173,30 @@ namespace PattyPetitGiant
                 return;
             }
 
+#if WINDOWS
             string[] spineAnims = File.ReadAllLines(spineManifestFile);
 
             foreach (string line in spineAnims)
             {
                 loadSpineAnimation(line);
             }
+
+#elif XBOX
+            String xboxLine;
+            int counter = 0;
+
+            StreamReader file = new StreamReader(spineManifestFile);
+
+            while ((xboxLine = file.ReadLine()) != null)
+            {
+                loadSpineAnimation(xboxLine);
+
+                counter++;
+            }
+
+            file.Close();
+
+#endif
 
             spineManifestLoaded = true;
         }
@@ -190,12 +208,30 @@ namespace PattyPetitGiant
                 return;
             }
 
+#if WINDOWS
             string[] frameAnims = File.ReadAllLines(frameManifestFile);
 
             foreach (string line in frameAnims)
             {
                 loadFrameAnimation(line);
             }
+
+#elif XBOX
+            String xboxLine;
+            int counter = 0;
+
+            StreamReader file = new StreamReader(frameManifestFile);
+
+            while ((xboxLine = file.ReadLine()) != null)
+            {
+                loadFrameAnimation(xboxLine);
+
+                counter++;
+            }
+
+            file.Close();
+
+#endif
 
             frameManifestLoaded = true;
         }

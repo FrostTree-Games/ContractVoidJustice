@@ -60,7 +60,7 @@ namespace PattyPetitGiant
 
             try
             {
-                fs = new FileStream(graphicsDirectory + filename, FileMode.Open);
+                fs = new FileStream(graphicsDirectory + filename, FileMode.Open, FileAccess.Read);
                 texture = Texture2D.FromStream(device, fs);
             }
             catch (FileNotFoundException)
