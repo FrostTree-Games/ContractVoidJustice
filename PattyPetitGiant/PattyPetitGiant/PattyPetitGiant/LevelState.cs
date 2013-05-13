@@ -48,6 +48,8 @@ namespace PattyPetitGiant
 
             entityList = new List<Entity>();
 
+            populateRooms(nodeMap);
+
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
@@ -67,7 +69,30 @@ namespace PattyPetitGiant
         }
 
         /// <summary>
-        /// Really crudle
+        /// Populates a dungeon with entities depending on its properties
+        /// </summary>
+        /// <param name="rooms"></param>
+        private void populateRooms(DungeonGenerator.DungeonRoom[,] rooms)
+        {
+            for (int i = 0; i < rooms.GetLength(0); i++)
+            {
+                for (int j = 0; j < rooms.GetLength(1); j++)
+                {
+                    if (rooms[i, j].attributes == null)
+                    {
+                        continue;
+                    }
+
+                    if (rooms[i, j].attributes.Contains("shopkeeper"))
+                    {
+                        entityList.Add(new ShopKeeper(this, new Vector2(i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X ), j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y + (5 * GlobalGameConstants.TileSize.Y))));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Really crude
         /// </summary>
         private void testPopulateEnemies()
         {

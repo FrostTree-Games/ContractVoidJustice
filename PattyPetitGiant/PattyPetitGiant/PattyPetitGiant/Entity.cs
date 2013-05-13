@@ -93,8 +93,6 @@ namespace PattyPetitGiant
                 Enemy enemy = (Enemy)other;
                 enemy.disable_movement = true;
 
-                Console.WriteLine(enemy.disable_movement_time);
-
                 Vector2 player_center = new Vector2(position.X + (dimensions.X / 2), position.Y + (dimensions.X / 2));
                 Vector2 enemy_center = new Vector2(enemy.position.X + (enemy.dimensions.X / 2), enemy.position.Y + (enemy.dimensions.Y / 2));
 

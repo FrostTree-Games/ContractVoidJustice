@@ -114,6 +114,13 @@ namespace PattyPetitGiant
                     if (room[i, j].attributes != null)
                     {
                         ChunkManager.Chunk c = ChunkLib.getRandomChunkByValues(room[i, j].attributes.ToArray(), rand);
+                        foreach (ChunkManager.Chunk.ChunkAttribute attr in c.Attributes)
+                        {
+                            if (!room[i, j].attributes.Contains(attr.AttributeName))
+                            {
+                                room[i, j].attributes.Add(attr.AttributeName);
+                            }
+                        }
 
                         if (c != null)
                         {

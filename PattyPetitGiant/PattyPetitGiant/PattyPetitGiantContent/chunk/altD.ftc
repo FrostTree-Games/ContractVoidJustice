@@ -261,9 +261,6 @@
   </tilemap>
   <Attributes>
     <ChunkAttribute>
-      <AttributeName>start</AttributeName>
-    </ChunkAttribute>
-    <ChunkAttribute>
       <AttributeName>east</AttributeName>
     </ChunkAttribute>
     <ChunkAttribute>
