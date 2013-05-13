@@ -13,3 +13,16 @@ testL.ftc
 testM.ftc
 testN.ftc
 testO.ftc
+altA.ftc
+altB.ftc
+altC.ftc
+altD.ftc
+altE.ftc
+altF.ftc
+altG.ftc
+altH.ftc
+altI.ftc
+altJ.ftc
+altK.ftc
+altL.ftc
+altM.ftc

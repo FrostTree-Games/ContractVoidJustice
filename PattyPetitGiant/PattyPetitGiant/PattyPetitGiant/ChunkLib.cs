@@ -51,34 +51,70 @@ namespace PattyPetitGiant
             manifestLoaded = true;
         }
 
-        public static ChunkManager.Chunk getRandomChunkByValues(string[] requiredAttributes)
+        private static byte chunkToByteValue(ChunkManager.Chunk c)
+        {
+            byte output = 0;
+
+            foreach (ChunkManager.Chunk.ChunkAttribute attr in c.Attributes)
+            {
+                if (attr.AttributeName == "north")
+                {
+                    output |= 1;
+                }
+                if (attr.AttributeName == "south")
+                {
+                    output |= 2;
+                }
+                if (attr.AttributeName == "east")
+                {
+                    output |= 4;
+                }
+                if (attr.AttributeName == "west")
+                {
+                    output |= 8;
+                }
+            }
+
+            return output;
+        }
+
+        private static byte stringsToByteValue(string[] attributes)
+        {
+            byte output = 0;
+
+            foreach (String s in attributes)
+            {
+                if (s == "north")
+                {
+                    output |= 1;
+                }
+                if (s == "south")
+                {
+                    output |= 2;
+                }
+                if (s == "east")
+                {
+                    output |= 4;
+                }
+                if (s == "west")
+                {
+                    output |= 8;
+                }
+            }
+
+            return output;
+        }
+
+        public static ChunkManager.Chunk getRandomChunkByValues(string[] requiredAttributes, Random rand)
         {
             List<ChunkManager.Chunk> potentials = new List<ChunkManager.Chunk>();
 
             foreach (KeyValuePair<string, ChunkManager.Chunk> val in dict)
             {
-                int remainingValues = requiredAttributes.Length;
+                byte b1 = chunkToByteValue(val.Value);
+                byte b2 = stringsToByteValue(requiredAttributes);
 
-                foreach (string requiredAttribute in requiredAttributes)
-                {
-                    foreach (ChunkManager.Chunk.ChunkAttribute attr in val.Value.Attributes)
-                    {
-                        if (attr.AttributeName == "north" || attr.AttributeName == "south" || attr.AttributeName == "east" || attr.AttributeName == "west")
-                        {
-                            if (!requiredAttributes.Contains(attr.AttributeName))
-                            {
-                                continue;
-                            }
-                        }
-
-                        if (attr.AttributeName == requiredAttribute)
-                        {
-                            remainingValues--;
-                        }
-                    }
-                }
-
-                if (remainingValues < 1)
+                if (b1 == b2)
                 {
                     potentials.Add(val.Value);
                 }
@@ -90,17 +126,7 @@ namespace PattyPetitGiant
             }
             else
             {
-                int lowestIndex = 0;
-
-                for (int i = 0; i < potentials.Count; i++)
-                {
-                    if (potentials[i].Attributes.Length < potentials[lowestIndex].Attributes.Length)
-                    {
-                        lowestIndex = i;
-                    }
-                }
-
-                return potentials[lowestIndex];
+                return potentials[rand.Next() % potentials.Count];
             }
         }
     }

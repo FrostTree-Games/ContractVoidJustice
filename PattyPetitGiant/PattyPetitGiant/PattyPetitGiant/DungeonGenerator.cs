@@ -7,6 +7,8 @@ namespace PattyPetitGiant
 {
     public class DungeonGenerator
     {
+        private const float probability_connectOldRooms = 0.1f;
+
         private class DungeonRoomClass
         {
             public enum ChildDirection
@@ -117,6 +119,11 @@ namespace PattyPetitGiant
             {
                 for (int j = 0; j < dungeonModel.GetLength(1); j++)
                 {
+                    if (dungeonModel[i, j] == null)
+                    {
+                        continue;
+                    }
+
                     dungeonModel[i, j].Intensity /= maxIntensity;
                 }
             }
@@ -142,7 +149,7 @@ namespace PattyPetitGiant
             int iterate = 0;
             const int maxIterations = 1000;
             int globalIterations = 0;
-            while (iterate < 100 && globalIterations < maxIterations)
+            while (iterate < (int)(model.GetLength(0) * model.GetLength(1) * 0.75f) && globalIterations < maxIterations)
             {
                 globalIterations++;
 
@@ -159,6 +166,31 @@ namespace PattyPetitGiant
                 //don't create a new room on top of an old one
                 if ((newDir == 0 && model[room.X, room.Y - 1] != null) || (newDir == 1 && model[room.X + 1, room.Y] != null) || ((newDir == 2 && model[room.X, room.Y + 1] != null)) || (newDir == 3 && model[room.X - 1, room.Y] != null))
                 {
+                    //but, there's a chance we'd like some loops so the dungeon looks less boring
+                    double newRoomChance = rand.NextDouble();
+                    if ((float)(newRoomChance) <= probability_connectOldRooms)
+                    {
+                        switch ((DungeonRoomClass.ChildDirection)newDir)
+                        {
+                            case DungeonRoomClass.ChildDirection.North:
+                                room.Children[newDir] = model[room.X, room.Y - 1];
+                                model[room.X, room.Y - 1].Children[(int)DungeonRoomClass.ChildDirection.South] = room;
+                                break;
+                            case DungeonRoomClass.ChildDirection.South:
+                                room.Children[newDir] = model[room.X, room.Y + 1];
+                                model[room.X, room.Y + 1].Children[(int)DungeonRoomClass.ChildDirection.North] = room;
+                                break;
+                            case DungeonRoomClass.ChildDirection.East:
+                                room.Children[newDir] = model[room.X + 1, room.Y];
+                                model[room.X + 1, room.Y].Children[(int)DungeonRoomClass.ChildDirection.West] = room;
+                                break;
+                            case DungeonRoomClass.ChildDirection.West:
+                                room.Children[newDir] = model[room.X - 1, room.Y];
+                                model[room.X - 1, room.Y].Children[(int)DungeonRoomClass.ChildDirection.East] = room;
+                                break;
+                        }
+                    }
+
                     continue;
                 }
 
