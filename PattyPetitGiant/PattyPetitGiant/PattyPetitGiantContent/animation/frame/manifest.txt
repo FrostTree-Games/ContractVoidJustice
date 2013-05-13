@@ -6,3 +6,4 @@ enemyPic
 chasePic
 flagPic
 bombExplosion
+shopKeeper

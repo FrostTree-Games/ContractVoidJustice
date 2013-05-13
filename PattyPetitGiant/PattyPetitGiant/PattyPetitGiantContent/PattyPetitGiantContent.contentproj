@@ -55,6 +55,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>bombExplosion</Name>
     </None>
+    <None Include="animation\frame\shopKeeper.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>shopKeeper</Name>
+    </None>
     <None Include="animation\frame\flagPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>flagPic</Name>

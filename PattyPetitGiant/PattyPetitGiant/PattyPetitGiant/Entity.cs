@@ -65,7 +65,7 @@ namespace PattyPetitGiant
         /// <param name="other">Entity that is either the player or the enemy depending on who is hitting who</param>
         /// <param name="position">center position of object that hits other is</param>
         /// <param name="dimensions">size of object that hits other is</param>
-        public void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
+        public virtual void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
         {
             //Enemy knocks back player
             if (other is Player)
