@@ -6,10 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 
 namespace PattyPetitGiant
 {
-    class Enemy : Entity
+    class Enemy : Entity, SpineEntity
     {
         public enum EnemyState
         {
@@ -20,6 +21,12 @@ namespace PattyPetitGiant
         }
 
         protected EnemyState state = EnemyState.Moving;
+        public EnemyState State
+        {
+            set { state = value; }
+            get { return state; }
+
+        }
 
         private bool item_hit;
         public bool Item_Hit
@@ -47,6 +54,13 @@ namespace PattyPetitGiant
             get { return enemy_damage; }
         }
 
+        protected AnimationLib.SpineAnimationSet walk_down = null;
+        protected AnimationLib.SpineAnimationSet walk_right = null;
+        protected AnimationLib.SpineAnimationSet walk_up = null;
+        protected AnimationLib.SpineAnimationSet current_skeleton = null;
+        public AnimationLib.SpineAnimationSet LoadAnimaton { set { current_skeleton = value; } get { return current_skeleton; } }
+        protected float animation_time;
+        
         protected float damage_player_time = 0.0f;
 
         public Enemy()
@@ -67,6 +81,8 @@ namespace PattyPetitGiant
             disable_movement_time = 0.0f;
 
             velocity = Vector2.Zero;
+
+            //animation_time = 0.0f;
 
             state = EnemyState.Moving;
 
@@ -121,6 +137,10 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
             sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
+        }
+
+        public virtual void spinerender(SkeletonRenderer renderer)
+        {
         }
     }
 }

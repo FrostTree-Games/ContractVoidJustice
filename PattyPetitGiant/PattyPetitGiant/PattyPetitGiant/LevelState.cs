@@ -53,7 +53,7 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new RangeEnemy(this, map.StartPosition.X, map.StartPosition.Y-100));
+            entityList.Add(new Pickup(this, map.StartPosition.X, map.StartPosition.Y-100));
             //entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
             //testPopulateEnemies();
 

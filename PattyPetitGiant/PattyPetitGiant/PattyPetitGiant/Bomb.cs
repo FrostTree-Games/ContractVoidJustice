@@ -68,7 +68,7 @@ namespace PattyPetitGiant
                     break;
                 case Bomb_State.exploded:
                     //where hit test is done
-                    if (time_explosion > 500)
+                    if (time_explosion > 1500)
                     {
                         bomb_state = Bomb_State.reset;
                         time_explosion = 0.0f;
@@ -119,7 +119,7 @@ namespace PattyPetitGiant
             switch(bomb_state)
             {
                 case Bomb_State.placed:
-                    bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(2.25f, 2.25f), 0.5f);
+                    bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1.0f, 1.0f), 0.5f);
                     break;
                 case Bomb_State.exploded:
                     bombAnim.drawAnimationFrame(animation_time, sb, position , new Vector2(2.25f, 2.25f), 0.5f);

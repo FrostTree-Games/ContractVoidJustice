@@ -6,10 +6,11 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 
 namespace PattyPetitGiant
 {
-    class TestEnemy : Enemy
+    class TestEnemy : Enemy, SpineEntity    
     {
         private int change_direction;
         private AnimationLib.FrameAnimationSet enemyAnim;
@@ -28,9 +29,9 @@ namespace PattyPetitGiant
 
             state = EnemyState.Moving;
 
-            direction_facing = GlobalGameConstants.Direction.Up;
+            direction_facing = GlobalGameConstants.Direction.Right;
 
-            velocity = new Vector2(0.0f, -1.0f);
+            velocity = new Vector2(1.0f, 0.0f);
 
             change_direction_time = 0.0f;
             change_direction = 0;
@@ -43,14 +44,19 @@ namespace PattyPetitGiant
 
             rand = new Random(DateTime.Now.Millisecond);
 
+            walk_down = AnimationLib.getSkeleton("zippyDown");
+            walk_right = AnimationLib.getSkeleton("zippyRight");
+            walk_up = AnimationLib.getSkeleton("zippyUp");
+            current_skeleton = walk_right;
+            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
             enemyAnim = AnimationLib.getFrameAnimationSet("enemyPic");
+            animation_time = 0.0f;
         }
 
         public override void update(GameTime currentTime)
         {
             if(state == EnemyState.Moving)
             {
-
                 change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
                 foreach (Entity en in parentWorld.EntityList)
@@ -79,98 +85,120 @@ namespace PattyPetitGiant
                         disable_movement_time = 0;
                     }
                 }
-
-                int check_corners = 0;
-                Vector2 nextStep_temp = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
-                
-                while (check_corners != 4)
+                else
                 {
-                    if (on_wall != true)
+
+                    int check_corners = 0;
+                    Vector2 nextStep_temp = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+                    bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+
+                    while (check_corners != 4)
                     {
-                        if (check_corners == 0)
+                        if (on_wall != true)
                         {
-                            nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + velocity.Y);
-                        }
-                        else if (check_corners == 1)
-                        {
-                            nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
-                        }
-                        else if (check_corners == 2)
-                        {
-                            nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                            if (check_corners == 0)
+                            {
+                                nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + velocity.Y);
+                            }
+                            else if (check_corners == 1)
+                            {
+                                nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                            }
+                            else if (check_corners == 2)
+                            {
+                                nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                            }
+                            else
+                            {
+                                break;
+                            }
                         }
                         else
                         {
+
+                            switch (direction_facing)
+                            {
+                                case GlobalGameConstants.Direction.Right:
+                                    direction_facing = GlobalGameConstants.Direction.Left;
+                                    current_skeleton = walk_right;
+                                    current_skeleton.Skeleton.FlipX = true;
+                                    velocity.X = -1.0f;
+                                    velocity.Y = 0.0f;
+                                    break;
+                                case GlobalGameConstants.Direction.Left:
+                                    direction_facing = GlobalGameConstants.Direction.Right;
+                                    current_skeleton = walk_right;
+                                    current_skeleton.Skeleton.FlipX = false;
+                                    velocity.X = 1.0f;
+                                    velocity.Y = 0.0f;
+                                    break;
+                                case GlobalGameConstants.Direction.Up:
+                                    direction_facing = GlobalGameConstants.Direction.Down;
+                                    current_skeleton = walk_down;
+                                    current_skeleton.Skeleton.FlipX = false;
+                                    velocity.Y = 1.0f;
+                                    velocity.X = 0.0f;
+                                    break;
+                                default:
+                                    direction_facing = GlobalGameConstants.Direction.Up;
+                                    current_skeleton = walk_up;
+                                    current_skeleton.Skeleton.FlipX = false;
+                                    velocity.Y = -1.0f;
+                                    velocity.X = 0.0f;
+                                    break;
+                            }
                             break;
                         }
+                        on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                        check_corners++;
                     }
-                    else
-                    {
 
-                        switch (direction_facing)
-                        {
-                            case GlobalGameConstants.Direction.Right:
-                                direction_facing = GlobalGameConstants.Direction.Left;
-                                velocity.X = -1.0f;
-                                velocity.Y = 0.0f;
-                                break;
-                            case GlobalGameConstants.Direction.Left:
-                                direction_facing = GlobalGameConstants.Direction.Right;
-                                velocity.X = 1.0f;
-                                velocity.Y = 0.0f;
-                                break;
-                            case GlobalGameConstants.Direction.Up:
-                                direction_facing = GlobalGameConstants.Direction.Down;
-                                velocity.Y = 1.0f;
-                                velocity.X = 0.0f;
-                                break;
-                            default:
-                                direction_facing = GlobalGameConstants.Direction.Up;
-                                velocity.Y = -1.0f;
-                                velocity.X = 0.0f;
-                                break;
-                        }
-                        break;
-                    }
-                    on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
-                    check_corners++;
-                }
-
-                if (change_direction_time > 2000)
-                {
-                    change_direction = rand.Next(4);
-                    //change_direction_time = 0.0f;
-                    if (change_direction_time > 2300)
+                    if (change_direction_time > 2000)
                     {
-                        switch (change_direction)
+                        change_direction = rand.Next(4);
+                        //change_direction_time = 0.0f;
+                        animation_time = 0.0f;
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        if (change_direction_time > 3000)
                         {
-                            case 0:
-                                velocity.X = 1.0f;
-                                velocity.Y = 0.0f;
-                                direction_facing = GlobalGameConstants.Direction.Right;
-                                break;
-                            case 1:
-                                velocity.X = -1.0f;
-                                velocity.Y = 0.0f;
-                                direction_facing = GlobalGameConstants.Direction.Left;
-                                break;
-                            case 2:
-                                velocity.X = 0.0f;
-                                velocity.Y = -1.0f;
-                                direction_facing = GlobalGameConstants.Direction.Up;
-                                break;
-                            default:
-                                velocity.X = 0.0f;
-                                velocity.Y = 1.0f;
-                                direction_facing = GlobalGameConstants.Direction.Down;
-                                break;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                            switch (change_direction)
+                            {
+                                case 0:
+                                    velocity.X = 1.0f;
+                                    velocity.Y = 0.0f;
+                                    direction_facing = GlobalGameConstants.Direction.Right;
+                                    current_skeleton = walk_right;
+                                    current_skeleton.Skeleton.FlipX = false;
+                                    break;
+                                case 1:
+                                    velocity.X = -1.0f;
+                                    velocity.Y = 0.0f;
+                                    direction_facing = GlobalGameConstants.Direction.Left;
+                                    current_skeleton = walk_right;
+                                    current_skeleton.Skeleton.FlipX = true;
+                                    break;
+                                case 2:
+                                    velocity.X = 0.0f;
+                                    velocity.Y = -1.0f;
+                                    current_skeleton = walk_up;
+                                    current_skeleton.Skeleton.FlipX = false;
+                                    direction_facing = GlobalGameConstants.Direction.Up;
+                                    break;
+                                default:
+                                    velocity.X = 0.0f;
+                                    velocity.Y = 1.0f;
+                                    direction_facing = GlobalGameConstants.Direction.Down;
+                                    current_skeleton = walk_down;
+                                    current_skeleton.Skeleton.FlipX = false;
+                                    break;
+                            }
+                            change_direction_time = 0.0f;
                         }
-                        change_direction_time = 0.0f;
-                    }
-                    else
-                    {
-                        velocity = Vector2.Zero;
+                        else
+                        {
+                            velocity = Vector2.Zero;
+                        }
                     }
                 }
                 
@@ -186,12 +214,25 @@ namespace PattyPetitGiant
             {
                 remove_from_list = true;
             }
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
         public override void draw(SpriteBatch sb)
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
-            enemyAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
+            //enemyAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
+        }
+        public override void spinerender(SkeletonRenderer renderer)
+        {
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            current_skeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(current_skeleton.Skeleton);
         }
     }
 }
