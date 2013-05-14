@@ -1,0 +1,26 @@
+
+img.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+machete
+  rotate: false
+  xy: 1, 15
+  size: 162, 228
+  orig: 162, 228
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 165, 195
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+foot
+  rotate: false
+  xy: 1, 1
+  size: 22, 12
+  orig: 22, 12
+  offset: 0, 0
+  index: -1
