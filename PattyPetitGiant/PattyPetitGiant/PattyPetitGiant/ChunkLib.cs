@@ -39,6 +39,7 @@ namespace PattyPetitGiant
                 return;
             }
 
+#if WINDOWS
             string[] chunks = File.ReadAllLines(chunkManifest);
 
             foreach (string line in chunks)
@@ -47,6 +48,25 @@ namespace PattyPetitGiant
 
                 dict.Add(line, c);
             }
+
+#elif XBOX
+            String xboxLine;
+            int counter = 0;
+
+            StreamReader file = new StreamReader(chunkManifest);
+
+            while ((xboxLine = file.ReadLine()) != null)
+            {
+                ChunkManager.Chunk c = ChunkManager.ReadChunk(chunkDirectory + xboxLine);
+
+                dict.Add(xboxLine, c);
+
+                counter++;
+            }
+
+            file.Close();
+
+#endif
 
             manifestLoaded = true;
         }

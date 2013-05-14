@@ -103,7 +103,11 @@ namespace PattyPetitGiant
             {
                 for (int j = 0; j < floorMap.GetLength(1); j++)
                 {
+#if WINDOWS
                     floorMap[i, j] = ((FloorType)(rand.Next() % Enum.GetNames(typeof(FloorType)).Length));
+#elif XBOX
+                    floorMap[i, j] = FloorType.A;
+#endif
                 }
             }
 

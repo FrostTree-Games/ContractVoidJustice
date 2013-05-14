@@ -131,8 +131,11 @@ namespace PattyPetitGiant
                 en.update(currentTime);
             }
 
+#if WINDOWS
             entityList.RemoveAll(en=>en.Remove_From_List==true);
+#elif XBOX
             //XboxListTools.RemoveAll<Entity>(entityList, XboxListTools.isShouldBeRemoved);
+#endif
 
             if (cameraFocus != null)
             {
