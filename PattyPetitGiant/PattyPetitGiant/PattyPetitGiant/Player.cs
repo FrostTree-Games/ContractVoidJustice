@@ -225,7 +225,6 @@ namespace PattyPetitGiant
             position.Y = finalPos.Y;
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
-            Console.WriteLine(current_skeleton.Animation.Name.ToString());
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
