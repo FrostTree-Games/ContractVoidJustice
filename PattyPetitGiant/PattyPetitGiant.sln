@@ -23,6 +23,7 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}.Debug|Mixed Platforms.Deploy.0 = Debug|x86
 		{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}.Debug|x86.ActiveCfg = Debug|x86
 		{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}.Debug|x86.Build.0 = Debug|x86
 		{85B2C3C2-7949-4762-AF4B-89A5DA2515CA}.Debug|Xbox 360.ActiveCfg = Debug|x86
@@ -63,7 +64,6 @@ Global
 		{4EEB82E0-DBC4-46BE-AC59-CAB78E7C91C2}.Release|Xbox 360.Build.0 = Release|Xbox 360
 		{39105BA6-91F5-4186-849B-83F35CC7C286}.Debug|Mixed Platforms.ActiveCfg = Debug|Xbox 360
 		{39105BA6-91F5-4186-849B-83F35CC7C286}.Debug|Mixed Platforms.Build.0 = Debug|Xbox 360
-		{39105BA6-91F5-4186-849B-83F35CC7C286}.Debug|Mixed Platforms.Deploy.0 = Debug|Xbox 360
 		{39105BA6-91F5-4186-849B-83F35CC7C286}.Debug|x86.ActiveCfg = Debug|Xbox 360
 		{39105BA6-91F5-4186-849B-83F35CC7C286}.Debug|Xbox 360.ActiveCfg = Debug|Xbox 360
 		{39105BA6-91F5-4186-849B-83F35CC7C286}.Debug|Xbox 360.Build.0 = Debug|Xbox 360
