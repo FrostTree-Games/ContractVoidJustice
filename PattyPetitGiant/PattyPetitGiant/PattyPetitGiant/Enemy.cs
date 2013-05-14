@@ -15,7 +15,8 @@ namespace PattyPetitGiant
         {
             Moving,
             Pause,
-            Chase
+            Chase,
+            Firing
         }
 
         protected EnemyState state = EnemyState.Moving;

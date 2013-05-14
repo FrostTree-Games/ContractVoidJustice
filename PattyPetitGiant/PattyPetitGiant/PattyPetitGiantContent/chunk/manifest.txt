@@ -27,3 +27,4 @@ altK.ftc
 altL.ftc
 altM.ftc
 testShop.ftc
+Example.ftc

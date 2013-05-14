@@ -58,6 +58,10 @@
     <None Include="animation\frame\shopKeeper.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>shopKeeper</Name>
+	</None>
+    <None Include="animation\frame\rangeenemyPic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>rangeenemyPic</Name>
     </None>
     <None Include="animation\frame\flagPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -153,6 +157,10 @@
     </None>
     <None Include="chunk\testShop.ftc">
       <Name>testShop</Name>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	</None>
+    <None Include="chunk\Example.ftc">
+      <Name>Example</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="gfx\tileTemplate.png">

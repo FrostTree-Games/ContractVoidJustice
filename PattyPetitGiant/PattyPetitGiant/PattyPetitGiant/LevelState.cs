@@ -53,8 +53,9 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
-            testPopulateEnemies();
+            entityList.Add(new RangeEnemy(this, map.StartPosition.X, map.StartPosition.Y-100));
+            //entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
+            //testPopulateEnemies();
 
             foreach (Entity en in entityList)
             {
@@ -131,6 +132,7 @@ namespace PattyPetitGiant
             }
 
             entityList.RemoveAll(en=>en.Remove_From_List==true);
+            //XboxListTools.RemoveAll<Entity>(entityList, XboxListTools.isShouldBeRemoved);
 
             if (cameraFocus != null)
             {

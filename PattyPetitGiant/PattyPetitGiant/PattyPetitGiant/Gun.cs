@@ -65,7 +65,6 @@ namespace PattyPetitGiant
                     bullet.position.Y = parent.CenterPoint.Y;
                     bullet.velocity.X = -3.0f;
                     bullet.bullet_direction = item_direction;
-                    // position.Y = parent.Position.Y;
                 }
                 else if (item_direction == GlobalGameConstants.Direction.Up)
                 {
@@ -73,7 +72,6 @@ namespace PattyPetitGiant
                     bullet.position.X = parent.CenterPoint.X;
                     bullet.velocity.Y = -3.0f;
                     bullet.bullet_direction = item_direction;
-                    //position.X = parent.Position.X;
                 }
                 else
                 {
@@ -81,7 +79,6 @@ namespace PattyPetitGiant
                     bullet.position.X = parent.CenterPoint.X;
                     bullet.velocity.Y = 3.0f;
                     bullet.bullet_direction = item_direction;
-                    //position.X = parent.Position.X;
                 }
             }
             
