@@ -73,10 +73,10 @@ namespace PattyPetitGiant
 
                 output.intensity = this.intensity;
 
-                if (output.north) { this.attributes.Add("north"); }
-                if (output.south) { this.attributes.Add("south"); }
-                if (output.east) { this.attributes.Add("east"); }
-                if (output.west) { this.attributes.Add("west"); }
+                if (output.north) { output.attributes.Add("north"); }
+                if (output.south) { output.attributes.Add("south"); }
+                if (output.east) { output.attributes.Add("east"); }
+                if (output.west) { output.attributes.Add("west"); }
 
                 return output;
             }
@@ -160,7 +160,7 @@ namespace PattyPetitGiant
             addedRooms.Add(model[randX, randY - 1]);
 
             //iterate and expand the dungeon according to the constraints
-            /*int iterate = 0;
+            int iterate = 0;
             const int maxIterations = 1000;
             int globalIterations = 0;
             while (iterate < (int)(model.GetLength(0) * model.GetLength(1) * 0.70f) && globalIterations < maxIterations)
@@ -170,7 +170,7 @@ namespace PattyPetitGiant
                 DungeonRoomClass room = addedRooms[rand.Next() % addedRooms.Count];
 
                 int newDir = rand.Next() % 4;
-                
+
                 //don't create a new room outside of the boundaries
                 if ((newDir == 0 && room.Y == 0) || (newDir == 1 && room.X == desiredWidth - 1) || ((newDir == 2 && room.Y == desiredHeight - 1)) || (newDir == 3 && room.X == 0))
                 {
@@ -244,7 +244,6 @@ namespace PattyPetitGiant
 
                 iterate++;
             }
-             */
 
             //compute intensity values
             computeDungeonIntensity(model, startingRoom.X, startingRoom.Y);

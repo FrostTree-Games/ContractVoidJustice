@@ -125,6 +125,21 @@ namespace PattyPetitGiant
             return output;
         }
 
+        private static bool checkChunk(string[] requiredAttributes, ChunkManager.Chunk chunk)
+        {
+            List<string> reqs = new List<string>(requiredAttributes);
+            List<string> chunkAttrs = new List<string>();
+            foreach (ChunkManager.Chunk.ChunkAttribute attrbute in chunk.Attributes)
+            {
+                chunkAttrs.Add(attrbute.AttributeName);
+            }
+
+            reqs.Sort();
+            chunkAttrs.Sort();
+
+            return Enumerable.SequenceEqual(reqs, chunkAttrs);
+        }
+
         public static ChunkManager.Chunk getRandomChunkByValues(string[] requiredAttributes, Random rand)
         {
             List<ChunkManager.Chunk> potentials = new List<ChunkManager.Chunk>();
@@ -134,7 +149,7 @@ namespace PattyPetitGiant
                 byte b1 = chunkToByteValue(val.Value);
                 byte b2 = stringsToByteValue(requiredAttributes);
 
-                if (b1 == b2)
+                if (b1 == b2 && checkChunk(requiredAttributes, val.Value))
                 {
                     potentials.Add(val.Value);
                 }
