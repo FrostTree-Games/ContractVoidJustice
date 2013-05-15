@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Chunk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <Name>D</Name>
+  <Name>startingNode</Name>
   <tilemap>
     <int>1</int>
     <int>1</int>
@@ -50,9 +50,123 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
@@ -68,28 +182,6 @@
     <int>0</int>
     <int>1</int>
     <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
@@ -100,28 +192,12 @@
     <int>0</int>
     <int>1</int>
     <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>1</int>
     <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
@@ -132,95 +208,6 @@
     <int>0</int>
     <int>1</int>
     <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>1</int>
@@ -229,45 +216,61 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
   </tilemap>
   <Attributes>
     <ChunkAttribute>
-      <AttributeName>east</AttributeName>
+      <AttributeName>start</AttributeName>
     </ChunkAttribute>
     <ChunkAttribute>
       <AttributeName>north</AttributeName>
     </ChunkAttribute>
     <ChunkAttribute>
-      <AttributeName>south</AttributeName>
+      <AttributeName>west</AttributeName>
+    </ChunkAttribute>
+    <ChunkAttribute>
+      <AttributeName>east</AttributeName>
     </ChunkAttribute>
   </Attributes>
 </Chunk>

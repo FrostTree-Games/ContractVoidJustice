@@ -266,8 +266,5 @@
     <ChunkAttribute>
       <AttributeName>east</AttributeName>
     </ChunkAttribute>
-    <ChunkAttribute>
-      <AttributeName>start</AttributeName>
-    </ChunkAttribute>
   </Attributes>
 </Chunk>
