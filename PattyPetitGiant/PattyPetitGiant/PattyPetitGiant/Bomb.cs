@@ -44,11 +44,18 @@ namespace PattyPetitGiant
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            position = parent.CenterPoint - hitbox/2;
-            center_placed_bomb = position + hitbox / 2;
-            time_explosion = 0.0f;
-            parent.State = Player.playerState.Moving;
-            bomb_state = Bomb_State.placed;
+            if (bomb_state == Bomb_State.reset)
+            {
+                position = parent.CenterPoint - hitbox / 2;
+                center_placed_bomb = position + hitbox / 2;
+                time_explosion = 0.0f;
+                parent.State = Player.playerState.Moving;
+                bomb_state = Bomb_State.placed;
+            }
+            else
+            {
+                parent.State = Player.playerState.Moving;
+            }
         }
         public void daemonupdate(GameTime currentTime, LevelState parentWorld)
         {
@@ -57,7 +64,7 @@ namespace PattyPetitGiant
             switch (bomb_state)
             {
                 case Bomb_State.placed:
-                    if (time_explosion > 1000)
+                    if (time_explosion > 1500)
                     {
                         hitbox = hitbox_exploded;
                         position = new Vector2(center_placed_bomb.X - hitbox.X / 2, center_placed_bomb.Y - hitbox.Y / 2);
@@ -68,7 +75,7 @@ namespace PattyPetitGiant
                     break;
                 case Bomb_State.exploded:
                     //where hit test is done
-                    if (time_explosion > 1500)
+                    if (time_explosion > 700)
                     {
                         bomb_state = Bomb_State.reset;
                         time_explosion = 0.0f;
