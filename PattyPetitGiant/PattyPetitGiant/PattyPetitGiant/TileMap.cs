@@ -70,6 +70,8 @@ namespace PattyPetitGiant
             H = 7,
         }
 
+        private LevelState parent = null;
+
         private TileDimensions size;
         public TileDimensions SizeInTiles { get { return size; } }
         public Vector2 SizeInPixels { get { return new Vector2(size.x * tileSize.X, size.y * tileSize.Y); } }
@@ -89,10 +91,12 @@ namespace PattyPetitGiant
         private Texture2D tileSkin = null;
         public Texture2D TileSkin { get { return tileSkin; } set { tileSkin = value; } }
 
-        public TileMap(DungeonGenerator.DungeonRoom[,] room, Vector2 tileSize)
+        public TileMap(LevelState parent, DungeonGenerator.DungeonRoom[,] room, Vector2 tileSize)
         {
             this.size = new TileDimensions(room.GetLength(0) * GlobalGameConstants.TilesPerRoomWide, room.GetLength(1)  * GlobalGameConstants.TilesPerRoomHigh);
             this.tileSize = tileSize;
+
+            this.parent = parent;
 
             map = new TileType[size.x, size.y];
             floorMap = new FloorType[size.x, size.y];
@@ -305,9 +309,12 @@ namespace PattyPetitGiant
         /// </summary>
         public void render(SpriteBatch spriteBatch, float depth)
         {
-            for (int j = 0; j < size.y; j++)
+            int focusTileX = (int)(parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X);
+            int focusTileY = (int)(parent.CameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y);
+
+            for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
             {
-                for (int i = 0; i < size.x; i++)
+                for (int i = Math.Max(0, focusTileX - 27); i < Math.Min(size.x, focusTileX + 27); i++)
                 {
                     if (map[i, j] != TileType.NoWall)
                     {
@@ -344,9 +351,9 @@ namespace PattyPetitGiant
                 }
             }
 
-            for (int j = 0; j < size.y; j++)
+            for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
             {
-                for (int i = 0; i < size.x; i++)
+                for (int i = Math.Max(0, focusTileX - 27); i < Math.Min(size.x, focusTileX + 27); i++)
                 {
                     int tileX;
                     int tileY;
