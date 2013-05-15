@@ -34,7 +34,7 @@ namespace PattyPetitGiant
         public static Vector2 TileSize { get { return tileSize; } }
 
         
-        private static TileMap.TileDimensions standardMapSize = new TileMap.TileDimensions(8, 8);
+        private static TileMap.TileDimensions standardMapSize = new TileMap.TileDimensions(5, 5);
         public static TileMap.TileDimensions StandardMapSize { get { return standardMapSize; } }
         private static int tilesPerRoomWide = 16;
         private static int tilesPerRoomHigh = 16;

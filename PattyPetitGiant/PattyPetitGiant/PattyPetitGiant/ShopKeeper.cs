@@ -26,6 +26,14 @@ namespace PattyPetitGiant
 
         private AnimationLib.FrameAnimationSet shopKeeperFrameAnimation = null;
 
+        private string buyMessage = "Buy";
+        private string noWayMessage = "Not enough money!";
+        private string soldOutMessage = "Sold out!";
+
+        private bool playerOverlap = false;
+        private string overlapMessage = null;
+        private Vector2 buyLocation = Vector2.Zero;
+
         public ShopKeeper(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -40,7 +48,7 @@ namespace PattyPetitGiant
             {
                 itemPrices[0] = 30;
                 itemPrices[1] = 100;
-                itemPrices[2] = 70;
+                itemPrices[2] = 210;
 
                 itemsForSale[0] = GlobalGameConstants.itemType.Bomb;
                 itemsForSale[1] = GlobalGameConstants.itemType.Sword;
@@ -73,8 +81,48 @@ namespace PattyPetitGiant
             }
         }
 
+        private double distance(Vector2 a, Vector2 b)
+        {
+            return Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2));
+        }
+
         public override void update(GameTime currentTime)
         {
+            foreach (Entity en in parentWorld.EntityList)
+            {
+                if (en is Player)
+                {
+                    if (distance(en.Position, position) < GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomHigh/2)
+                    {
+                        playerOverlap = false;
+
+                        for (int i = 0; i < 3; i++)
+                        {
+                            Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
+
+                            if (distance(drawItemPos + GlobalGameConstants.TileSize/2, en.CenterPoint) < 32)
+                            {
+                                playerOverlap = true;
+                                buyLocation = en.Position - new Vector2(0, 32);
+
+                                if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                                {
+                                    overlapMessage = soldOutMessage;
+                                }
+                                else if (itemPrices[i] > GlobalGameConstants.Player_Coin_Amount)
+                                {
+                                    overlapMessage = noWayMessage;
+                                }
+                                else
+                                {
+                                    overlapMessage = buyMessage;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             return;
         }
 
@@ -88,6 +136,11 @@ namespace PattyPetitGiant
 
                 itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(3.0f, 3.0f), 0.5f);
                 sb.DrawString(Game1.font, itemPrices[i].ToString(), drawItemPos + new Vector2(0f, GlobalGameConstants.TileSize.Y), Color.Yellow, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            }
+
+            if (playerOverlap)
+            {
+                sb.DrawString(Game1.font, overlapMessage, buyLocation, Color.Red, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
             }
         }
 
