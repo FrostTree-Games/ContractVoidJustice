@@ -1,7 +1,4 @@
-﻿//comment this out if you don't want to generate any entities
-#define TEST_ENTITIES
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,13 +47,6 @@ namespace PattyPetitGiant
 
             populateRooms(nodeMap);
 
-#if TEST_ENTITIES
-
-            entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            //entityList.Add(new Pickup(this, map.StartPosition.X, map.StartPosition.Y-100));
-            //entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
-            //testPopulateEnemies();
-
             foreach (Entity en in entityList)
             {
                 if (en is Player)
@@ -64,7 +54,6 @@ namespace PattyPetitGiant
                     cameraFocus = en;
                 }
             }
-#endif
 
             state = LoadingState.Running;
         }
@@ -91,6 +80,14 @@ namespace PattyPetitGiant
                     if (rooms[i, j].attributes.Contains("shopkeeper"))
                     {
                         entityList.Add(new ShopKeeper(this, new Vector2(i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X), j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y + (5 * GlobalGameConstants.TileSize.Y))));
+                    }
+                    else if (rooms[i, j].attributes.Contains("start"))
+                    {
+                        entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
+                    }
+                    else if (rooms[i, j].attributes.Contains("end"))
+                    {
+                        //
                     }
                     else
                     {
