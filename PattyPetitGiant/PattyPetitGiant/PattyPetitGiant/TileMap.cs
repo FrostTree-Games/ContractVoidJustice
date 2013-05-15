@@ -122,52 +122,56 @@ namespace PattyPetitGiant
                     if (room[i, j].attributes != null)
                     {
                         ChunkManager.Chunk c = ChunkLib.getRandomChunkByValues(room[i, j].attributes.ToArray(), rand);
-                        foreach (ChunkManager.Chunk.ChunkAttribute attr in c.Attributes)
-                        {
-                            if (!room[i, j].attributes.Contains(attr.AttributeName))
-                            {
-                                room[i, j].attributes.Add(attr.AttributeName);
-                            }
-                        }
 
                         if (c != null)
                         {
-                            for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
+                            foreach (ChunkManager.Chunk.ChunkAttribute attr in c.Attributes)
                             {
-                                for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                                if (!room[i, j].attributes.Contains(attr.AttributeName))
                                 {
-                                    map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = (TileType)(c.tilemap[(q * GlobalGameConstants.TilesPerRoomHigh) + p]);
+                                    room[i, j].attributes.Add(attr.AttributeName);
                                 }
                             }
 
-                            if (room[i, j].attributes.Contains("start"))
+                            if (c != null)
                             {
-                                int startX = 0;
-                                int startY = 0;
-
-                                while (c.tilemap[startY * GlobalGameConstants.TilesPerRoomHigh + startX] == 1)
+                                for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
                                 {
-                                    startX = rand.Next() % GlobalGameConstants.TilesPerRoomWide;
-                                    startY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
+                                    for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                                    {
+                                        map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = (TileType)(c.tilemap[(q * GlobalGameConstants.TilesPerRoomHigh) + p]);
+                                    }
                                 }
 
-                                startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
-                                startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
-                            }
-
-                            if (room[i, j].intensity > 0.95f)
-                            {
-                                endFlagPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
-                                endFlagPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
-                            }
-                        }
-                        else
-                        {
-                            for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
-                            {
-                                for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                                if (room[i, j].attributes.Contains("start"))
                                 {
-                                    map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = TileType.TestWall;
+                                    int startX = 0;
+                                    int startY = 0;
+
+                                    while (c.tilemap[startY * GlobalGameConstants.TilesPerRoomHigh + startX] == 1)
+                                    {
+                                        startX = rand.Next() % GlobalGameConstants.TilesPerRoomWide;
+                                        startY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
+                                    }
+
+                                    startPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
+                                    startPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
+                                }
+
+                                if (room[i, j].intensity > 0.95f)
+                                {
+                                    endFlagPosition.X = (i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
+                                    endFlagPosition.Y = (j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
+                                }
+                            }
+                            else
+                            {
+                                for (int p = 0; p < GlobalGameConstants.TilesPerRoomWide; p++)
+                                {
+                                    for (int q = 0; q < GlobalGameConstants.TilesPerRoomHigh; q++)
+                                    {
+                                        map[(i * GlobalGameConstants.TilesPerRoomWide) + p, (j * GlobalGameConstants.TilesPerRoomHigh) + q] = TileType.TestWall;
+                                    }
                                 }
                             }
                         }

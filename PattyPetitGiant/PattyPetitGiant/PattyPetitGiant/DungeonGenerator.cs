@@ -248,6 +248,18 @@ namespace PattyPetitGiant
             //compute intensity values
             computeDungeonIntensity(model, startingRoom.X, startingRoom.Y);
 
+            bool placedEnd = false;
+            while (!placedEnd)
+            {
+                DungeonRoomClass finalRoomCandidate = addedRooms[rand.Next() % addedRooms.Count];
+
+                if (finalRoomCandidate.Intensity > 0.95f)
+                {
+                    finalRoomCandidate.Attributes.Add("end");
+                    placedEnd = true;
+                }
+            }
+
             //convert the class data to a room strucutre model
             for (int i = 0; i < output.GetLength(0); i++)
             {
