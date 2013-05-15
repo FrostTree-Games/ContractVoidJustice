@@ -53,7 +53,7 @@ namespace PattyPetitGiant
 #if TEST_ENTITIES
 
             entityList.Add(new Player(this, map.StartPosition.X, map.StartPosition.Y));
-            entityList.Add(new Pickup(this, map.StartPosition.X, map.StartPosition.Y-100));
+            //entityList.Add(new Pickup(this, map.StartPosition.X, map.StartPosition.Y-100));
             //entityList.Add(new BetaEndLevelFag(this, map.EndFlagPosition));
             //testPopulateEnemies();
 
@@ -75,6 +75,7 @@ namespace PattyPetitGiant
         /// <param name="rooms"></param>
         private void populateRooms(DungeonGenerator.DungeonRoom[,] rooms)
         {
+            Random rand = new Random();
             for (int i = 0; i < rooms.GetLength(0); i++)
             {
                 for (int j = 0; j < rooms.GetLength(1); j++)
@@ -84,9 +85,50 @@ namespace PattyPetitGiant
                         continue;
                     }
 
+                    int currentRoomX = i * GlobalGameConstants.TilesPerRoomWide;
+                    int currentRoomY = j * GlobalGameConstants.TilesPerRoomHigh;
+
                     if (rooms[i, j].attributes.Contains("shopkeeper"))
                     {
-                        entityList.Add(new ShopKeeper(this, new Vector2(i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X ), j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y + (5 * GlobalGameConstants.TileSize.Y))));
+                        entityList.Add(new ShopKeeper(this, new Vector2(i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X), j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y + (5 * GlobalGameConstants.TileSize.Y))));
+                    }
+                    else
+                    {
+                        for (int h = 0; h < (rand.Next() % 2) + 1; h++)
+                        {
+                            int place_x = currentRoomX + (rand.Next() % 16);
+                            int place_y = currentRoomY + (rand.Next() % 16);
+                            int entity_choice = rand.Next() % 4;
+
+                            for (int k = 0; k < 50; k++)
+                            {
+                                entity_choice = rand.Next() % 3;
+                                if (map.Map[place_x, place_y] == TileMap.TileType.NoWall)
+                                {
+                                    switch (entity_choice)
+                                    {
+                                        case 0:
+                                            int item_choice = rand.Next() % 3;
+                                            entityList.Add(new Pickup(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y, item_choice));
+                                            break;
+                                        case 1:
+                                            entityList.Add(new ChaseEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
+                                            break;
+                                        case 2:
+                                            entityList.Add(new TestEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    break;
+                                }
+                                else
+                                {
+                                    place_x = currentRoomX + (rand.Next() % 16);
+                                    place_y = currentRoomY + (rand.Next() % 16);
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -140,6 +182,7 @@ namespace PattyPetitGiant
             if (cameraFocus != null)
             {
                 camera = Matrix.Identity * Matrix.CreateTranslation(new Vector3((cameraFocus.CenterPoint.X * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (cameraFocus.CenterPoint.Y * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
+                //camera = Matrix.Identity * Matrix.CreateScale(0.2f);
             }
 
             if (endFlagReached)

@@ -49,6 +49,7 @@ namespace PattyPetitGiant
             walk_up = AnimationLib.getSkeleton("zippyUp");
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+            current_skeleton.Skeleton.FlipX = false;
             enemyAnim = AnimationLib.getFrameAnimationSet("enemyPic");
             animation_time = 0.0f;
         }
@@ -121,28 +122,24 @@ namespace PattyPetitGiant
                                 case GlobalGameConstants.Direction.Right:
                                     direction_facing = GlobalGameConstants.Direction.Left;
                                     current_skeleton = walk_right;
-                                    current_skeleton.Skeleton.FlipX = true;
                                     velocity.X = -1.0f;
                                     velocity.Y = 0.0f;
                                     break;
                                 case GlobalGameConstants.Direction.Left:
                                     direction_facing = GlobalGameConstants.Direction.Right;
                                     current_skeleton = walk_right;
-                                    current_skeleton.Skeleton.FlipX = false;
                                     velocity.X = 1.0f;
                                     velocity.Y = 0.0f;
                                     break;
                                 case GlobalGameConstants.Direction.Up:
                                     direction_facing = GlobalGameConstants.Direction.Down;
                                     current_skeleton = walk_down;
-                                    current_skeleton.Skeleton.FlipX = false;
                                     velocity.Y = 1.0f;
                                     velocity.X = 0.0f;
                                     break;
                                 default:
                                     direction_facing = GlobalGameConstants.Direction.Up;
                                     current_skeleton = walk_up;
-                                    current_skeleton.Skeleton.FlipX = false;
                                     velocity.Y = -1.0f;
                                     velocity.X = 0.0f;
                                     break;
@@ -156,7 +153,6 @@ namespace PattyPetitGiant
                     if (change_direction_time > 2000)
                     {
                         change_direction = rand.Next(4);
-                        //change_direction_time = 0.0f;
                         animation_time = 0.0f;
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         if (change_direction_time > 3000)
@@ -169,20 +165,17 @@ namespace PattyPetitGiant
                                     velocity.Y = 0.0f;
                                     direction_facing = GlobalGameConstants.Direction.Right;
                                     current_skeleton = walk_right;
-                                    current_skeleton.Skeleton.FlipX = false;
                                     break;
                                 case 1:
                                     velocity.X = -1.0f;
                                     velocity.Y = 0.0f;
                                     direction_facing = GlobalGameConstants.Direction.Left;
                                     current_skeleton = walk_right;
-                                    current_skeleton.Skeleton.FlipX = true;
                                     break;
                                 case 2:
                                     velocity.X = 0.0f;
                                     velocity.Y = -1.0f;
                                     current_skeleton = walk_up;
-                                    current_skeleton.Skeleton.FlipX = false;
                                     direction_facing = GlobalGameConstants.Direction.Up;
                                     break;
                                 default:
@@ -190,7 +183,6 @@ namespace PattyPetitGiant
                                     velocity.Y = 1.0f;
                                     direction_facing = GlobalGameConstants.Direction.Down;
                                     current_skeleton = walk_down;
-                                    current_skeleton.Skeleton.FlipX = false;
                                     break;
                             }
                             change_direction_time = 0.0f;
@@ -220,11 +212,18 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            //sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
-            //enemyAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
         }
         public override void spinerender(SkeletonRenderer renderer)
         {
+            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+            {
+                current_skeleton.Skeleton.FlipX = false;
+            }
+            if (direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                current_skeleton.Skeleton.FlipX = true;
+            }
+
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
 

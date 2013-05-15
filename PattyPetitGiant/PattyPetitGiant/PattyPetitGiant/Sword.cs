@@ -122,11 +122,11 @@ namespace PattyPetitGiant
          
         public void draw(SpriteBatch sb)
         {
-            if (sword_swing)
+            /*if (sword_swing)
             {
                 //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
                 swordAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
-            }
+            }*/
         }
 
         public bool hitTest(Entity other)

@@ -70,10 +70,12 @@
     <None Include="animation\frame\gunPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>gunPic</Name>
+      <SubType>Designer</SubType>
     </None>
     <None Include="animation\frame\swordPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>swordPic</Name>
+      <SubType>Designer</SubType>
     </None>
     <None Include="animation\frame\test.zpy">
       <Name>test</Name>

@@ -13,10 +13,22 @@ namespace PattyPetitGiant
     {
         GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Bomb;
 
-        public Pickup(LevelState parentWorld, float initial_x, float initial_y)
+        public Pickup(LevelState parentWorld, float initial_x, float initial_y, int item_choice)
         {
             position = new Vector2(initial_x, initial_y);
             dimensions = new Vector2(48.0f, 48.0f);
+            switch (item_choice)
+            {
+                case 0:
+                    item_type = GlobalGameConstants.itemType.Bomb;
+                    break;
+                case 1:
+                    item_type = GlobalGameConstants.itemType.Sword;
+                    break;
+                default:
+                    item_type = GlobalGameConstants.itemType.Gun;
+                    break;
+            }
         }
 
         public override void update(GameTime currentTime)
@@ -24,6 +36,7 @@ namespace PattyPetitGiant
             return;
         }
 
+        //after the item gets picked up, it gets replaced with the item the player dropped
         public Item assignItem(Item player_item, GameTime currentTime)
         {
             switch (item_type)
