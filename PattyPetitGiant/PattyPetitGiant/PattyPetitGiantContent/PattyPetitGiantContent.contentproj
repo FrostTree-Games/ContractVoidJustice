@@ -181,6 +181,42 @@
       <Name>altM</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="chunk\crossroads1.ftc">
+      <Name>crossroads1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads2.ftc">
+      <Name>crossroads2</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads3.ftc">
+      <Name>crossroads3</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads4.ftc">
+      <Name>crossroads4</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads5.ftc">
+      <Name>crossroads5</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevel1.ftc">
+      <Name>endLevel1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevel2.ftc">
+      <Name>endLevel2</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevel3.ftc">
+      <Name>endLevel3</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevel4.ftc">
+      <Name>endLevel4</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="chunk\startNode.ftc">
       <Name>startNode</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
