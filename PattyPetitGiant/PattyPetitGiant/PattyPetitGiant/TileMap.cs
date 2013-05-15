@@ -110,7 +110,7 @@ namespace PattyPetitGiant
 #if WINDOWS
                     floorMap[i, j] = ((FloorType)(rand.Next() % Enum.GetNames(typeof(FloorType)).Length));
 #elif XBOX
-                    floorMap[i, j] = FloorType.A;
+                    floorMap[i, j] = ((FloorType)(rand.Next() % 8));
 #endif
                 }
             }
@@ -399,7 +399,7 @@ namespace PattyPetitGiant
         ///  Hit-checks a point against the map. Useful for ray-casting or mouse clicks.
         /// </summary>
         /// <param name="position"></param>
-        /// <returns>True if position overlaps a solid wall tile, false if otherwis.</returns>
+        /// <returns>True if position overlaps a solid wall tile, false if otherwise.</returns>
         public bool hitTestWall(Vector2 position)
         {
             if (position.X < 0 || position.Y < 0 || position.X >= size.x * tileSize.X || position.Y >= size.y * tileSize.Y)
@@ -420,7 +420,7 @@ namespace PattyPetitGiant
         }
 
         /// <summary>
-        ///  (UNTESTED) Determines if a moved hitbox intersects with a tilemap. Gives a new, valid solution if the new position is not valid.
+        /// Determines if a moved hitbox intersects with a tilemap. Gives a new, valid solution if the new position is not valid.
         /// </summary>
         /// <param name="currentPosition">current position of the hitbox</param>
         /// <param name="newPosition">new position of the hitbox</param>
