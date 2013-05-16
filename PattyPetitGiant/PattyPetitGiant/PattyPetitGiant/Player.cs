@@ -47,6 +47,8 @@ namespace PattyPetitGiant
 
             dimensions = new Vector2(32.0f, 58.5f);
             
+            velocity = Vector2.Zero;
+
             player_item_1 = new Sword(position);
             player_item_2 = new Bomb(position);
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
@@ -73,7 +75,7 @@ namespace PattyPetitGiant
         public override void update(GameTime currentTime)
         {
             double delta = currentTime.ElapsedGameTime.Milliseconds;
-            KeyboardState ks = Keyboard.GetState();
+            //KeyboardState ks = Keyboard.GetState();
 
             if (state == playerState.Item1)
             {
@@ -114,26 +116,26 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-                    if (ks.IsKeyDown(Keys.A))
+                    if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                     {
                         state = playerState.Item1;
 
                     }
-                    if (ks.IsKeyDown(Keys.S))
+                    if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
                     {
                         state = playerState.Item2;
                     }
 
                     if (disable_movement == false)
                     {
-                        if (ks.IsKeyDown(Keys.Right))
+                        if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection))
                         {
                             velocity.X = 1.5f;
                             direction_facing = GlobalGameConstants.Direction.Right;
                             current_skeleton = walk_right ;
                             current_skeleton.Skeleton.FlipX = false;
                         }
-                        else if (ks.IsKeyDown(Keys.Left))
+                        else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.LeftDirection))
                         {
                             velocity.X = -1.5f;
                             direction_facing = GlobalGameConstants.Direction.Left;
@@ -145,14 +147,14 @@ namespace PattyPetitGiant
                             velocity.X = 0.0f;
                         }
 
-                        if (ks.IsKeyDown(Keys.Up))
+                        if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection))
                         {
                             velocity.Y = -1.5f;
                             direction_facing = GlobalGameConstants.Direction.Up;
                             current_skeleton = walk_up;
                             current_skeleton.Skeleton.FlipX = false;
                         }
-                        else if (ks.IsKeyDown(Keys.Down))
+                        else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
                         {
                             velocity.Y = 1.5f;
                             direction_facing = GlobalGameConstants.Direction.Down;
@@ -199,12 +201,12 @@ namespace PattyPetitGiant
                         {
                             if (switch_weapon_interval > 100)
                             {
-                                if (ks.IsKeyDown(Keys.Q))
+                                if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1))
                                 {
                                     player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
                                     GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
                                 }
-                                else if (ks.IsKeyDown(Keys.W))
+                                else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2))
                                 {
                                     player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
                                     GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();

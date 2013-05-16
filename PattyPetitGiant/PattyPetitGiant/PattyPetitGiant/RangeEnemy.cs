@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 
 namespace PattyPetitGiant
 {
@@ -18,7 +19,7 @@ namespace PattyPetitGiant
         public GlobalGameConstants.Direction bullet_direction;
     }
 
-    class RangeEnemy : Enemy
+    class RangeEnemy : Enemy, SpineEntity
     {
         private int change_direction;
         private AnimationLib.FrameAnimationSet enemyAnim;

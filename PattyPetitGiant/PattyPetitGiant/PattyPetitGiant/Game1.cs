@@ -24,6 +24,8 @@ namespace PattyPetitGiant
 
         private ScreenState currentGameScreen = null;
 
+        private InputDeviceManager input_device = null;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -51,6 +53,9 @@ namespace PattyPetitGiant
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
+
+            input_device = new InputDeviceManager(graphics.GraphicsDevice);
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             whitePixel = Content.Load<Texture2D>("whitePixel");
@@ -98,6 +103,8 @@ namespace PattyPetitGiant
             {
                 currentGameScreen = ScreenState.SwitchToNewScreen(currentGameScreen.nextLevelState());
             }
+
+            input_device.update();
 
             currentGameScreen.update(gameTime);
 

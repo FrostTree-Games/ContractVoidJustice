@@ -18,18 +18,22 @@ namespace PattyPetitGiant
         public void update(Enemy parent, Entity player, GameTime currentTime, LevelState parentWorld)
         {
             //distance in the X direction
-            float direction_x = (player.Position.X + (parent.Dimensions.X/2.0f)) - parent.CenterPoint.X;
-            float direction_y = (player.Position.Y + (parent.Dimensions.Y / 2.0f)) - parent.CenterPoint.Y;
+            float direction_x = player.CenterPoint.X - parent.CenterPoint.X;
+            float direction_y = player.CenterPoint.Y - parent.CenterPoint.Y;
 
-            if (Math.Abs(direction_x) > Math.Abs(direction_y))
+            Console.WriteLine(Math.Abs(direction_x) + "\t" + Math.Abs(direction_y));
+
+            if (Math.Abs(direction_x) > (Math.Abs(direction_y) + 50))
             {
                 if (direction_x < 0)
                 {
                     parent.Velocity = new Vector2(-1.51f, direction_y/100);
+                    parent.Direction_Facing = GlobalGameConstants.Direction.Left;
                 }
                 else
                 {
                     parent.Velocity = new Vector2(1.51f, direction_y/100);
+                    parent.Direction_Facing = GlobalGameConstants.Direction.Right;
                 }
             }
             else
@@ -37,10 +41,12 @@ namespace PattyPetitGiant
                 if (direction_y < 0)
                 {
                     parent.Velocity = new Vector2(direction_x / 100f, -1.51f);
+                    parent.Direction_Facing = GlobalGameConstants.Direction.Up;
                 }
                 else
                 {
                     parent.Velocity = new Vector2(direction_x / 100f, 1.51f);
+                    parent.Direction_Facing = GlobalGameConstants.Direction.Down;
                 }
             }
         }
