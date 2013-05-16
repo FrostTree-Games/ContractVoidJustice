@@ -21,6 +21,9 @@ namespace PattyPetitGiant
         private LoadingState state = LoadingState.UninitializedAndWaiting;
 
         private DungeonGenerator.DungeonRoom[,] nodeMap = null;
+        public DungeonGenerator.DungeonRoom[,] NodeMap { get { return nodeMap; } }
+        private bool renderNodeMap = false;
+        public bool RenderNodeMap { get { return renderNodeMap; } set { renderNodeMap = value; } }
 
         private TileMap map = null;
         public TileMap Map { get { return map; } }
@@ -112,7 +115,7 @@ namespace PattyPetitGiant
                                     switch (entity_choice)
                                     {
                                         case 0:
-                                            int item_choice = rand.Next() % 4;
+                                            int item_choice = rand.Next() % 5;
                                             entityList.Add(new Pickup(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y, (GlobalGameConstants.itemType)item_choice));
                                             break;
                                         case 1:
@@ -210,6 +213,8 @@ namespace PattyPetitGiant
 
             sb.End();
 
+            AnimationLib.renderSpineEntities(camera, entityList);
+
             sb.Begin();
 
             string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
@@ -227,9 +232,46 @@ namespace PattyPetitGiant
             string player_item_2 = "Item 1: " + GlobalGameConstants.Player_Item_2;
             sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.Black);
 
-            sb.End();
+            if (renderNodeMap)
+            {
+                Vector2 renderMapPosition = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - (nodeMap.GetLength(0) * 64 / 2), GlobalGameConstants.GameResolutionHeight / 4);
+                int renderFocusX = (int)((cameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide);
+                int renderFocusY = (int)((cameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh);
 
-            AnimationLib.renderSpineEntities(camera, entityList);
+                for (int i = 0; i < nodeMap.GetLength(0); i++)
+                {
+                    for (int j = 0; j < nodeMap.GetLength(1); j++)
+                    {
+                        if (nodeMap[i, j].east || nodeMap[i, j].west || nodeMap[i, j].south || nodeMap[i, j].north)
+                        {
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, Color.Black, 0.0f, Vector2.Zero, 32.0f, SpriteEffects.None, 0.6f);
+                        }
+                        if (i == renderFocusX && j == renderFocusY)
+                        {
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 + 8), null, Color.Red, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+                        }
+
+                        if (nodeMap[i, j].east)
+                        {
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 32, j * 64 + 8), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                        }
+                        if (nodeMap[i, j].west)
+                        {
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 - 16, j * 64 + 8), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                        }
+                        if (nodeMap[i, j].south)
+                        {
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 + 32), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                        }
+                        if (nodeMap[i, j].north)
+                        {
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 - 16), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                        }
+                    }
+                }
+            }
+
+            sb.End();
         }
 
         public override ScreenState.ScreenStateType nextLevelState()

@@ -8,3 +8,4 @@ flagPic
 bombExplosion
 shopKeeper
 compassPic
+dungeonMapPic

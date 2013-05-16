@@ -40,6 +40,9 @@ namespace PattyPetitGiant
                 case GlobalGameConstants.itemType.Compass:
                     item_type = player_item.ItemType();
                     return new Compass();
+                case GlobalGameConstants.itemType.DungeonMap:
+                    item_type = player_item.ItemType();
+                    return new DungeonMap();
                 default:
                     item_type = player_item.ItemType();
                     return new Sword(position);
@@ -63,6 +66,9 @@ namespace PattyPetitGiant
                     break;
                 case GlobalGameConstants.itemType.Compass:
                     dropAnim = AnimationLib.getFrameAnimationSet("compassPic");
+                    break;
+                case GlobalGameConstants.itemType.DungeonMap:
+                    dropAnim = AnimationLib.getFrameAnimationSet("dungeonMapPic");
                     break;
                 default:
                     sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);

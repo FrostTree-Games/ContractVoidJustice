@@ -60,6 +60,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>compassPic</Name>
     </None>
+    <None Include="animation\frame\dungeonMapPic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dungeonMapPic</Name>
+    </None>
     <None Include="animation\frame\shopKeeper.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>shopKeeper</Name>

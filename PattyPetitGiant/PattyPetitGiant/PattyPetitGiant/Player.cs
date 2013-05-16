@@ -48,7 +48,7 @@ namespace PattyPetitGiant
             dimensions = new Vector2(32.0f, 58.5f);
             
             player_item_1 = new Sword(position);
-            player_item_2 = new Compass();
+            player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
             switch_weapon_interval = 0.0f;
