@@ -22,6 +22,7 @@ namespace PattyPetitGiant
             Sword = 0,
             Gun = 1,
             Bomb = 2,
+            Compass = 3,
         }
 
         private static int gameResolutionWidth = 1280;

@@ -12,7 +12,7 @@ namespace PattyPetitGiant
     interface Item
     {
         void update(Player parent, GameTime currentTime, LevelState parentWorld);
-        void daemonupdate(GameTime currentTime, LevelState parentWorld);
+        void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld);
         GlobalGameConstants.itemType ItemType();
         string getEnumType();
         void draw(SpriteBatch sb);

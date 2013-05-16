@@ -57,7 +57,7 @@ namespace PattyPetitGiant
                 parent.State = Player.playerState.Moving;
             }
         }
-        public void daemonupdate(GameTime currentTime, LevelState parentWorld)
+        public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             time_explosion += currentTime.ElapsedGameTime.Milliseconds;
 

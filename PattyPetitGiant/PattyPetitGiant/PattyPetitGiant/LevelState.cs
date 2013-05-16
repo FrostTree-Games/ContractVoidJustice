@@ -112,8 +112,8 @@ namespace PattyPetitGiant
                                     switch (entity_choice)
                                     {
                                         case 0:
-                                            int item_choice = rand.Next() % 3;
-                                            entityList.Add(new Pickup(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y, item_choice));
+                                            int item_choice = rand.Next() % 4;
+                                            entityList.Add(new Pickup(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y, (GlobalGameConstants.itemType)item_choice));
                                             break;
                                         case 1:
                                             entityList.Add(new ChaseEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));

@@ -105,7 +105,7 @@ namespace PattyPetitGiant
             }
         }
 
-        public void daemonupdate(GameTime currentTime, LevelState parentWorld)
+        public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             return;
         }
