@@ -35,6 +35,8 @@ namespace PattyPetitGiant
         private bool endFlagReached;
         public bool EndFlagReached { get { return endFlagReached; } set { endFlagReached = value; } }
 
+        private bool end_flag_placed;
+
         public LevelState()
         {
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y);
@@ -55,6 +57,7 @@ namespace PattyPetitGiant
                 }
             }
 
+            end_flag_placed = false;
             state = LoadingState.Running;
         }
 
@@ -87,7 +90,11 @@ namespace PattyPetitGiant
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
-                        //
+                        if(end_flag_placed == false)
+                        {
+                            entityList.Add(new BetaEndLevelFag(this,new Vector2( (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
+                            end_flag_placed = true;
+                        }
                     }
                     else
                     {

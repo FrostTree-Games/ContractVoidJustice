@@ -54,6 +54,7 @@
     <None Include="animation\frame\bombExplosion.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>bombExplosion</Name>
+      <SubType>Designer</SubType>
     </None>
     <None Include="animation\frame\shopKeeper.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
