@@ -84,12 +84,14 @@
     <Compile Include="ChunkLib.cs" />
     <Compile Include="ChunkManager.cs" />
     <Compile Include="Coin.cs" />
+    <Compile Include="Compass.cs" />
     <Compile Include="DungeonGenerator.cs" />
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyComponents.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GlobalGameConstants.cs" />
     <Compile Include="Gun.cs" />
+    <Compile Include="InputDeviceManager.cs" />
     <Compile Include="Pickup.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="LevelState.cs" />
