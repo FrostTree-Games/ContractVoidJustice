@@ -183,7 +183,7 @@ namespace PattyPetitGiant
 #if WINDOWS
             entityList.RemoveAll(en=>en.Remove_From_List==true);
 #elif XBOX
-            //XboxListTools.RemoveAll<Entity>(entityList, XboxListTools.isShouldBeRemoved);
+            XboxTools.RemoveAll(entityList, XboxTools.IsEntityToBeRemoved);
 #endif
 
             if (cameraFocus != null)

@@ -108,6 +108,7 @@
     <Compile Include="TextureLib.cs" />
     <Compile Include="TileMap.cs" />
     <Compile Include="Walk.cs" />
+    <Compile Include="XboxTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
