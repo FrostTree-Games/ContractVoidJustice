@@ -264,7 +264,7 @@
       <AttributeName>end</AttributeName>
     </ChunkAttribute>
     <ChunkAttribute>
-      <AttributeName>east</AttributeName>
+      <AttributeName>south</AttributeName>
     </ChunkAttribute>
   </Attributes>
 </Chunk>
