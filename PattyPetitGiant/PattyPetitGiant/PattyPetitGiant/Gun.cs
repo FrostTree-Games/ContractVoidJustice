@@ -85,7 +85,7 @@ namespace PattyPetitGiant
             parent.State = Player.playerState.Moving;
         }
 
-        public void daemonupdate(GameTime currentTime, LevelState parentWorld)
+        public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             bullet_alive_time += currentTime.ElapsedGameTime.Milliseconds;
             Vector2 nextStep_temp = Vector2.Zero;

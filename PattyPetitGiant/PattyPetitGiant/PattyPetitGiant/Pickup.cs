@@ -13,22 +13,12 @@ namespace PattyPetitGiant
     {
         GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Bomb;
 
-        public Pickup(LevelState parentWorld, float initial_x, float initial_y, int item_choice)
+        public Pickup(LevelState parentWorld, float initial_x, float initial_y, GlobalGameConstants.itemType item_choice)
         {
             position = new Vector2(initial_x, initial_y);
             dimensions = new Vector2(48.0f, 48.0f);
-            switch (item_choice)
-            {
-                case 0:
-                    item_type = GlobalGameConstants.itemType.Bomb;
-                    break;
-                case 1:
-                    item_type = GlobalGameConstants.itemType.Sword;
-                    break;
-                default:
-                    item_type = GlobalGameConstants.itemType.Gun;
-                    break;
-            }
+
+            item_type = item_choice;
         }
 
         public override void update(GameTime currentTime)
@@ -47,6 +37,12 @@ namespace PattyPetitGiant
                 case GlobalGameConstants.itemType.Gun:
                     item_type = player_item.ItemType();
                     return new Gun(position);
+                case GlobalGameConstants.itemType.Compass:
+                    item_type = player_item.ItemType();
+                    return new Compass();
+                case GlobalGameConstants.itemType.DungeonMap:
+                    item_type = player_item.ItemType();
+                    return new DungeonMap();
                 default:
                     item_type = player_item.ItemType();
                     return new Sword(position);
@@ -67,6 +63,12 @@ namespace PattyPetitGiant
                     break;
                 case GlobalGameConstants.itemType.Bomb:
                     dropAnim = AnimationLib.getFrameAnimationSet("bombPic");
+                    break;
+                case GlobalGameConstants.itemType.Compass:
+                    dropAnim = AnimationLib.getFrameAnimationSet("compassPic");
+                    break;
+                case GlobalGameConstants.itemType.DungeonMap:
+                    dropAnim = AnimationLib.getFrameAnimationSet("dungeonMapPic");
                     break;
                 default:
                     sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);

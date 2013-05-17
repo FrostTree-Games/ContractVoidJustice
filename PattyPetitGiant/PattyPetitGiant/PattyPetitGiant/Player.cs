@@ -50,7 +50,7 @@ namespace PattyPetitGiant
             velocity = Vector2.Zero;
 
             player_item_1 = new Sword(position);
-            player_item_2 = new Bomb(position);
+            player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
             switch_weapon_interval = 0.0f;
@@ -181,11 +181,11 @@ namespace PattyPetitGiant
                 }
                 if (player_item_1 != null)
                 {
-                    player_item_1.daemonupdate(currentTime, parentWorld);
+                    player_item_1.daemonupdate(this, currentTime, parentWorld);
                 }
                 if (player_item_2 != null)
                 {
-                    player_item_2.daemonupdate(currentTime, parentWorld);
+                    player_item_2.daemonupdate(this, currentTime, parentWorld);
                 }
 
 

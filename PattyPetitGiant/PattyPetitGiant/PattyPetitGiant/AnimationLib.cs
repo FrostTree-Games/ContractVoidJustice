@@ -126,6 +126,22 @@ namespace PattyPetitGiant
 
                 sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
             }
+
+            public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Vector2 scale, float depth, float rotation, Vector2 centerPoint)
+            {
+                int frame = (int)(time / frameDuration);
+
+                if (loop)
+                {
+                    frame = frame % frameCount;
+                }
+                else
+                {
+                    frame = frameCount - 1;
+                }
+
+                sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, rotation, centerPoint, scale, SpriteEffects.None, depth);
+            }
         }
 
         public class SerializableAnimationData

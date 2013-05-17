@@ -7,3 +7,5 @@ chasePic
 flagPic
 bombExplosion
 shopKeeper
+compassPic
+dungeonMapPic
