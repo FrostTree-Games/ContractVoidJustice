@@ -86,25 +86,25 @@ namespace PattyPetitGiant
                     }
                     break;
                 case PlayerButton.UseItem1:
-                    if(game_pad_state[control_number].Triggers.Right > 0.0 || key_board_state.IsKeyDown(Keys.A))
+                    if(game_pad_state[control_number].Triggers.Left > 0.0 || key_board_state.IsKeyDown(Keys.A))
                     {
                         return true;
                     }
                     break;
                 case PlayerButton.UseItem2:
-                    if (game_pad_state[control_number].Triggers.Left > 0.0 || key_board_state.IsKeyDown(Keys.S))
+                    if (game_pad_state[control_number].Triggers.Right > 0.0 || key_board_state.IsKeyDown(Keys.S))
                     {
                         return true;
                     }
                     break;
                 case PlayerButton.SwitchItem1:
-                    if (game_pad_state[control_number].Buttons.RightShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.Q))
+                    if (game_pad_state[control_number].Buttons.LeftShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.Q))
                     {
                         return true;
                     }
                     break;
                 case PlayerButton.SwitchItem2:
-                    if (game_pad_state[control_number].Buttons.LeftShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.W))
+                    if (game_pad_state[control_number].Buttons.RightShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.W))
                     {
                         return true;
                     }
