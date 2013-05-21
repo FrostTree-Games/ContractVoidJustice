@@ -153,6 +153,15 @@ namespace PattyPetitGiant
             output[1, 1].attributes.Add("east");
             output[1, 1].attributes.Add("west");
 
+            //exit
+            output[0, 1].north = false;
+            output[0, 1].south = false;
+            output[0, 1].east = true;
+            output[0, 1].west = false;
+            output[0, 1].attributes = new List<string>();
+            output[0, 1].attributes.Add("end");
+            output[0, 1].attributes.Add("east");
+
             return output;
         }
 

@@ -24,8 +24,12 @@ namespace PattyPetitGiant
         private int[] itemPrices = new int[3];
         private AnimationLib.FrameAnimationSet[] itemIcons = new AnimationLib.FrameAnimationSet[3];
         private InGameGUI.BoxWindow[] itemMessages = new InGameGUI.BoxWindow[3];
+        private Pickup[] items = new Pickup[3];
 
         private AnimationLib.FrameAnimationSet shopKeeperFrameAnimation = null;
+        private InGameGUI.BoxWindow thankYouMessage;
+        private float thankYouTime;
+        private const float thankYouDuration = 3000;
 
         private string buyMessage = "Buy";
         private string noWayMessage = "Not enough money!";
@@ -36,6 +40,8 @@ namespace PattyPetitGiant
         private string overlapMessage = null;
         private Vector2 buyLocation = Vector2.Zero;
 
+        private bool switchItemPressed;
+
         public ShopKeeper(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -43,6 +49,11 @@ namespace PattyPetitGiant
             this.dimensions = GlobalGameConstants.TileSize;
 
             state = ShopKeeperState.Normal;
+
+            switchItemPressed = false;
+
+            thankYouMessage = new InGameGUI.BoxWindow("thankYou", 0, 0, 150, "Thank you!");
+            thankYouTime = -1;
 
             shopKeeperFrameAnimation = AnimationLib.getFrameAnimationSet("shopKeeper");
 
@@ -60,6 +71,11 @@ namespace PattyPetitGiant
                 itemMessages[1] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "The compass will point in the direction of the level's exit.");
                 itemMessages[2] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "Fires a projectile that will damage enemies. Kind of slow and short-ranged.");
             }
+
+            items[0] = new Pickup(parentWorld, -500, -500, itemsForSale[0]);
+            items[1] = new Pickup(parentWorld, -500, -500, itemsForSale[1]);
+            items[2] = new Pickup(parentWorld, -500, -500, itemsForSale[2]);
+            parentWorld.EntityList.AddRange(items);
 
             getItemIcons();
         }
@@ -95,6 +111,11 @@ namespace PattyPetitGiant
             return Math.Sqrt(Math.Pow(a.X - b.X, 2) + Math.Pow(a.Y - b.Y, 2));
         }
 
+        private void purchaseTransaction(int goldValue)
+        {
+            GlobalGameConstants.Player_Coin_Amount -= goldValue;
+        }
+
         public override void update(GameTime currentTime)
         {
             foreach (Entity en in parentWorld.EntityList)
@@ -109,7 +130,7 @@ namespace PattyPetitGiant
                         {
                             Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
-                            if (distance(drawItemPos + GlobalGameConstants.TileSize/2, en.CenterPoint) < 32)
+                            if (distance(drawItemPos + GlobalGameConstants.TileSize/2, en.CenterPoint) < 32 && itemsForSale[i] != GlobalGameConstants.itemType.NoItem)
                             {
                                 playerOverlap = true;
                                 buyLocation = en.Position - new Vector2(0, 32);
@@ -131,13 +152,47 @@ namespace PattyPetitGiant
                                 {
                                     overlapMessage = buyMessage;
                                 }
+
+                                if (switchItemPressed && !(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && GlobalGameConstants.Player_Coin_Amount >= itemPrices[i])
+                                {
+                                    items[i].Position = drawItemPos;
+
+                                    purchaseTransaction(itemPrices[i]);
+                                    itemsForSale[i] = GlobalGameConstants.itemType.NoItem;
+
+                                    if (!parentWorld.GUI.peekBox("thankYou"))
+                                    {
+                                        thankYouMessage.x = GlobalGameConstants.GameResolutionWidth / 2 - 75;
+                                        thankYouMessage.y = GlobalGameConstants.GameResolutionHeight / 4 - thankYouMessage.height/2;
+                                        thankYouTime = 0;
+                                        parentWorld.GUI.pushBox(thankYouMessage);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
 
+            if ((InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && !switchItemPressed)
+            {
+                switchItemPressed = true;
+            }
+            else if (!(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && switchItemPressed)
+            {
+                switchItemPressed = false;
+            }
 
+            if (thankYouTime >= 0)
+            {
+                thankYouTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (thankYouTime > thankYouDuration)
+                {
+                    thankYouTime = -1;
+                    parentWorld.GUI.popBox("thankYou");
+                }
+            }
 
             if (!playerOverlap && parentWorld.GUI.peekBox("shopkeeperMessage"))
             {
@@ -151,6 +206,11 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < 3; i++)
             {
+                if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                {
+                    continue;
+                }
+
                 Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
                 itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f);
