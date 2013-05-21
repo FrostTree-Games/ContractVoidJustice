@@ -23,17 +23,15 @@ namespace PattyPetitGiant
 
             Console.WriteLine(Math.Abs(direction_x) + "\t" + Math.Abs(direction_y));
 
-            if (Math.Abs(direction_x) > (Math.Abs(direction_y) + 50))
+            if (Math.Abs(direction_x) > (Math.Abs(direction_y) + 100))
             {
                 if (direction_x < 0)
                 {
                     parent.Velocity = new Vector2(-1.51f, direction_y/100);
-                    parent.Direction_Facing = GlobalGameConstants.Direction.Left;
                 }
                 else
                 {
                     parent.Velocity = new Vector2(1.51f, direction_y/100);
-                    parent.Direction_Facing = GlobalGameConstants.Direction.Right;
                 }
             }
             else
@@ -41,12 +39,10 @@ namespace PattyPetitGiant
                 if (direction_y < 0)
                 {
                     parent.Velocity = new Vector2(direction_x / 100f, -1.51f);
-                    parent.Direction_Facing = GlobalGameConstants.Direction.Up;
                 }
                 else
                 {
                     parent.Velocity = new Vector2(direction_x / 100f, 1.51f);
-                    parent.Direction_Facing = GlobalGameConstants.Direction.Down;
                 }
             }
         }
