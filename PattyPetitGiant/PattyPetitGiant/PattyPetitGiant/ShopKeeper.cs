@@ -23,6 +23,7 @@ namespace PattyPetitGiant
         private GlobalGameConstants.itemType[] itemsForSale = new GlobalGameConstants.itemType[3];
         private int[] itemPrices = new int[3];
         private AnimationLib.FrameAnimationSet[] itemIcons = new AnimationLib.FrameAnimationSet[3];
+        private InGameGUI.BoxWindow[] itemMessages = new InGameGUI.BoxWindow[3];
 
         private AnimationLib.FrameAnimationSet shopKeeperFrameAnimation = null;
 
@@ -31,6 +32,7 @@ namespace PattyPetitGiant
         private string soldOutMessage = "Sold out!";
 
         private bool playerOverlap = false;
+        private int overlapIndex = 0;
         private string overlapMessage = null;
         private Vector2 buyLocation = Vector2.Zero;
 
@@ -51,8 +53,12 @@ namespace PattyPetitGiant
                 itemPrices[2] = 210;
 
                 itemsForSale[0] = GlobalGameConstants.itemType.Bomb;
-                itemsForSale[1] = GlobalGameConstants.itemType.Sword;
+                itemsForSale[1] = GlobalGameConstants.itemType.Compass;
                 itemsForSale[2] = GlobalGameConstants.itemType.Gun;
+
+                itemMessages[0] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "Bombs will destroy enemies in a radius, but watch out! They're dangerous!");
+                itemMessages[1] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "The compass will point in the direction of the level's exit.");
+                itemMessages[2] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "Fires a projectile that will damage enemies. Kind of slow and short-ranged.");
             }
 
             getItemIcons();
@@ -72,6 +78,9 @@ namespace PattyPetitGiant
                         break;
                     case GlobalGameConstants.itemType.Bomb:
                         itemIcons[i] = AnimationLib.getFrameAnimationSet("bombPic");
+                        break;
+                    case GlobalGameConstants.itemType.Compass:
+                        itemIcons[i] = AnimationLib.getFrameAnimationSet("compassPic");
                         break;
                     case GlobalGameConstants.itemType.NoItem:
                     default:
@@ -104,6 +113,11 @@ namespace PattyPetitGiant
                             {
                                 playerOverlap = true;
                                 buyLocation = en.Position - new Vector2(0, 32);
+                                overlapIndex = i;
+                                if (!parentWorld.GUI.peekBox("shopkeeperMessage"))
+                                {
+                                    parentWorld.GUI.pushBox(itemMessages[i]);
+                                }
 
                                 if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
                                 {
@@ -123,7 +137,12 @@ namespace PattyPetitGiant
                 }
             }
 
-            return;
+
+
+            if (!playerOverlap && parentWorld.GUI.peekBox("shopkeeperMessage"))
+            {
+                parentWorld.GUI.popBox("shopkeeperMessage");
+            }
         }
 
         public override void draw(SpriteBatch sb)

@@ -170,8 +170,7 @@ namespace PattyPetitGiant
                 {
                     if (boxWindows[i].name == boxName)
                     {
-                        boxWindows[i].animationLocation = 0.0f;
-                        boxWindows[i].animationState = BoxWindow.State.Closing;
+                        windowIsActive[i] = false;
                         return;
                     }
                 }

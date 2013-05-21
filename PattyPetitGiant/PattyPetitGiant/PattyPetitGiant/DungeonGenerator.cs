@@ -129,6 +129,33 @@ namespace PattyPetitGiant
             }
         }
 
+        public static DungeonRoom[,] generateEntityZoo()
+        {
+            DungeonRoom[,] output = new DungeonRoom[5, 5];
+
+            //shopkeeper 
+            output[1, 0].north = false;
+            output[1, 0].south = true;
+            output[1, 0].east = false;
+            output[1, 0].west = false;
+            output[1, 0].attributes = new List<string>();
+            output[1, 0].attributes.Add("south");
+            output[1, 0].attributes.Add("shopkeeper");
+
+            //player spawn below
+            output[1, 1].north = true;
+            output[1, 1].south = false;
+            output[1, 1].east = true;
+            output[1, 1].west = true;
+            output[1, 1].attributes = new List<string>();
+            output[1, 1].attributes.Add("start");
+            output[1, 1].attributes.Add("north");
+            output[1, 1].attributes.Add("east");
+            output[1, 1].attributes.Add("west");
+
+            return output;
+        }
+
         public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight)
         {
             DungeonRoom[,] output = new DungeonRoom[desiredWidth, desiredHeight];
