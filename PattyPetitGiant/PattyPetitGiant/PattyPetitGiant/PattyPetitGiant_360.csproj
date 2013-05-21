@@ -79,6 +79,7 @@
     <Compile Include="Entity.cs" />
     <Compile Include="GlobalGameConstants.cs" />
     <Compile Include="Gun.cs" />
+    <Compile Include="InGameGUI.cs" />
     <Compile Include="InputDeviceManager.cs" />
     <Compile Include="Pickup.cs" />
     <Compile Include="Item.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="TextureLib.cs" />
     <Compile Include="TileMap.cs" />
     <Compile Include="Walk.cs" />
+    <Compile Include="XboxTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

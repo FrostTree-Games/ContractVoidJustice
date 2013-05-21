@@ -20,6 +20,9 @@ namespace PattyPetitGiant
 
         private LoadingState state = LoadingState.UninitializedAndWaiting;
 
+        private InGameGUI gui = null;
+        public InGameGUI GUI { get { return gui; } }
+
         private DungeonGenerator.DungeonRoom[,] nodeMap = null;
         public DungeonGenerator.DungeonRoom[,] NodeMap { get { return nodeMap; } }
         private bool renderNodeMap = false;
@@ -47,6 +50,8 @@ namespace PattyPetitGiant
             map.TileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
 
             endFlagReached = false;
+
+            gui = new InGameGUI(this);
 
             entityList = new List<Entity>();
 
@@ -183,14 +188,30 @@ namespace PattyPetitGiant
 #if WINDOWS
             entityList.RemoveAll(en=>en.Remove_From_List==true);
 #elif XBOX
-            //XboxListTools.RemoveAll<Entity>(entityList, XboxListTools.isShouldBeRemoved);
+            XboxTools.RemoveAll(entityList, XboxTools.IsEntityToBeRemoved);
 #endif
 
             if (cameraFocus != null)
             {
-                camera = Matrix.Identity * Matrix.CreateTranslation(new Vector3((cameraFocus.CenterPoint.X * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (cameraFocus.CenterPoint.Y * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
+                int pointX = (int)cameraFocus.CenterPoint.X;
+                int pointY = (int)cameraFocus.CenterPoint.Y;
+
+                camera = Matrix.Identity * Matrix.CreateTranslation(new Vector3((pointX * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (pointY * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
                 //camera = Matrix.Identity * Matrix.CreateScale(0.2f);
             }
+
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
+            {
+                InGameGUI.BoxWindow box = new InGameGUI.BoxWindow("test", 100, 100, 300, "The quick brown fox hides a drawer and freaks out your mom after you move to Russia.");
+                gui.pushBox(box);
+            }
+
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection))
+            {
+                gui.popBox("test");
+            }
+
+            gui.update(currentTime);
 
             if (endFlagReached)
             {
@@ -215,63 +236,7 @@ namespace PattyPetitGiant
 
             AnimationLib.renderSpineEntities(camera, entityList);
 
-            sb.Begin();
-
-            string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
-            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
-
-            string ammunition_amount_display = "Ammunition: " + GlobalGameConstants.Player_Ammunition;
-            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.Black);
-
-            string coin_amount_display = "Coin: " + GlobalGameConstants.Player_Coin_Amount;
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
-
-            string player_item_1 = "Item 1: " + GlobalGameConstants.Player_Item_1;
-            sb.DrawString(Game1.font, player_item_1, new Vector2(320,10), Color.Black);
-
-            string player_item_2 = "Item 1: " + GlobalGameConstants.Player_Item_2;
-            sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.Black);
-
-            if (renderNodeMap)
-            {
-                Vector2 renderMapPosition = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - (nodeMap.GetLength(0) * 64 / 2), GlobalGameConstants.GameResolutionHeight / 4);
-                int renderFocusX = (int)((cameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide);
-                int renderFocusY = (int)((cameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh);
-
-                for (int i = 0; i < nodeMap.GetLength(0); i++)
-                {
-                    for (int j = 0; j < nodeMap.GetLength(1); j++)
-                    {
-                        if (nodeMap[i, j].east || nodeMap[i, j].west || nodeMap[i, j].south || nodeMap[i, j].north)
-                        {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, Color.Black, 0.0f, Vector2.Zero, 32.0f, SpriteEffects.None, 0.6f);
-                        }
-                        if (i == renderFocusX && j == renderFocusY)
-                        {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 + 8), null, Color.Red, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
-                        }
-
-                        if (nodeMap[i, j].east)
-                        {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 32, j * 64 + 8), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
-                        }
-                        if (nodeMap[i, j].west)
-                        {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 - 16, j * 64 + 8), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
-                        }
-                        if (nodeMap[i, j].south)
-                        {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 + 32), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
-                        }
-                        if (nodeMap[i, j].north)
-                        {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 - 16), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
-                        }
-                    }
-                }
-            }
-
-            sb.End();
+            gui.render(sb);
         }
 
         public override ScreenState.ScreenStateType nextLevelState()
