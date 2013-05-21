@@ -21,8 +21,6 @@ namespace PattyPetitGiant
             float direction_x = player.CenterPoint.X - parent.CenterPoint.X;
             float direction_y = player.CenterPoint.Y - parent.CenterPoint.Y;
 
-            Console.WriteLine(Math.Abs(direction_x) + "\t" + Math.Abs(direction_y));
-
             if (Math.Abs(direction_x) > (Math.Abs(direction_y) + 100))
             {
                 if (direction_x < 0)

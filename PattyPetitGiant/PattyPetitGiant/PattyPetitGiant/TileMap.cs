@@ -400,6 +400,47 @@ namespace PattyPetitGiant
         }
 
         /// <summary>
+        /// Checks to see if the player is within the enemy's sight or if a wall is blocking it's view
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        public bool playerInSight(float angle, float distance, Vector2 enemy_center_position)
+        {
+            float Xa = 0.0f;
+            float Ya = TileSize.Y;
+            Vector2 ray_position = enemy_center_position;
+            float ray_travelled = 0.0f;
+            float ray_displacement = 0.0f;
+            bool ray_hit_wall = hitTestWall(ray_position);
+
+            Xa = (float)(Ya / Math.Tan(angle));
+            ray_displacement = (float)(Math.Sqrt((Xa*Xa)+(Ya*Ya)));
+
+            Console.WriteLine("can see me in");
+
+            while (ray_hit_wall == false)
+            {
+                if (ray_travelled >= distance)
+                {
+                    Console.WriteLine("Ray travelled hit player");
+                    ray_hit_wall = true;
+                    return ray_hit_wall;
+                }
+                else
+                {
+                    ray_position += new Vector2(Xa, Ya);
+                    ray_travelled += ray_displacement;
+                    ray_hit_wall = hitTestWall(ray_position);
+                    Console.WriteLine("Ray hit wall: " + ray_hit_wall);
+                    Console.WriteLine("Ray Displacement: " + ray_displacement);
+                }
+            }
+            Console.WriteLine("Ray hit wall");
+            return ray_hit_wall;
+        }
+
+        /// <summary>
         ///  Hit-checks a point against the map. Useful for ray-casting or mouse clicks.
         /// </summary>
         /// <param name="position"></param>
