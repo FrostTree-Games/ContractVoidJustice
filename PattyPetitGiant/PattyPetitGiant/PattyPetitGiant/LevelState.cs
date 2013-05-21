@@ -200,17 +200,6 @@ namespace PattyPetitGiant
                 //camera = Matrix.Identity * Matrix.CreateScale(0.2f);
             }
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
-            {
-                InGameGUI.BoxWindow box = new InGameGUI.BoxWindow("test", 100, 100, 300, "The quick brown fox hides a drawer and freaks out your mom after you move to Russia.");
-                gui.pushBox(box);
-            }
-
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection))
-            {
-                gui.popBox("test");
-            }
-
             gui.update(currentTime);
 
             if (endFlagReached)
