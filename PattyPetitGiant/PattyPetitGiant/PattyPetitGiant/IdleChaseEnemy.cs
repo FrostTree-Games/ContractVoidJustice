@@ -145,9 +145,11 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle1, Vector2.Zero, new Vector2(600.0f, 10.0f),SpriteEffects.None, 0.5f);
+            /*
+             * sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle1, Vector2.Zero, new Vector2(600.0f, 10.0f),SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle2, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
+             */
         }
         public override void spinerender(SkeletonRenderer renderer)
         {
