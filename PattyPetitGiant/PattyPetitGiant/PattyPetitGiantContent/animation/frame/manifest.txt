@@ -9,3 +9,16 @@ bombExplosion
 shopKeeper
 compassPic
 dungeonMapPic
+gamepadA
+gamepadB
+gamepadBack
+gamepadDPad
+gamepadLB
+gamepadLS
+gamepadLT
+gamepadRB
+gamepadRS
+gamepadRT
+gamepadStart
+gamepadX
+gamepadY

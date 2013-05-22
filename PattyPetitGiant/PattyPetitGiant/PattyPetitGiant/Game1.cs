@@ -67,6 +67,7 @@ namespace PattyPetitGiant
             TextureLib.loadTexture("bomb.png");
             TextureLib.loadTexture("sword.png");
             TextureLib.loadTexture("gun.png");
+            TextureLib.loadTexture("gamepadSheet.png");
 
             font = Content.Load<SpriteFont>("testFont");
 
