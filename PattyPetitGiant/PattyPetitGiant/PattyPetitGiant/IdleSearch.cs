@@ -16,6 +16,8 @@ namespace PattyPetitGiant
         private float angle = 0.0f;
         private float range_distance = 600.0f;
         private bool player_in_sight = false;
+        private double sight_angle1 = 1.2;
+        private double sight_angle2 = 1.8;
 
         public void update(Enemy parent, GameTime currentTime, LevelState parentWorld)
         {
@@ -23,8 +25,8 @@ namespace PattyPetitGiant
         }
         public void update(Enemy parent, Entity player, GameTime currentTime, LevelState parentWorld)
         {
-            angle = (float)(Math.Atan2(parent.CenterPoint.Y - player.CenterPoint.Y, parent.CenterPoint.X - player.CenterPoint.X));
-            angle = -1 * angle;
+            angle = (float)(Math.Atan2(parent.CenterPoint.Y - player.CenterPoint.Y, player.CenterPoint.X - parent.CenterPoint.X));
+            angle = -1* angle;
 
             Console.WriteLine("player angle: " + angle);
             distance = Vector2.Distance(parent.CenterPoint, player.CenterPoint);
@@ -32,7 +34,7 @@ namespace PattyPetitGiant
             switch (parent.Direction_Facing)
             {
                 case GlobalGameConstants.Direction.Right:
-                    if ((angle > (-1 * Math.PI / 7) && angle < Math.PI / 7) && distance < range_distance)
+                    if ((angle > (-1 * sight_angle2 + Math.PI / 2) && angle < (-1 * sight_angle1 + Math.PI / 2)) && distance < range_distance)
                     {
                         /*player_in_sight = parentWorld.Map.playerInSight(angle, distance, parent.CenterPoint);
                         Console.WriteLine("player direction: " + parent.Direction_Facing);
@@ -41,14 +43,12 @@ namespace PattyPetitGiant
                             Console.WriteLine("player right in view");
                             parent.State = Enemy.EnemyState.Chase;
                         }*/
-                        Console.WriteLine("player direction: " + parent.Direction_Facing);
-                        parent.State = Enemy.EnemyState.Chase;
                     }
-                    ((IdleChaseEnemy)parent).Angle1 = (float)(-1 * Math.PI / 7);
-                    ((IdleChaseEnemy)parent).Angle2 = (float)(Math.PI / 7);
+                    ((IdleChaseEnemy)parent).Angle1 = (float)(-1 * sight_angle1 + Math.PI / 2);
+                    ((IdleChaseEnemy)parent).Angle2 = (float)(-1 * sight_angle2 + Math.PI / 2);
                     break;
                 case GlobalGameConstants.Direction.Left:
-                    if ((angle > (Math.PI / 1.1) && angle < Math.PI * 1.1) && distance < range_distance)
+                    if ((angle > (sight_angle1 + Math.PI / 2) && angle < (sight_angle2 + Math.PI / 2)) && distance < range_distance)
                     {
                         /*player_in_sight = parentWorld.Map.playerInSight(angle, distance, parent.CenterPoint);
                         Console.WriteLine("player direction: " + parent.Direction_Facing);
@@ -57,14 +57,12 @@ namespace PattyPetitGiant
                             Console.WriteLine("player left in view");
                             parent.State = Enemy.EnemyState.Chase;
                         }*/
-                        Console.WriteLine("player direction: " + parent.Direction_Facing);
-                        parent.State = Enemy.EnemyState.Chase;
                     }
-                    ((IdleChaseEnemy)parent).Angle1 = (float)(Math.PI / 1.1);
-                    ((IdleChaseEnemy)parent).Angle2 = (float)(Math.PI * 1.1);
+                    ((IdleChaseEnemy)parent).Angle1 = (float)(sight_angle1 + Math.PI / 2);
+                    ((IdleChaseEnemy)parent).Angle2 = (float)(sight_angle2 + Math.PI / 2);
                     break;
                 case GlobalGameConstants.Direction.Up:
-                    if ((angle > (Math.PI / 2.25) && angle < (Math.PI / 1.75)) && distance < range_distance)
+                    if ((angle > (-1*sight_angle2) && angle < (-1 * sight_angle1)) && distance < range_distance)
                     {
                         /*player_in_sight = parentWorld.Map.playerInSight(angle, distance, parent.CenterPoint);
                         Console.WriteLine("player direction: " + parent.Direction_Facing);
@@ -73,14 +71,14 @@ namespace PattyPetitGiant
                             Console.WriteLine("player Up in view");
                             parent.State = Enemy.EnemyState.Chase;
                         }*/
-                        Console.WriteLine("player direction: " + parent.Direction_Facing);
-                        parent.State = Enemy.EnemyState.Chase;
+                        
                     }
-                    ((IdleChaseEnemy)parent).Angle1 = (float)(-1 * Math.PI / 2.25);
-                    ((IdleChaseEnemy)parent).Angle2 = (float)(-1 *Math.PI / 1.75);
+                    ((IdleChaseEnemy)parent).Angle1 = (float)(-1 * sight_angle1);
+                    ((IdleChaseEnemy)parent).Angle2 = (float)(-1 * sight_angle2);
+                    Console.WriteLine(-1 * sight_angle1);
                     break;
                 default:
-                    if ((angle > 1.098 && angle < 2.02 ) && distance < range_distance)
+                    if ((angle > sight_angle1 && angle < sight_angle2 ) && distance < range_distance)
                     {
                         /*player_in_sight = parentWorld.Map.playerInSight(angle, distance, parent.CenterPoint);
                         Console.WriteLine("player direction: " + parent.Direction_Facing);
@@ -89,14 +87,13 @@ namespace PattyPetitGiant
                             Console.WriteLine("player Down in view");
                             parent.State = Enemy.EnemyState.Chase;
                         }*/
-                        Console.WriteLine("player direction: " + parent.Direction_Facing);
-                        parent.State = Enemy.EnemyState.Chase;
                     }
-                    ((IdleChaseEnemy)parent).Angle1 = (float)(1.098);
-                    ((IdleChaseEnemy)parent).Angle2 = (float)(2.02);
+                    ((IdleChaseEnemy)parent).Angle1 = (float)(sight_angle1);
+                    ((IdleChaseEnemy)parent).Angle2 = (float)(sight_angle2);
                     
                     break;
             }
+            
             ((IdleChaseEnemy)parent).Angle = angle;
             return;
         }

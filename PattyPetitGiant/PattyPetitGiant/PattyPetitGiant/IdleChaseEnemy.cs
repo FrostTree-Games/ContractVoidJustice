@@ -73,16 +73,10 @@ namespace PattyPetitGiant
                         else if (en is Player)
                         {
                             component.update(this, en, currentTime, parentWorld);
-
-                            angle = (float)(Math.Atan2(CenterPoint.X - en.CenterPoint.X, CenterPoint.Y - en.CenterPoint.Y));
-                            angle = angle + (float)(Math.PI / 2);
-
-                            distance = Vector2.Distance(CenterPoint, en.CenterPoint);
-
                             break;
                         }
                     }
-                    if (change_direction_time > 2000)
+                    if (change_direction_time > 5000)
                     {
                         switch (direction_facing)
                         {
@@ -133,8 +127,6 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            Console.WriteLine(angle*180/Math.PI);
-
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle1, Vector2.Zero, new Vector2(600.0f, 10.0f),SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle2, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
