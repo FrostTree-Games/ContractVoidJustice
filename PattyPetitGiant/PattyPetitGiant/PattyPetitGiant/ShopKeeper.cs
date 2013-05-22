@@ -24,8 +24,25 @@ namespace PattyPetitGiant
         /// </summary>
         private struct FireBall
         {
+            public bool active;
             public Vector2 position;
             public Vector2 hitbox;
+            public float direction;
+            public float timeAlive;
+
+            public const float fireBallVelocity = 7.5f;
+            public const float fireBallDurationTime = 500f;
+
+            public FireBall(Vector2 position, float direction)
+            {
+                this.position = position;
+                hitbox = GlobalGameConstants.TileSize;
+                this.direction = direction;
+                timeAlive = 0.0f;
+                active = true;
+            }
+
+            public Vector2 center { get { return position + (hitbox / 2); } }
         }
 
         private int health;
@@ -55,16 +72,27 @@ namespace PattyPetitGiant
         private bool switchItemPressed;
 
         private Entity attacker = null;
+        private FireBall projectile;
+        private float fireballDelayPassed;
+        private const float fireballDelay = 400f;
+        private Vector2 attackPoint;
+        private const float attackPointSetDelay = 100f;
+        private const float distanceToMaintainFromAttacker = 250f;
+        private const int fireballDamage = 1;
 
         public ShopKeeper(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
             this.position = position;
+            this.velocity = Vector2.Zero;
             this.dimensions = GlobalGameConstants.TileSize;
 
             state = ShopKeeperState.Normal;
 
             health = 25;
+            projectile = new FireBall(new Vector2(-10, -10), 0.0f);
+            projectile.active = false;
+            fireballDelayPassed = 0.0f;
 
             switchItemPressed = false;
 
@@ -140,7 +168,61 @@ namespace PattyPetitGiant
                 return;
             }
 
-            if (state == ShopKeeperState.Normal)
+            if (state == ShopKeeperState.Enraged)
+            {
+                if (attacker != null)
+                {
+                    double angle = Math.Atan2(attacker.Position.Y - position.Y, attacker.Position.X - position.X);
+
+                    if (Vector2.Distance(CenterPoint, attacker.CenterPoint) - distanceToMaintainFromAttacker > GlobalGameConstants.TileSize.Y)
+                    {
+                        velocity = FireBall.fireBallVelocity / 4 * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+
+                        velocity += FireBall.fireBallVelocity / 8 * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+                    }
+                    else if (Vector2.Distance(CenterPoint, attacker.CenterPoint) - distanceToMaintainFromAttacker < -1 * GlobalGameConstants.TileSize.Y)
+                    {
+                        velocity = -1 * FireBall.fireBallVelocity / 4 * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+                    }
+                }
+                if (projectile.active)
+                {
+                    projectile.position += FireBall.fireBallVelocity * new Vector2((float)Math.Cos(projectile.direction), (float)Math.Sin(projectile.direction));
+                    projectile.timeAlive += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (projectile.timeAlive > FireBall.fireBallDurationTime || parentWorld.Map.hitTestWall(projectile.center))
+                    {
+                        projectile.active = false;
+                        fireballDelayPassed = 0.0f;
+                        attackPoint = new Vector2(-1, -1);
+                    }
+
+                    if (Vector2.Distance(projectile.center, attacker.CenterPoint) < GlobalGameConstants.TileSize.X)
+                    {
+                        knockBack(attacker, projectile.center, projectile.hitbox, fireballDamage);
+                        projectile.active = false;
+                        fireballDelayPassed = -200f;
+                        attackPoint = new Vector2(-1, -1);
+                    }
+                }
+                else
+                {
+                    fireballDelayPassed += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (attacker != null)
+                    {
+                        if (fireballDelayPassed > fireballDelay && attackPoint != new Vector2(-1, -1))
+                        {
+                            projectile = new FireBall(position, (float)Math.Atan2(attackPoint.Y - position.Y, attackPoint.X - position.X));
+                        }
+                        else if (fireballDelayPassed > attackPointSetDelay && attackPoint == new Vector2(-1, -1))
+                        {
+                            attackPoint = attacker.CenterPoint;
+                        }
+                    }
+                }
+            }
+            else if (state == ShopKeeperState.Normal)
             {
                 foreach (Entity en in parentWorld.EntityList)
                 {
@@ -223,14 +305,15 @@ namespace PattyPetitGiant
                     parentWorld.GUI.popBox("shopkeeperMessage");
                 }
             }
-            else if (state == ShopKeeperState.Enraged)
-            {
-                //
-            }
             else if (state == ShopKeeperState.InvalidState)
             {
                 throw new Exception("Shopkeeper was thrown into an invalid state: " + position.X + "," + position.Y);
             }
+
+            Vector2 step = position + velocity;
+            Vector2 finalPos = parentWorld.Map.reloactePosition(position, step, dimensions);
+
+            position = finalPos;
         }
 
         public override void draw(SpriteBatch sb)
@@ -260,6 +343,11 @@ namespace PattyPetitGiant
             else if (state == ShopKeeperState.Enraged)
             {
                 shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f, Color.Red);
+            }
+
+            if (projectile.active)
+            {
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, projectile.position, new Vector2(3, 3), 0.51f, Color.Yellow);
             }
         }
 
