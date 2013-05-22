@@ -19,6 +19,18 @@ namespace PattyPetitGiant
             Enraged = 1,
         }
 
+        /// <summary>
+        /// Structure for the Shopkeeper's projectiles
+        /// </summary>
+        private struct FireBall
+        {
+            public Vector2 position;
+            public Vector2 hitbox;
+        }
+
+        private int health;
+        public int Health { get { return health; } }
+
         private ShopKeeperState state = ShopKeeperState.Normal;
         private GlobalGameConstants.itemType[] itemsForSale = new GlobalGameConstants.itemType[3];
         private int[] itemPrices = new int[3];
@@ -42,6 +54,8 @@ namespace PattyPetitGiant
 
         private bool switchItemPressed;
 
+        private Entity attacker = null;
+
         public ShopKeeper(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -49,6 +63,8 @@ namespace PattyPetitGiant
             this.dimensions = GlobalGameConstants.TileSize;
 
             state = ShopKeeperState.Normal;
+
+            health = 25;
 
             switchItemPressed = false;
 
@@ -61,7 +77,7 @@ namespace PattyPetitGiant
             {
                 itemPrices[0] = 30;
                 itemPrices[1] = 100;
-                itemPrices[2] = 210;
+                itemPrices[2] = 180;
 
                 itemsForSale[0] = GlobalGameConstants.itemType.Bomb;
                 itemsForSale[1] = GlobalGameConstants.itemType.Compass;
@@ -118,114 +134,174 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            foreach (Entity en in parentWorld.EntityList)
+            if (health <= 0)
             {
-                if (en is Player)
+                remove_from_list = true;
+                return;
+            }
+
+            if (state == ShopKeeperState.Normal)
+            {
+                foreach (Entity en in parentWorld.EntityList)
                 {
-                    if (distance(en.Position, position) < GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomHigh/2)
+                    if (en is Player)
                     {
-                        playerOverlap = false;
-
-                        for (int i = 0; i < 3; i++)
+                        if (distance(en.Position, position) < GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomHigh / 2)
                         {
-                            Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
+                            playerOverlap = false;
 
-                            if (distance(drawItemPos + GlobalGameConstants.TileSize/2, en.CenterPoint) < 32 && itemsForSale[i] != GlobalGameConstants.itemType.NoItem)
+                            for (int i = 0; i < 3; i++)
                             {
-                                playerOverlap = true;
-                                buyLocation = en.Position - new Vector2(0, 32);
-                                overlapIndex = i;
-                                if (!parentWorld.GUI.peekBox("shopkeeperMessage"))
-                                {
-                                    parentWorld.GUI.pushBox(itemMessages[i]);
-                                }
+                                Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
-                                if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                                if (distance(drawItemPos + GlobalGameConstants.TileSize / 2, en.CenterPoint) < 32 && itemsForSale[i] != GlobalGameConstants.itemType.NoItem)
                                 {
-                                    overlapMessage = soldOutMessage;
-                                }
-                                else if (itemPrices[i] > GlobalGameConstants.Player_Coin_Amount)
-                                {
-                                    overlapMessage = noWayMessage;
-                                }
-                                else
-                                {
-                                    overlapMessage = buyMessage;
-                                }
-
-                                if (switchItemPressed && !(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && GlobalGameConstants.Player_Coin_Amount >= itemPrices[i])
-                                {
-                                    items[i].Position = drawItemPos;
-
-                                    purchaseTransaction(itemPrices[i]);
-                                    itemsForSale[i] = GlobalGameConstants.itemType.NoItem;
-
-                                    if (!parentWorld.GUI.peekBox("thankYou"))
+                                    playerOverlap = true;
+                                    buyLocation = en.Position - new Vector2(0, 32);
+                                    overlapIndex = i;
+                                    if (!parentWorld.GUI.peekBox("shopkeeperMessage"))
                                     {
-                                        thankYouMessage.x = GlobalGameConstants.GameResolutionWidth / 2 - 75;
-                                        thankYouMessage.y = GlobalGameConstants.GameResolutionHeight / 4 - thankYouMessage.height/2;
-                                        thankYouTime = 0;
-                                        parentWorld.GUI.pushBox(thankYouMessage);
+                                        parentWorld.GUI.pushBox(itemMessages[i]);
+                                    }
+
+                                    if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                                    {
+                                        overlapMessage = soldOutMessage;
+                                    }
+                                    else if (itemPrices[i] > GlobalGameConstants.Player_Coin_Amount)
+                                    {
+                                        overlapMessage = noWayMessage;
+                                    }
+                                    else
+                                    {
+                                        overlapMessage = buyMessage;
+                                    }
+
+                                    if (switchItemPressed && !(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && GlobalGameConstants.Player_Coin_Amount >= itemPrices[i])
+                                    {
+                                        items[i].Position = drawItemPos;
+
+                                        purchaseTransaction(itemPrices[i]);
+                                        itemsForSale[i] = GlobalGameConstants.itemType.NoItem;
+
+                                        if (!parentWorld.GUI.peekBox("thankYou"))
+                                        {
+                                            thankYouMessage.x = GlobalGameConstants.GameResolutionWidth / 2 - 75;
+                                            thankYouMessage.y = GlobalGameConstants.GameResolutionHeight / 4 - thankYouMessage.height / 2;
+                                            thankYouTime = 0;
+                                            parentWorld.GUI.pushBox(thankYouMessage);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if ((InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && !switchItemPressed)
-            {
-                switchItemPressed = true;
-            }
-            else if (!(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && switchItemPressed)
-            {
-                switchItemPressed = false;
-            }
-
-            if (thankYouTime >= 0)
-            {
-                thankYouTime += currentTime.ElapsedGameTime.Milliseconds;
-
-                if (thankYouTime > thankYouDuration)
+                if ((InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && !switchItemPressed)
                 {
-                    thankYouTime = -1;
-                    parentWorld.GUI.popBox("thankYou");
+                    switchItemPressed = true;
+                }
+                else if (!(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && switchItemPressed)
+                {
+                    switchItemPressed = false;
+                }
+
+                if (thankYouTime >= 0)
+                {
+                    thankYouTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (thankYouTime > thankYouDuration)
+                    {
+                        thankYouTime = -1;
+                        parentWorld.GUI.popBox("thankYou");
+                    }
+                }
+
+                if (!playerOverlap && parentWorld.GUI.peekBox("shopkeeperMessage"))
+                {
+                    parentWorld.GUI.popBox("shopkeeperMessage");
                 }
             }
-
-            if (!playerOverlap && parentWorld.GUI.peekBox("shopkeeperMessage"))
+            else if (state == ShopKeeperState.Enraged)
             {
-                parentWorld.GUI.popBox("shopkeeperMessage");
+                //
+            }
+            else if (state == ShopKeeperState.InvalidState)
+            {
+                throw new Exception("Shopkeeper was thrown into an invalid state: " + position.X + "," + position.Y);
             }
         }
 
         public override void draw(SpriteBatch sb)
         {
-            shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
-
-            for (int i = 0; i < 3; i++)
+            if (state == ShopKeeperState.Normal)
             {
-                if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
+
+                for (int i = 0; i < 3; i++)
                 {
-                    continue;
+                    if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                    {
+                        continue;
+                    }
+
+                    Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
+
+                    itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f);
+                    sb.DrawString(Game1.font, itemPrices[i].ToString(), drawItemPos + new Vector2(0f, GlobalGameConstants.TileSize.Y), Color.Yellow, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                 }
 
-                Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
-
-                itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f);
-                sb.DrawString(Game1.font, itemPrices[i].ToString(), drawItemPos + new Vector2(0f, GlobalGameConstants.TileSize.Y), Color.Yellow, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                if (playerOverlap)
+                {
+                    sb.DrawString(Game1.font, overlapMessage, buyLocation, Color.Red, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
+                }
             }
-
-            if (playerOverlap)
+            else if (state == ShopKeeperState.Enraged)
             {
-                sb.DrawString(Game1.font, overlapMessage, buyLocation, Color.Red, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f, Color.Red);
             }
         }
 
-        public override void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
+        //upon becoming knocked back and enraged, the shopkeeper will attack the closest entity
+        public void shopKnockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
         {
-            return;
+            health -= damage;
+
+            if (state == ShopKeeperState.Normal)
+            {
+                for (int i = 0; i < items.Length; i++)
+                {
+                    Vector2 drawItemPos = this.position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
+
+                    items[i].Position = drawItemPos;
+                }
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (!(en is Player || en is Enemy))
+                    {
+                        continue;
+                    }
+
+                    if (attacker == null)
+                    {
+                        attacker = en;
+                        continue;
+                    }
+
+                    if (Vector2.Distance(CenterPoint, en.CenterPoint) < Vector2.Distance(CenterPoint, attacker.CenterPoint))
+                    {
+                        attacker = en;
+                    }
+                }
+
+                state = ShopKeeperState.Enraged;
+            }
+            else if (state == ShopKeeperState.Enraged)
+            {
+                //
+            }
         }
     }
 }

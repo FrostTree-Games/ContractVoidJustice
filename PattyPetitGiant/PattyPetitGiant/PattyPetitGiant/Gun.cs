@@ -45,7 +45,7 @@ namespace PattyPetitGiant
             {
                 bullet.hitbox = new Vector2(10.0f, 10.0f);
                 bullet.velocity = new Vector2(0.0f, 0.0f);
-                bullet.bullet_damage = 2;
+                bullet.bullet_damage = 10;
                 bullet_alive = true;
 
                 GlobalGameConstants.Player_Ammunition = GlobalGameConstants.Player_Ammunition - 1;
@@ -94,7 +94,7 @@ namespace PattyPetitGiant
             {
                 foreach (Entity en in parentWorld.EntityList)
                 {
-                    if (en is Enemy)
+                    if (en is Enemy || en is ShopKeeper)
                     {
                         if (hitTest(en))
                         {

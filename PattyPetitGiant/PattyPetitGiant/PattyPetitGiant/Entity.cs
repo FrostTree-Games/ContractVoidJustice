@@ -102,6 +102,11 @@ namespace PattyPetitGiant
 
                 enemy.Enemy_Life = enemy.Enemy_Life - damage;
             }
+            // shopkeeper knockback logic (this was by Dan)
+            else if (other is ShopKeeper)
+            {
+                ((ShopKeeper)other).shopKnockBack(other, position, dimensions, damage);
+            }
         }
 
         public abstract void update(GameTime currentTime);

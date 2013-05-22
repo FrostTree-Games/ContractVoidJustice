@@ -91,7 +91,7 @@ namespace PattyPetitGiant
                                     en.knockBack(en, position, hitbox, bomb_damage);
                                 }
                             }
-                            else if (en is Enemy)
+                            else if (en is Enemy || en is ShopKeeper)
                             {
                                 if (hitTest(en))
                                 {
