@@ -45,8 +45,8 @@ namespace PattyPetitGiant
 
         public LevelState()
         {
-            //nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y);
-            nodeMap = DungeonGenerator.generateEntityZoo();
+            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y);
+            //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
 
