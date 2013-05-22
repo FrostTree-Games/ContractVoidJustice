@@ -68,6 +68,7 @@ namespace PattyPetitGiant
             TextureLib.loadTexture("bomb.png");
             TextureLib.loadTexture("sword.png");
             TextureLib.loadTexture("gun.png");
+            TextureLib.loadTexture("gamepadSheet.png");
 
             font = Content.Load<SpriteFont>("testFont");
 
@@ -76,6 +77,8 @@ namespace PattyPetitGiant
             AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
             AnimationLib.loadSpineFromManifest();
             AnimationLib.loadFrameFromManifest();
+
+            GlobalGameConstants.Player_Coin_Amount = 200;
 
             currentGameScreen = new LevelState();
         }

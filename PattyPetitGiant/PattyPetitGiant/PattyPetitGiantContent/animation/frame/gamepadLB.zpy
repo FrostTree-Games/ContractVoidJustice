@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name>gamepadLB</name>
+  <sheetName>gamepadSheet.png</sheetName>
+  <initalX>0</initalX>
+  <initalY>96</initalY>
+  <offsetX>0</offsetX>
+  <offsetY>0</offsetY>
+  <frameWidth>48</frameWidth>
+  <frameHeight>48</frameHeight>
+  <frameCount>0</frameCount>
+  <frameSpeed>0</frameSpeed>
+  <loop>false</loop>
+</SerializableAnimationData>

@@ -36,7 +36,7 @@ namespace PattyPetitGiant
                 Hide = -1,
                 Show = 0,
                 Opening = 1,
-                Closing = 0,
+                Closing = 2,
             }
 
             public BoxWindow(string name, int x, int y, int width, string text)
@@ -170,15 +170,14 @@ namespace PattyPetitGiant
                 {
                     if (boxWindows[i].name == boxName)
                     {
-                        boxWindows[i].animationLocation = 0.0f;
-                        boxWindows[i].animationState = BoxWindow.State.Closing;
+                        windowIsActive[i] = false;
                         return;
                     }
                 }
             }
         }
 
-        public bool peepBox(string boxName)
+        public bool peekBox(string boxName)
         {
             for (int i = 0; i < windowIsActive.Length; i++)
             {
@@ -203,7 +202,11 @@ namespace PattyPetitGiant
                     continue;
                 }
 
-                if (boxWindows[i].animationState == BoxWindow.State.Opening)
+                if (boxWindows[i].animationState == BoxWindow.State.Show)
+                {
+                    //
+                }
+                else if (boxWindows[i].animationState == BoxWindow.State.Opening)
                 {
                     boxWindows[i].animationLocation += (currentTime.ElapsedGameTime.Milliseconds / BoxWindow.animationDuration);
 
