@@ -66,6 +66,7 @@ namespace PattyPetitGiant
             switch (state)
             {
                 case EnemyState.Idle:
+                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                     foreach(Entity en in parentWorld.EntityList)
                     {
                         if (en == this)
@@ -76,51 +77,68 @@ namespace PattyPetitGiant
                             break;
                         }
                     }
-                    if (change_direction_time > 5000)
+                    if (state == Enemy.EnemyState.Chase)
                     {
-                        switch (direction_facing)
-                        {
-                            case GlobalGameConstants.Direction.Right:
-                                direction_facing = GlobalGameConstants.Direction.Down;
-                                break;
-                            case GlobalGameConstants.Direction.Left:
-                                direction_facing = GlobalGameConstants.Direction.Up;
-                                break;
-                            case GlobalGameConstants.Direction.Up:
-                                direction_facing = GlobalGameConstants.Direction.Right;
-                                break;
-                            default:
-                                direction_facing = GlobalGameConstants.Direction.Left;
-                                break;
-                        }
+                        component = new Chase();
                         change_direction_time = 0.0f;
+                        animation_time = 0.0f;
+                    }
+                    else
+                    {
+                        if (change_direction_time > 5000)
+                        {
+                            switch (direction_facing)
+                            {
+                                case GlobalGameConstants.Direction.Right:
+                                    direction_facing = GlobalGameConstants.Direction.Down;
+                                    break;
+                                case GlobalGameConstants.Direction.Left:
+                                    direction_facing = GlobalGameConstants.Direction.Up;
+                                    break;
+                                case GlobalGameConstants.Direction.Up:
+                                    direction_facing = GlobalGameConstants.Direction.Right;
+                                    break;
+                                default:
+                                    direction_facing = GlobalGameConstants.Direction.Left;
+                                    break;
+                            }
+                            change_direction_time = 0.0f;
+                        }
                     }
                     break;
                 case EnemyState.Chase:
-                    if (change_direction_time > 5000)
-                    {
-                        state = EnemyState.Idle;
-                        change_direction_time = 0.0f;
-                    }
-    
-                /*foreach (Entity en in parentWorld.EntityList)
+                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                    foreach (Entity en in parentWorld.EntityList)
                     {
                         if (en == this)
                             continue;
                         else if (en is Player)
                         {
                             distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
-                            if(distance > 100)
+                            if (distance > 300)
                             {
                                 state = EnemyState.Idle;
+                                component = new IdleSearch();
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
+                            }
+                            else
+                            {
+                                component.update(this, en, currentTime, parentWorld);
                             }
                         }
-                    }*/
+                    }
                     break;
                 default:
                     break;
             }
+            
+            Vector2 pos = new Vector2(position.X, position.Y);
 
+            Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }

@@ -400,44 +400,64 @@ namespace PattyPetitGiant
         }
 
         /// <summary>
-        /// Checks to see if the player is within the enemy's sight or if a wall is blocking it's view
+        /// Checks to see if there is a wall between player and enemy
         /// </summary>
         /// <param name="angle"></param>
         /// <param name="distance"></param>
         /// <returns></returns>
-        public bool playerInSight(float angle, float distance, Vector2 enemy_center_position)
+        public bool playerInSight(float angle, float distance, Entity enemy, Entity player)
         {
             float Xa = 0.0f;
-            float Ya = TileSize.Y;
-            Vector2 ray_position = enemy_center_position;
+            float Ya = 0.0f;
+            Vector2 ray_position = enemy.CenterPoint;
             float ray_travelled = 0.0f;
             float ray_displacement = 0.0f;
-            bool ray_hit_wall = hitTestWall(ray_position);
+            bool ray_hit_object = hitTestWall(ray_position);
 
-            Xa = (float)(Ya / Math.Tan(angle));
+            switch (enemy.Direction_Facing)
+            {
+                case GlobalGameConstants.Direction.Right:
+                    Xa = GlobalGameConstants.TileSize.X / 2;
+                    Ya = (float)(Xa * Math.Tan(angle));
+                    break;
+                case GlobalGameConstants.Direction.Left:
+                    Xa = GlobalGameConstants.TileSize.X / 2;
+                    Xa = -1 * Xa;
+                    Ya = (float)(Xa * Math.Tan(angle));
+                    break;
+                case GlobalGameConstants.Direction.Up:
+                    Ya = GlobalGameConstants.TileSize.Y / 2;
+                    Ya = -1 * Ya;
+                    Xa = (float)(Ya / Math.Tan(angle));
+                    break;
+                default:
+                    Ya = GlobalGameConstants.TileSize.Y / 2;
+                    Xa = (float)(Ya / Math.Tan(angle));
+                    break;
+            }
             ray_displacement = (float)(Math.Sqrt((Xa*Xa)+(Ya*Ya)));
 
-            Console.WriteLine("can see me in");
+            Console.WriteLine("Entity looking at me");
 
-            while (ray_hit_wall == false)
+            while (ray_hit_object == false )
             {
                 if (ray_travelled >= distance)
                 {
-                    Console.WriteLine("Ray travelled hit player");
-                    ray_hit_wall = true;
-                    return ray_hit_wall;
+                    Console.WriteLine("Ray hit player");
+                    ray_displacement = 0.0f;
+                    return ray_hit_object;
                 }
                 else
                 {
                     ray_position += new Vector2(Xa, Ya);
                     ray_travelled += ray_displacement;
-                    ray_hit_wall = hitTestWall(ray_position);
-                    Console.WriteLine("Ray hit wall: " + ray_hit_wall);
-                    Console.WriteLine("Ray Displacement: " + ray_displacement);
+                    ray_hit_object = hitTestWall(ray_position);
+                    Console.WriteLine("Ray hit wall: " + ray_hit_object);
                 }
             }
             Console.WriteLine("Ray hit wall");
-            return ray_hit_wall;
+            ray_displacement = 0.0f;
+            return ray_hit_object;
         }
 
         /// <summary>

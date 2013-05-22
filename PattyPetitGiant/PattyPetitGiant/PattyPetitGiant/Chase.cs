@@ -26,10 +26,20 @@ namespace PattyPetitGiant
                 if (direction_x < 0)
                 {
                     parent.Velocity = new Vector2(-1.51f, direction_y/100);
+                    if (parent.Change_Direction_Time > 300)
+                    {
+                        parent.Direction_Facing = GlobalGameConstants.Direction.Left;
+                        parent.Change_Direction_Time = 0.0f;
+                    }
                 }
                 else
                 {
                     parent.Velocity = new Vector2(1.51f, direction_y/100);
+                    if (parent.Change_Direction_Time > 300)
+                    {
+                        parent.Direction_Facing = GlobalGameConstants.Direction.Right;
+                        parent.Change_Direction_Time = 0.0f;
+                    }
                 }
             }
             else
@@ -37,10 +47,20 @@ namespace PattyPetitGiant
                 if (direction_y < 0)
                 {
                     parent.Velocity = new Vector2(direction_x / 100f, -1.51f);
+                    if (parent.Change_Direction_Time > 300)
+                    {
+                        parent.Direction_Facing = GlobalGameConstants.Direction.Up;
+                        parent.Change_Direction_Time = 0.0f;
+                    }
                 }
                 else
                 {
                     parent.Velocity = new Vector2(direction_x / 100f, 1.51f);
+                    if (parent.Change_Direction_Time > 300)
+                    {
+                        parent.Direction_Facing = GlobalGameConstants.Direction.Down;
+                        parent.Change_Direction_Time = 0.0f;
+                    }
                 }
             }
         }
