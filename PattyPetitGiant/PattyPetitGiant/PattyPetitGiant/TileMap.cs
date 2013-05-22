@@ -400,6 +400,67 @@ namespace PattyPetitGiant
         }
 
         /// <summary>
+        /// Checks to see if there is a wall between player and enemy
+        /// </summary>
+        /// <param name="angle"></param>
+        /// <param name="distance"></param>
+        /// <returns></returns>
+        public bool playerInSight(float angle, float distance, Entity enemy, Entity player)
+        {
+            float Xa = 0.0f;
+            float Ya = 0.0f;
+            Vector2 ray_position = enemy.CenterPoint;
+            float ray_travelled = 0.0f;
+            float ray_displacement = 0.0f;
+            bool ray_hit_object = hitTestWall(ray_position);
+
+            switch (enemy.Direction_Facing)
+            {
+                case GlobalGameConstants.Direction.Right:
+                    Xa = GlobalGameConstants.TileSize.X / 2;
+                    Ya = (float)(Xa * Math.Tan(angle));
+                    break;
+                case GlobalGameConstants.Direction.Left:
+                    Xa = GlobalGameConstants.TileSize.X / 2;
+                    Xa = -1 * Xa;
+                    Ya = (float)(Xa * Math.Tan(angle));
+                    break;
+                case GlobalGameConstants.Direction.Up:
+                    Ya = GlobalGameConstants.TileSize.Y / 2;
+                    Ya = -1 * Ya;
+                    Xa = (float)(Ya / Math.Tan(angle));
+                    break;
+                default:
+                    Ya = GlobalGameConstants.TileSize.Y / 2;
+                    Xa = (float)(Ya / Math.Tan(angle));
+                    break;
+            }
+            ray_displacement = (float)(Math.Sqrt((Xa*Xa)+(Ya*Ya)));
+
+            Console.WriteLine("Entity looking at me");
+
+            while (ray_hit_object == false )
+            {
+                if (ray_travelled >= distance)
+                {
+                    Console.WriteLine("Ray hit player");
+                    ray_displacement = 0.0f;
+                    return ray_hit_object;
+                }
+                else
+                {
+                    ray_position += new Vector2(Xa, Ya);
+                    ray_travelled += ray_displacement;
+                    ray_hit_object = hitTestWall(ray_position);
+                    Console.WriteLine("Ray hit wall: " + ray_hit_object);
+                }
+            }
+            Console.WriteLine("Ray hit wall");
+            ray_displacement = 0.0f;
+            return ray_hit_object;
+        }
+
+        /// <summary>
         ///  Hit-checks a point against the map. Useful for ray-casting or mouse clicks.
         /// </summary>
         /// <param name="position"></param>

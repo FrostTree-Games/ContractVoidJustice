@@ -21,6 +21,7 @@ namespace PattyPetitGiant
         SpriteBatch spriteBatch;
         public static SpriteFont font;
         public static Texture2D whitePixel = null;
+        public static Random rand = new Random();
 
         private ScreenState currentGameScreen = null;
 

@@ -42,8 +42,6 @@ namespace PattyPetitGiant
             enemy_damage = 1;
             damage_player_time = 0.0f;
 
-            rand = new Random(DateTime.Now.Millisecond);
-
             walk_down = AnimationLib.getSkeleton("zippyDown");
             walk_right = AnimationLib.getSkeleton("zippyRight");
             walk_up = AnimationLib.getSkeleton("zippyUp");
@@ -152,7 +150,7 @@ namespace PattyPetitGiant
 
                     if (change_direction_time > 2000)
                     {
-                        change_direction = rand.Next(4);
+                        change_direction = Game1.rand.Next(4);
                         animation_time = 0.0f;
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         if (change_direction_time > 3000)

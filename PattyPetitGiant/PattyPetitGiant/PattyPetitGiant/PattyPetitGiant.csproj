@@ -92,6 +92,8 @@
     <Compile Include="Entity.cs" />
     <Compile Include="GlobalGameConstants.cs" />
     <Compile Include="Gun.cs" />
+    <Compile Include="IdleChaseEnemy.cs" />
+    <Compile Include="IdleSearch.cs" />
     <Compile Include="InGameGUI.cs" />
     <Compile Include="InputDeviceManager.cs" />
     <Compile Include="Pickup.cs" />

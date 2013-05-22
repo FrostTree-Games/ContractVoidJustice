@@ -243,7 +243,7 @@ namespace PattyPetitGiant
                             }
                             else
                             {
-                                state = EnemyState.Pause;
+                                state = EnemyState.Idle;
                                 pause_time = 0.0f;
                                 bullet_alive = false;
                             }

@@ -15,8 +15,8 @@ namespace PattyPetitGiant
         public enum EnemyState
         {
             Moving,
-            Pause,
             Chase,
+            Idle,
             Firing
         }
 
