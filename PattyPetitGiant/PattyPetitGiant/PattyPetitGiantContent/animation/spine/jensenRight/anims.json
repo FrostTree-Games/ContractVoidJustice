@@ -45,6 +45,7 @@
 	{ "name": "rHand", "parent": "rForearm", "length": 44.49, "x": 91.52, "y": 0.46, "rotation": -4.5 }
 ],
 "slots": [
+	{ "name": "lMachete", "bone": "lHand", "attachment": "lSword01" },
 	{ "name": "testGuySpine/leftForearm copy", "bone": "lForearm", "attachment": "leftForearm copy" },
 	{ "name": "testGuySpine/leftBicep copy", "bone": "lBicep", "attachment": "leftBicep copy" },
 	{ "name": "testGuySpine/leftHand copy", "bone": "lHand", "attachment": "leftHand copy" },
@@ -58,15 +59,12 @@
 	{ "name": "testGuySpine/rightFoot copy", "bone": "rFoot", "attachment": "rightFoot copy" },
 	{ "name": "testGuySpine/rightForearm copy", "bone": "rForearm", "attachment": "rightForearm copy" },
 	{ "name": "testGuySpine/rightBicep copy", "bone": "rBicep", "attachment": "rightBicep copy" },
-	{ "name": "rMachete", "bone": "rHand", "attachment": "machete" },
+	{ "name": "rMachete", "bone": "rHand", "attachment": "rSword1" },
 	{ "name": "testGuySpine/rightHand copy", "bone": "rHand", "attachment": "rightHand copy" },
 	{ "name": "testGuySpine/head copy", "bone": "head", "attachment": "head copy" }
 ],
 "skins": {
 	"default": {
-		"rMachete": {
-			"machete": { "x": 0.78, "y": 82.59, "scaleX": 1.111, "rotation": 65.47, "width": 162, "height": 228 }
-		},
 		"testGuySpine/head copy": {
 			"head copy": { "x": 73.24, "y": 9.23, "rotation": -92.24, "width": 120, "height": 168 }
 		},
@@ -111,6 +109,18 @@
 		},
 		"testGuySpine/torso copy": {
 			"torso copy": { "x": 135.07, "y": 18.17, "rotation": -94.05, "width": 240, "height": 320 }
+		}
+	},
+	"lEmpty": {},
+	"lSword01": {
+		"lMachete": {
+			"lSword01": { "name": "machete", "x": 30.09, "y": -78.86, "scaleX": -1, "scaleY": 0.999, "rotation": 150.07, "width": 162, "height": 228 }
+		}
+	},
+	"rEmpty": {},
+	"rSword01": {
+		"rMachete": {
+			"rSword1": { "name": "machete", "x": 0.78, "y": 82.59, "scaleX": 1.111, "rotation": 65.47, "width": 162, "height": 228 }
 		}
 	}
 },
@@ -493,7 +503,8 @@
 				],
 				"scale": [
 					{ "time": 0.0666, "x": 1, "y": 1.153 },
-					{ "time": 0.1666, "x": 1, "y": 1.714 }
+					{ "time": 0.1666, "x": 1, "y": 1.714 },
+					{ "time": 0.3333, "x": 1.052, "y": 1.165 }
 				]
 			},
 			"lBicep": {

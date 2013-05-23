@@ -43,7 +43,8 @@
 	{ "name": "testGuySpine/testGuySpineUp/rCalf copy", "bone": "rCalf", "attachment": "rCalf copy" },
 	{ "name": "testGuySpine/testGuySpineUp/lCalf", "bone": "lCalf", "attachment": "lCalf" },
 	{ "name": "testGuySpine/testGuySpineUp/pelvis", "bone": "pelvis", "attachment": "pelvis" },
-	{ "name": "rMachete", "bone": "rHand", "attachment": "machete" },
+	{ "name": "rMachete", "bone": "rHand", "attachment": "rSword1" },
+	{ "name": "lMachete", "bone": "lHand", "attachment": "lSword01" },
 	{ "name": "testGuySpine/testGuySpineUp/lHand", "bone": "lHand", "attachment": "lHand" },
 	{ "name": "testGuySpine/testGuySpineUp/rHand copy", "bone": "rHand", "attachment": "rHand copy" },
 	{ "name": "testGuySpine/testGuySpineUp/rForearm copy", "bone": "rForearm", "attachment": "rForearm copy" },
@@ -55,9 +56,6 @@
 ],
 "skins": {
 	"default": {
-		"rMachete": {
-			"machete": { "x": -64.1, "y": 26.81, "scaleX": -1, "rotation": 35.04, "width": 162, "height": 228 }
-		},
 		"testGuySpine/testGuySpineUp/head copy": {
 			"head copy": { "x": 41.32, "y": 0.3, "rotation": -88.16, "width": 101, "height": 198 }
 		},
@@ -102,6 +100,18 @@
 		},
 		"testGuySpine/testGuySpineUp/torso copy": {
 			"torso copy": { "x": 118.89, "y": -1.68, "rotation": -89.52, "width": 280, "height": 294 }
+		}
+	},
+	"lEmpty": {},
+	"lSword01": {
+		"lMachete": {
+			"lSword01": { "name": "machete", "x": -36.12, "y": 54.72, "scaleY": 0.908, "rotation": 86.09, "width": 162, "height": 228 }
+		}
+	},
+	"rEmpty": {},
+	"rSword01": {
+		"rMachete": {
+			"rSword1": { "name": "machete", "x": -64.1, "y": 26.81, "scaleX": -1, "rotation": 35.04, "width": 162, "height": 228 }
 		}
 	}
 },
