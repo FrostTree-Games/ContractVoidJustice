@@ -20,8 +20,24 @@ namespace PattyPetitGiant
             Item_Pickup
         }
 
+        public struct PlayerItems
+        {
+            public GlobalGameConstants.itemType item1;
+            public GlobalGameConstants.itemType item2;
+        }
+
         private Item player_item_1 = null;
         private Item player_item_2 = null;
+        public PlayerItems CurrentItemTypes
+        {
+            get
+            {
+                PlayerItems p = new PlayerItems();
+                p.item1 = player_item_1.ItemType();
+                p.item2 = player_item_2.ItemType();
+                return p;
+            }
+        }
 
         private AnimationLib.SpineAnimationSet walk_down = null;
         private AnimationLib.SpineAnimationSet walk_right = null;

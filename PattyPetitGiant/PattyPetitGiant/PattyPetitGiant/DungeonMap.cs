@@ -16,11 +16,24 @@ namespace PattyPetitGiant
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            // this will need to be altered later for press/release
-            parentWorld.RenderNodeMap = !parentWorld.RenderNodeMap;
+            Player.PlayerItems items = parent.CurrentItemTypes;
 
-            parent.State = Player.playerState.Moving;
-            parent.Disable_Movement = true;
+            if (items.item1 == GlobalGameConstants.itemType.DungeonMap && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+            {
+                parent.Velocity = Vector2.Zero;
+                parentWorld.RenderNodeMap = true;
+            }
+            else if (items.item2 == GlobalGameConstants.itemType.DungeonMap && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+            {
+                parent.Velocity = Vector2.Zero;
+                parentWorld.RenderNodeMap = true;
+            }
+            else
+            {
+                parentWorld.RenderNodeMap = false;
+                parent.State = Player.playerState.Moving;
+                parent.Disable_Movement = false;
+            }
         }
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
