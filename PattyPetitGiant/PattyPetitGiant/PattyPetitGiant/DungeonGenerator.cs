@@ -203,10 +203,29 @@ namespace PattyPetitGiant
 
         public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight)
         {
+            return generateRoomData(desiredWidth, desiredHeight, Game1.rand.Next());
+        }
+
+        public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight, string seed)
+        {
+            return generateRoomData(desiredWidth, desiredHeight, seed.GetHashCode());
+        }
+
+        public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight, int seed)
+        {
             DungeonRoom[,] output = new DungeonRoom[desiredWidth, desiredHeight];
             DungeonRoomClass[,] model = new DungeonRoomClass[desiredWidth, desiredHeight];
 
-            Random rand = new Random();
+            Random rand = null;
+            if (seed != null)
+            {
+                rand = new Random(seed.GetHashCode());
+            }
+            else
+            {
+                rand = new Random();
+            }
+
             List<DungeonRoomClass> addedRooms = new List<DungeonRoomClass>();
 
             //place initial room
@@ -333,15 +352,18 @@ namespace PattyPetitGiant
                 }
             }
 
-            foreach (DungeonRoomClass room in addedRooms)
+            // litter attributes around dungeon
             {
-                // place occasional shopkeeper
-                if (room.ActualChildCount == 1 && !(room.Attributes.Contains("end")))
+                foreach (DungeonRoomClass room in addedRooms)
                 {
-                    if (rand.NextDouble() < DungeonGeneratonValues.ShopkeeperProbability)
+                    // place occasional shopkeeper
+                    if (room.ActualChildCount == 1 && !(room.Attributes.Contains("end")))
                     {
-                        room.Attributes.Add("shopkeeper");
-                        continue;
+                        if (rand.NextDouble() < DungeonGeneratonValues.ShopkeeperProbability)
+                        {
+                            room.Attributes.Add("shopkeeper");
+                            continue;
+                        }
                     }
                 }
             }
