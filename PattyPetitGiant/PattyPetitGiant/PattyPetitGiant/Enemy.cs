@@ -15,6 +15,7 @@ namespace PattyPetitGiant
         public enum EnemyState
         {
             Moving,
+            Agressive,
             Chase,
             Idle,
             Firing
@@ -53,6 +54,9 @@ namespace PattyPetitGiant
         {
             get { return enemy_damage; }
         }
+
+        protected bool player_found;
+        public bool Player_Found { set { player_found = value; } get { return player_found; } }
 
         protected AnimationLib.SpineAnimationSet walk_down = null;
         protected AnimationLib.SpineAnimationSet walk_right = null;
@@ -105,7 +109,7 @@ namespace PattyPetitGiant
                 {
                     if (en is Player)
                     {
-                        this.knockBack(en, this.position, this.dimensions, enemy_damage);
+                        this.knockBack(en, enemy_damage);
                         en.Disable_Movement = true;
                         ((Player)en).State = Player.playerState.Moving;
                     }

@@ -199,7 +199,7 @@ namespace PattyPetitGiant
 
                     if (Vector2.Distance(projectile.center, attacker.CenterPoint) < GlobalGameConstants.TileSize.X)
                     {
-                        knockBack(attacker, projectile.center, projectile.hitbox, fireballDamage);
+                        knockBack(attacker, fireballDamage);
                         projectile.active = false;
                         fireballDelayPassed = -200f;
                         attackPoint = new Vector2(-1, -1);
@@ -352,7 +352,7 @@ namespace PattyPetitGiant
         }
 
         //upon becoming knocked back and enraged, the shopkeeper will attack the closest entity
-        public void shopKnockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
+        public void shopKnockBack(Entity other, int damage)
         {
             health -= damage;
 

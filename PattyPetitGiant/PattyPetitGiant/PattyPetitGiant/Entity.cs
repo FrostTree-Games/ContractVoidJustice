@@ -63,18 +63,15 @@ namespace PattyPetitGiant
         /// Players and Enemies get knocked back a certain velocity away
         /// </summary>
         /// <param name="other">Entity that is either the player or the enemy depending on who is hitting who</param>
-        /// <param name="position">center position of object that hits other is</param>
-        /// <param name="dimensions">size of object that hits other is</param>
-        public virtual void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
+        public virtual void knockBack(Entity other, int damage)
         {
-            //Enemy knocks back player
+            /*//Enemy knocks back player
             if (other is Player)
             {
                 Player player = (Player)other;
                 if (player.disable_movement_time == 0.0)
                 {
                     player.disable_movement = true;
-                    //temporary fix will consult dan to be sure.
 
                     Vector2 player_center = new Vector2(player.position.X + (player.Dimensions.X / 2), player.position.Y + (player.Dimensions.Y / 2));
                     Vector2 enemy_center = new Vector2(position.X + (dimensions.X / 2), position.Y + (dimensions.Y / 2));
@@ -101,11 +98,11 @@ namespace PattyPetitGiant
                 enemy.velocity.Y = enemy.velocity.Y / 10.0f;
 
                 enemy.Enemy_Life = enemy.Enemy_Life - damage;
-            }
+            }*/
             // shopkeeper knockback logic (this was by Dan)
-            else if (other is ShopKeeper)
+            if (other is ShopKeeper)
             {
-                ((ShopKeeper)other).shopKnockBack(other, position, dimensions, damage);
+                ((ShopKeeper)other).shopKnockBack(other, damage);
             }
         }
 

@@ -98,7 +98,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            en.knockBack(en, bullet.position, bullet.hitbox, bullet.bullet_damage);
+                            en.knockBack(parent,bullet.bullet_damage);
                             bullet_alive = false;
                         }
                     }

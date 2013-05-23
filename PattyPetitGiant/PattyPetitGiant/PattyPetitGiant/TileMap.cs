@@ -437,13 +437,10 @@ namespace PattyPetitGiant
             }
             ray_displacement = (float)(Math.Sqrt((Xa*Xa)+(Ya*Ya)));
 
-            Console.WriteLine("Entity looking at me");
-
             while (ray_hit_object == false )
             {
                 if (ray_travelled >= distance)
                 {
-                    Console.WriteLine("Ray hit player");
                     ray_displacement = 0.0f;
                     return ray_hit_object;
                 }
@@ -452,10 +449,8 @@ namespace PattyPetitGiant
                     ray_position += new Vector2(Xa, Ya);
                     ray_travelled += ray_displacement;
                     ray_hit_object = hitTestWall(ray_position);
-                    Console.WriteLine("Ray hit wall: " + ray_hit_object);
                 }
             }
-            Console.WriteLine("Ray hit wall");
             ray_displacement = 0.0f;
             return ray_hit_object;
         }

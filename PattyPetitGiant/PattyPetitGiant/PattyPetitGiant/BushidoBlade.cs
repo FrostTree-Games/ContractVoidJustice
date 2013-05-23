@@ -91,7 +91,7 @@ namespace PattyPetitGiant
                         {
                             if (hitTest(en))
                             {
-                                parent.knockBack(en, parent.Position, parent.Dimensions, sword_damage);
+                                en.knockBack(parent, sword_damage);
                                 enemy_explode = true;
                                 enemy_explode_position = en.CenterPoint - new Vector2(24.0f * 3.0f, 24.0f * 3.0f);
                             }

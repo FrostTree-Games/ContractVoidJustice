@@ -15,7 +15,6 @@ namespace PattyPetitGiant
         private EnemyComponents component = null;
         private AnimationLib.FrameAnimationSet chaseAnim;
 
-        private int damage;
         private float distance = 0.0f;
         private float angle = 0.0f;
         public float Angle
@@ -38,7 +37,8 @@ namespace PattyPetitGiant
             position = new Vector2(initial_x, initial_y);
             dimensions = new Vector2(48.0f, 48.0f);
             velocity = new Vector2(0.0f, 0.0f);
-            damage = 10;
+            enemy_damage = 10;
+            enemy_life = 15;
             distance = 0.0f;
             angle = 0.0f;
             angle1 = 0.0f;
@@ -46,7 +46,7 @@ namespace PattyPetitGiant
 
             direction_facing = GlobalGameConstants.Direction.Right;
             change_direction_time = 0.0f;
-
+            player_found = false;
             state = EnemyState.Idle;
 
             component = new IdleSearch();
@@ -80,9 +80,10 @@ namespace PattyPetitGiant
                             break;
                         }
                     }
-                    if (state == Enemy.EnemyState.Chase)
+                    if (player_found)
                     {
                         component = new Chase();
+                        state = EnemyState.Chase;
                         change_direction_time = 0.0f;
                         animation_time = 0.0f;
                     }
@@ -120,7 +121,7 @@ namespace PattyPetitGiant
                             distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
                             if (hitTest(en))
                             {
-                                en.knockBack(this, position, dimensions, damage);
+                                en.knockBack(this, enemy_damage);
                             }
                             else if (distance > 300)
                             {
@@ -128,6 +129,7 @@ namespace PattyPetitGiant
                                 component = new IdleSearch();
                                 velocity = Vector2.Zero;
                                 animation_time = 0.0f;
+                                player_found = false;
                             }
                             else
                             {
@@ -159,7 +161,7 @@ namespace PattyPetitGiant
             */
         }
 
-        public override void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
+        public override void knockBack(Entity other, int damage)
         {
 
             if (disable_movement_time == 0.0)
@@ -190,7 +192,7 @@ namespace PattyPetitGiant
                         velocity = new Vector2(direction_x / 100f, 5.51f);
                     }
                 }
-                GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - damage;
+                enemy_life = enemy_life - damage;
             }
         }
 

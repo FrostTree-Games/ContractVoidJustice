@@ -73,8 +73,7 @@ namespace PattyPetitGiant
 
             if (parent.Change_Direction_Time > 1000)
             {
-                Random rand = new Random();
-                change_direction = rand.Next(4);
+                change_direction = Game1.rand.Next(4);
                 parent.Change_Direction_Time = 0.0f;
                 if (change_direction == 0)
                 {
@@ -98,6 +97,7 @@ namespace PattyPetitGiant
                 }
             }
         }
+
         public void update(Enemy parent, Entity player, GameTime currentTime, LevelState parentWorld)
         {
             return;
