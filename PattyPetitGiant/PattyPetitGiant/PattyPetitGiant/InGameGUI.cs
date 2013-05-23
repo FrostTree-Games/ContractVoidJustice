@@ -279,13 +279,15 @@ namespace PattyPetitGiant
                 int renderFocusX = (int)((parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide);
                 int renderFocusY = (int)((parent.CameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh);
 
+                sb.Draw(Game1.whitePixel, renderMapPosition - new Vector2(16, 16), null, Color.SandyBrown, 0.0f, Vector2.Zero, (parent.NodeMap.GetLength(0) + 0) * 32 * 2, SpriteEffects.None, 0.3f);
+
                 for (int i = 0; i < parent.NodeMap.GetLength(0); i++)
                 {
                     for (int j = 0; j < parent.NodeMap.GetLength(1); j++)
                     {
                         if (parent.NodeMap[i, j].east || parent.NodeMap[i, j].west || parent.NodeMap[i, j].south || parent.NodeMap[i, j].north)
                         {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, Color.Black, 0.0f, Vector2.Zero, 32.0f, SpriteEffects.None, 0.6f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, parent.NodeMap[i, j].visited ? Color.Black : Color.MidnightBlue, 0.0f, Vector2.Zero, 32.0f, SpriteEffects.None, 0.6f);
                         }
                         if (i == renderFocusX && j == renderFocusY)
                         {
@@ -294,19 +296,19 @@ namespace PattyPetitGiant
 
                         if (parent.NodeMap[i, j].east)
                         {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 32, j * 64 + 8), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 32, j * 64 + 8), null, parent.NodeMap[i, j].visited ? Color.Black : Color.MidnightBlue, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
                         }
                         if (parent.NodeMap[i, j].west)
                         {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 - 16, j * 64 + 8), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 - 16, j * 64 + 8), null, parent.NodeMap[i, j].visited ? Color.Black : Color.MidnightBlue, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
                         }
                         if (parent.NodeMap[i, j].south)
                         {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 + 32), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 + 32), null, parent.NodeMap[i, j].visited ? Color.Black : Color.MidnightBlue, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
                         }
                         if (parent.NodeMap[i, j].north)
                         {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 - 16), null, Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 8, j * 64 - 16), null, parent.NodeMap[i, j].visited ? Color.Black : Color.MidnightBlue, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.6f);
                         }
                     }
                 }

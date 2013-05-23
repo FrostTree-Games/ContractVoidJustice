@@ -51,6 +51,8 @@ namespace PattyPetitGiant
             {
                 DungeonRoom output = new DungeonRoom();
 
+                output.visited = false;
+
                 if (children[(int)ChildDirection.North] != null)
                 {
                     output.north = true;
@@ -90,6 +92,8 @@ namespace PattyPetitGiant
             public bool east;
 
             public float intensity;
+
+            public bool visited;
 
             public List<string> attributes;
         }

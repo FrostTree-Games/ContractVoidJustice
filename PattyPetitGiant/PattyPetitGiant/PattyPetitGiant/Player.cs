@@ -91,7 +91,14 @@ namespace PattyPetitGiant
         public override void update(GameTime currentTime)
         {
             double delta = currentTime.ElapsedGameTime.Milliseconds;
-            //KeyboardState ks = Keyboard.GetState();
+
+            //update the world map if you've visited a new room
+            int currentNodeX = (int)((CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide);
+            int currentNodeY = (int)((CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh);
+            if (currentNodeX >= 0 && currentNodeX < parentWorld.NodeMap.GetLength(0) && currentNodeY >= 0 && currentNodeY < parentWorld.NodeMap.GetLength(1))
+            {
+                parentWorld.NodeMap[currentNodeX, currentNodeY].visited = true;
+            }
 
             if (state == playerState.Item1)
             {
