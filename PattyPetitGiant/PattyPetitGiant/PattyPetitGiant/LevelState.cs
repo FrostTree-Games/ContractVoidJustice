@@ -96,7 +96,7 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
 
-                        entityList.Add(new IdleChaseEnemy(this, (currentRoomX + 10) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new TestEnemy(this, (currentRoomX + 10) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {

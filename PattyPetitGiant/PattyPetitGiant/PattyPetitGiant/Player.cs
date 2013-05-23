@@ -27,7 +27,7 @@ namespace PattyPetitGiant
         private AnimationLib.SpineAnimationSet walk_right = null;
         private AnimationLib.SpineAnimationSet walk_up = null;
         private AnimationLib.SpineAnimationSet current_skeleton = null;
-        public AnimationLib.SpineAnimationSet LoadAnimaton { set { current_skeleton = value; } get { return current_skeleton; } }
+        public AnimationLib.SpineAnimationSet LoadAnimation { set { current_skeleton = value; } get { return current_skeleton; } }
 
         private float animation_time = 0.0f;
         public float Animation_Time { set { animation_time = value; } get { return animation_time; } }
@@ -49,7 +49,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword(position);
+            player_item_1 = new BushidoBlade(position);
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();

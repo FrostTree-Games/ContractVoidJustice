@@ -58,7 +58,7 @@ namespace PattyPetitGiant
         protected AnimationLib.SpineAnimationSet walk_right = null;
         protected AnimationLib.SpineAnimationSet walk_up = null;
         protected AnimationLib.SpineAnimationSet current_skeleton = null;
-        public AnimationLib.SpineAnimationSet LoadAnimaton { set { current_skeleton = value; } get { return current_skeleton; } }
+        public AnimationLib.SpineAnimationSet LoadAnimation { set { current_skeleton = value; } get { return current_skeleton; } }
         protected float animation_time;
         
         protected float damage_player_time = 0.0f;
