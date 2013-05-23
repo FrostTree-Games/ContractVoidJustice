@@ -49,7 +49,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new BushidoBlade(position);
+            player_item_1 = new Sword(position);
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
@@ -242,6 +242,41 @@ namespace PattyPetitGiant
                 player_item_2.draw(sb);
             }
         }
+
+        /*public override void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
+        {
+            
+            if (disable_movement_time == 0.0)
+            {
+                disable_movement = true;
+                float direction_x = CenterPoint.X - other.CenterPoint.X;
+                float direction_y = CenterPoint.Y - other.CenterPoint.Y;
+
+                if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
+                {
+                    if (direction_x < 0)
+                    {
+                        velocity = new Vector2(-5.51f, direction_y / 100);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(5.51f, direction_y / 100);
+                    }
+                }
+                else
+                {
+                    if (direction_y < 0)
+                    {
+                        velocity = new Vector2(direction_x / 100f, -5.51f);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(direction_x / 100f, 5.51f);
+                    }
+                }
+                GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - damage;
+            }
+        }*/
 
         public void spinerender(SkeletonRenderer renderer)
         {

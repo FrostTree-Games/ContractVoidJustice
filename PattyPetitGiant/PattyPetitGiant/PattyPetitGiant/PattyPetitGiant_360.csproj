@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="AnimationLib.cs" />
     <Compile Include="AudioLib.cs" />
+    <Compile Include="BallMutant.cs" />
     <Compile Include="BetaEndLevelFag.cs" />
     <Compile Include="Bomb.cs" />
     <Compile Include="BushidoBlade.cs" />
