@@ -8,34 +8,30 @@
 	{ "name": "muzzle", "parent": "weapon", "length": 32.51, "x": 26.15, "y": -0.47, "rotation": -14.56 }
 ],
 "slots": [
-	{ "name": "rFoot", "bone": "rFoot", "attachment": "foot" },
-	{ "name": "lFoot", "bone": "lFoot", "attachment": "foot" },
+	{ "name": "rFoot", "bone": "rFoot", "attachment": "gay" },
+	{ "name": "lFoot", "bone": "lFoot", "attachment": "gay" },
 	{ "name": "machete", "bone": "root" },
-	{ "name": "torso", "bone": "torso", "attachment": "torso" },
-	{ "name": "bone1", "bone": "weapon", "attachment": "cockrifle" },
+	{ "name": "torso", "bone": "torso", "attachment": "gay" },
+	{ "name": "bone1", "bone": "weapon", "attachment": "gay" },
 	{ "name": "muzzle", "bone": "muzzle", "attachment": "null" }
 ],
 "skins": {
 	"default": {
 		"bone1": {
-			"cockrifle": { "x": 8.89, "y": 0.17, "scaleX": 0.75, "scaleY": 0.75, "rotation": -56.88, "width": 48, "height": 48 }
+			"gay": { "name": "cockrifle", "x": 8.89, "y": 0.17, "scaleX": 0.75, "scaleY": 0.75, "rotation": -56.88, "width": 48, "height": 48 }
 		},
 		"lFoot": {
-			"foot": { "x": 7.66, "y": 1.01, "scaleX": -0.833, "rotation": -178.39, "width": 22, "height": 12 }
+			"gay": { "name": "foot", "x": 7.66, "y": 1.01, "scaleX": -0.833, "rotation": -178.39, "width": 22, "height": 12 }
 		},
 		"muzzle": {
-			"muzzleflash": { "x": 27.72, "y": 1.99, "scaleY": 0.916, "rotation": 1.96, "width": 64, "height": 32 }
+			"muzzle": { "name": "muzzleflash", "x": 27.72, "y": 1.99, "scaleY": 0.916, "rotation": 1.96, "width": 64, "height": 32 },
+			"null": { "x": -8.97, "y": -27.48, "scaleY": 0.916, "rotation": 70.92, "width": 4, "height": 4 }
 		},
 		"rFoot": {
-			"foot": { "x": 6.26, "y": 0.61, "scaleX": 0.727, "rotation": -6.12, "width": 22, "height": 12 }
+			"gay": { "name": "foot", "x": 6.26, "y": 0.61, "scaleX": 0.727, "rotation": -6.12, "width": 22, "height": 12 }
 		},
 		"torso": {
-			"torso": { "x": 18.04, "y": -3.53, "scaleY": 0.858, "rotation": -86.84, "width": 48, "height": 48 }
-		}
-	},
-	"default": {
-		"muzzle": {
-			"null": { "x": -8.97, "y": -27.48, "scaleY": 0.916, "rotation": 70.92, "width": 4, "height": 4 }
+			"gay": { "name": "torso", "x": 18.04, "y": -3.53, "scaleY": 0.858, "rotation": -86.84, "width": 48, "height": 48 }
 		}
 	}
 },
@@ -96,8 +92,8 @@
 		"slots": {
 			"muzzle": {
 				"attachment": [
-					{ "time": 0, "name": "muzzleflash" },
-					{ "time": 0.1333, "name": "muzzleflash" }
+					{ "time": 0, "name": "muzzle" },
+					{ "time": 0.1333, "name": null }
 				]
 			}
 		}
@@ -210,21 +206,21 @@
 			"torso": {
 				"rotate": [
 					{ "time": 0, "angle": -13.31 },
-					{ "time": 4, "angle": 21.43 }
+					{ "time": 0.5, "angle": 21.43 }
 				]
 			},
 			"weapon": {
 				"rotate": [
 					{ "time": 0, "angle": -10.23 },
-					{ "time": 4, "angle": 148.29 }
+					{ "time": 0.5, "angle": 148.29 }
 				],
 				"translate": [
 					{ "time": 0, "x": -12.06, "y": -5.07 },
-					{ "time": 4, "x": 16.76, "y": -10.08 }
+					{ "time": 0.5, "x": 16.76, "y": -10.08 }
 				],
 				"scale": [
 					{ "time": 0, "x": 1, "y": 1 },
-					{ "time": 4, "x": 0.723, "y": 1 }
+					{ "time": 0.5, "x": 0.723, "y": 1 }
 				]
 			}
 		}

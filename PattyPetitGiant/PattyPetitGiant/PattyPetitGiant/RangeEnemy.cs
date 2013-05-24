@@ -63,6 +63,7 @@ namespace PattyPetitGiant
 
             change_direction = 0;
             change_direction_time = 0.0f;
+            disable_movement_time = 0.0f;
 
             enemy_life = 10;
             enemy_damage = 2;
@@ -72,8 +73,16 @@ namespace PattyPetitGiant
             rand = new Random(DateTime.Now.Millisecond);
             enemyAnim = AnimationLib.getFrameAnimationSet("rangeenemyPic");
             bullet_alive = false;
-
             bullet.bullet_damage = 5;
+
+            walk_down = AnimationLib.getSkeleton("zippyGunDown");
+            walk_right = AnimationLib.getSkeleton("zippyGunRight");
+            walk_up = AnimationLib.getSkeleton("zippyGunUp");
+            current_skeleton = walk_down;
+            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+            current_skeleton.Skeleton.FlipX = false;
+            //enemyAnim = AnimationLib.getFrameAnimationSet("enemyPic");
+            animation_time = 0.0f;
         }
 
         //needs to walk randomly and then shoot in a direction
@@ -84,120 +93,192 @@ namespace PattyPetitGiant
                 daemonupdate(currentTime, parentWorld);
             }
 
-            switch (state)
+            if (disable_movement == true)
             {
-                case EnemyState.Moving:
-                    change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
+                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                if (disable_movement_time > 300)
+                {
+                    velocity = Vector2.Zero;
+                    disable_movement = false;
+                    disable_movement_time = 0;
+                }
+            }
+            else
+            {
+                switch (state)
+                {
+                    case EnemyState.Moving:
+                        change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
-                    if (disable_movement == true)
-                    {
-                        disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
-                        if (disable_movement_time > 300)
+                        if (disable_movement == true)
                         {
-                            velocity = Vector2.Zero;
-                            disable_movement = false;
-                            disable_movement_time = 0;
-                        }
-                    }
-                    //checks where the player is
-                    foreach (Entity en in parentWorld.EntityList)
-                    {
-                        if (en == this)
-                        {
-                            continue;
-                        }
-
-                        if (en is Player)
-                        {
-                            component.update(this, en, currentTime, parentWorld);
-                        }
-                    }
-
-                    if (player_found == true)
-                    {
-                        state = EnemyState.Firing;
-                        velocity = Vector2.Zero;
-                    }
-
-                    Vector2 pos = new Vector2(position.X, position.Y);
-                    Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                    Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-                    position.X = finalPos.X;
-                    position.Y = finalPos.Y;
-                    break;
-                case EnemyState.Firing: 
-                    pause_time += currentTime.ElapsedGameTime.Milliseconds;
-                    if (pause_time > 500)
-                    {
-                        if (pause_time > 1500)
-                        {
-                            if (bullet_alive == true)
+                            disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                            if (disable_movement_time > 300)
                             {
-                                daemonupdate(currentTime, parentWorld);
+                                velocity = Vector2.Zero;
+                                disable_movement = false;
+                                disable_movement_time = 0;
+                            }
+                        }
+                        //checks where the player is
+                        else
+                        {
+                            foreach (Entity en in parentWorld.EntityList)
+                            {
+                                if (en == this)
+                                {
+                                    continue;
+                                }
+
+                                if (en is Player)
+                                {
+                                    if (hitTest(en))
+                                    {
+                                        Vector2 direction = en.Position - bullet.position;
+                                        en.knockBack(direction, knockback_magnitude, enemy_damage);
+                                    }
+                                    component.update(this, en, currentTime, parentWorld);
+                                }
+                            }
+
+                            if (player_found == true)
+                            {
+                                state = EnemyState.Firing;
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
                             }
                             else
                             {
-                                state = EnemyState.Idle;
-                                pause_time = 0.0f;
-                                bullet_alive = false;
-                            }
-                        }
-                        else
-                        {
-                            if (bullet_alive == false)
-                            {
-                                bullet.hitbox = new Vector2(10.0f, 10.0f);
-                                bullet.velocity = new Vector2(0.0f, 0.0f);
-                                bullet_alive = true;
-                                bullet_alive_time = 0.0f;
-                                bullet.bullet_direction = direction_facing;
+                                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                                 switch (direction_facing)
                                 {
                                     case GlobalGameConstants.Direction.Right:
-                                        bullet.position.X = CenterPoint.X + (Dimensions.X / 2);
-                                        bullet.position.Y = CenterPoint.Y;
-                                        bullet.velocity.X = 20.0f;
+                                        current_skeleton = walk_right;
                                         break;
                                     case GlobalGameConstants.Direction.Left:
-                                        bullet.position.X = CenterPoint.X - (Dimensions.X / 2);
-                                        bullet.position.Y = CenterPoint.Y;
-                                        bullet.velocity.X = -20.0f;
+                                        current_skeleton = walk_right;
                                         break;
                                     case GlobalGameConstants.Direction.Up:
-                                        bullet.position.Y = CenterPoint.Y - (Dimensions.Y / 2);
-                                        bullet.position.X = CenterPoint.X;
-                                        bullet.velocity.Y = -20.0f;
-
+                                        current_skeleton = walk_up;
                                         break;
                                     default:
-                                        bullet.position.Y = CenterPoint.Y + (Dimensions.Y / 2);
-                                        bullet.position.X = CenterPoint.X;
-                                        bullet.velocity.Y = 20.0f;
+                                        current_skeleton = walk_down;
                                         break;
+                                }
+                            }
+                        }
+                        break;
+                    case EnemyState.Firing:
+                        pause_time += currentTime.ElapsedGameTime.Milliseconds;
+                        //for winding up && difference between this and the follow if statement is when bullet gets created before next pause
+                        if (pause_time > 500)
+                        {
+                            //if the timer is less then 1500, then the enemy can fire bullets
+                            if (pause_time < 1500)
+                            {
+                                if (bullet_alive_time == 0.0f)
+                                {
+                                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
+                                    animation_time = 0.0f;
+                                    bullet.hitbox = new Vector2(10.0f, 10.0f);
+                                    bullet.velocity = new Vector2(0.0f, 0.0f);
+                                    bullet_alive = true;
+                                    bullet_alive_time = 0.0f;
+                                    bullet.bullet_direction = direction_facing;
+                                    switch (direction_facing)
+                                    {
+                                        case GlobalGameConstants.Direction.Right:
+                                            bullet.position.X = current_skeleton.Skeleton.FindBone("muzzle").WorldX;
+                                            bullet.position.Y = current_skeleton.Skeleton.FindBone("muzzle").WorldY;
+                                            bullet.velocity.X = 20.0f;
+                                            break;
+                                        case GlobalGameConstants.Direction.Left:
+                                            bullet.position.X = current_skeleton.Skeleton.FindBone("muzzle").WorldX;
+                                            bullet.position.Y = current_skeleton.Skeleton.FindBone("muzzle").WorldY;
+                                            bullet.velocity.X = -20.0f;
+                                            break;
+                                        case GlobalGameConstants.Direction.Up:
+                                            bullet.position.X = current_skeleton.Skeleton.FindBone("muzzle").WorldX;
+                                            bullet.position.Y = current_skeleton.Skeleton.FindBone("muzzle").WorldY;
+                                            bullet.velocity.Y = -20.0f;
+
+                                            break;
+                                        default:
+                                            bullet.position.X = current_skeleton.Skeleton.FindBone("muzzle").WorldX;
+                                            bullet.position.Y = current_skeleton.Skeleton.FindBone("muzzle").WorldY;
+                                            bullet.velocity.Y = 20.0f;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    player_found = false;
+                                    if (animation_time > 0.3)
+                                    {
+                                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                                        bullet_alive_time = 0.0f;
+                                    }
                                 }
                             }
                             else
                             {
-                                state = EnemyState.Moving;
-                                player_found = false;
+                                if (bullet_alive == true)
+                                {
+                                    daemonupdate(currentTime, parentWorld);
+                                }
+                                else
+                                {
+                                    state = EnemyState.Idle;
+                                    pause_time = 0.0f;
+                                    bullet_alive = false;
+                                }
                             }
                         }
-                    }
-                    break;
-                default:
-                    //this is where enemy animation is reloading
-                    pause_time += currentTime.ElapsedGameTime.Milliseconds;
-                    if (pause_time > 500)
-                    {
-                        state = EnemyState.Moving;
-                        pause_time = 0.0f;
-                    }
-                    break;
+                        else
+                        {
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("windUp");
+                        }
+                        break;
+                    default:
+                        //this is where enemy animation is reloading
+                        pause_time += currentTime.ElapsedGameTime.Milliseconds;
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        if (pause_time > 500)
+                        {
+                            state = EnemyState.Moving;
+                            switch (direction_facing)
+                            {
+                                case GlobalGameConstants.Direction.Right:
+                                    velocity = new Vector2(1.0f, 0.0f);
+                                    break;
+                                case GlobalGameConstants.Direction.Left:
+                                    velocity = new Vector2(-1.0f, 0.0f);
+                                    break;
+                                case GlobalGameConstants.Direction.Up:
+                                    velocity = new Vector2(0.0f, -1.0f);
+                                    break;
+                                default:
+                                    velocity = new Vector2(0.0f, 1.0f);
+                                    break;
+                            }
+                            pause_time = 0.0f;
+                        }
+                        break;
+                }
             }
             if (enemy_life <= 0)
             {
                 remove_from_list = true;
             }
+
+            Vector2 pos = new Vector2(position.X, position.Y);
+            Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
         //checks to see if the bullet hit the player
@@ -221,7 +302,7 @@ namespace PattyPetitGiant
                     }
                 }
 
-                if (bullet_alive_time > 2000)
+                if (bullet_alive_time > 300)
                 {
                     bullet_alive = false;
                     bullet_alive_time = 0.0f;
@@ -235,7 +316,7 @@ namespace PattyPetitGiant
                 int check_corners = 0;
                 while (check_corners != 4)
                 {
-                    if (on_wall != true)
+                    if (on_wall == false)
                     {
                         if (check_corners == 0)
                         {
@@ -275,33 +356,34 @@ namespace PattyPetitGiant
                 {
                     if (direction.X < 0)
                     {
-                        velocity = new Vector2(-1.0f * magnitude, direction.Y / 100 * magnitude);
+                        velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2(1.0f * magnitude, direction.Y / 100 * magnitude);
+                        velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                 }
                 else
                 {
                     if (direction.Y < 0)
                     {
-                        velocity = new Vector2(direction.X / 100f * magnitude, -1.0f * magnitude);
+                        velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2((direction.X / 100f) * magnitude, 1.0f * magnitude);
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
                     }
                 }
+
                 enemy_life = enemy_life - damage;
             }
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle1, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
+            /*sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle1, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle2, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle2, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);*/
             
             sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
             if (bullet_alive)
@@ -317,6 +399,27 @@ namespace PattyPetitGiant
                 return false;
             }
             return true;
+        }
+
+        public override void spinerender(SkeletonRenderer renderer)
+        {
+            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+            {
+                current_skeleton.Skeleton.FlipX = false;
+            }
+            if (direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                current_skeleton.Skeleton.FlipX = true;
+            }
+
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            current_skeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(current_skeleton.Skeleton);
         }
     }
 }

@@ -8,33 +8,29 @@
 	{ "name": "muzzle", "parent": "machete", "length": 29.39, "x": 31.16, "y": -5.5, "rotation": -8.5 }
 ],
 "slots": [
-	{ "name": "torso", "bone": "torso", "attachment": "torso" },
-	{ "name": "lFoot", "bone": "lFoot", "attachment": "foot" },
-	{ "name": "rFoot", "bone": "rFoot", "attachment": "foot" },
-	{ "name": "machete", "bone": "machete", "attachment": "cockrifle" },
+	{ "name": "torso", "bone": "torso", "attachment": "gay" },
+	{ "name": "lFoot", "bone": "lFoot", "attachment": "gay" },
+	{ "name": "rFoot", "bone": "rFoot", "attachment": "gay" },
+	{ "name": "machete", "bone": "machete", "attachment": "gay" },
 	{ "name": "muzzle", "bone": "muzzle", "attachment": "null" }
 ],
 "skins": {
 	"default": {
 		"lFoot": {
-			"foot": { "x": 4.13, "y": -0.71, "scaleX": 0.633, "scaleY": 0.954, "rotation": 36.52, "width": 22, "height": 12 }
+			"gay": { "name": "foot", "x": 4.13, "y": -0.71, "scaleX": 0.633, "scaleY": 0.954, "rotation": 36.52, "width": 22, "height": 12 }
 		},
 		"machete": {
-			"cockrifle": { "x": 14.12, "y": -7.87, "scaleX": 0.75, "scaleY": 0.75, "rotation": -50.48, "width": 48, "height": 48 }
+			"gay": { "name": "cockrifle", "x": 14.12, "y": -7.87, "scaleX": 0.75, "scaleY": 0.75, "rotation": -50.48, "width": 48, "height": 48 }
 		},
 		"muzzle": {
-			"muzzleflash": { "x": 27.08, "y": 0.99, "rotation": -0.71, "width": 64, "height": 32 }
+			"muzzle": { "name": "muzzleflash", "x": 27.08, "y": 0.99, "rotation": -0.71, "width": 64, "height": 32 },
+			"null": { "x": -14.31, "y": 14.44, "rotation": 88.24, "width": 4, "height": 4 }
 		},
 		"rFoot": {
-			"foot": { "x": 4.06, "y": 0.78, "scaleX": -0.59, "rotation": 123.52, "width": 22, "height": 12 }
+			"gay": { "name": "foot", "x": 4.06, "y": 0.78, "scaleX": -0.59, "rotation": 123.52, "width": 22, "height": 12 }
 		},
 		"torso": {
-			"torso": { "x": 21.75, "y": -0.21, "scaleY": 0.792, "rotation": -88.63, "width": 48, "height": 48 }
-		}
-	},
-	"default": {
-		"muzzle": {
-			"null": { "x": -14.31, "y": 14.44, "rotation": 88.24, "width": 4, "height": 4 }
+			"gay": { "name": "torso", "x": 21.75, "y": -0.21, "scaleY": 0.792, "rotation": -88.63, "width": 48, "height": 48 }
 		}
 	}
 },
@@ -106,8 +102,13 @@
 		"slots": {
 			"muzzle": {
 				"attachment": [
-					{ "time": 0, "name": "muzzleflash" },
+					{ "time": 0, "name": "muzzle" },
 					{ "time": 0.1, "name": "null" }
+				]
+			},
+			"torso": {
+				"attachment": [
+					{ "time": 0.3, "name": "gay" }
 				]
 			}
 		}
@@ -225,33 +226,33 @@
 			"machete": {
 				"rotate": [
 					{ "time": 0, "angle": 286.16 },
-					{ "time": 4, "angle": 343.13 }
+					{ "time": 0.5, "angle": 343.13 }
 				],
 				"translate": [
 					{ "time": 0, "x": -14.19, "y": -1.24 },
-					{ "time": 4, "x": -8.05, "y": -11.92 }
+					{ "time": 0.5, "x": -8.05, "y": -11.92 }
 				]
 			},
 			"torso": {
 				"rotate": [
 					{ "time": 0, "angle": 0 },
-					{ "time": 4, "angle": 12.07 }
+					{ "time": 0.5, "angle": 12.07 }
 				],
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 4, "x": 1.36, "y": 8.83 }
+					{ "time": 0.5, "x": 1.36, "y": 8.83 }
 				]
 			},
 			"lFoot": {
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 4, "x": 0, "y": 4.75 }
+					{ "time": 0.5, "x": 0, "y": 4.75 }
 				]
 			},
 			"rFoot": {
 				"translate": [
 					{ "time": 0, "x": 0, "y": 0 },
-					{ "time": 4, "x": -0.68, "y": 3.39 }
+					{ "time": 0.5, "x": -0.68, "y": 3.39 }
 				]
 			}
 		}

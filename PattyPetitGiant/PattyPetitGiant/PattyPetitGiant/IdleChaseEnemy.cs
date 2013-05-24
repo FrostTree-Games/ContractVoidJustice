@@ -44,6 +44,7 @@ namespace PattyPetitGiant
             angle1 = 0.0f;
             angle2 = 0.0f;
             knockback_magnitude = 2.0f;
+            disable_movement_time = 0.0f;
 
             direction_facing = GlobalGameConstants.Direction.Right;
             change_direction_time = 0.0f;
@@ -67,85 +68,104 @@ namespace PattyPetitGiant
         public override void update(GameTime currentTime)
         {
             change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
-            switch (state)
+
+            if (disable_movement == true)
             {
-                case EnemyState.Idle:
-                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
-                    foreach(Entity en in parentWorld.EntityList)
-                    {
-                        if (en == this)
-                            continue;
-                        else if (en is Player)
+                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                if (disable_movement_time > 300)
+                {
+                    velocity = Vector2.Zero;
+                    disable_movement = false;
+                    disable_movement_time = 0;
+                }
+            }
+            else
+            {
+                switch (state)
+                {
+                    case EnemyState.Idle:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        foreach (Entity en in parentWorld.EntityList)
                         {
-                            component.update(this, en, currentTime, parentWorld);
-                            break;
-                        }
-                    }
-                    if (player_found)
-                    {
-                        component = new Chase();
-                        state = EnemyState.Chase;
-                        change_direction_time = 0.0f;
-                        animation_time = 0.0f;
-                    }
-                    else
-                    {
-                        if (change_direction_time > 5000)
-                        {
-                            switch (direction_facing)
-                            {
-                                case GlobalGameConstants.Direction.Right:
-                                    direction_facing = GlobalGameConstants.Direction.Down;
-                                    break;
-                                case GlobalGameConstants.Direction.Left:
-                                    direction_facing = GlobalGameConstants.Direction.Up;
-                                    break;
-                                case GlobalGameConstants.Direction.Up:
-                                    direction_facing = GlobalGameConstants.Direction.Right;
-                                    break;
-                                default:
-                                    direction_facing = GlobalGameConstants.Direction.Left;
-                                    break;
-                            }
-                            change_direction_time = 0.0f;
-                        }
-                    }
-                    break;
-                case EnemyState.Chase:
-                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
-                    foreach (Entity en in parentWorld.EntityList)
-                    {
-                        if (en == this)
-                            continue;
-                        else if (en is Player)
-                        {
-                            distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
-                            if (hitTest(en))
-                            {
-                                Vector2 direction = en.CenterPoint - CenterPoint;
-                                en.knockBack(direction, knockback_magnitude, enemy_damage);
-                            }
-                            else if (distance > 300)
-                            {
-                                state = EnemyState.Idle;
-                                component = new IdleSearch();
-                                velocity = Vector2.Zero;
-                                animation_time = 0.0f;
-                                player_found = false;
-                            }
-                            else
+                            if (en == this)
+                                continue;
+                            else if (en is Player)
                             {
                                 component.update(this, en, currentTime, parentWorld);
+                                break;
                             }
                         }
-                    }
-                    break;
-                default:
-                    break;
+                        if (player_found)
+                        {
+                            component = new Chase();
+                            state = EnemyState.Chase;
+                            change_direction_time = 0.0f;
+                            animation_time = 0.0f;
+                        }
+                        else
+                        {
+                            if (change_direction_time > 5000)
+                            {
+                                switch (direction_facing)
+                                {
+                                    case GlobalGameConstants.Direction.Right:
+                                        direction_facing = GlobalGameConstants.Direction.Down;
+                                        break;
+                                    case GlobalGameConstants.Direction.Left:
+                                        direction_facing = GlobalGameConstants.Direction.Up;
+                                        break;
+                                    case GlobalGameConstants.Direction.Up:
+                                        direction_facing = GlobalGameConstants.Direction.Right;
+                                        break;
+                                    default:
+                                        direction_facing = GlobalGameConstants.Direction.Left;
+                                        break;
+                                }
+                                change_direction_time = 0.0f;
+                            }
+                        }
+                        break;
+                    case EnemyState.Chase:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                        foreach (Entity en in parentWorld.EntityList)
+                        {
+                            if (en == this)
+                                continue;
+                            else if (en is Player)
+                            {
+                                distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
+                                if (hitTest(en))
+                                {
+                                    Vector2 direction = en.CenterPoint - CenterPoint;
+                                    en.knockBack(direction, knockback_magnitude, enemy_damage);
+                                }
+                                else if (distance > 300)
+                                {
+                                    state = EnemyState.Idle;
+                                    component = new IdleSearch();
+                                    velocity = Vector2.Zero;
+                                    animation_time = 0.0f;
+                                    player_found = false;
+                                }
+                                else
+                                {
+                                    component.update(this, en, currentTime, parentWorld);
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
-            
-            Vector2 pos = new Vector2(position.X, position.Y);
 
+            if (enemy_life <= 0)
+            {
+                remove_from_list = true;
+            }
+
+            Vector2 pos = new Vector2(position.X, position.Y);
             Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
