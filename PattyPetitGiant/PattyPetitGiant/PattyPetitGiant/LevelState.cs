@@ -11,14 +11,19 @@ namespace PattyPetitGiant
     {
         private enum LoadingState
         {
+            InvalidState = -1,
             UninitializedAndWaiting,
-            Loading,
-            Running,
-            Closing,
+            LevelLoading,
+            LevelRunning,
+            LevelPaused,
+            LevelClosing,
             ClosedAndWaiting,
         }
 
         private LoadingState state = LoadingState.UninitializedAndWaiting;
+
+        private bool pauseButtonDown = false;
+        private float pauseDialogMinimumTime;
 
         private InGameGUI gui = null;
         public InGameGUI GUI { get { return gui; } }
@@ -72,7 +77,7 @@ namespace PattyPetitGiant
             }
 
             end_flag_placed = false;
-            state = LoadingState.Running;
+            state = LoadingState.LevelRunning;
         }
 
         /// <summary>
@@ -188,15 +193,26 @@ namespace PattyPetitGiant
             }
         }
 
-        protected override void doUpdate(Microsoft.Xna.Framework.GameTime currentTime)
+        private void loadingUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
+            throw new NotImplementedException("asset loading not necessary yet");
+        }
+
+        private void gameLogicUpdate(Microsoft.Xna.Framework.GameTime currentTime)
+        {
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton))
+            {
+                state = LoadingState.LevelPaused;
+                pauseDialogMinimumTime = 0;
+            }
+
             foreach (Entity en in entityList)
             {
                 en.update(currentTime);
             }
 
 #if WINDOWS
-            entityList.RemoveAll(en=>en.Remove_From_List==true);
+            entityList.RemoveAll(en => en.Remove_From_List == true);
 #elif XBOX
             XboxTools.RemoveAll(entityList, XboxTools.IsEntityToBeRemoved);
 #endif
@@ -220,7 +236,42 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void render(SpriteBatch sb)
+        private void pausedUpdate(Microsoft.Xna.Framework.GameTime currentTime)
+        {
+            pauseDialogMinimumTime += currentTime.ElapsedGameTime.Milliseconds;
+
+            if (!pauseButtonDown && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton))
+            {
+                pauseButtonDown = true;
+            }
+            else if (pauseButtonDown && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton))
+            {
+                pauseButtonDown = false;
+
+                if (pauseDialogMinimumTime > 300)
+                {
+                    state = LoadingState.LevelRunning;
+                }
+            }
+        }
+
+        protected override void doUpdate(Microsoft.Xna.Framework.GameTime currentTime)
+        {
+            switch (state)
+            {
+                case LoadingState.LevelRunning:
+                    gameLogicUpdate(currentTime);
+                    break;
+                case LoadingState.LevelPaused:
+                    pausedUpdate(currentTime);
+                    break;
+                case LoadingState.InvalidState:
+                default:
+                    throw new InvalidLevelStateExcepton();
+            }
+        }
+
+        private void renderGameStuff(SpriteBatch sb)
         {
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, camera);
 
@@ -238,6 +289,31 @@ namespace PattyPetitGiant
             gui.render(sb);
         }
 
+        private void renderPauseOverlay(SpriteBatch sb)
+        {
+            sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+
+            sb.DrawString(Game1.font, "PAUSED HOMIE\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, 0.4f));
+
+            sb.End();
+        }
+
+        public override void render(SpriteBatch sb)
+        {
+            switch (state)
+            {
+                case LoadingState.LevelRunning:
+                    renderGameStuff(sb);
+                    break;
+                case LoadingState.LevelPaused:
+                    renderGameStuff(sb);
+                    renderPauseOverlay(sb);
+                    break;
+                default:
+                    break;
+            }
+        }
+
         public override ScreenState.ScreenStateType nextLevelState()
         {
             if (endFlagReached)
@@ -248,6 +324,13 @@ namespace PattyPetitGiant
             {
                 return ScreenStateType.InvalidScreenState;
             }
+        }
+
+        public class InvalidLevelStateExcepton : System.Exception
+        {
+            public InvalidLevelStateExcepton() { }
+            public InvalidLevelStateExcepton(string message) { }
+            public InvalidLevelStateExcepton(string message, System.Exception inner) { }
         }
     }
 }

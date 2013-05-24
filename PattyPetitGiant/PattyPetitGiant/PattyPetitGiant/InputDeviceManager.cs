@@ -22,7 +22,9 @@ namespace PattyPetitGiant
             UseItem2,
             SwitchItem1,
             SwitchItem2,
-            AnyButton
+            AnyButton,
+            PauseButton,
+            BackButton,
         }
 
         private static Vector2[] analog_directions = null;
@@ -105,6 +107,18 @@ namespace PattyPetitGiant
                     break;
                 case PlayerButton.SwitchItem2:
                     if (game_pad_state[control_number].Buttons.RightShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.W))
+                    {
+                        return true;
+                    }
+                    break;
+                case PlayerButton.PauseButton:
+                    if (game_pad_state[control_number].Buttons.Start == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.Enter))
+                    {
+                        return true;
+                    }
+                    break;
+                case PlayerButton.BackButton:
+                    if (game_pad_state[control_number].Buttons.Back == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.Back))
                     {
                         return true;
                     }
