@@ -301,8 +301,31 @@ namespace PattyPetitGiant
             }
         }*/
 
+        private void setAnimationWeapons()
+        {
+            if (player_item_2.ItemType() == GlobalGameConstants.itemType.Sword)
+            {
+                current_skeleton.Skeleton.SetAttachment("leftHand", "lSword01");
+            }
+            else
+            {
+                current_skeleton.Skeleton.SetAttachment("leftHand", "lEmpty");
+            }
+
+            if (player_item_1.ItemType() == GlobalGameConstants.itemType.Sword)
+            {
+                current_skeleton.Skeleton.SetAttachment("rightHand", "rSword01");
+            }
+            else
+            {
+                current_skeleton.Skeleton.SetAttachment("rightHand", "rEmpty");
+            }
+        }
+
         public void spinerender(SkeletonRenderer renderer)
         {
+            setAnimationWeapons();
+
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y+(dimensions.Y/2f);
 
