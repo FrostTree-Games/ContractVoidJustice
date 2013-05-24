@@ -25,24 +25,41 @@ namespace PattyPetitGiant
         private AnimationLib.FrameAnimationSet enemyAnim;
         private Random rand;
         private EnemyBullet bullet;
-        private float angle;
-        private float distance;
-        private float range_distance;
         private bool bullet_alive;
         private float bullet_alive_time;
         private float pause_time = 0.0f;
+
+        private EnemyComponents component = null;
+
+
+        private float angle = 0.0f;
+        public float Angle
+        {
+            set { angle = value; }
+        }
+
+        private float angle1 = 0.0f;
+        public float Angle1
+        {
+            set { angle1 = value; }
+        }
+        private float angle2 = 0.0f;
+        public float Angle2
+        {
+            set { angle2 = value; }
+        }
 
         public RangeEnemy(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
             this.parentWorld = parentWorld;
             dimensions = new Vector2(48.0f, 48.0f);
+            velocity = new Vector2(0.0f, 1.0f);
+            player_found = false;
 
             state = EnemyState.Moving;
-
+            component = new MoveSearch();
             direction_facing = GlobalGameConstants.Direction.Down;
-
-            velocity = new Vector2(0.0f, -1.0f);
 
             change_direction = 0;
             change_direction_time = 0.0f;
@@ -54,14 +71,18 @@ namespace PattyPetitGiant
             rand = new Random(DateTime.Now.Millisecond);
             enemyAnim = AnimationLib.getFrameAnimationSet("rangeenemyPic");
             bullet_alive = false;
-            angle = 0.0f;
-            distance = 0.0f;
-            range_distance = 325;
+
+            bullet.bullet_damage = 5;
         }
 
         //needs to walk randomly and then shoot in a direction
         public override void update(GameTime currentTime)
         {
+            if (bullet_alive)
+            {
+                daemonupdate(currentTime, parentWorld);
+            }
+
             switch (state)
             {
                 case EnemyState.Moving:
@@ -87,149 +108,21 @@ namespace PattyPetitGiant
 
                         if (en is Player)
                         {
-                            angle = (float)(Math.Atan2(CenterPoint.X - en.CenterPoint.X, CenterPoint.Y - en.CenterPoint.Y));
-                            angle = angle + (float)(Math.PI / 2);
-
-                            distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
+                            component.update(this, en, currentTime, parentWorld);
                         }
                     }
 
-                    switch (direction_facing)
+                    if (player_found == true)
                     {
-                        case GlobalGameConstants.Direction.Right:
-                            if ((angle > (-1 * Math.PI / 7) && angle < Math.PI / 7) && distance < range_distance)
-                            {
-                                state = EnemyState.Firing;
-                            }
-                            break;
-                        case GlobalGameConstants.Direction.Left:
-                            if ((angle > (Math.PI / 1.1) && angle < Math.PI * 1.1) && distance < range_distance)
-                            {
-                                state = EnemyState.Firing;
-                            }
-                            break;
-                        case GlobalGameConstants.Direction.Up:
-                            if ((angle > (Math.PI / 2.25) && angle < (Math.PI / 1.75)) && distance < range_distance)
-                            {
-                                state = EnemyState.Firing;
-                            }
-                            break;
-                        default:
-                            if ((angle > (Math.PI * 1.35) || angle < (-1 * Math.PI / 2.5)) && distance < range_distance)
-                            {
-                                state = EnemyState.Firing;
-                            }
-                            break;
+                        state = EnemyState.Firing;
+                        velocity = Vector2.Zero;
                     }
 
-                    if (bullet_alive)
-                    {
-                        daemonupdate(currentTime, parentWorld);
-                    }
-
-                    if (state == EnemyState.Moving)
-                    {
-                        int check_corners = 0;
-                        Vector2 nextStep_temp = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                        bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
-
-                        while (check_corners != 4)
-                        {
-                            if (on_wall != true)
-                            {
-                                if (check_corners == 0)
-                                {
-                                    nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + velocity.Y);
-                                }
-                                else if (check_corners == 1)
-                                {
-                                    nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
-                                }
-                                else if (check_corners == 2)
-                                {
-                                    nextStep_temp = new Vector2(position.X + dimensions.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
-                                }
-                                else
-                                {
-                                    break;
-                                }
-                            }
-                            else
-                            {
-
-                                switch (direction_facing)
-                                {
-                                    case GlobalGameConstants.Direction.Right:
-                                        direction_facing = GlobalGameConstants.Direction.Left;
-                                        velocity.X = -1.0f;
-                                        velocity.Y = 0.0f;
-                                        break;
-                                    case GlobalGameConstants.Direction.Left:
-                                        direction_facing = GlobalGameConstants.Direction.Right;
-                                        velocity.X = 1.0f;
-                                        velocity.Y = 0.0f;
-                                        break;
-                                    case GlobalGameConstants.Direction.Up:
-                                        direction_facing = GlobalGameConstants.Direction.Down;
-                                        velocity.Y = 1.0f;
-                                        velocity.X = 0.0f;
-                                        break;
-                                    default:
-                                        direction_facing = GlobalGameConstants.Direction.Up;
-                                        velocity.Y = -1.0f;
-                                        velocity.X = 0.0f;
-                                        break;
-                                }
-                                break;
-                            }
-                            on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
-                            check_corners++;
-                        }
-
-                        if (change_direction_time > 2000)
-                        {
-                            change_direction = rand.Next(4);
-                            //change_direction_time = 0.0f;
-                            if (change_direction_time > 2300)
-                            {
-                                switch (change_direction)
-                                {
-                                    case 0:
-                                        velocity.X = 1.0f;
-                                        velocity.Y = 0.0f;
-                                        direction_facing = GlobalGameConstants.Direction.Right;
-                                        break;
-                                    case 1:
-                                        velocity.X = -1.0f;
-                                        velocity.Y = 0.0f;
-                                        direction_facing = GlobalGameConstants.Direction.Left;
-                                        break;
-                                    case 2:
-                                        velocity.X = 0.0f;
-                                        velocity.Y = -1.0f;
-                                        direction_facing = GlobalGameConstants.Direction.Up;
-                                        break;
-                                    default:
-                                        velocity.X = 0.0f;
-                                        velocity.Y = 1.0f;
-                                        direction_facing = GlobalGameConstants.Direction.Down;
-                                        break;
-                                }
-                                change_direction_time = 0.0f;
-                            }
-                            else
-                            {
-                                velocity = Vector2.Zero;
-                            }
-                        }
-
-                        Vector2 pos = new Vector2(position.X, position.Y);
-
-                        Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                        Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-                        position.X = finalPos.X;
-                        position.Y = finalPos.Y;
-                    }
+                    Vector2 pos = new Vector2(position.X, position.Y);
+                    Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+                    Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+                    position.X = finalPos.X;
+                    position.Y = finalPos.Y;
                     break;
                 case EnemyState.Firing: 
                     pause_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -285,6 +178,7 @@ namespace PattyPetitGiant
                             else
                             {
                                 state = EnemyState.Moving;
+                                player_found = false;
                             }
                         }
                     }
@@ -305,12 +199,11 @@ namespace PattyPetitGiant
             }
         }
 
+        //checks to see if the bullet hit the player
         public void daemonupdate(GameTime currentTime, LevelState parentWorld)
         {
             bullet_alive_time += currentTime.ElapsedGameTime.Milliseconds;
             Vector2 nextStep_temp = Vector2.Zero;
-
-            Console.WriteLine("Inside the daemonupdate");
 
             if (bullet_alive == true)
             {
@@ -318,9 +211,9 @@ namespace PattyPetitGiant
                 {
                     if (en is Player)
                     {
-                        if (hitTest(en))
+                        if (hitTestBullet(en))
                         {
-                            en.knockBack(en, bullet.position, bullet.hitbox, bullet.bullet_damage);
+                            en.knockBack(this, bullet.bullet_damage);
                             bullet_alive = false;
                         }
                     }
@@ -369,16 +262,63 @@ namespace PattyPetitGiant
                     check_corners++;
                 }
             }
+        }
 
+        public override void knockBack(Entity other, int damage)
+        {
+
+            if (disable_movement_time == 0.0)
+            {
+                disable_movement = true;
+                float direction_x = CenterPoint.X - other.CenterPoint.X;
+                float direction_y = CenterPoint.Y - other.CenterPoint.Y;
+
+                if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
+                {
+                    if (direction_x < 0)
+                    {
+                        velocity = new Vector2(-5.51f, direction_y / 100);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(5.51f, direction_y / 100);
+                    }
+                }
+                else
+                {
+                    if (direction_y < 0)
+                    {
+                        velocity = new Vector2(direction_x / 100f, -5.51f);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(direction_x / 100f, 5.51f);
+                    }
+                }
+                enemy_life = enemy_life - damage;
+            }
         }
 
         public override void draw(SpriteBatch sb)
         {
+            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle1, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle2, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
+            
             sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
             if (bullet_alive)
             {
                 sb.Draw(Game1.whitePixel, bullet.position, null, Color.Pink, 0.0f, Vector2.Zero, bullet.hitbox, SpriteEffects.None, 0.5f);
             }
+        }
+
+        public bool hitTestBullet(Entity other)
+        {
+            if ((bullet.position.X - (bullet.hitbox.X / 2)) > other.Position.X + other.Dimensions.X || (bullet.position.X + (bullet.hitbox.X / 2)) < other.Position.X || (bullet.position.Y - (bullet.hitbox.Y / 2)) > other.Position.Y + other.Dimensions.Y || (bullet.position.Y + (bullet.hitbox.Y / 2)) < other.Position.Y)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

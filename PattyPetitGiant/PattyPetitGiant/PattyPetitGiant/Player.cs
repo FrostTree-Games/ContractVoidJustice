@@ -65,7 +65,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword(position);
+            player_item_1 = new Bomb(position);
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
@@ -266,7 +266,7 @@ namespace PattyPetitGiant
             }
         }
 
-        /*public override void knockBack(Entity other, Vector2 position, Vector2 dimensions, int damage)
+        public override void knockBack(Entity other, int damage)
         {
             
             if (disable_movement_time == 0.0)
@@ -299,7 +299,7 @@ namespace PattyPetitGiant
                 }
                 GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - damage;
             }
-        }*/
+        }
 
         public void spinerender(SkeletonRenderer renderer)
         {

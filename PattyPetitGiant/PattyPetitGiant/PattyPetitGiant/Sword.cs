@@ -87,7 +87,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            parent.knockBack(en, en.Position, en.Dimensions, sword_damage);
+                            en.knockBack(parent, sword_damage);
                         }
                     }
                 }

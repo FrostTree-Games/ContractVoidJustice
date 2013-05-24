@@ -109,7 +109,7 @@ namespace PattyPetitGiant
                             float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
                             if (hitTest(en))
                             {
-                                this.knockBack(en, this.position, this.dimensions, enemy_damage);
+                                en.knockBack(this,enemy_damage);
                             }
                             else if (distance > 300)
                             {

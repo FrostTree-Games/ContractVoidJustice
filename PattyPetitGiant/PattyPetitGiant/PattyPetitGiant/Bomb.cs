@@ -88,14 +88,14 @@ namespace PattyPetitGiant
                             {
                                 if (hitTest(en))
                                 {
-                                    en.knockBack(en, position, hitbox, bomb_damage);
+                                    bombKnockBack(en, position, hitbox, bomb_damage);
                                 }
                             }
                             else if (en is Enemy || en is ShopKeeper)
                             {
                                 if (hitTest(en))
                                 {
-                                    en.knockBack(en, position, hitbox, bomb_damage);
+                                    bombKnockBack(en, position, hitbox, bomb_damage);
                                 }
                             }
                         }
@@ -135,6 +135,45 @@ namespace PattyPetitGiant
                 default:
                     break;
             }
+        }
+
+        public void bombKnockBack(Entity en, Vector2 position, Vector2 hitbox, int bomb_damage)
+        {
+            en.Disable_Movement= true;
+            float direction_x = en.CenterPoint.X - (position.X + hitbox.X/2);
+            float direction_y = en.CenterPoint.Y - (position.Y + hitbox.Y/2);
+
+            if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
+            {
+                if (direction_x < 0)
+                {
+                    en.Velocity = new Vector2(-5.51f, direction_y / 100);
+                }
+                else
+                {
+                    en.Velocity = new Vector2(5.51f, direction_y / 100);
+                }
+            }
+            else
+            {
+                if (direction_y < 0)
+                {
+                    en.Velocity = new Vector2(direction_x / 100f, -5.51f);
+                }
+                else
+                {
+                    en.Velocity = new Vector2(direction_x / 100f, 5.51f);
+                }
+            }
+            if (en is Player)
+            {
+                GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - bomb_damage;
+            }
+            else if (en is Enemy)
+            {
+                ((Enemy)en).Enemy_Life = ((Enemy)en).Enemy_Life - bomb_damage;
+            }
+           
         }
 
         public bool hitTest(Entity other)

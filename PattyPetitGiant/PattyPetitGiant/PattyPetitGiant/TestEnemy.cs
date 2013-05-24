@@ -69,7 +69,7 @@ namespace PattyPetitGiant
                     {
                         if (en is Player)
                         {
-                            this.knockBack(en, this.position, this.dimensions, enemy_damage);
+                            en.knockBack(this, enemy_damage);
                         }
                     }
                 }
@@ -211,6 +211,42 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
         }
+
+        public override void knockBack(Entity other, int damage)
+        {
+
+            if (disable_movement_time == 0.0)
+            {
+                disable_movement = true;
+                float direction_x = CenterPoint.X - other.CenterPoint.X;
+                float direction_y = CenterPoint.Y - other.CenterPoint.Y;
+
+                if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
+                {
+                    if (direction_x < 0)
+                    {
+                        velocity = new Vector2(-5.51f, direction_y / 100);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(5.51f, direction_y / 100);
+                    }
+                }
+                else
+                {
+                    if (direction_y < 0)
+                    {
+                        velocity = new Vector2(direction_x / 100f, -5.51f);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(direction_x / 100f, 5.51f);
+                    }
+                }
+                enemy_life = enemy_life - damage;
+            }
+        }
+
         public override void spinerender(SkeletonRenderer renderer)
         {
             if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
