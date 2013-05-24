@@ -216,15 +216,7 @@ namespace PattyPetitGiant
             DungeonRoom[,] output = new DungeonRoom[desiredWidth, desiredHeight];
             DungeonRoomClass[,] model = new DungeonRoomClass[desiredWidth, desiredHeight];
 
-            Random rand = null;
-            if (seed != null)
-            {
-                rand = new Random(seed.GetHashCode());
-            }
-            else
-            {
-                rand = new Random();
-            }
+            Random rand = new Random(seed);
 
             List<DungeonRoomClass> addedRooms = new List<DungeonRoomClass>();
 
