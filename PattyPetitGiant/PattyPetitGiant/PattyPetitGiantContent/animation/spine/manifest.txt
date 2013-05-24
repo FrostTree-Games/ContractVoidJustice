@@ -4,6 +4,9 @@ jensenUp
 zippyDown
 zippyRight
 zippyUp
+zippyGunDown
+zippyGunRight
+zippyGunUp
 chaseDown
 chaseRight
 chaseUp
