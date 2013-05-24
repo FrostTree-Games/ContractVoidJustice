@@ -115,6 +115,20 @@ rHand copy
   orig: 40, 72
   offset: 0, 0
   index: -1
+bomb
+  rotate: false
+  xy: 300, 28
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+cockrifle
+  rotate: false
+  xy: 854, 328
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 empty
   rotate: false
   xy: 643, 294

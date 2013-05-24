@@ -303,22 +303,36 @@ namespace PattyPetitGiant
 
         private void setAnimationWeapons()
         {
-            if (player_item_2.ItemType() == GlobalGameConstants.itemType.Sword)
+            switch (player_item_2.ItemType())
             {
-                current_skeleton.Skeleton.SetAttachment("leftHand", "lSword01");
-            }
-            else
-            {
-                current_skeleton.Skeleton.SetAttachment("leftHand", "lEmpty");
+                case GlobalGameConstants.itemType.Sword:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lSword01");
+                    break;
+                case GlobalGameConstants.itemType.Bomb:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lBomb01");
+                    break;
+                case GlobalGameConstants.itemType.Gun:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lGun01");
+                    break;
+                default:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lEmpty");
+                    break;
             }
 
-            if (player_item_1.ItemType() == GlobalGameConstants.itemType.Sword)
+            switch (player_item_1.ItemType())
             {
-                current_skeleton.Skeleton.SetAttachment("rightHand", "rSword01");
-            }
-            else
-            {
-                current_skeleton.Skeleton.SetAttachment("rightHand", "rEmpty");
+                case GlobalGameConstants.itemType.Sword:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rSword01");
+                    break;
+                case GlobalGameConstants.itemType.Bomb:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rBomb01");
+                    break;
+                case GlobalGameConstants.itemType.Gun:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rGun01");
+                    break;
+                default:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rEmpty");
+                    break;
             }
         }
 

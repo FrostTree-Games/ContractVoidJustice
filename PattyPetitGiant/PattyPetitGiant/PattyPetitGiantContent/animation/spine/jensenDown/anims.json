@@ -59,7 +59,7 @@
 	{ "name": "testGuySpine/testGuySpineDown/rForearm", "bone": "rForearm", "attachment": "rForeArmSkin" },
 	{ "name": "testGuySpine/testGuySpineDown/head copy", "bone": "head", "attachment": "headSkin" },
 	{ "name": "leftHand", "bone": "lHand", "attachment": "lEmpty" },
-	{ "name": "rightHand", "bone": "rHand", "attachment": "rEmpty" },
+	{ "name": "rightHand", "bone": "rHand", "attachment": "rGun01" },
 	{ "name": "testGuySpine/testGuySpineDown/rHand", "bone": "rHand", "attachment": "rHandSkin" },
 	{ "name": "testGuySpine/testGuySpineDown/lHand", "bone": "lHand", "attachment": "lHandSkin" },
 	{ "name": "lHand", "bone": "lHand" }
@@ -67,10 +67,14 @@
 "skins": {
 	"default": {
 		"leftHand": {
+			"lBomb01": { "name": "bomb", "x": 59.98, "y": 16.89, "scaleX": -3, "scaleY": 3, "rotation": -91.5, "width": 48, "height": 48 },
+			"lGun01": { "name": "cockrifle", "x": 59.98, "y": 16.89, "scaleX": -3, "scaleY": 3, "rotation": -91.5, "width": 48, "height": 48 },
 			"lEmpty": { "name": "empty", "x": 323.52, "y": -23.66, "scaleX": 1.176, "scaleY": 0.83, "rotation": 103.71, "width": 4, "height": 4 },
 			"lSword01": { "name": "machete", "x": 42.54, "y": 82.09, "rotation": 18.31, "width": 162, "height": 228 }
 		},
 		"rightHand": {
+			"rBomb01": { "name": "bomb", "x": 15.83, "y": 33.28, "scaleX": 3, "scaleY": 3, "rotation": 94.44, "width": 48, "height": 48 },
+			"rGun01": { "name": "cockrifle", "x": 34.2, "y": 39.22, "scaleX": 3, "scaleY": 3, "rotation": 2.4, "width": 48, "height": 48 },
 			"rEmpty": { "name": "empty", "x": 355.35, "y": 53.24, "scaleX": 1.2, "rotation": 77.55, "width": 4, "height": 4 },
 			"rSword01": { "name": "machete", "x": -58.13, "y": 55.66, "scaleX": 1.2, "rotation": 94.44, "width": 162, "height": 228 }
 		},

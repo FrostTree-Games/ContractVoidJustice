@@ -115,6 +115,20 @@ rHand
   orig: 40, 72
   offset: 0, 0
   index: -1
+bomb
+  rotate: false
+  xy: 786, 262
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+cockrifle
+  rotate: false
+  xy: 836, 262
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 empty
   rotate: false
   xy: 165, 28

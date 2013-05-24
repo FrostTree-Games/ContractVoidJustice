@@ -57,10 +57,14 @@
 "skins": {
 	"default": {
 		"leftHand": {
+			"lBomb01": { "name": "bomb", "x": 22.04, "y": 12.02, "scaleX": 3, "scaleY": 3, "rotation": 86.09, "width": 48, "height": 48 },
+			"lGun01": { "name": "cockrifle", "x": 58.14, "y": 13.19, "scaleX": 3, "scaleY": 3, "rotation": -47.34, "width": 48, "height": 48 },
 			"lEmpty": { "name": "empty", "x": 289.73, "y": 20.1, "scaleY": 0.908, "rotation": 74.46, "width": 4, "height": 4 },
 			"lSword01": { "name": "machete", "x": -36.12, "y": 54.72, "scaleY": 0.908, "rotation": 86.09, "width": 162, "height": 228 }
 		},
 		"rightHand": {
+			"rBomb01": { "name": "bomb", "x": 15.18, "y": 7.83, "scaleX": -3, "scaleY": 3, "rotation": 35.04, "width": 48, "height": 48 },
+			"rGun01": { "name": "cockrifle", "x": -16.63, "y": 26.12, "scaleX": -3, "scaleY": 3, "rotation": 24.17, "width": 48, "height": 48 },
 			"rEmpty": { "name": "empty", "x": 295.54, "y": -33.62, "rotation": 104.19, "width": 4, "height": 4 },
 			"rSword01": { "name": "machete", "x": -64.1, "y": 26.81, "scaleX": -1, "rotation": 35.04, "width": 162, "height": 228 }
 		},

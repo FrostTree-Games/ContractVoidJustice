@@ -122,6 +122,20 @@ leftHand copy
   orig: 52, 68
   offset: 0, 0
   index: -1
+bomb
+  rotate: false
+  xy: 939, 261
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+cockrifle
+  rotate: false
+  xy: 326, 8
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
 empty
   rotate: false
   xy: 224, 183
