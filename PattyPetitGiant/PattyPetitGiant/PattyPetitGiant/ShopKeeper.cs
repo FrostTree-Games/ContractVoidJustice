@@ -26,6 +26,7 @@ namespace PattyPetitGiant
         {
             public bool active;
             public Vector2 position;
+            public Vector2 startPosition;
             public Vector2 hitbox;
             public float direction;
             public float timeAlive;
@@ -36,6 +37,7 @@ namespace PattyPetitGiant
             public FireBall(Vector2 position, float direction)
             {
                 this.position = position;
+                this.startPosition = position;
                 hitbox = GlobalGameConstants.TileSize;
                 this.direction = direction;
                 timeAlive = 0.0f;
@@ -167,6 +169,7 @@ namespace PattyPetitGiant
         {
             if (health <= 0)
             {
+                parentWorld.GUI.popBox("thankYou");
                 remove_from_list = true;
                 return;
             }
@@ -200,12 +203,20 @@ namespace PattyPetitGiant
                         attackPoint = new Vector2(-1, -1);
                     }
 
-                    if (Vector2.Distance(projectile.center, attacker.CenterPoint) < GlobalGameConstants.TileSize.X)
+                    foreach (Entity en in parentWorld.EntityList)
                     {
-                        //knockBack(attacker, fireballDamage);
-                        projectile.active = false;
-                        fireballDelayPassed = -200f;
-                        attackPoint = new Vector2(-1, -1);
+                        if (en == this)
+                        {
+                            continue;
+                        }
+
+                        if (Vector2.Distance(projectile.center, en.CenterPoint) < GlobalGameConstants.TileSize.X)
+                        {
+                            en.knockBack(new Vector2((float)Math.Cos(projectile.direction), (float)Math.Sin(projectile.direction)), 4.0f, 10);
+                            projectile.active = false;
+                            fireballDelayPassed = -200f;
+                            attackPoint = new Vector2(-1, -1);
+                        }
                     }
                 }
                 else
@@ -354,8 +365,7 @@ namespace PattyPetitGiant
             }
         }
 
-        //upon becoming knocked back and enraged, the shopkeeper will attack the closest entity
-        public void shopKnockBack(Entity other, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
             health -= damage;
 
@@ -398,11 +408,6 @@ namespace PattyPetitGiant
             {
                 //
             }
-        }
-
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
-        {
-            return;
         }
 
         /// <summary>
