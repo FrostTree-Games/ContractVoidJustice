@@ -301,8 +301,45 @@ namespace PattyPetitGiant
             }
         }
 
+        private void setAnimationWeapons()
+        {
+            switch (player_item_2.ItemType())
+            {
+                case GlobalGameConstants.itemType.Sword:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lSword01");
+                    break;
+                case GlobalGameConstants.itemType.Bomb:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lBomb01");
+                    break;
+                case GlobalGameConstants.itemType.Gun:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lGun01");
+                    break;
+                default:
+                    current_skeleton.Skeleton.SetAttachment("leftHand", "lEmpty");
+                    break;
+            }
+
+            switch (player_item_1.ItemType())
+            {
+                case GlobalGameConstants.itemType.Sword:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rSword01");
+                    break;
+                case GlobalGameConstants.itemType.Bomb:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rBomb01");
+                    break;
+                case GlobalGameConstants.itemType.Gun:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rGun01");
+                    break;
+                default:
+                    current_skeleton.Skeleton.SetAttachment("rightHand", "rEmpty");
+                    break;
+            }
+        }
+
         public void spinerender(SkeletonRenderer renderer)
         {
+            setAnimationWeapons();
+
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y+(dimensions.Y/2f);
 

@@ -43,9 +43,14 @@ namespace PattyPetitGiant
 
         private bool end_flag_placed;
 
+        private int currentSeed;
+        public int CurrentSeed { get { return currentSeed; } }
+
         public LevelState()
         {
-            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y);
+            currentSeed = Game1.rand.Next();
+
+            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("tileTemplate.png");

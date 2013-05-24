@@ -56,28 +56,28 @@ namespace PattyPetitGiant
                 {
                     bullet.position.X = parent.CenterPoint.X + (parent.Dimensions.X / 2) + (bullet.hitbox.X / 2);
                     bullet.position.Y = parent.CenterPoint.Y;
-                    bullet.velocity.X = 3.0f;
+                    bullet.velocity.X = 5.0f;
                     bullet.bullet_direction = item_direction;
                 }
                 else if (item_direction == GlobalGameConstants.Direction.Left)
                 {
                     bullet.position.X = parent.CenterPoint.X - (parent.Dimensions.X / 2) - (bullet.hitbox.X / 2);
                     bullet.position.Y = parent.CenterPoint.Y;
-                    bullet.velocity.X = -3.0f;
+                    bullet.velocity.X = -5.0f;
                     bullet.bullet_direction = item_direction;
                 }
                 else if (item_direction == GlobalGameConstants.Direction.Up)
                 {
                     bullet.position.Y = parent.CenterPoint.Y - (parent.Dimensions.Y / 2) - (bullet.hitbox.Y / 2);
                     bullet.position.X = parent.CenterPoint.X;
-                    bullet.velocity.Y = -3.0f;
+                    bullet.velocity.Y = -5.0f;
                     bullet.bullet_direction = item_direction;
                 }
                 else
                 {
                     bullet.position.Y = parent.CenterPoint.Y + (parent.Dimensions.Y / 2) + (bullet.hitbox.Y / 2);
                     bullet.position.X = parent.CenterPoint.X;
-                    bullet.velocity.Y = 3.0f;
+                    bullet.velocity.Y = 5.0f;
                     bullet.bullet_direction = item_direction;
                 }
             }

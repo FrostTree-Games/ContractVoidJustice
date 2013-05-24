@@ -9,6 +9,15 @@ namespace PattyPetitGiant
     {
         private const float probability_connectOldRooms = 0.1f;
 
+        public class DungeonGeneratonValues
+        {
+            /// <summary>
+            /// Probability that a shopkeeper will be placed in a dead end room.
+            /// </summary>
+            public static float ShopkeeperProbability { get { return shopkeeperProbability; } }
+            private static float shopkeeperProbability = 0.17526f;
+        }
+
         private class DungeonRoomClass
         {
             public enum ChildDirection
@@ -33,6 +42,29 @@ namespace PattyPetitGiant
 
             private float intensity;
             public float Intensity { get { return intensity; } set { intensity = value; } }
+
+            public int ActualChildCount
+            {
+                get
+                {
+                    if (children == null)
+                    {
+                        return 0;
+                    }
+
+                    int output = 0;
+
+                    for (int i = 0; i < children.Length; i++)
+                    {
+                        if (children[i] != null)
+                        {
+                            output++;
+                        }
+                    }
+
+                    return output;
+                }
+            }
 
             public DungeonRoomClass(DungeonRoomClass parent, int X, int Y)
             {
@@ -171,10 +203,29 @@ namespace PattyPetitGiant
 
         public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight)
         {
+            return generateRoomData(desiredWidth, desiredHeight, Game1.rand.Next());
+        }
+
+        public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight, string seed)
+        {
+            return generateRoomData(desiredWidth, desiredHeight, seed.GetHashCode());
+        }
+
+        public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight, int seed)
+        {
             DungeonRoom[,] output = new DungeonRoom[desiredWidth, desiredHeight];
             DungeonRoomClass[,] model = new DungeonRoomClass[desiredWidth, desiredHeight];
 
-            Random rand = new Random();
+            Random rand = null;
+            if (seed != null)
+            {
+                rand = new Random(seed.GetHashCode());
+            }
+            else
+            {
+                rand = new Random();
+            }
+
             List<DungeonRoomClass> addedRooms = new List<DungeonRoomClass>();
 
             //place initial room
@@ -288,6 +339,7 @@ namespace PattyPetitGiant
             //compute intensity values
             computeDungeonIntensity(model, startingRoom.X, startingRoom.Y);
 
+            // place exit room
             bool placedEnd = false;
             while (!placedEnd)
             {
@@ -297,6 +349,22 @@ namespace PattyPetitGiant
                 {
                     finalRoomCandidate.Attributes.Add("end");
                     placedEnd = true;
+                }
+            }
+
+            // litter attributes around dungeon
+            {
+                foreach (DungeonRoomClass room in addedRooms)
+                {
+                    // place occasional shopkeeper
+                    if (room.ActualChildCount == 1 && !(room.Attributes.Contains("end")))
+                    {
+                        if (rand.NextDouble() < DungeonGeneratonValues.ShopkeeperProbability)
+                        {
+                            room.Attributes.Add("shopkeeper");
+                            continue;
+                        }
+                    }
                 }
             }
 

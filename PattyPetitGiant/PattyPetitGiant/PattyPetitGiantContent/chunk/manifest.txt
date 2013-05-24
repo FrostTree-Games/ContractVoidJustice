@@ -29,6 +29,8 @@ altL.ftc
 altM.ftc
 testShop.ftc
 testShop2.ftc
+testShop3.ftc
+testShop4.ftc
 Example.ftc
 endLevel1.ftc
 endLevel2.ftc
