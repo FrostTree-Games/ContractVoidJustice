@@ -1,0 +1,40 @@
+
+img.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+cockrifle
+  rotate: false
+  xy: 1, 15
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+muzzleflash
+  rotate: false
+  xy: 51, 31
+  size: 64, 32
+  orig: 64, 32
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 117, 15
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+foot
+  rotate: false
+  xy: 1, 1
+  size: 22, 12
+  orig: 22, 12
+  offset: 0, 0
+  index: -1
+null
+  rotate: false
+  xy: 51, 25
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
