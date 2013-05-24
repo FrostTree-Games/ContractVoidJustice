@@ -28,6 +28,7 @@ namespace PattyPetitGiant
         private bool sword_swing = false;
         protected int sword_damage;
         private AnimationLib.FrameAnimationSet swordAnim;
+        private float knockback_magnitude;
 
         public Sword(Vector2 initial_position)
         {
@@ -36,6 +37,7 @@ namespace PattyPetitGiant
             hitbox.Y = 48.0f;
             item_state_time = 0.0f;
             sword_damage = 5;
+            knockback_magnitude = 1.0f;
 
             sword_state = Sword_State.preslash;
 
@@ -87,7 +89,8 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            en.knockBack(parent, sword_damage);
+                            Vector2 direction = en.CenterPoint - parent.CenterPoint;
+                            en.knockBack(direction, knockback_magnitude, sword_damage);
                         }
                     }
                 }

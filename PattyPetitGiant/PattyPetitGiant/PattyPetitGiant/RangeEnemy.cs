@@ -67,6 +67,7 @@ namespace PattyPetitGiant
             enemy_life = 10;
             enemy_damage = 2;
             damage_player_time = 0.0f;
+            knockback_magnitude = 1.0f;
 
             rand = new Random(DateTime.Now.Millisecond);
             enemyAnim = AnimationLib.getFrameAnimationSet("rangeenemyPic");
@@ -213,7 +214,8 @@ namespace PattyPetitGiant
                     {
                         if (hitTestBullet(en))
                         {
-                            en.knockBack(this, bullet.bullet_damage);
+                            Vector2 direction = en.Position - bullet.position;
+                            en.knockBack(direction, knockback_magnitude, bullet.bullet_damage);
                             bullet_alive = false;
                         }
                     }
@@ -264,35 +266,31 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Entity other, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
-                float direction_x = CenterPoint.X - other.CenterPoint.X;
-                float direction_y = CenterPoint.Y - other.CenterPoint.Y;
-
-                if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
+                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
-                    if (direction_x < 0)
+                    if (direction.X < 0)
                     {
-                        velocity = new Vector2(-5.51f, direction_y / 100);
+                        velocity = new Vector2(-1.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2(5.51f, direction_y / 100);
+                        velocity = new Vector2(1.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                 }
                 else
                 {
-                    if (direction_y < 0)
+                    if (direction.Y < 0)
                     {
-                        velocity = new Vector2(direction_x / 100f, -5.51f);
+                        velocity = new Vector2(direction.X / 100f * magnitude, -1.0f * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2(direction_x / 100f, 5.51f);
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 1.0f * magnitude);
                     }
                 }
                 enemy_life = enemy_life - damage;

@@ -65,7 +65,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Bomb(position);
+            player_item_1 = new Sword(position);
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
@@ -266,35 +266,32 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Entity other, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
             
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
-                float direction_x = CenterPoint.X - other.CenterPoint.X;
-                float direction_y = CenterPoint.Y - other.CenterPoint.Y;
-
-                if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
+                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
-                    if (direction_x < 0)
+                    if (direction.X < 0)
                     {
-                        velocity = new Vector2(-5.51f, direction_y / 100);
+                        velocity = new Vector2(-1.51f * magnitude, direction.Y / 100 * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2(5.51f, direction_y / 100);
+                        velocity = new Vector2(1.51f * magnitude, direction.Y / 100 * magnitude);
                     }
                 }
                 else
                 {
-                    if (direction_y < 0)
+                    if (direction.Y < 0)
                     {
-                        velocity = new Vector2(direction_x / 100f, -5.51f);
+                        velocity = new Vector2(direction.Y / 100f * magnitude, -1.51f * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2(direction_x / 100f, 5.51f);
+                        velocity = new Vector2(direction.Y / 100f * magnitude, 1.51f * magnitude);
                     }
                 }
                 GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - damage;

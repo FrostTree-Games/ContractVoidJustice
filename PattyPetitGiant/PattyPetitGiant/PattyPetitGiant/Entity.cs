@@ -62,49 +62,10 @@ namespace PattyPetitGiant
         /// <summary>
         /// Players and Enemies get knocked back a certain velocity away
         /// </summary>
-        /// <param name="other">Entity that is either the player or the enemy depending on who is hitting who</param>
-        public virtual void knockBack(Entity other, int damage)
-        {
-            /*//Enemy knocks back player
-            if (other is Player)
-            {
-                Player player = (Player)other;
-                if (player.disable_movement_time == 0.0)
-                {
-                    player.disable_movement = true;
-
-                    Vector2 player_center = new Vector2(player.position.X + (player.Dimensions.X / 2), player.position.Y + (player.Dimensions.Y / 2));
-                    Vector2 enemy_center = new Vector2(position.X + (dimensions.X / 2), position.Y + (dimensions.Y / 2));
-
-                    player.velocity = player_center - enemy_center;
-
-                    player.velocity.X = player.velocity.X / 10.0f;
-                    player.velocity.Y = player.velocity.Y / 10.0f;
-
-                    GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - damage;
-                }
-            }
-            //items knock back enemy
-            else if (other is Enemy)
-            {
-                Enemy enemy = (Enemy)other;
-                enemy.disable_movement = true;
-
-                Vector2 player_center = new Vector2(position.X + (dimensions.X / 2), position.Y + (dimensions.X / 2));
-                Vector2 enemy_center = new Vector2(enemy.position.X + (enemy.dimensions.X / 2), enemy.position.Y + (enemy.dimensions.Y / 2));
-
-                enemy.velocity = (enemy_center - player_center);
-                enemy.velocity.X = enemy.velocity.X / 10.0f;
-                enemy.velocity.Y = enemy.velocity.Y / 10.0f;
-
-                enemy.Enemy_Life = enemy.Enemy_Life - damage;
-            }*/
-            // shopkeeper knockback logic (this was by Dan)
-            if (other is ShopKeeper)
-            {
-                ((ShopKeeper)other).shopKnockBack(other, damage);
-            }
-        }
+        /// <param name="direction">direction you want to send the entity</param>
+        /// <param name="magnitude">how much force the entity will send you</param>
+        /// <param name="damage">how damage the entity does</param>
+        public abstract void knockBack(Vector2 direction, float magnitude, int damage);
 
         public abstract void update(GameTime currentTime);
 

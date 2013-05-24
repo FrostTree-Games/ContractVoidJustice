@@ -80,5 +80,9 @@ namespace PattyPetitGiant
                 dropAnim.drawAnimationFrame(0.0f, sb, Position, new Vector2(1.0f, 1.0f), 0.5f);
             }
         }
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        {
+            return;
+        }
     }
 }

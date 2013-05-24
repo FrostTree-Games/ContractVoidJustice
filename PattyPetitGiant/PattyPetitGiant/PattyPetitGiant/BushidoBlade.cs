@@ -35,6 +35,7 @@ namespace PattyPetitGiant
         private float animation_time;
 
         protected int sword_damage;
+        protected float knockback_magnitude;
 
         public BushidoBlade(Vector2 initial_position)
         {
@@ -45,6 +46,7 @@ namespace PattyPetitGiant
             player_health = GlobalGameConstants.Player_Health;
             animation_time = 0.0f;
             bushidoAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
+            knockback_magnitude = 1.0f;
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -91,7 +93,8 @@ namespace PattyPetitGiant
                         {
                             if (hitTest(en))
                             {
-                                en.knockBack(parent, sword_damage);
+                                Vector2 direction = en.CenterPoint - parent.CenterPoint;
+                                en.knockBack(direction, knockback_magnitude, sword_damage);
                                 enemy_explode = true;
                                 enemy_explode_position = en.CenterPoint - new Vector2(24.0f * 3.0f, 24.0f * 3.0f);
                             }
@@ -163,22 +166,6 @@ namespace PattyPetitGiant
                 bushidoAnim.drawAnimationFrame(animation_time, sb, enemy_explode_position, new Vector2(2.25f, 2.25f), 0.5f);
             }
         }
-
-        /*public void knockBack(Player player, Entity other)
-        {
-            Enemy enemy = (Enemy)other;
-            enemy.Disable_Movement = true;
-
-
-            //Vector2 player_center = new Vector2(position.X + (hitbox.X / 2), position.Y + (hitbox.Y / 2));
-            //Vector2 enemy_center = new Vector2(enemy.position.X + (enemy.dimensions.X / 2), enemy.position.Y + (enemy.dimensions.Y / 2));
-
-            enemy.velocity = (enemy_center - player_center);
-            enemy.velocity.X = enemy.velocity.X / 10.0f;
-            enemy.velocity.Y = enemy.velocity.Y / 10.0f;
-
-            enemy.Enemy_Life = enemy.Enemy_Life - damage;
-        }*/
 
         public bool hitTest(Entity other)
         {

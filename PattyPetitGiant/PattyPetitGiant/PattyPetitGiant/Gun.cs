@@ -25,6 +25,7 @@ namespace PattyPetitGiant
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Gun;
         private bool bullet_alive = false;
         private float bullet_alive_time = 0.0f;
+        private float knockback_magnitude;
 
         private Bullet bullet = new Bullet();
 
@@ -35,6 +36,7 @@ namespace PattyPetitGiant
             bullet_alive_time = 0.0f;
             bullet_alive = false;
             item_type = GlobalGameConstants.itemType.Gun;
+            knockback_magnitude = 1.0f;
         }
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
@@ -98,7 +100,8 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            en.knockBack(parent,bullet.bullet_damage);
+                            Vector2 direction = bullet.position - en.Position;
+                            en.knockBack(direction, knockback_magnitude, bullet.bullet_damage);
                             bullet_alive = false;
                         }
                     }

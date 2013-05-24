@@ -38,5 +38,9 @@ namespace PattyPetitGiant
         {
             anims.drawAnimationFrame(0.0f, sb, Position, new Vector2(3.0f, 3.0f), 0.5f);
         }
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        {
+            return;
+        }
     }
 }

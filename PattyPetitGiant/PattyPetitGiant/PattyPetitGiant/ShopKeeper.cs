@@ -199,7 +199,7 @@ namespace PattyPetitGiant
 
                     if (Vector2.Distance(projectile.center, attacker.CenterPoint) < GlobalGameConstants.TileSize.X)
                     {
-                        knockBack(attacker, fireballDamage);
+                        //knockBack(attacker, fireballDamage);
                         projectile.active = false;
                         fireballDelayPassed = -200f;
                         attackPoint = new Vector2(-1, -1);
@@ -390,6 +390,11 @@ namespace PattyPetitGiant
             {
                 //
             }
+        }
+
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        {
+            return;
         }
     }
 }

@@ -31,6 +31,7 @@ namespace PattyPetitGiant
         Bomb_State bomb_state = Bomb_State.reset;
         private AnimationLib.FrameAnimationSet bombAnim;
         private float animation_time;
+        private float knockback_magnitude;
 
         public Bomb(Vector2 initial_position)
         {
@@ -40,6 +41,7 @@ namespace PattyPetitGiant
             bomb_state = Bomb_State.reset;
             bomb_damage = 5;
             bombAnim = AnimationLib.getFrameAnimationSet("bombPic");
+            knockback_magnitude = 5.0f;
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -88,14 +90,20 @@ namespace PattyPetitGiant
                             {
                                 if (hitTest(en))
                                 {
-                                    bombKnockBack(en, position, hitbox, bomb_damage);
+                                    Vector2 direction = en.CenterPoint - center_placed_bomb;
+                                    float temp_knockback_magnitude = knockback_magnitude / (Vector2.Distance(center_placed_bomb, en.CenterPoint)/hitbox.X);
+                                    
+                                    en.knockBack(direction, temp_knockback_magnitude, bomb_damage);
                                 }
                             }
                             else if (en is Enemy || en is ShopKeeper)
                             {
                                 if (hitTest(en))
                                 {
-                                    bombKnockBack(en, position, hitbox, bomb_damage);
+                                    Vector2 direction = en.CenterPoint - center_placed_bomb;
+                                    float temp_knockback_magnitude = knockback_magnitude / (Vector2.Distance(center_placed_bomb, en.CenterPoint) / hitbox.X);
+
+                                    en.knockBack(direction, temp_knockback_magnitude, bomb_damage);
                                 }
                             }
                         }
@@ -135,45 +143,6 @@ namespace PattyPetitGiant
                 default:
                     break;
             }
-        }
-
-        public void bombKnockBack(Entity en, Vector2 position, Vector2 hitbox, int bomb_damage)
-        {
-            en.Disable_Movement= true;
-            float direction_x = en.CenterPoint.X - (position.X + hitbox.X/2);
-            float direction_y = en.CenterPoint.Y - (position.Y + hitbox.Y/2);
-
-            if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
-            {
-                if (direction_x < 0)
-                {
-                    en.Velocity = new Vector2(-5.51f, direction_y / 100);
-                }
-                else
-                {
-                    en.Velocity = new Vector2(5.51f, direction_y / 100);
-                }
-            }
-            else
-            {
-                if (direction_y < 0)
-                {
-                    en.Velocity = new Vector2(direction_x / 100f, -5.51f);
-                }
-                else
-                {
-                    en.Velocity = new Vector2(direction_x / 100f, 5.51f);
-                }
-            }
-            if (en is Player)
-            {
-                GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - bomb_damage;
-            }
-            else if (en is Enemy)
-            {
-                ((Enemy)en).Enemy_Life = ((Enemy)en).Enemy_Life - bomb_damage;
-            }
-           
         }
 
         public bool hitTest(Entity other)

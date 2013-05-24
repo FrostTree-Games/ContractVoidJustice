@@ -19,23 +19,18 @@ namespace PattyPetitGiant
         {
             position.X = initialx;
             position.Y = initialy;
-
-            dimensions = new Vector2(48f, 48f);
-
-            state = EnemyState.Moving;
-
-            component = new Walk();
-
-            direction_facing = GlobalGameConstants.Direction.Up;
-
             velocity = new Vector2(0.0f, -1.0f);
-
+            dimensions = new Vector2(48f, 48f);
+            
+            state = EnemyState.Moving;
+            component = new Walk();
+            direction_facing = GlobalGameConstants.Direction.Up;
             change_direction_time = 0.0f;
-
             this.parentWorld = parentWorld;
-
+            
             enemy_damage = 1;
             enemy_life = 15;
+            knockback_magnitude = 1.0f;
 
             walk_down = AnimationLib.getSkeleton("chaseDown");
             walk_right = AnimationLib.getSkeleton("chaseRight");
@@ -109,7 +104,8 @@ namespace PattyPetitGiant
                             float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
                             if (hitTest(en))
                             {
-                                en.knockBack(this,enemy_damage);
+                                Vector2 direction = en.CenterPoint - CenterPoint;
+                                en.knockBack(direction, knockback_magnitude,enemy_damage);
                             }
                             else if (distance > 300)
                             {
@@ -180,6 +176,38 @@ namespace PattyPetitGiant
 
             current_skeleton.Skeleton.UpdateWorldTransform();
             renderer.Draw(current_skeleton.Skeleton);
+        }
+
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        {
+
+            if (disable_movement_time == 0.0)
+            {
+                disable_movement = true;
+                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                {
+                    if (direction.X < 0)
+                    {
+                        velocity = new Vector2(-1.0f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(1.0f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                }
+                else
+                {
+                    if (direction.Y < 0)
+                    {
+                        velocity = new Vector2(direction.X / 100f * magnitude, -1.0f * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 1.0f * magnitude);
+                    }
+                }
+                enemy_life = enemy_life - damage;
+            }
         }
     }
 }

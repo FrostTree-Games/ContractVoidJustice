@@ -55,6 +55,8 @@ namespace PattyPetitGiant
             get { return enemy_damage; }
         }
 
+        protected float knockback_magnitude;
+
         protected bool player_found;
         public bool Player_Found { set { player_found = value; } get { return player_found; } }
 
@@ -86,6 +88,7 @@ namespace PattyPetitGiant
 
             velocity = Vector2.Zero;
 
+            knockback_magnitude = 1.0f;
             //animation_time = 0.0f;
 
             state = EnemyState.Moving;
@@ -109,7 +112,8 @@ namespace PattyPetitGiant
                 {
                     if (en is Player)
                     {
-                        this.knockBack(en, enemy_damage);
+                        Vector2 direction = CenterPoint - en.CenterPoint;
+                        en.knockBack(direction, knockback_magnitude, enemy_damage);
                         en.Disable_Movement = true;
                         ((Player)en).State = Player.playerState.Moving;
                     }
@@ -141,6 +145,11 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
             sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
+        }
+
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        {
+            return;
         }
 
         public virtual void spinerender(SkeletonRenderer renderer)

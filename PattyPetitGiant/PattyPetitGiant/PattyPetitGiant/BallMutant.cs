@@ -37,6 +37,7 @@ namespace PattyPetitGiant
             change_direction_time = 0.0f;
             agressive_timer = 0.0f;
             distance = 0.0f;
+            knockback_magnitude = 3.0f;
 
             this.parentWorld = parentWorld;
 
@@ -136,7 +137,9 @@ namespace PattyPetitGiant
 
                                 if (hitTestBall(en, ball_coordinate.X, ball_coordinate.Y))
                                 {
-                                    en.knockBack(this, enemy_damage);
+                                    Vector2 direction = en.CenterPoint - CenterPoint;
+                                    knockback_magnitude = knockback_magnitude / (radius/temp_radius);
+                                    en.knockBack(direction, knockback_magnitude, enemy_damage);
                                     temp_radius = 0.0f;
                                     break;
                                 }
@@ -171,9 +174,9 @@ namespace PattyPetitGiant
                 }
             }
         }
-        public override void knockBack(Entity other, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-            base.knockBack(other, damage);
+            
         }
         public override void spinerender(Spine.SkeletonRenderer renderer)
         {
