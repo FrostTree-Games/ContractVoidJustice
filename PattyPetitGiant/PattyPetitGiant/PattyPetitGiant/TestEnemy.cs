@@ -15,15 +15,19 @@ namespace PattyPetitGiant
         private int change_direction;
         private AnimationLib.FrameAnimationSet enemyAnim;
 
+        private float changeDirectionIdleDuration;
+        private bool isIdling = false;
+
         private Random rand;
        
         public TestEnemy()
         {
+            throw new NotImplementedException("Don't use this");
         }
-        public TestEnemy(LevelState parentWorld, float initialx, float initialy)
+
+        public TestEnemy(LevelState parentWorld, Vector2 position)
         {
-            position.X = initialx;
-            position.Y = initialy;
+            this.position = position;
 
             dimensions = new Vector2(48f, 48f);
 
@@ -35,6 +39,7 @@ namespace PattyPetitGiant
 
             change_direction_time = 0.0f;
             change_direction = 0;
+            changeDirectionIdleDuration = 300f;
 
             this.parentWorld = parentWorld;
 
@@ -71,7 +76,7 @@ namespace PattyPetitGiant
                         if (en is Player)
                         {
                             Vector2 direction = en.CenterPoint - CenterPoint;
-                            en.knockBack(direction, knockback_magnitude, enemy_damage);
+                            en.knockBack(direction, knockback_magnitude * 3, enemy_damage);
                         }
                     }
                 }
@@ -88,7 +93,6 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-
                     int check_corners = 0;
                     Vector2 nextStep_temp = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
                     bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
@@ -116,7 +120,6 @@ namespace PattyPetitGiant
                         }
                         else
                         {
-
                             switch (direction_facing)
                             {
                                 case GlobalGameConstants.Direction.Right:
@@ -152,12 +155,11 @@ namespace PattyPetitGiant
 
                     if (change_direction_time > 2000)
                     {
+                        isIdling = true;
                         change_direction = Game1.rand.Next(4);
-                        animation_time = 0.0f;
-                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
-                        if (change_direction_time > 3000)
+
+                        if (change_direction_time > changeDirectionIdleDuration)
                         {
-                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                             switch (change_direction)
                             {
                                 case 0:
@@ -185,7 +187,10 @@ namespace PattyPetitGiant
                                     current_skeleton = walk_down;
                                     break;
                             }
+
                             change_direction_time = 0.0f;
+                            changeDirectionIdleDuration = (float)(3000 + (Game1.rand.NextDouble() * 600));
+                            isIdling = false;
                         }
                         else
                         {
@@ -207,7 +212,6 @@ namespace PattyPetitGiant
                 remove_from_list = true;
             }
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
-            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
         public override void draw(SpriteBatch sb)
@@ -216,7 +220,6 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
@@ -248,6 +251,15 @@ namespace PattyPetitGiant
 
         public override void spinerender(SkeletonRenderer renderer)
         {
+            if (isIdling)
+            {
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+            }
+            else
+            {
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+            }
+
             if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
             {
                 current_skeleton.Skeleton.FlipX = false;
@@ -256,6 +268,8 @@ namespace PattyPetitGiant
             {
                 current_skeleton.Skeleton.FlipX = true;
             }
+
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
 
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);

@@ -66,7 +66,7 @@ namespace PattyPetitGiant
 
             entityList = new List<Entity>();
 
-            populateRooms(nodeMap);
+            populateRooms(nodeMap, currentSeed);
 
             foreach (Entity en in entityList)
             {
@@ -84,9 +84,10 @@ namespace PattyPetitGiant
         /// Populates a dungeon with entities depending on its properties
         /// </summary>
         /// <param name="rooms"></param>
-        private void populateRooms(DungeonGenerator.DungeonRoom[,] rooms)
+        private void populateRooms(DungeonGenerator.DungeonRoom[,] rooms, int seed)
         {
-            Random rand = new Random();
+            Random rand = new Random(seed);
+
             for (int i = 0; i < rooms.GetLength(0); i++)
             {
                 for (int j = 0; j < rooms.GetLength(1); j++)
@@ -117,43 +118,21 @@ namespace PattyPetitGiant
                     }
                     else
                     {
-                        for (int h = 0; h < (rand.Next() % 2) + 1; h++)
-                        {
-                            int place_x = currentRoomX + (rand.Next() % 16);
-                            int place_y = currentRoomY + (rand.Next() % 16);
-                            int entity_choice = rand.Next() % 4;
+                        int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                            for (int k = 0; k < 50; k++)
+                        for (int ec = 0; ec < intensityLevel; ec++)
+                        {
+                            int randX = 0;
+                            int randY = 0;
+
+                            do
                             {
-                                entity_choice = rand.Next() % 4;
-                                if (map.Map[place_x, place_y] == TileMap.TileType.NoWall)
-                                {
-                                    switch (entity_choice)
-                                    {
-                                        case 0:
-                                            int item_choice = rand.Next() % 5;
-                                            entityList.Add(new Pickup(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y, (GlobalGameConstants.itemType)item_choice));
-                                            break;
-                                        case 1:
-                                            entityList.Add(new IdleChaseEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
-                                            break;
-                                        case 2:
-                                            entityList.Add(new TestEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
-                                            break;
-                                        case 3:
-                                            entityList.Add(new RangeEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    break;
-                                }
-                                else
-                                {
-                                    place_x = currentRoomX + (rand.Next() % 16);
-                                    place_y = currentRoomY + (rand.Next() % 16);
-                                }
+                                randX = rand.Next() % GlobalGameConstants.TilesPerRoomWide;
+                                randY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
                             }
+                            while (map.Map[randX + (GlobalGameConstants.TilesPerRoomWide * i), randY + (GlobalGameConstants.TilesPerRoomHigh * j)] != TileMap.TileType.NoWall);
+
+                            entityList.Add(new TestEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                         }
                     }
                 }
@@ -185,7 +164,7 @@ namespace PattyPetitGiant
                             break;
                         case 0:
                         default:
-                            entityList.Add(new TestEnemy(this, placeX * GlobalGameConstants.TileSize.X, placeY * GlobalGameConstants.TileSize.Y + 60));
+                            entityList.Add(new TestEnemy(this, new Vector2(placeX * GlobalGameConstants.TileSize.X, placeY * GlobalGameConstants.TileSize.Y + 60)));
                             break;
                     }
                 }
