@@ -106,7 +106,7 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new RangeEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
+                        //entityList.Add(new RangeEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
@@ -133,16 +133,16 @@ namespace PattyPetitGiant
                                     {
                                         case 0:
                                             int item_choice = rand.Next() % 5;
-                                            //entityList.Add(new Pickup(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y, (GlobalGameConstants.itemType)item_choice));
+                                            entityList.Add(new Pickup(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y, (GlobalGameConstants.itemType)item_choice));
                                             break;
                                         case 1:
-                                            //entityList.Add(new IdleChaseEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
+                                            entityList.Add(new IdleChaseEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
                                             break;
                                         case 2:
-                                            //entityList.Add(new TestEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
+                                            entityList.Add(new TestEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
                                             break;
                                         case 3:
-                                            //entityList.Add(new RangeEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
+                                            entityList.Add(new RangeEnemy(this, place_x * GlobalGameConstants.TileSize.X, place_y * GlobalGameConstants.TileSize.Y));
                                             break;
                                         default:
                                             break;
