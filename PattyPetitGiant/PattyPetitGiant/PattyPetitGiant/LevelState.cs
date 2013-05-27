@@ -132,7 +132,24 @@ namespace PattyPetitGiant
                             }
                             while (map.Map[randX + (GlobalGameConstants.TilesPerRoomWide * i), randY + (GlobalGameConstants.TilesPerRoomHigh * j)] != TileMap.TileType.NoWall);
 
-                            entityList.Add(new TestEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                            const int enemyTypeCount = 3;
+                            int randomEnemyNumber = rand.Next();
+
+                            switch (randomEnemyNumber % enemyTypeCount)
+                            {
+                                case 0:
+                                    entityList.Add(new TestEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    break;
+                                case 1:
+                                    entityList.Add(new IdleChaseEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    break;
+                                case 2:
+                                    entityList.Add(new RangeEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    break;
+                                case 3:
+                                    break;
+                            }
+                            
                         }
                     }
                 }

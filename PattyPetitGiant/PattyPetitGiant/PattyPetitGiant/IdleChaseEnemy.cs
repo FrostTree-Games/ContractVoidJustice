@@ -32,9 +32,9 @@ namespace PattyPetitGiant
         {
             set { angle2 = value; }
         }
-        public IdleChaseEnemy(LevelState parentWorld, float initial_x, float initial_y)
+        public IdleChaseEnemy(LevelState parentWorld, Vector2 position)
         {
-            position = new Vector2(initial_x, initial_y);
+            this.position = position;
             dimensions = new Vector2(48.0f, 48.0f);
             velocity = new Vector2(0.0f, 0.0f);
             enemy_damage = 10;

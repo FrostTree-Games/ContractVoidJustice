@@ -49,9 +49,9 @@ namespace PattyPetitGiant
             set { angle2 = value; }
         }
 
-        public RangeEnemy(LevelState parentWorld, float initial_x, float initial_y)
+        public RangeEnemy(LevelState parentWorld, Vector2 position)
         {
-            position = new Vector2(initial_x, initial_y);
+            this.position = position;
             this.parentWorld = parentWorld;
             dimensions = new Vector2(48.0f, 48.0f);
             velocity = new Vector2(0.0f, 1.0f);
