@@ -78,7 +78,7 @@ namespace PattyPetitGiant
                 x = X;
                 y = Y;
 
-                intensity = -1;
+                intensity = 999;
 
                 this.attributes = new List<string>();
             }
@@ -144,7 +144,7 @@ namespace PattyPetitGiant
 
         private static int recurseDungeonIntensity(DungeonRoomClass room, int intensity)
         {
-            if (room == null || room.Intensity != -1)
+            if (room == null || room.Intensity < intensity)
             {
                 return 0;
             }
@@ -161,7 +161,23 @@ namespace PattyPetitGiant
                 throw new Exception("No dungeon model passed into intensity");
             }
 
-            int maxIntensity = recurseDungeonIntensity(dungeonModel[startingRoomX, startingRoomY], 0);
+            recurseDungeonIntensity(dungeonModel[startingRoomX, startingRoomY], 0);
+
+            float maxIntensity = 0;
+
+            for (int i = 0; i < dungeonModel.GetLength(0); i++)
+            {
+                for (int j = 0; j < dungeonModel.GetLength(1); j++)
+                {
+                    if (dungeonModel[i, j] != null)
+                    {
+                        if (dungeonModel[i, j].Intensity > maxIntensity)
+                        {
+                            maxIntensity = dungeonModel[i, j].Intensity;
+                        }
+                    }
+                }
+            }
 
             for (int i = 0; i < dungeonModel.GetLength(0); i++)
             {
