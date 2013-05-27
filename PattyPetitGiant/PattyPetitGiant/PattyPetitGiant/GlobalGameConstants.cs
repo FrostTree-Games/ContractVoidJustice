@@ -25,6 +25,7 @@ namespace PattyPetitGiant
             Compass = 3,
             DungeonMap = 4,
             BushidoBlade = 5,
+            WandOfGyges = 6,
         }
 
         private static int gameResolutionWidth = 1280;

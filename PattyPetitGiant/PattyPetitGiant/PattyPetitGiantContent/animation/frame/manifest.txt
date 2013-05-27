@@ -9,6 +9,7 @@ bombExplosion
 shopKeeper
 compassPic
 dungeonMapPic
+wandPic
 gamepadA
 gamepadB
 gamepadBack

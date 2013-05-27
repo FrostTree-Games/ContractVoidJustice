@@ -60,6 +60,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>compassPic</Name>
     </None>
+    <None Include="animation\frame\wandPic.zpy">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>wandPic</Name>
+    </None>
     <None Include="animation\frame\dungeonMapPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dungeonMapPic</Name>

@@ -26,6 +26,7 @@ namespace PattyPetitGiant
         {
             public bool active;
             public Vector2 position;
+            public Vector2 startPosition;
             public Vector2 hitbox;
             public float direction;
             public float timeAlive;
@@ -36,6 +37,7 @@ namespace PattyPetitGiant
             public FireBall(Vector2 position, float direction)
             {
                 this.position = position;
+                this.startPosition = position;
                 hitbox = GlobalGameConstants.TileSize;
                 this.direction = direction;
                 timeAlive = 0.0f;
@@ -103,17 +105,17 @@ namespace PattyPetitGiant
 
             //test shop data for now
             {
-                itemPrices[0] = 30;
-                itemPrices[1] = 100;
-                itemPrices[2] = 180;
+                itemPrices[0] = 170;
+                itemPrices[1] = 30;
+                itemPrices[2] = 200;
 
                 itemsForSale[0] = GlobalGameConstants.itemType.Bomb;
                 itemsForSale[1] = GlobalGameConstants.itemType.Compass;
-                itemsForSale[2] = GlobalGameConstants.itemType.Gun;
+                itemsForSale[2] = GlobalGameConstants.itemType.WandOfGyges;
 
                 itemMessages[0] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "Bombs will destroy enemies in a radius, but watch out! They're dangerous!");
                 itemMessages[1] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "The compass will point in the direction of the level's exit.");
-                itemMessages[2] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "Fires a projectile that will damage enemies. Kind of slow and short-ranged.");
+                itemMessages[2] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "A magical wand that seems to let its weilder bend space and location.");
             }
 
             items[0] = new Pickup(parentWorld, -500, -500, itemsForSale[0]);
@@ -142,6 +144,9 @@ namespace PattyPetitGiant
                     case GlobalGameConstants.itemType.Compass:
                         itemIcons[i] = AnimationLib.getFrameAnimationSet("compassPic");
                         break;
+                    case GlobalGameConstants.itemType.WandOfGyges:
+                        itemIcons[i] = AnimationLib.getFrameAnimationSet("wandPic");
+                        break;
                     case GlobalGameConstants.itemType.NoItem:
                     default:
                         itemIcons[i] = AnimationLib.getFrameAnimationSet("flagPic");
@@ -164,6 +169,7 @@ namespace PattyPetitGiant
         {
             if (health <= 0)
             {
+                parentWorld.GUI.popBox("thankYou");
                 remove_from_list = true;
                 return;
             }
@@ -197,12 +203,20 @@ namespace PattyPetitGiant
                         attackPoint = new Vector2(-1, -1);
                     }
 
-                    if (Vector2.Distance(projectile.center, attacker.CenterPoint) < GlobalGameConstants.TileSize.X)
+                    foreach (Entity en in parentWorld.EntityList)
                     {
-                        //knockBack(attacker, fireballDamage);
-                        projectile.active = false;
-                        fireballDelayPassed = -200f;
-                        attackPoint = new Vector2(-1, -1);
+                        if (en == this)
+                        {
+                            continue;
+                        }
+
+                        if (Vector2.Distance(projectile.center, en.CenterPoint) < GlobalGameConstants.TileSize.X)
+                        {
+                            en.knockBack(new Vector2((float)Math.Cos(projectile.direction), (float)Math.Sin(projectile.direction)), 4.0f, 10);
+                            projectile.active = false;
+                            fireballDelayPassed = -200f;
+                            attackPoint = new Vector2(-1, -1);
+                        }
                     }
                 }
                 else
@@ -351,8 +365,7 @@ namespace PattyPetitGiant
             }
         }
 
-        //upon becoming knocked back and enraged, the shopkeeper will attack the closest entity
-        public void shopKnockBack(Entity other, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
             health -= damage;
 
@@ -360,6 +373,11 @@ namespace PattyPetitGiant
             {
                 for (int i = 0; i < items.Length; i++)
                 {
+                    if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                    {
+                        continue;
+                    }
+
                     Vector2 drawItemPos = this.position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
                     items[i].Position = drawItemPos;
@@ -392,9 +410,48 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        /// <summary>
+        /// Enrages the shopkeeper.
+        /// </summary>
+        public void poke()
         {
-            return;
+            if (state == ShopKeeperState.Enraged)
+            {
+                return;
+            }
+
+            for (int i = 0; i < items.Length; i++)
+            {
+                if (itemsForSale[i] == GlobalGameConstants.itemType.NoItem)
+                {
+                    continue;
+                }
+
+                Vector2 drawItemPos = this.position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
+
+                items[i].Position = drawItemPos;
+            }
+
+            foreach (Entity en in parentWorld.EntityList)
+            {
+                if (!(en is Player || en is Enemy))
+                {
+                    continue;
+                }
+
+                if (attacker == null)
+                {
+                    attacker = en;
+                    continue;
+                }
+
+                if (Vector2.Distance(CenterPoint, en.CenterPoint) < Vector2.Distance(CenterPoint, attacker.CenterPoint))
+                {
+                    attacker = en;
+                }
+            }
+
+            state = ShopKeeperState.Enraged;
         }
     }
 }

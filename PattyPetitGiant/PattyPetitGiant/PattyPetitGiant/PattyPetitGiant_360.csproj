@@ -101,6 +101,7 @@
     <Compile Include="TextureLib.cs" />
     <Compile Include="TileMap.cs" />
     <Compile Include="Walk.cs" />
+    <Compile Include="WandOfGyges.cs" />
     <Compile Include="XboxTools.cs" />
   </ItemGroup>
   <ItemGroup>

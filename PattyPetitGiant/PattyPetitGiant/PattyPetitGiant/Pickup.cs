@@ -43,6 +43,9 @@ namespace PattyPetitGiant
                 case GlobalGameConstants.itemType.DungeonMap:
                     item_type = player_item.ItemType();
                     return new DungeonMap();
+                case GlobalGameConstants.itemType.WandOfGyges:
+                    item_type = player_item.ItemType();
+                    return new WandOfGyges();
                 default:
                     item_type = player_item.ItemType();
                     return new Sword(position);
@@ -69,6 +72,9 @@ namespace PattyPetitGiant
                     break;
                 case GlobalGameConstants.itemType.DungeonMap:
                     dropAnim = AnimationLib.getFrameAnimationSet("dungeonMapPic");
+                    break;
+                case GlobalGameConstants.itemType.WandOfGyges:
+                    dropAnim = AnimationLib.getFrameAnimationSet("wandPic");
                     break;
                 default:
                     sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);

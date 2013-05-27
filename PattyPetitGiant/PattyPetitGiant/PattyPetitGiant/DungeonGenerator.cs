@@ -66,6 +66,10 @@ namespace PattyPetitGiant
                 }
             }
 
+            public DungeonRoomClass()
+            {
+            }
+
             public DungeonRoomClass(DungeonRoomClass parent, int X, int Y)
             {
                 this.parent = parent;
@@ -79,7 +83,7 @@ namespace PattyPetitGiant
                 this.attributes = new List<string>();
             }
 
-            public DungeonRoom outputStruct()
+            public virtual DungeonRoom outputStruct()
             {
                 DungeonRoom output = new DungeonRoom();
 
@@ -113,6 +117,14 @@ namespace PattyPetitGiant
                 if (output.west) { output.attributes.Add("west"); }
 
                 return output;
+            }
+        }
+
+        private class NullRoomSpace : DungeonRoomClass
+        {
+            public NullRoomSpace()
+            {
+                //
             }
         }
 
@@ -216,15 +228,7 @@ namespace PattyPetitGiant
             DungeonRoom[,] output = new DungeonRoom[desiredWidth, desiredHeight];
             DungeonRoomClass[,] model = new DungeonRoomClass[desiredWidth, desiredHeight];
 
-            Random rand = null;
-            if (seed != null)
-            {
-                rand = new Random(seed.GetHashCode());
-            }
-            else
-            {
-                rand = new Random();
-            }
+            Random rand = new Random(seed);
 
             List<DungeonRoomClass> addedRooms = new List<DungeonRoomClass>();
 
@@ -250,6 +254,43 @@ namespace PattyPetitGiant
             startingRoom.Children[(int)DungeonRoomClass.ChildDirection.North].Children[(int)DungeonRoomClass.ChildDirection.South] = startingRoom;
             addedRooms.Add(model[randX, randY - 1]);
 
+            // strategic walls around starting room
+            /*
+            model[randX + 1, randY - 1] = new NullRoomSpace();
+            model[randX - 1, randY - 1] = new NullRoomSpace();
+            model[(rand.Next() % (model.GetLength(0) - 2)) + 1, rand.Next() % (model.GetLength(1) - 2)] = new NullRoomSpace();
+            */
+
+            /*
+            // bland checkerboard
+            for (int i = 0; i < model.GetLength(0); i++)
+            {
+                for (int j = 0; j < model.GetLength(1); j++)
+                {
+                    if (i % 2 == 0 && j % 2 == 0 && model[i, j] == null)
+                    {
+                        model[i, j] = new NullRoomSpace();
+                    }
+                }
+            }
+            */
+
+            /*
+            // random plugs
+            int nullRoomCount = rand.Next() % 5;
+            for (int i = 0; i < nullRoomCount; i++)
+            {
+                int nullRandX = rand.Next() % model.GetLength(0);
+                int nullRandY = (rand.Next() % (model.GetLength(1) - 2)) + 1;
+
+                if (model[nullRandX, nullRandY] == null && !(model[nullRandX, nullRandY - 1] is NullRoomSpace))
+                {
+                    Console.WriteLine("{0},{1}", nullRandX, nullRandY);
+                    model[nullRandX, nullRandY] = new NullRoomSpace();
+                }
+            }
+            */
+
             //iterate and expand the dungeon according to the constraints
             int iterate = 0;
             const int maxIterations = 1000;
@@ -271,6 +312,12 @@ namespace PattyPetitGiant
                 //don't create a new room on top of an old one
                 if ((newDir == 0 && model[room.X, room.Y - 1] != null) || (newDir == 1 && model[room.X + 1, room.Y] != null) || ((newDir == 2 && model[room.X, room.Y + 1] != null)) || (newDir == 3 && model[room.X - 1, room.Y] != null))
                 {
+                    //if the old room is NullRoomSpace, don't bother either
+                    if ((newDir == 0 && model[room.X, room.Y - 1] is NullRoomSpace) || (newDir == 1 && model[room.X + 1, room.Y] is NullRoomSpace) || ((newDir == 2 && model[room.X, room.Y + 1] is NullRoomSpace)) || (newDir == 3 && model[room.X - 1, room.Y] is NullRoomSpace))
+                    {
+                        continue;
+                    }
+
                     //but, there's a chance we'd like some loops so the dungeon looks less boring
                     double newRoomChance = rand.NextDouble();
                     if ((float)(newRoomChance) <= probability_connectOldRooms)
@@ -373,7 +420,7 @@ namespace PattyPetitGiant
             {
                 for (int j = 0; j < output.GetLength(1); j++)
                 {
-                    if (model[i, j] != null)
+                    if (model[i, j] != null && !(model[i,j] is NullRoomSpace))
                     {
                         output[i, j] = model[i, j].outputStruct();
                     }
