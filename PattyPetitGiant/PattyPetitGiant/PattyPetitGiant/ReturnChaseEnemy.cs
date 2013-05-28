@@ -9,6 +9,14 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PattyPetitGiant
 {
+
+    struct WalkBackDirections
+    {
+        public GlobalGameConstants.Direction direction;
+        public float time;
+        public Vector2 velocity;
+    }
+
     class ReturnChaseEnemy : Enemy
     {
         private EnemyComponents component = null;
@@ -18,6 +26,8 @@ namespace PattyPetitGiant
         private Vector2 original_position = Vector2.Zero;
         private float distance_from_origin = 0.0f;
         private float return_timer = 0.0f;
+
+        private List<WalkBackDirections> return_instructions = new List<WalkBackDirections>();
 
         private float angle = 0.0f;
         public float Angle
@@ -136,6 +146,7 @@ namespace PattyPetitGiant
                     case EnemyState.Chase:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         distance_from_origin = Vector2.Distance(CenterPoint, original_position);
+                        return_timer += currentTime.ElapsedGameTime.Milliseconds;
                         foreach (Entity en in parentWorld.EntityList)
                         {
                             if (en == this)
@@ -155,7 +166,12 @@ namespace PattyPetitGiant
                                 }
                                 else
                                 {
+                                    Vector2 old_velocity = velocity;
                                     component.update(this, en, currentTime, parentWorld);
+                                    if (old_velocity != velocity)
+                                    {
+                                         
+                                    }
                                 }
                             }
                         }
