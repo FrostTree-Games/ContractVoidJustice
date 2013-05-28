@@ -84,8 +84,6 @@ namespace PattyPetitGiant
         {
             change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
-            Console.WriteLine(velocity);
-
             if (disable_movement == true)
             {
                 disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;

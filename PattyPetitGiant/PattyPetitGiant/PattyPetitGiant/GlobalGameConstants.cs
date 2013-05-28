@@ -40,8 +40,8 @@ namespace PattyPetitGiant
         
         private static TileMap.TileDimensions standardMapSize = new TileMap.TileDimensions(5, 5);
         public static TileMap.TileDimensions StandardMapSize { get { return standardMapSize; } }
-        private static int tilesPerRoomWide = 16;
-        private static int tilesPerRoomHigh = 16;
+        private static int tilesPerRoomWide = 24;
+        private static int tilesPerRoomHigh = 24;
         public static int TilesPerRoomWide { get { return tilesPerRoomWide; } }
         public static int TilesPerRoomHigh { get { return tilesPerRoomHigh; } }
 

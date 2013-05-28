@@ -40,10 +40,6 @@
     <int>1</int>
     <int>1</int>
     <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -60,15 +56,6 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
@@ -79,56 +66,12 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
     <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>1</int>
-    <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -146,22 +89,14 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -178,22 +113,14 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
     <int>1</int>
-    <int>1</int>
-    <int>1</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
-    <int>0</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -210,6 +137,399 @@
     <int>0</int>
     <int>0</int>
     <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>1</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>0</int>
+    <int>1</int>
+    <int>1</int>
     <int>1</int>
     <int>1</int>
     <int>1</int>
@@ -264,7 +584,7 @@
       <AttributeName>shopkeeper</AttributeName>
     </ChunkAttribute>
     <ChunkAttribute>
-      <AttributeName>east</AttributeName>
+      <AttributeName>west</AttributeName>
     </ChunkAttribute>
   </Attributes>
 </Chunk>
