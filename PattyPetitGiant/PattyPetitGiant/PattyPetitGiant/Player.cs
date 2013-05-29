@@ -49,6 +49,8 @@ namespace PattyPetitGiant
         public float Animation_Time { set { animation_time = value; } get { return animation_time; } }
         private float switch_weapon_interval = 0.0f;
 
+        private const float playerMoveSpeed = 2.0f;
+
         private playerState state = playerState.Moving;
         public playerState State
         {
@@ -66,7 +68,7 @@ namespace PattyPetitGiant
             velocity = Vector2.Zero;
 
             player_item_1 = new Sword(position);
-            player_item_2 = new Bomb(position);
+            player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
             switch_weapon_interval = 0.0f;
@@ -153,14 +155,14 @@ namespace PattyPetitGiant
                     {
                         if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection))
                         {
-                            velocity.X = 1.5f;
+                            velocity.X = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Right;
                             current_skeleton = walk_right ;
                             current_skeleton.Skeleton.FlipX = false;
                         }
                         else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.LeftDirection))
                         {
-                            velocity.X = -1.5f;
+                            velocity.X = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Left;
                             current_skeleton = walk_right;
                             current_skeleton.Skeleton.FlipX = true;
@@ -172,14 +174,14 @@ namespace PattyPetitGiant
 
                         if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection))
                         {
-                            velocity.Y = -1.5f;
+                            velocity.Y = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Up;
                             current_skeleton = walk_up;
                             current_skeleton.Skeleton.FlipX = false;
                         }
                         else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
                         {
-                            velocity.Y = 1.5f;
+                            velocity.Y = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Down;
                             current_skeleton = walk_down;
                             current_skeleton.Skeleton.FlipX = false;
