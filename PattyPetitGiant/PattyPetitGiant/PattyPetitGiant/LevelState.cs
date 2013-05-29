@@ -111,6 +111,12 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
+                        
+                        // if this line is found on the master branch, please remove it
+                        entityList.Add(new TestEnemy(this, (GlobalGameConstants.TileSize * 2) + new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
+                        entityList.Add(new Key(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y) + (2 * GlobalGameConstants.TileSize), LevelKeyModule.KeyColor.Blue));
+                        entityList.Add(new KeyDoor(this, new Vector2(((currentRoomX + 12) * GlobalGameConstants.TileSize.X) + 30, (currentRoomY) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.EastWest));
+                        entityList.Add(new KeyDoor(this, new Vector2(((currentRoomX) * GlobalGameConstants.TileSize.X) + 30, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y + 30), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.NorthSouth));
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {

@@ -3,11 +3,11 @@
   <name>keyPic</name>
   <sheetName>derek.png</sheetName>
   <initalX>0</initalX>
-  <initalY>144</initalY>
+  <initalY>146</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
   <frameWidth>16</frameWidth>
-  <frameHeight>16</frameHeight>
+  <frameHeight>14</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>
   <loop>true</loop>
