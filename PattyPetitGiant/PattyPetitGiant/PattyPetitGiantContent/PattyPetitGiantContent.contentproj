@@ -367,6 +367,14 @@
       <Name>tunnel_I</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="chunk\tunnel_K.ftc">
+      <Name>tunnel_K</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\tunnel_N.ftc">
+      <Name>tunnel_N</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="gfx\tileTemplate.png">
       <Name>tileTemplate</Name>
       <Importer>TextureImporter</Importer>

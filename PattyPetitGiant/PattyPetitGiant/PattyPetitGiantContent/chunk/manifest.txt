@@ -23,3 +23,5 @@ endLevel2.ftc
 endLevel3.ftc
 endLevel4.ftc
 tunnel_I.ftc
+tunnel_K.ftc
+tunnel_N.ftc
