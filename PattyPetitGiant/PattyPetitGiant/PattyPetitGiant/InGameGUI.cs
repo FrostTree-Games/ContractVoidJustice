@@ -21,6 +21,9 @@ namespace PattyPetitGiant
         private BoxWindow[] boxWindows = new BoxWindow[10];
         private bool[] windowIsActive = new bool[10];
 
+        private AnimationLib.FrameAnimationSet keyFoundPic = null;
+        private AnimationLib.FrameAnimationSet keyNotFoundPic = null;
+
         private BoxWindow testWin;
 
         /// <summary>
@@ -107,6 +110,9 @@ namespace PattyPetitGiant
             {
                 windowIsActive[i] = false;
             }
+
+            keyFoundPic = AnimationLib.getFrameAnimationSet("keyPic");
+            keyNotFoundPic = AnimationLib.getFrameAnimationSet("keyEmptyPic");
 
             testWin = new BoxWindow("foo", 100, 100, 200, "GamePad code overflowing with madness");
         }
@@ -246,21 +252,20 @@ namespace PattyPetitGiant
 
         public void render(SpriteBatch sb)
         {
-            sb.Begin();
 
             string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
-            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
-
             string ammunition_amount_display = "Ammunition: " + GlobalGameConstants.Player_Ammunition;
-            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.Black);
-
             string coin_amount_display = "Coin: " + GlobalGameConstants.Player_Coin_Amount;
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
-
             string player_item_1 = "Item 1: " + GlobalGameConstants.Player_Item_1;
-            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), Color.Black);
-
             string player_item_2 = "Item 2: " + GlobalGameConstants.Player_Item_2;
+
+            //sb.Begin();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+
+            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
+            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.Black);
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
+            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), Color.Black);
             sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.Black);
 
             for (int i = 0; i < windowIsActive.Length; i++)
@@ -271,6 +276,18 @@ namespace PattyPetitGiant
                 }
 
                 drawBox(ref boxWindows[i], sb);
+            }
+
+            for (int i = 0; i < parent.KeyModule.NumberOfKeys; i++)
+            {
+                if (parent.KeyModule.isKeyFound((LevelKeyModule.KeyColor)i))
+                {
+                    keyFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(550 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
+                }
+                else
+                {
+                    keyNotFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(550 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
+                }
             }
 
             if (parent.RenderNodeMap)

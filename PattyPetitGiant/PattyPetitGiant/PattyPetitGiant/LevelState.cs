@@ -28,6 +28,9 @@ namespace PattyPetitGiant
         private InGameGUI gui = null;
         public InGameGUI GUI { get { return gui; } }
 
+        private LevelKeyModule keyModule = null;
+        public LevelKeyModule KeyModule { get { return keyModule; } }
+
         private DungeonGenerator.DungeonRoom[,] nodeMap = null;
         public DungeonGenerator.DungeonRoom[,] NodeMap { get { return nodeMap; } }
         private bool renderNodeMap = false;
@@ -63,6 +66,7 @@ namespace PattyPetitGiant
             endFlagReached = false;
 
             gui = new InGameGUI(this);
+            keyModule = new LevelKeyModule();
 
             entityList = new List<Entity>();
 

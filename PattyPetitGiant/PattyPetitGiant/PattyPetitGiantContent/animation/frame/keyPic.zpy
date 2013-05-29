@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name>keyPic</name>
+  <sheetName>derek.png</sheetName>
+  <initalX>0</initalX>
+  <initalY>144</initalY>
+  <offsetX>0</offsetX>
+  <offsetY>0</offsetY>
+  <frameWidth>16</frameWidth>
+  <frameHeight>16</frameHeight>
+  <frameCount>1</frameCount>
+  <frameSpeed>100</frameSpeed>
+  <loop>true</loop>
+</SerializableAnimationData>
