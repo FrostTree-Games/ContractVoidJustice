@@ -25,6 +25,7 @@ namespace PattyPetitGiant
         }
         public void update(Enemy parent, Entity player, GameTime currentTime, LevelState parentWorld)
         {
+            range_distance = parent.Range_Distance;
             angle = (float)(Math.Atan2(player.CenterPoint.Y-parent.CenterPoint.Y, player.CenterPoint.X - parent.CenterPoint.X));
             distance = Vector2.Distance(parent.CenterPoint, player.CenterPoint);
                 

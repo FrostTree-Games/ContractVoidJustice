@@ -21,6 +21,15 @@ namespace PattyPetitGiant
             Firing
         }
 
+        public enum EnemyType
+        {
+            Guard,
+            Prisoner,
+            Alien
+        }
+
+        protected EnemyType enemy_type = EnemyType.Guard;
+
         protected EnemyState state = EnemyState.Moving;
         public EnemyState State
         {
@@ -54,6 +63,9 @@ namespace PattyPetitGiant
         {
             get { return enemy_damage; }
         }
+
+        protected float range_distance = 600.0f;
+        public float Range_Distance { get { return range_distance; } }
 
         protected float knockback_magnitude;
 

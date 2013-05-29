@@ -644,6 +644,7 @@ namespace PattyPetitGiant
             }
         }
 
+        //may get rid of needs further discussion
         public Vector2 CalculateBezierPoint(float t, Vector2 p0, Vector2 p1, Vector2 p2, Vector2 p3)
         {
             float u = 1 - t;
