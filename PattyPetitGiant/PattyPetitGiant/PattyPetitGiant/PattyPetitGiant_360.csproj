@@ -88,6 +88,7 @@
     <Compile Include="IdleSearch.cs" />
     <Compile Include="InGameGUI.cs" />
     <Compile Include="InputDeviceManager.cs" />
+    <Compile Include="KeySystem.cs" />
     <Compile Include="LevelKeyModule.cs" />
     <Compile Include="MoveSearch.cs" />
     <Compile Include="Pickup.cs" />
