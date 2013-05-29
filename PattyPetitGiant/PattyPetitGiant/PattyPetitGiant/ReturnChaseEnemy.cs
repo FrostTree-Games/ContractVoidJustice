@@ -15,6 +15,7 @@ namespace PattyPetitGiant
         public GlobalGameConstants.Direction direction;
         public float time;
         public Vector2 velocity;
+        public Vector2 point;
     }
 
     class ReturnChaseEnemy : Enemy
@@ -103,6 +104,7 @@ namespace PattyPetitGiant
                 {
                     case EnemyState.Idle:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        velocity = Vector2.Zero;
                         foreach (Entity en in parentWorld.EntityList)
                         {
                             if (en == this)
