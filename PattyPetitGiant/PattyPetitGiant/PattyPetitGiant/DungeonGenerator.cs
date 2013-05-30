@@ -18,6 +18,40 @@ namespace PattyPetitGiant
             private static float shopkeeperProbability = 0.17526f;
         }
 
+        public class RoomColors
+        {
+            public bool Red;
+            public bool Green;
+            public bool Blue;
+            public bool Purple;
+            public bool Gray;
+
+            public RoomColors() { }
+
+            public RoomColors(RoomColors old)
+            {
+                this.Red = old.Red;
+                this.Green = old.Green;
+                this.Blue = old.Blue;
+                this.Purple = old.Purple;
+                this.Gray = old.Gray;
+            }
+
+            public RoomColors(bool Red, bool Green, bool Blue, bool Purple, bool Gray)
+            {
+                this.Red = Red;
+                this.Green = Green;
+                this.Blue = Blue;
+                this.Purple = Purple;
+                this.Gray = Gray;
+            }
+
+            public static RoomColors operator +(RoomColors a, RoomColors b)
+            {
+                return new RoomColors(a.Red || b.Red, a.Green || b.Green, a.Blue || b.Blue, a.Purple || b.Purple, a.Gray || b.Gray);
+            }
+        }
+
         private class DungeonRoomClass
         {
             public enum ChildDirection
@@ -42,6 +76,8 @@ namespace PattyPetitGiant
 
             private float intensity;
             public float Intensity { get { return intensity; } set { intensity = value; } }
+
+            public RoomColors colors;
 
             public int ActualChildCount
             {
@@ -78,6 +114,8 @@ namespace PattyPetitGiant
                 x = X;
                 y = Y;
 
+                this.colors = parent.colors;
+
                 intensity = 999;
 
                 this.attributes = new List<string>();
@@ -111,6 +149,8 @@ namespace PattyPetitGiant
 
                 output.intensity = this.intensity;
 
+                output.colors = this.colors;
+
                 if (output.north) { output.attributes.Add("north"); }
                 if (output.south) { output.attributes.Add("south"); }
                 if (output.east) { output.attributes.Add("east"); }
@@ -138,6 +178,8 @@ namespace PattyPetitGiant
             public float intensity;
 
             public bool visited;
+
+            public RoomColors colors;
 
             public List<string> attributes;
         }
@@ -247,6 +289,8 @@ namespace PattyPetitGiant
             Random rand = new Random(seed);
 
             List<DungeonRoomClass> addedRooms = new List<DungeonRoomClass>();
+
+            RoomColors colorsRegister = new RoomColors();
 
             //place initial room
             int randX = GlobalGameConstants.StandardMapSize.x / 2;

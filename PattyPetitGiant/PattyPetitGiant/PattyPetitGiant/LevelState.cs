@@ -120,6 +120,10 @@ namespace PattyPetitGiant
                             end_flag_placed = true;
                         }
                     }
+                    else if (rooms[i, j].attributes.Contains("key"))
+                    {
+                        entityList.Add(new Key(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue));
+                    }
                     else
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);

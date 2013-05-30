@@ -339,6 +339,22 @@
       <Name>endLevel4</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="chunk\keyRoomJ.ftc">
+      <Name>keyRoomJ</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomL.ftc">
+      <Name>keyRoomL</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomM.ftc">
+      <Name>keyRoomM</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomO.ftc">
+      <Name>keyRoomO</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="chunk\startNode.ftc">
       <Name>startNode</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
