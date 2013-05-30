@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define SHOW_MAP_COLORS
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -305,6 +307,13 @@ namespace PattyPetitGiant
                         if (parent.NodeMap[i, j].east || parent.NodeMap[i, j].west || parent.NodeMap[i, j].south || parent.NodeMap[i, j].north)
                         {
                             sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, parent.NodeMap[i, j].visited ? Color.Black : Color.MidnightBlue, 0.0f, Vector2.Zero, 32.0f, SpriteEffects.None, 0.6f);
+
+#if SHOW_MAP_COLORS
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, parent.NodeMap[i, j].colors.Blue ? Color.Blue : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 16, j * 64), null, parent.NodeMap[i, j].colors.Red ? Color.Red : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64 + 16), null, parent.NodeMap[i, j].colors.Green ? Color.Green : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 16, j * 64 + 16), null, parent.NodeMap[i, j].colors.Purple ? Color.Purple : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+#endif
                         }
                         if (i == renderFocusX && j == renderFocusY)
                         {

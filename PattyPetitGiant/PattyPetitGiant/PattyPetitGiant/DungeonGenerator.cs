@@ -78,6 +78,16 @@ namespace PattyPetitGiant
                 return a.KeyFlagCount > b.KeyFlagCount;
             }
 
+            public override bool Equals(object obj)
+            {
+                return base.Equals(obj);
+            }
+
+            public override int GetHashCode()
+            {
+                return base.GetHashCode();
+            }
+
             public static bool operator <(RoomColors a, RoomColors b)
             {
                 return a.KeyFlagCount < b.KeyFlagCount;
