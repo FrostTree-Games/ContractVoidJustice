@@ -404,12 +404,6 @@ namespace PattyPetitGiant
             {
                 globalIterations++;
 
-                // remove this before going on master
-                if (iterate == 5)
-                {
-                    colorsRegister.Blue = true;
-                }
-
                 DungeonRoomClass room = addedRooms[rand.Next() % addedRooms.Count];
 
                 int newDir = rand.Next() % 4;
@@ -496,6 +490,13 @@ namespace PattyPetitGiant
                 }
 
                 iterate++;
+
+                // remove this before going on master
+                if (iterate == 5)
+                {
+                    colorsRegister.Blue = true;
+                    room.Attributes.Add("key");
+                }
             }
 
             //compute intensity values

@@ -1,4 +1,4 @@
-﻿#define SHOW_MAP_COLORS
+﻿//#define SHOW_MAP_COLORS
 
 using System;
 using System.Collections.Generic;

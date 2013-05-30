@@ -108,7 +108,7 @@ namespace PattyPetitGiant
                     {
                         if (rooms[i, j].north)
                         {
-                            if (rooms[i, j].colors < rooms[i, j - 1].colors)
+                            if (rooms[i, j].colors != rooms[i, j - 1].colors)
                             {
                                 if (!rooms[i, j].colors.Blue && rooms[i, j - 1].colors.Blue)
                                 {
@@ -119,9 +119,9 @@ namespace PattyPetitGiant
 
                         if (rooms[i, j].south)
                         {
-                            if (rooms[i, j].colors < rooms[i, j + 1].colors)
+                            if (rooms[i, j].colors != rooms[i, j + 1].colors)
                             {
-                                if (!rooms[i, j].colors.Blue && rooms[i, j - 1].colors.Blue)
+                                if (!rooms[i, j].colors.Blue && rooms[i, j + 1].colors.Blue)
                                 {
                                     entityList.Add(new KeyDoor(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + GlobalGameConstants.TilesPerRoomHigh) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.EastWest));
                                 }
@@ -130,9 +130,9 @@ namespace PattyPetitGiant
 
                         if (rooms[i, j].east)
                         {
-                            if (rooms[i, j].colors < rooms[i + 1, j].colors)
+                            if (rooms[i, j].colors != rooms[i + 1, j].colors)
                             {
-                                if (!rooms[i, j].colors.Blue && rooms[i, j - 1].colors.Blue)
+                                if (!rooms[i, j].colors.Blue && rooms[i + 1, j].colors.Blue)
                                 {
                                     entityList.Add(new KeyDoor(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.NorthSouth));
                                 }
@@ -141,14 +141,19 @@ namespace PattyPetitGiant
 
                         if (rooms[i, j].west)
                         {
-                            if (rooms[i, j].colors < rooms[i - 1, j].colors)
+                            if (rooms[i, j].colors != rooms[i - 1, j].colors)
                             {
-                                if (!rooms[i, j].colors.Blue && rooms[i, j - 1].colors.Blue)
+                                if (!rooms[i, j].colors.Blue && rooms[i - 1, j].colors.Blue)
                                 {
                                     entityList.Add(new KeyDoor(this, new Vector2((currentRoomX) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.NorthSouth));
                                 }
                             }
                         }
+                    }
+
+                    if (rooms[i, j].attributes.Contains("key"))
+                    {
+                        entityList.Add(new Key(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue));
                     }
 
                     if (rooms[i, j].attributes.Contains("shopkeeper"))
@@ -166,10 +171,6 @@ namespace PattyPetitGiant
                             entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
                             end_flag_placed = true;
                         }
-                    }
-                    else if (rooms[i, j].attributes.Contains("key"))
-                    {
-                        entityList.Add(new Key(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue));
                     }
                     else
                     {

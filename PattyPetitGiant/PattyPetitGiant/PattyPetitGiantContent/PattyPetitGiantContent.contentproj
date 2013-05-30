@@ -267,8 +267,48 @@
       <Name>endLevel4</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="chunk\keyRoomA.ftc">
+      <Name>keyRoomA</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomB.ftc">
+      <Name>keyRoomB</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomC.ftc">
+      <Name>keyRoomC</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomD.ftc">
+      <Name>keyRoomD</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomE.ftc">
+      <Name>keyRoomE</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomF.ftc">
+      <Name>keyRoomF</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomG.ftc">
+      <Name>keyRoomG</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomH.ftc">
+      <Name>keyRoomH</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomI.ftc">
+      <Name>keyRoomI</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="chunk\keyRoomJ.ftc">
       <Name>keyRoomJ</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomK.ftc">
+      <Name>keyRoomK</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\keyRoomL.ftc">
@@ -277,6 +317,10 @@
     </None>
     <None Include="chunk\keyRoomM.ftc">
       <Name>keyRoomM</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\keyRoomN.ftc">
+      <Name>keyRoomN</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\keyRoomO.ftc">
