@@ -18,15 +18,13 @@ namespace PattyPetitGiant
             private static float shopkeeperProbability = 0.17526f;
         }
 
-        public class RoomColors
+        public struct RoomColors
         {
             public bool Red;
             public bool Green;
             public bool Blue;
             public bool Purple;
             public bool Gray;
-
-            public RoomColors() { }
 
             public RoomColors(RoomColors old)
             {
@@ -46,9 +44,43 @@ namespace PattyPetitGiant
                 this.Gray = Gray;
             }
 
+            public int KeyFlagCount
+            {
+                get
+                {
+                    int output = 0;
+                    output += Convert.ToInt32(this.Red);
+                    output += Convert.ToInt32(this.Blue);
+                    output += Convert.ToInt32(this.Green);
+                    output += Convert.ToInt32(this.Purple);
+                    output += Convert.ToInt32(this.Gray);
+                    return output;
+                }
+            }
+
             public static RoomColors operator +(RoomColors a, RoomColors b)
             {
                 return new RoomColors(a.Red || b.Red, a.Green || b.Green, a.Blue || b.Blue, a.Purple || b.Purple, a.Gray || b.Gray);
+            }
+
+            public static bool operator ==(RoomColors a, RoomColors b)
+            {
+                return ((a.Red == b.Red) && (a.Green == b.Green) && (a.Blue == b.Blue) && (a.Purple == b.Purple) && (a.Gray == b.Gray));
+            }
+
+            public static bool operator !=(RoomColors a, RoomColors b)
+            {
+                return ((a.Red != b.Red) || (a.Green != b.Green) || (a.Blue != b.Blue) || (a.Purple != b.Purple) || (a.Gray != b.Gray));
+            }
+
+            public static bool operator >(RoomColors a, RoomColors b)
+            {
+                return a.KeyFlagCount > b.KeyFlagCount;
+            }
+
+            public static bool operator <(RoomColors a, RoomColors b)
+            {
+                return a.KeyFlagCount < b.KeyFlagCount;
             }
         }
 
@@ -114,7 +146,10 @@ namespace PattyPetitGiant
                 x = X;
                 y = Y;
 
-                this.colors = parent.colors;
+                if (parent != null)
+                {
+                    this.colors = parent.colors;
+                }
 
                 intensity = 999;
 
@@ -359,6 +394,12 @@ namespace PattyPetitGiant
             {
                 globalIterations++;
 
+                // remove this before going on master
+                if (iterate == 5)
+                {
+                    colorsRegister.Blue = true;
+                }
+
                 DungeonRoomClass room = addedRooms[rand.Next() % addedRooms.Count];
 
                 int newDir = rand.Next() % 4;
@@ -418,24 +459,28 @@ namespace PattyPetitGiant
                         room.Children[newDir] = new DungeonRoomClass(room, room.X, room.Y - 1);
                         room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.South)] = room;
                         model[room.X, room.Y - 1] = room.Children[newDir];
+                        model[room.X, room.Y - 1].colors = colorsRegister;
                         addedRooms.Add(room.Children[newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.South:
                         room.Children[newDir] = new DungeonRoomClass(room, room.X, room.Y + 1);
                         room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.North)] = room;
                         model[room.X, room.Y + 1] = room.Children[newDir];
+                        model[room.X, room.Y + 1].colors = colorsRegister;
                         addedRooms.Add(room.Children[newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.East:
                         room.Children[newDir] = new DungeonRoomClass(room, room.X + 1, room.Y);
                         room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.West)] = room;
                         model[room.X + 1, room.Y] = room.Children[newDir];
+                        model[room.X + 1, room.Y].colors = colorsRegister;
                         addedRooms.Add(room.Children[newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.West:
                         room.Children[newDir] = new DungeonRoomClass(room, room.X - 1, room.Y);
                         room.Children[newDir].Children[(int)(DungeonRoomClass.ChildDirection.East)] = room;
                         model[room.X - 1, room.Y] = room.Children[newDir];
+                        model[room.X - 1, room.Y].colors = colorsRegister;
                         addedRooms.Add(room.Children[newDir]);
                         break;
                 }
