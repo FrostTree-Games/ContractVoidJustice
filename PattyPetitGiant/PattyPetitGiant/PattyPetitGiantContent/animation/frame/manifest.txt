@@ -23,3 +23,5 @@ gamepadRT
 gamepadStart
 gamepadX
 gamepadY
+keyPic
+keyEmptyPic

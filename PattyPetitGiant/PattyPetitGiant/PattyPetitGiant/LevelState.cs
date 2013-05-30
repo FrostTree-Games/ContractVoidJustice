@@ -28,6 +28,9 @@ namespace PattyPetitGiant
         private InGameGUI gui = null;
         public InGameGUI GUI { get { return gui; } }
 
+        private LevelKeyModule keyModule = null;
+        public LevelKeyModule KeyModule { get { return keyModule; } }
+
         private DungeonGenerator.DungeonRoom[,] nodeMap = null;
         public DungeonGenerator.DungeonRoom[,] NodeMap { get { return nodeMap; } }
         private bool renderNodeMap = false;
@@ -63,6 +66,7 @@ namespace PattyPetitGiant
             endFlagReached = false;
 
             gui = new InGameGUI(this);
+            keyModule = new LevelKeyModule();
 
             entityList = new List<Entity>();
 
@@ -100,9 +104,61 @@ namespace PattyPetitGiant
                     int currentRoomX = i * GlobalGameConstants.TilesPerRoomWide;
                     int currentRoomY = j * GlobalGameConstants.TilesPerRoomHigh;
 
+                    //add doors based on neighboring room color values
+                    {
+                        if (rooms[i, j].north)
+                        {
+                            if (rooms[i, j].colors != rooms[i, j - 1].colors)
+                            {
+                                if (!rooms[i, j].colors.Blue && rooms[i, j - 1].colors.Blue)
+                                {
+                                    entityList.Add(new KeyDoor(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.EastWest));
+                                }
+                            }
+                        }
+
+                        if (rooms[i, j].south)
+                        {
+                            if (rooms[i, j].colors != rooms[i, j + 1].colors)
+                            {
+                                if (!rooms[i, j].colors.Blue && rooms[i, j + 1].colors.Blue)
+                                {
+                                    entityList.Add(new KeyDoor(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + GlobalGameConstants.TilesPerRoomHigh) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.EastWest));
+                                }
+                            }
+                        }
+
+                        if (rooms[i, j].east)
+                        {
+                            if (rooms[i, j].colors != rooms[i + 1, j].colors)
+                            {
+                                if (!rooms[i, j].colors.Blue && rooms[i + 1, j].colors.Blue)
+                                {
+                                    entityList.Add(new KeyDoor(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.NorthSouth));
+                                }
+                            }
+                        }
+
+                        if (rooms[i, j].west)
+                        {
+                            if (rooms[i, j].colors != rooms[i - 1, j].colors)
+                            {
+                                if (!rooms[i, j].colors.Blue && rooms[i - 1, j].colors.Blue)
+                                {
+                                    entityList.Add(new KeyDoor(this, new Vector2((currentRoomX) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue, KeyDoor.DoorDirection.NorthSouth));
+                                }
+                            }
+                        }
+                    }
+
+                    if (rooms[i, j].attributes.Contains("key"))
+                    {
+                        entityList.Add(new Key(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue));
+                    }
+
                     if (rooms[i, j].attributes.Contains("shopkeeper"))
                     {
-                        entityList.Add(new ShopKeeper(this, new Vector2(i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X) - GlobalGameConstants.TileSize.X/2, j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y + (5 * GlobalGameConstants.TileSize.Y))));
+                        entityList.Add(new ShopKeeper(this, new Vector2(i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X) - GlobalGameConstants.TileSize.X / 2, j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y + (5 * GlobalGameConstants.TileSize.Y))));
                     }
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
@@ -110,9 +166,9 @@ namespace PattyPetitGiant
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
-                        if(end_flag_placed == false)
+                        if (end_flag_placed == false)
                         {
-                            entityList.Add(new BetaEndLevelFag(this,new Vector2( (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
+                            entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
                             end_flag_placed = true;
                         }
                     }
@@ -149,7 +205,7 @@ namespace PattyPetitGiant
                                 case 3:
                                     break;
                             }
-                            
+
                         }
                     }
                 }

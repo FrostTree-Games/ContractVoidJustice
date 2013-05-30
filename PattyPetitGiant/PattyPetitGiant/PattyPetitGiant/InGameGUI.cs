@@ -1,4 +1,6 @@
-﻿using System;
+﻿//#define SHOW_MAP_COLORS
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,6 +22,9 @@ namespace PattyPetitGiant
 
         private BoxWindow[] boxWindows = new BoxWindow[10];
         private bool[] windowIsActive = new bool[10];
+
+        private AnimationLib.FrameAnimationSet keyFoundPic = null;
+        private AnimationLib.FrameAnimationSet keyNotFoundPic = null;
 
         private BoxWindow testWin;
 
@@ -107,6 +112,9 @@ namespace PattyPetitGiant
             {
                 windowIsActive[i] = false;
             }
+
+            keyFoundPic = AnimationLib.getFrameAnimationSet("keyPic");
+            keyNotFoundPic = AnimationLib.getFrameAnimationSet("keyEmptyPic");
 
             testWin = new BoxWindow("foo", 100, 100, 200, "GamePad code overflowing with madness");
         }
@@ -246,21 +254,20 @@ namespace PattyPetitGiant
 
         public void render(SpriteBatch sb)
         {
-            sb.Begin();
 
             string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
-            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
-
             string ammunition_amount_display = "Ammunition: " + GlobalGameConstants.Player_Ammunition;
-            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.Black);
-
             string coin_amount_display = "Coin: " + GlobalGameConstants.Player_Coin_Amount;
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
-
             string player_item_1 = "Item 1: " + GlobalGameConstants.Player_Item_1;
-            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), Color.Black);
-
             string player_item_2 = "Item 2: " + GlobalGameConstants.Player_Item_2;
+
+            //sb.Begin();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
+
+            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
+            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.Black);
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
+            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), Color.Black);
             sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.Black);
 
             for (int i = 0; i < windowIsActive.Length; i++)
@@ -271,6 +278,18 @@ namespace PattyPetitGiant
                 }
 
                 drawBox(ref boxWindows[i], sb);
+            }
+
+            for (int i = 0; i < parent.KeyModule.NumberOfKeys; i++)
+            {
+                if (parent.KeyModule.isKeyFound((LevelKeyModule.KeyColor)i))
+                {
+                    keyFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(550 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
+                }
+                else
+                {
+                    keyNotFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(550 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
+                }
             }
 
             if (parent.RenderNodeMap)
@@ -288,6 +307,13 @@ namespace PattyPetitGiant
                         if (parent.NodeMap[i, j].east || parent.NodeMap[i, j].west || parent.NodeMap[i, j].south || parent.NodeMap[i, j].north)
                         {
                             sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, parent.NodeMap[i, j].visited ? Color.Black : Color.MidnightBlue, 0.0f, Vector2.Zero, 32.0f, SpriteEffects.None, 0.6f);
+
+#if SHOW_MAP_COLORS
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64), null, parent.NodeMap[i, j].colors.Blue ? Color.Blue : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 16, j * 64), null, parent.NodeMap[i, j].colors.Red ? Color.Red : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64, j * 64 + 16), null, parent.NodeMap[i, j].colors.Green ? Color.Green : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i * 64 + 16, j * 64 + 16), null, parent.NodeMap[i, j].colors.Purple ? Color.Purple : Color.Black, 0.0f, Vector2.Zero, 16.0f, SpriteEffects.None, 0.61f);
+#endif
                         }
                         if (i == renderFocusX && j == renderFocusY)
                         {

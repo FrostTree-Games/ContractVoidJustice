@@ -85,7 +85,7 @@ namespace PattyPetitGiant
             {
                 foreach (Entity en in parentWorld.EntityList)
                 {
-                    if (en is Enemy || en is ShopKeeper)
+                    if (en is Enemy || en is ShopKeeper || en is Key)
                     {
                         if (hitTest(en))
                         {

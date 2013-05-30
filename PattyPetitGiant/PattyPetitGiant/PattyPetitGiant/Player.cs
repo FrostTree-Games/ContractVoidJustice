@@ -274,6 +274,12 @@ namespace PattyPetitGiant
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
+
+                /*
+                double theta = Math.Atan2(direction.Y, direction.X);
+                velocity = magnitude * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+                */
+
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
                     if (direction.X < 0)
@@ -296,6 +302,7 @@ namespace PattyPetitGiant
                         velocity = new Vector2(direction.Y / 100f * magnitude, 1.51f * magnitude);
                     }
                 }
+
                 GlobalGameConstants.Player_Health = GlobalGameConstants.Player_Health - damage;
             }
         }
