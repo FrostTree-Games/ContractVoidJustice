@@ -251,78 +251,6 @@
       <Name>parts</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\altA.ftc">
-      <Name>altA</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altB.ftc">
-      <Name>altB</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altC.ftc">
-      <Name>altC</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altD.ftc">
-      <Name>altD</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altE.ftc">
-      <Name>altE</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altF.ftc">
-      <Name>altF</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altG.ftc">
-      <Name>altG</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altH.ftc">
-      <Name>altH</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altI.ftc">
-      <Name>altI</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altJ.ftc">
-      <Name>altJ</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altK.ftc">
-      <Name>altK</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altL.ftc">
-      <Name>altL</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\altM.ftc">
-      <Name>altM</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\crossroads1.ftc">
-      <Name>crossroads1</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\crossroads2.ftc">
-      <Name>crossroads2</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\crossroads3.ftc">
-      <Name>crossroads3</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\crossroads4.ftc">
-      <Name>crossroads4</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\crossroads5.ftc">
-      <Name>crossroads5</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="chunk\endLevel1.ftc">
       <Name>endLevel1</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -361,10 +289,6 @@
     </None>
     <None Include="chunk\testShop.ftc">
       <Name>testShop</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="chunk\Example.ftc">
-      <Name>Example</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\testShop2.ftc">
