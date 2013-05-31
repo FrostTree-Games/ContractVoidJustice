@@ -88,6 +88,11 @@ namespace PattyPetitGiant
                                 en.Position = swap;
 
                                 shot.active = false;
+
+                                if (en is AntiFairy)
+                                {
+                                    ((AntiFairy)en).duplicate();
+                                }
                             }
                         }
                     }

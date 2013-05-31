@@ -60,6 +60,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>compassPic</Name>
     </None>
+    <None Include="animation\frame\antiFairy.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>antiFairy</Name>
+    </None>
     <None Include="animation\frame\keyEmptyPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>keyEmptyPic</Name>

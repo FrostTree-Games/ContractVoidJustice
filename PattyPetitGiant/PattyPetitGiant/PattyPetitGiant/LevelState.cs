@@ -189,7 +189,7 @@ namespace PattyPetitGiant
                             }
                             while (map.Map[randX + (GlobalGameConstants.TilesPerRoomWide * i), randY + (GlobalGameConstants.TilesPerRoomHigh * j)] != TileMap.TileType.NoWall);
 
-                            const int enemyTypeCount = 3;
+                            const int enemyTypeCount = 4;
                             int randomEnemyNumber = rand.Next();
 
                             switch (randomEnemyNumber % enemyTypeCount)
@@ -204,6 +204,7 @@ namespace PattyPetitGiant
                                     entityList.Add(new RangeEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                                 case 3:
+                                    entityList.Add(new AntiFairy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                             }
 
