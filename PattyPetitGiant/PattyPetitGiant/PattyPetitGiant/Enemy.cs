@@ -31,12 +31,6 @@ namespace PattyPetitGiant
         protected EnemyType enemy_type = EnemyType.Guard;
 
         protected EnemyState state = EnemyState.Moving;
-        public EnemyState State
-        {
-            set { state = value; }
-            get { return state; }
-
-        }
 
         private bool item_hit;
         public bool Item_Hit

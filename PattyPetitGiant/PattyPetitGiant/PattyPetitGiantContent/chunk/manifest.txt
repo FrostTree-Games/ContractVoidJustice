@@ -23,3 +23,8 @@ endLevel2.ftc
 endLevel3.ftc
 endLevel4.ftc
 tunnel_I.ftc
+crossroads6.ftc
+crossroads7.ftc
+crossroads8.ftc
+crossroads9.ftc
+crossroads10.ftc

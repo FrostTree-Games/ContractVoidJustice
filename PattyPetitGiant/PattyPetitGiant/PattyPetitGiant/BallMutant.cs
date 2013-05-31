@@ -175,10 +175,39 @@ namespace PattyPetitGiant
                 }
             }
         }
+        
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-            
+            if (disable_movement_time == 0.0)
+            {
+                disable_movement = true;
+                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                {
+                    if (direction.X < 0)
+                    {
+                        velocity = new Vector2(-5.51f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(5.51f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                }
+                else
+                {
+                    if (direction.Y < 0)
+                    {
+                        velocity = new Vector2(direction.X / 100f * magnitude, -5.51f * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 5.51f * magnitude);
+                    }
+                }
+
+                enemy_life = enemy_life - damage;
+            }
         }
+
         public override void spinerender(Spine.SkeletonRenderer renderer)
         {
             base.spinerender(renderer);
