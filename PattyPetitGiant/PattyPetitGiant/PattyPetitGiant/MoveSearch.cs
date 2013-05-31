@@ -30,6 +30,7 @@ namespace PattyPetitGiant
         {
 
             /*Search for player***********************************************************************************************************/
+            range_distance = parent.Range_Distance;
             angle = (float)(Math.Atan2(player.CenterPoint.Y - parent.CenterPoint.Y, player.CenterPoint.X - parent.CenterPoint.X));
             distance = Vector2.Distance(parent.CenterPoint, player.CenterPoint);
             wall_between = false;

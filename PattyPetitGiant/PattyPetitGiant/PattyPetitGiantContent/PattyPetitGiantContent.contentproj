@@ -297,6 +297,37 @@
     </None>
     <None Include="chunk\keyRoomH.ftc">
       <Name>keyRoomH</Name>
+	 <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads10.ftc">
+      <Name>crossroads10</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads12.ftc">
+      <Name>crossroads12</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads13.ftc">
+      <Name>crossroads13</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads14.ftc">
+      <Name>crossroads14</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads15.ftc">
+      <Name>crossroads15</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads11.ftc">
+      <Name>crossroads11</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="chunk\crossroads16.ftc">
+      <Name>crossroads16</Name>
+    </Compile>
+    <None Include="chunk\crossroads2.ftc">
+      <Name>crossroads2</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\keyRoomI.ftc">
@@ -313,6 +344,26 @@
     </None>
     <None Include="chunk\keyRoomL.ftc">
       <Name>keyRoomL</Name>
+	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads6.ftc">
+      <Name>crossroads6</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads7.ftc">
+      <Name>crossroads7</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads8.ftc">
+      <Name>crossroads8</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads9.ftc">
+      <Name>crossroads9</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevel1.ftc">
+      <Name>endLevel1</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\keyRoomM.ftc">

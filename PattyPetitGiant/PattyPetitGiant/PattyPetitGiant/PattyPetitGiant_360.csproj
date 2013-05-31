@@ -83,6 +83,8 @@
     <Compile Include="EnemyComponents.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="GlobalGameConstants.cs" />
+    <Compile Include="GuardSquadLeader.cs" />
+    <Compile Include="GuardSquadSoldiers.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="IdleChaseEnemy.cs" />
     <Compile Include="IdleSearch.cs" />
@@ -106,7 +108,7 @@
     <Compile Include="TestEnemy.cs" />
     <Compile Include="TextureLib.cs" />
     <Compile Include="TileMap.cs" />
-    <Compile Include="ToughGuardEnemy.cs" />
+    <Compile Include="ToughPrisonerEnemy.cs" />
     <Compile Include="Walk.cs" />
     <Compile Include="WandOfGyges.cs" />
     <Compile Include="XboxTools.cs" />
