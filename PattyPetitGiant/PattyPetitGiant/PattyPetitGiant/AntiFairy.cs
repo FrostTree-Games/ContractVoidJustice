@@ -25,6 +25,9 @@ namespace PattyPetitGiant
         private AnimationLib.FrameAnimationSet anim = null;
         private float animationTime;
 
+        private AntiFairy other = null;
+        private bool doubled;
+
         public AntiFairy(LevelState parentWorld, Vector2 position)
         {
             this.position = position;
@@ -34,11 +37,26 @@ namespace PattyPetitGiant
             anim = AnimationLib.getFrameAnimationSet("antiFairy");
             animationTime = 0.0f;
 
+            if (position.X > 0)
+            {
+                other = new AntiFairy(parentWorld, new Vector2(-100, 100));
+                doubled = false;
+            }
+            else
+            {
+                doubled = true;
+            }
+
             fairyState = (AntiFairyState)(Game1.rand.Next() % 4);
         }
 
         public override void update(GameTime currentTime)
         {
+            if (doubled && other != null)
+            {
+                other.update(currentTime);
+            }
+
             animationTime += currentTime.ElapsedGameTime.Milliseconds;
 
             switch (fairyState)
@@ -125,12 +143,27 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
+            if (doubled && other != null)
+            {
+                other.draw(sb);
+            }
+
             anim.drawAnimationFrame(animationTime, sb, position, new Vector2(3.0f, 3.0f), 0.6f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
             //
+        }
+
+        public void duplicate()
+        {
+            if (!doubled && other != null)
+            {
+                doubled = true;
+
+                other.Position = position;
+            }
         }
     }
 }
