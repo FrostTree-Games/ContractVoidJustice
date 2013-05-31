@@ -80,7 +80,42 @@ namespace PattyPetitGiant
 
             if (nextStep != finalPos)
             {
-                fairyState = (AntiFairyState)((((int)fairyState) + 1) % 4); //bracket hell
+                if (nextStep.X != finalPos.X)
+                {
+                    switch (fairyState)
+                    {
+                        case AntiFairyState.NorthEast:
+                            fairyState = AntiFairyState.NorthWest;
+                            break;
+                        case AntiFairyState.NorthWest:
+                            fairyState = AntiFairyState.NorthEast;
+                            break;
+                        case AntiFairyState.SouthEast:
+                            fairyState = AntiFairyState.SouthWest;
+                            break;
+                        case AntiFairyState.SouthWest:
+                            fairyState = AntiFairyState.SouthEast;
+                            break;
+                    }
+                }
+                else if (nextStep.Y != finalPos.Y)
+                {
+                    switch (fairyState)
+                    {
+                        case AntiFairyState.NorthEast:
+                            fairyState = AntiFairyState.SouthEast;
+                            break;
+                        case AntiFairyState.NorthWest:
+                            fairyState = AntiFairyState.SouthWest;
+                            break;
+                        case AntiFairyState.SouthEast:
+                            fairyState = AntiFairyState.NorthEast;
+                            break;
+                        case AntiFairyState.SouthWest:
+                            fairyState = AntiFairyState.NorthWest;
+                            break;
+                    }
+                }
             }
             else
             {
@@ -95,10 +130,7 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-            if (damage == 0)
-            {
-                velocity *= -1;
-            }
+            //
         }
     }
 }
