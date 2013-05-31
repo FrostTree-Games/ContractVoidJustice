@@ -107,11 +107,24 @@ namespace PattyPetitGiant
             {
                 for (int j = 0; j < floorMap.GetLength(1); j++)
                 {
-#if WINDOWS
-                    floorMap[i, j] = ((FloorType)(rand.Next() % Enum.GetNames(typeof(FloorType)).Length));
-#elif XBOX
-                    floorMap[i, j] = ((FloorType)(rand.Next() % 8));
-#endif
+                    int randVal = Game1.rand.Next() % 100;
+
+                    if (randVal > 15)
+                    {
+                        floorMap[i, j] = Game1.rand.Next() % 2 == 0 ? FloorType.A : FloorType.B;
+                    }
+                    else if (randVal > 10)
+                    {
+                        floorMap[i, j] = Game1.rand.Next() % 2 == 0 ? FloorType.C : FloorType.D;
+                    }
+                    else if (randVal > 5)
+                    {
+                        floorMap[i, j] = Game1.rand.Next() % 2 == 0 ? FloorType.E : FloorType.F;
+                    }
+                    else
+                    {
+                        floorMap[i, j] = Game1.rand.Next() % 2 == 0 ? FloorType.G : FloorType.H;
+                    }
                 }
             }
 
