@@ -297,7 +297,7 @@
     </None>
     <None Include="chunk\keyRoomH.ftc">
       <Name>keyRoomH</Name>
-	 <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\crossroads10.ftc">
       <Name>crossroads10</Name>
@@ -323,11 +323,8 @@
       <Name>crossroads11</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <Compile Include="chunk\crossroads16.ftc">
+    <None Include="chunk\crossroads16.ftc">
       <Name>crossroads16</Name>
-    </Compile>
-    <None Include="chunk\crossroads2.ftc">
-      <Name>crossroads2</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\keyRoomI.ftc">
@@ -344,7 +341,7 @@
     </None>
     <None Include="chunk\keyRoomL.ftc">
       <Name>keyRoomL</Name>
-	  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\crossroads6.ftc">
       <Name>crossroads6</Name>
