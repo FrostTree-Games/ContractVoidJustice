@@ -58,6 +58,14 @@ namespace PattyPetitGiant
             WallP = 17,
         }
 
+        private enum WallMod
+        {
+            None = 0,
+            Mod1 = 1,
+            Mod2 = 2,
+            Mod3 = 3,
+        }
+
         private enum FloorType
         {
             A = 0,
@@ -82,6 +90,7 @@ namespace PattyPetitGiant
         private TileType[,] map = null;
         public TileType[,] Map { get { return map; } }
         private FloorType[,] floorMap = null;
+        private WallMod[,] mapMod = null;
 
         private Vector2 startPosition;
         public Vector2 StartPosition { get { return startPosition; } }
@@ -100,6 +109,7 @@ namespace PattyPetitGiant
 
             map = new TileType[size.x, size.y];
             floorMap = new FloorType[size.x, size.y];
+            mapMod = new WallMod[size.x, size.y];
 
             Random rand = new Random();
 
@@ -242,6 +252,24 @@ namespace PattyPetitGiant
 
                                 flag <<= 1;
                             }
+                        }
+
+                        int modRandVal = Game1.rand.Next() % 100;
+                        if (modRandVal > 15)
+                        {
+                            mapMod[i, j] = WallMod.None;
+                        }
+                        else if (modRandVal > 10)
+                        {
+                            mapMod[i, j] = WallMod.Mod1;
+                        }
+                        else if (modRandVal > 5)
+                        {
+                            mapMod[i, j] = WallMod.Mod2;
+                        }
+                        else
+                        {
+                            mapMod[i, j] = WallMod.Mod3;
                         }
 
                         switch (adjacencyValue)
@@ -401,6 +429,14 @@ namespace PattyPetitGiant
                         case TileType.WallP:
                             tileX = ((int)(map[i, j]) - 2) % 5;
                             tileY = ((int)(map[i, j]) - 2) / 5;
+                            if (mapMod[i, j] == WallMod.Mod1 || mapMod[i, j] == WallMod.Mod3)
+                            {
+                                tileX += 5;
+                            }
+                            if (mapMod[i, j] == WallMod.Mod2 || mapMod[i, j] == WallMod.Mod3)
+                            {
+                                tileY += 3;
+                            }
                             spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(tileX * GlobalGameConstants.TileSize.X + tileX), (int)(tileY * GlobalGameConstants.TileSize.Y + tileY), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
                             break;
                         case TileType.WallUnidentified:
