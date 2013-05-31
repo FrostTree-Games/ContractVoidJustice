@@ -303,6 +303,29 @@
       <Name>crossroads10</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="chunk\crossroads12.ftc">
+      <Name>crossroads12</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads13.ftc">
+      <Name>crossroads13</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads14.ftc">
+      <Name>crossroads14</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads15.ftc">
+      <Name>crossroads15</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\crossroads11.ftc">
+      <Name>crossroads11</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Compile Include="chunk\crossroads16.ftc">
+      <Name>crossroads16</Name>
+    </Compile>
     <None Include="chunk\crossroads2.ftc">
       <Name>crossroads2</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
