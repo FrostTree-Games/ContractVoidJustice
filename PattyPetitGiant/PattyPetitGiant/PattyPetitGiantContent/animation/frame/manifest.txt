@@ -25,3 +25,4 @@ gamepadX
 gamepadY
 keyPic
 keyEmptyPic
+antiFairy

@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnimationLib.cs" />
+    <Compile Include="AntiFairy.cs" />
     <Compile Include="AudioLib.cs" />
     <Compile Include="BallMutant.cs" />
     <Compile Include="BetaEndLevelFag.cs" />
