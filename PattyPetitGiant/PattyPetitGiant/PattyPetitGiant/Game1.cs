@@ -62,13 +62,7 @@ namespace PattyPetitGiant
             whitePixel = Content.Load<Texture2D>("whitePixel");
 
             TextureLib ts = new TextureLib(GraphicsDevice);
-            TextureLib.loadTexture("derek.png");
-            TextureLib.loadTexture("tileTemplate.png");
-            TextureLib.loadTexture("explosionlarge2.png");
-            TextureLib.loadTexture("bomb.png");
-            TextureLib.loadTexture("sword.png");
-            TextureLib.loadTexture("gun.png");
-            TextureLib.loadTexture("gamepadSheet.png");
+            TextureLib.loadFromManifest();
 
             font = Content.Load<SpriteFont>("testFont");
 

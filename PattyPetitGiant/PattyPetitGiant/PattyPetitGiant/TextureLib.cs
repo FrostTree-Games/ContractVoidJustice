@@ -13,6 +13,8 @@ namespace PattyPetitGiant
     class TextureLib
     {
         private static string graphicsDirectory = "Content/gfx/";
+        private static string manifestFile = "Content/gfx/manifest.txt";
+        private static bool manifestLoaded = false;
 
         private static GraphicsDevice device = null;
         private static Dictionary<string, Texture2D> dict = null;
@@ -114,6 +116,39 @@ namespace PattyPetitGiant
         public static void removeAllTextures()
         {
             dict.Clear();
+        }
+
+        public static void loadFromManifest()
+        {
+            if (manifestLoaded || dict == null)
+            {
+                return;
+            }
+
+#if WINDOWS
+            string[] textures = File.ReadAllLines(manifestFile);
+
+            foreach (string line in textures)
+            {
+                loadTexture(line);
+            }
+#elif XBOX
+            String xboxLine;
+            int counter = 0;
+
+            StreamReader file = new StreamReader(manifestFile);
+
+            while ((xboxLine = file.ReadLine()) != null)
+            {
+                loadTexture(xboxLine);
+
+                counter++;
+            }
+
+            file.Close();
+#endif
+
+            manifestLoaded = true;
         }
 
         public class TextureLibNotInitializedException : Exception
