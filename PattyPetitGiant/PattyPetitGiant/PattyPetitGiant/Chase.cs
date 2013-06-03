@@ -22,7 +22,6 @@ namespace PattyPetitGiant
             float direction_y = player.CenterPoint.Y - parent.CenterPoint.Y;
             float angle = (float)Math.Atan2(player.CenterPoint.Y - parent.CenterPoint.Y, player.CenterPoint.X - parent.CenterPoint.X);
 
-            Console.WriteLine(angle);
             if (Math.Abs(direction_x) > (Math.Abs(direction_y)))
             {
                 if (direction_x < 0)
