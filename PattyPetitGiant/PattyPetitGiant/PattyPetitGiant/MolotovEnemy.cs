@@ -30,6 +30,11 @@ namespace PattyPetitGiant
 
         private const float molotovMovementSpeed = 0.1f;
 
+        private float knockBackTime;
+        private const float knockBackDuration = 250f;
+
+        private int health;
+
         public MolotovEnemy(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -45,6 +50,8 @@ namespace PattyPetitGiant
 
             direction_facing = (GlobalGameConstants.Direction)(Game1.rand.Next() % 4);
 
+            health = 15;
+
             templateAnim = AnimationLib.getFrameAnimationSet("antiFairy");
             animation_time = 0.0f;
 
@@ -53,6 +60,12 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
+            if (health < 1)
+            {
+                remove_from_list = true;
+                return;
+            }
+
             animation_time += currentTime.ElapsedGameTime.Milliseconds;
 
             if (molotovState == MolotovState.InvalidState)
@@ -193,14 +206,22 @@ namespace PattyPetitGiant
 
                 throwPosition = position + (throwVelocity * throwingTimer * throwDirection);
                 flame.position = throwPosition;
-                foreach (Entity en in parentWorld.EntityList)
+
+                if (parentWorld.Map.hitTestWall(flame.position) || parentWorld.Map.hitTestWall(flame.position + flame.dimensions))
                 {
-                    if (en is Player)
+                    throwingTimer = 999f;
+                }
+                else
+                {
+                    foreach (Entity en in parentWorld.EntityList)
                     {
-                        if (flame.hitTestWithEntity(en))
+                        if (en is Player)
                         {
-                            throwingTimer = 999f;
-                            break;
+                            if (flame.hitTestWithEntity(en))
+                            {
+                                throwingTimer = 999f;
+                                break;
+                            }
                         }
                     }
                 }
@@ -215,6 +236,15 @@ namespace PattyPetitGiant
                     moveWaitTimer = 0.0f;
                 }
             }
+            else if (molotovState == MolotovState.KnockedBack)
+            {
+                knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (knockBackTime > knockBackDuration)
+                {
+                    molotovState = MolotovState.MoveWait;
+                }
+            }
             else
             {
                 throw new NotImplementedException("Need to complete other states first");
@@ -222,7 +252,7 @@ namespace PattyPetitGiant
 
             if (flame.active)
             {
-                flame.update(currentTime);
+                flame.update(parentWorld, currentTime);
             }
 
             Vector2 newPos = position + (currentTime.ElapsedGameTime.Milliseconds * velocity);
@@ -242,13 +272,25 @@ namespace PattyPetitGiant
 
             if (flame.active)
             {
-                templateAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(3, 3), 0.6f, Color.Red);
+                templateAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(3, 3), 0.4f, Color.Red);
             }
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-            return;
+            if (molotovState == MolotovState.KnockedBack)
+            {
+                return;
+            }
+
+            direction.Normalize();
+            velocity = direction * (magnitude / 2);
+
+            health -= damage;
+
+            knockBackTime = 0.0f;
+
+            molotovState = MolotovState.KnockedBack;
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
@@ -294,6 +336,14 @@ namespace PattyPetitGiant
 
             public Vector2 dimensions;
 
+            public Vector2 CenterPoint
+            {
+                get
+                {
+                    return position + (dimensions / 2);
+                }
+            }
+
             public float timeAlive;
             private const float flameDuration = 4000f;
 
@@ -316,9 +366,22 @@ namespace PattyPetitGiant
                 return true;
             }
 
-            public void update(GameTime currentTime)
+            public void update(LevelState parentWorld, GameTime currentTime)
             {
                 timeAlive += currentTime.ElapsedGameTime.Milliseconds;
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en is MolotovEnemy)
+                    {
+                        continue;
+                    }
+
+                    if (hitTestWithEntity(en))
+                    {
+                        en.knockBack(en.CenterPoint - CenterPoint, 5.0f, 10);
+                    }
+                }
 
                 if (timeAlive > flameDuration)
                 {
