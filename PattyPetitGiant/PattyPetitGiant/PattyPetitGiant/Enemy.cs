@@ -75,6 +75,12 @@ namespace PattyPetitGiant
         
         protected float damage_player_time = 0.0f;
 
+        protected float enemy_speed = 2.0f;
+        public float Enemy_Speed
+        {
+            get { return enemy_speed; }
+        }
+
         public Enemy()
         {
             velocity = Vector2.Zero;
