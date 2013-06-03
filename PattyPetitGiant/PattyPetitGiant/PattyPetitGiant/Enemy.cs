@@ -23,12 +23,14 @@ namespace PattyPetitGiant
 
         public enum EnemyType
         {
-            Guard,
-            Prisoner,
-            Alien
+            NoType = 0,
+            Guard = 1,
+            Prisoner = 2,
+            Alien = 4,
         }
 
-        protected EnemyType enemy_type = EnemyType.Guard;
+        protected EnemyType enemy_type;
+        public EnemyType EnemyFaction { get { return enemy_type; } }
 
         protected EnemyState state = EnemyState.Moving;
 

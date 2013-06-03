@@ -20,6 +20,14 @@ namespace PattyPetitGiant
         private float moveWaitTimer;
         private const float moveStepTime = 500f;
 
+        private float windUpTimer;
+        private const float windUpDuration = 500f;
+
+        private float throwingTimer;
+        private const float throwDuration = 500f;
+        private Vector2 throwPosition = Vector2.Zero;
+        private const float throwVelocity = 0.5f;
+
         private const float molotovMovementSpeed = 0.1f;
 
         public MolotovEnemy(LevelState parentWorld, Vector2 position)
@@ -39,6 +47,8 @@ namespace PattyPetitGiant
 
             templateAnim = AnimationLib.getFrameAnimationSet("antiFairy");
             animation_time = 0.0f;
+
+            enemy_type = EnemyType.Prisoner;
         }
 
         public override void update(GameTime currentTime)
@@ -52,6 +62,64 @@ namespace PattyPetitGiant
             else if (molotovState == MolotovState.MoveWait)
             {
                 moveWaitTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                // check if player is in front of enemy within range. if so throw a molotov
+                if (flame.active == false)
+                {
+                    MolotovFlame f = new MolotovFlame();
+                    if (direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+                    {
+                        f.dimensions = new Vector2(GlobalGameConstants.TileSize.X * 3, GlobalGameConstants.TileSize.Y * 4);
+                    }
+                    else
+                    {
+                        f.dimensions = new Vector2(GlobalGameConstants.TileSize.X * 4, GlobalGameConstants.TileSize.Y * 3);
+                    }
+
+                    switch (direction_facing)
+                    {
+                        case GlobalGameConstants.Direction.Up:
+                            f.position = position + new Vector2(-GlobalGameConstants.TileSize.X, -GlobalGameConstants.TileSize.Y * 4);
+                            break;
+                        case GlobalGameConstants.Direction.Down:
+                            f.position = position + new Vector2(-GlobalGameConstants.TileSize.X, dimensions.Y);
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            f.position = position + new Vector2(-(GlobalGameConstants.TileSize.X * 4), -GlobalGameConstants.TileSize.Y);
+                            break;
+                        case GlobalGameConstants.Direction.Right:
+                            f.position = position + new Vector2(dimensions.X, -GlobalGameConstants.TileSize.Y);
+                            break; 
+                    }
+
+                    foreach (Entity en in parentWorld.EntityList)
+                    {
+                        if (en == this)
+                        {
+                            continue;
+                        }
+
+                        if (en is Player || en is Enemy)
+                        {
+                            if (en is Enemy)
+                            {
+                                if (((Enemy)en).EnemyFaction == Enemy.EnemyType.Prisoner)
+                                {
+                                    continue;
+                                }
+                            }
+
+                            if (f.hitTestWithEntity(en))
+                            {
+                                animation_time = 0.0f;
+
+                                molotovState = MolotovState.WindUp;
+                                windUpTimer = 0.0f;
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 if (moveWaitStepping)
                 {
@@ -87,9 +155,74 @@ namespace PattyPetitGiant
                     }
                 }
             }
+            else if (molotovState == MolotovState.WindUp)
+            {
+                windUpTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (windUpTimer > windUpDuration)
+                {
+                    animation_time = 0.0f;
+
+                    molotovState = MolotovState.Throwing;
+                    throwingTimer = 0.0f;
+                    throwPosition = position;
+                }
+
+                velocity = Vector2.Zero;
+            }
+            else if (molotovState == MolotovState.Throwing)
+            {
+                throwingTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                Vector2 throwDirection = Vector2.Zero;
+                switch (direction_facing)
+                {
+                    case GlobalGameConstants.Direction.Up:
+                        throwDirection = new Vector2(0, -1);
+                        break;
+                    case GlobalGameConstants.Direction.Down:
+                        throwDirection = new Vector2(0, 1);
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        throwDirection = new Vector2(-1, 0);
+                        break;
+                    case GlobalGameConstants.Direction.Right:
+                        throwDirection = new Vector2(1, 0);
+                        break;
+                }
+
+                throwPosition = position + (throwVelocity * throwingTimer * throwDirection);
+                flame.position = throwPosition;
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en is Player)
+                    {
+                        if (flame.hitTestWithEntity(en))
+                        {
+                            throwingTimer = 999f;
+                            break;
+                        }
+                    }
+                }
+
+                if (throwingTimer > throwDuration)
+                {
+                    animation_time = 0.0f;
+
+                    flame = new MolotovFlame(throwPosition);
+
+                    molotovState = MolotovState.MoveWait;
+                    moveWaitTimer = 0.0f;
+                }
+            }
             else
             {
                 throw new NotImplementedException("Need to complete other states first");
+            }
+
+            if (flame.active)
+            {
+                flame.update(currentTime);
             }
 
             Vector2 newPos = position + (currentTime.ElapsedGameTime.Milliseconds * velocity);
@@ -101,6 +234,16 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
             templateAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(3, 3), 0.5f, Color.LimeGreen);
+
+            if (molotovState == MolotovState.Throwing)
+            {
+                templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(2, 2), 0.51f, animation_time, new Vector2(4, 4));
+            }
+
+            if (flame.active)
+            {
+                templateAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(3, 3), 0.6f, Color.Red);
+            }
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
@@ -151,11 +294,16 @@ namespace PattyPetitGiant
 
             public Vector2 dimensions;
 
+            public float timeAlive;
+            private const float flameDuration = 4000f;
+
             public MolotovFlame(Vector2 position)
             {
                 this.position = position;
                 this.active = true;
                 this.dimensions = GlobalGameConstants.TileSize;
+
+                timeAlive = 0.0f;
             }
 
             public bool hitTestWithEntity(Entity en)
@@ -170,7 +318,12 @@ namespace PattyPetitGiant
 
             public void update(GameTime currentTime)
             {
-                //
+                timeAlive += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (timeAlive > flameDuration)
+                {
+                    active = false;
+                }
             }
         }
     }
