@@ -10,10 +10,10 @@ namespace PattyPetitGiant
     {
         public enum Direction
         {
-            Up,
-            Down,
-            Left,
-            Right
+            Up = 3,
+            Down = 1,
+            Left = 2,
+            Right = 0,
         }
 
         public enum itemType
