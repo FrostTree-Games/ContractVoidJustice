@@ -270,16 +270,10 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-            
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
-
-                /*
-                double theta = Math.Atan2(direction.Y, direction.X);
-                velocity = magnitude * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
-                */
-
+                
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
                     if (direction.X < 0)

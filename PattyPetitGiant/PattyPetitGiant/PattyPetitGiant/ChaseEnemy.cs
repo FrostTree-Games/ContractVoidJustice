@@ -13,11 +13,20 @@ namespace PattyPetitGiant
 
     class ChaseEnemy : Enemy, SpineEntity
     {
+        private enum ChaseAttackStage
+        {
+            windUp,
+            attack,
+            none
+        }
+
         private EnemyComponents component = null;
         private AnimationLib.FrameAnimationSet chaseAnim;
         private float wind_anim = 0.0f;
         private Vector2 sword_hitbox;
         private Vector2 sword_position;
+        private bool player_in_range;
+        private ChaseAttackStage chase_stage;
 
         public ChaseEnemy(LevelState parentWorld, float initialx, float initialy)
         {
@@ -35,6 +44,8 @@ namespace PattyPetitGiant
             change_direction_time = 0.0f;
             this.parentWorld = parentWorld;
             player_found = false;
+            player_in_range = false;
+            chase_stage = ChaseAttackStage.none;
             
             enemy_damage = 1;
             enemy_life = 15;
@@ -89,6 +100,7 @@ namespace PattyPetitGiant
                             component = new Chase();
                             state = EnemyState.Chase;
                             animation_time = 0.0f;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         }
                         break;
                     case EnemyState.Chase:
@@ -102,55 +114,79 @@ namespace PattyPetitGiant
 
                             if (en is Player)
                             {
+                                //component won't update when the swing is in effect
                                 float distance = Vector2.Distance(en.CenterPoint, CenterPoint);
-                                if (distance < 64.0f)
+                                switch(chase_stage)
                                 {
-                                    velocity = Vector2.Zero;
-                                    
-                                    switch (direction_facing)
-                                    {
-                                        case GlobalGameConstants.Direction.Right:
-                                            sword_position.X = position.X + dimensions.X;
-                                            sword_position.Y = position.Y;
-                                            break;
-                                        case GlobalGameConstants.Direction.Left:
-                                            sword_position.X = position.X - sword_hitbox.X;
-                                            sword_position.Y = position.Y;
-                                            break;
-                                        case GlobalGameConstants.Direction.Up:
-                                            sword_position.Y = position.Y - sword_hitbox.Y;
-                                            sword_position.X = CenterPoint.X - sword_hitbox.X / 2;
-                                            break;
-                                        default:
-                                            sword_position.Y = CenterPoint.Y + dimensions.Y / 2;
-                                            sword_position.X = CenterPoint.X - sword_hitbox.X / 2;
-                                            break;
-                                    }
-                                    if (wind_anim > 300)
-                                    {
+                                    case ChaseAttackStage.windUp:
+                                        wind_anim += currentTime.ElapsedGameTime.Milliseconds;
+                                        //animation_time = 0.0f;
+                                        
+                                        velocity = Vector2.Zero;
+                                        switch (direction_facing)
+                                        {
+                                            case GlobalGameConstants.Direction.Right:
+                                                sword_position.X = position.X + dimensions.X;
+                                                sword_position.Y = position.Y;
+                                                break;
+                                            case GlobalGameConstants.Direction.Left:
+                                                sword_position.X = position.X - sword_hitbox.X;
+                                                sword_position.Y = position.Y;
+                                                break;
+                                            case GlobalGameConstants.Direction.Up:
+                                                sword_position.Y = position.Y - sword_hitbox.Y;
+                                                sword_position.X = CenterPoint.X - sword_hitbox.X / 2;
+                                                break;
+                                            default:
+                                                sword_position.Y = CenterPoint.Y + dimensions.Y / 2;
+                                                sword_position.X = CenterPoint.X - sword_hitbox.X / 2;
+                                                break;
+                                        }
+                                        if(wind_anim > 300)
+                                        {
+                                            chase_stage = ChaseAttackStage.attack;
+                                            wind_anim = 0.0f;
+                                            animation_time = 0.0f;
+                                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
+                                        }
+                                        break;
+                                    case ChaseAttackStage.attack:
+                                        wind_anim += currentTime.ElapsedGameTime.Milliseconds;    
+                                        //animation_time = 0.0f;
                                         if (swordSlashHitTest(en))
                                         {
                                             Vector2 direction = en.CenterPoint - CenterPoint;
+                                            
                                             en.knockBack(direction, knockback_magnitude, enemy_damage);
                                         }
-                                        dimensions = new Vector2(48f, 48f);
-                                        wind_anim = 0.0f;
-                                    }
-                                }
-                                else if (distance > 300)
-                                {
-                                    state = EnemyState.Moving;
-                                }
-                                else
-                                {
-                                    component.update(this, en, currentTime, parentWorld);
+                                        if (wind_anim > 500)
+                                        {
+                                            dimensions = new Vector2(48f, 48f);
+                                            wind_anim = 0.0f;
+                                            animation_time = 0.0f;
+                                            chase_stage = ChaseAttackStage.none;
+                                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+
+                                        }
+                                        break;
+                                    default:
+                                        component.update(this, en, currentTime, parentWorld);
+                                        if (distance < 64.0f)
+                                        {
+                                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("windUp");
+                                            chase_stage = ChaseAttackStage.windUp;
+                                            wind_anim = 0.0f;
+                                            animation_time = 0.0f;
+                                        }
+                                        if (distance > 300.0f)
+                                        {
+                                            state = EnemyState.Moving;
+                                            component = new MoveSearch();
+                                            wind_anim = 0.0f;
+                                        }
+                                        break;
                                 }
                             }
-                        }
-                        if (state == EnemyState.Moving)
-                        {
-                            component = new MoveSearch();
-                            wind_anim = 0.0f;
                         }
                         break;
                     default:
@@ -169,7 +205,7 @@ namespace PattyPetitGiant
                 }
 
                 animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
-                current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
+                current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, (wind_anim == 0)? true : false);
             }
         }
 
