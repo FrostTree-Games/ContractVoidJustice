@@ -46,8 +46,6 @@ namespace PattyPetitGiant
                             parent.Player_Found = true;
                         }
                     }
-                    //((RangeEnemy)parent).Angle1 = (float)(-1 * sight_angle1 + Math.PI / 2);
-                    //((RangeEnemy)parent).Angle2 = (float)(-1 * sight_angle2 + Math.PI / 2);
                     break;
                 case GlobalGameConstants.Direction.Left:
                     if ((angle > (sight_angle1 + Math.PI / 2) && angle < (sight_angle2 + Math.PI / 2)) && distance < range_distance)
@@ -59,8 +57,6 @@ namespace PattyPetitGiant
                             parent.Player_Found = true;
                         }
                     }
-                    //((RangeEnemy)parent).Angle1 = (float)(sight_angle1 + Math.PI / 2);
-                    //((RangeEnemy)parent).Angle2 = (float)(sight_angle2 + Math.PI / 2);
                     break;
                 case GlobalGameConstants.Direction.Up:
                     if ((angle > (-1 * sight_angle2) && angle < (-1 * sight_angle1)) && distance < range_distance)
@@ -73,8 +69,6 @@ namespace PattyPetitGiant
                         }
 
                     }
-                    //((RangeEnemy)parent).Angle1 = (float)(-1 * sight_angle1);
-                    //((RangeEnemy)parent).Angle2 = (float)(-1 * sight_angle2);
                     break;
                 default:
                     if ((angle > sight_angle1 && angle < sight_angle2) && distance < range_distance)
@@ -86,8 +80,6 @@ namespace PattyPetitGiant
                             parent.Player_Found = true;
                         }
                     }
-                    //((RangeEnemy)parent).Angle1 = (float)(sight_angle1);
-                    //((RangeEnemy)parent).Angle2 = (float)(sight_angle2);
                     break;
             }
             //((RangeEnemy)parent).Angle = angle;

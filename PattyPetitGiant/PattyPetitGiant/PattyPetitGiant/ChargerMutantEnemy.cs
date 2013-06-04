@@ -11,8 +11,16 @@ namespace PattyPetitGiant
 {
     class ChargerMutantEnemy : Enemy
     {
+        private enum ChargerState
+        {
+            windUp,
+            charge,
+            none
+        }
         private EnemyComponents component;
-        
+        private ChargerState charger_state;
+        private float windup_timer;
+
         public ChargerMutantEnemy(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
@@ -21,7 +29,8 @@ namespace PattyPetitGiant
 
             disable_movement = false;
             disable_movement_time = 0.0f;
-            knockback_magnitude = 6.0f;
+            windup_timer = 0.0f;
+            knockback_magnitude = 8.0f;
             enemy_damage = 20;
             enemy_life = 10;
             player_found = false;
@@ -31,6 +40,7 @@ namespace PattyPetitGiant
             state = EnemyState.Idle;
             enemy_type = EnemyType.Alien;
             component = new IdleSearch();
+            charger_state = ChargerState.none;
 
             this.parentWorld = parentWorld;
         }
@@ -46,7 +56,30 @@ namespace PattyPetitGiant
                         if (en == this)
                             continue;
                         else if (en is Player)
-                            component.update(this, en, currentTime, parentWorld);
+                        {
+                            if (player_found == true)
+                            {
+                                switch (en.Direction_Facing)
+                                {
+                                    case GlobalGameConstants.Direction.Right:
+                                        direction_facing = GlobalGameConstants.Direction.Left;
+                                        break;
+                                    case GlobalGameConstants.Direction.Left:
+                                        direction_facing = GlobalGameConstants.Direction.Right;
+                                        break;
+                                    case GlobalGameConstants.Direction.Up:
+                                        direction_facing = GlobalGameConstants.Direction.Down;
+                                        break;
+                                    default:
+                                        direction_facing = GlobalGameConstants.Direction.Up;
+                                        break;
+                                }
+                            }
+                            else
+                            {
+                                component.update(this, en, currentTime, parentWorld);
+                            }
+                        }
                     }
 
                     if (player_found)
@@ -79,47 +112,65 @@ namespace PattyPetitGiant
                     break;
                 case EnemyState.Agressive:
                     float distance = 0.0f;
-                    switch (direction_facing)
+
+                    switch(charger_state)
                     {
-                        case GlobalGameConstants.Direction.Right:
-                            velocity = new Vector2(8.0f, 0.0f);
+                        case ChargerState.windUp:
+                            windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            if (windup_timer > 300)
+                            {
+                                charger_state = ChargerState.charge;
+                                switch (direction_facing)
+                                {
+                                    case GlobalGameConstants.Direction.Right:
+                                        velocity = new Vector2(8.0f, 0.0f);
+                                        break;
+                                    case GlobalGameConstants.Direction.Left:
+                                        velocity = new Vector2(-8.0f, 0.0f);
+                                        break;
+                                    case GlobalGameConstants.Direction.Up:
+                                        velocity = new Vector2(0.0f, -8.0f);
+                                        break;
+                                    default:
+                                        velocity = new Vector2(0.0f, 8.0f);
+                                        break;
+                                }
+                            }
+                            
+
                             break;
-                        case GlobalGameConstants.Direction.Left:
-                            velocity = new Vector2(-8.0f, 0.0f);
-                            break;
-                        case GlobalGameConstants.Direction.Up:
-                            velocity = new Vector2(0.0f, -8.0f);
+                        case ChargerState.charge:
+                            foreach (Entity en in parentWorld.EntityList)
+                            {
+                                if (en == this)
+                                    continue;
+                                else if (en is Player)
+                                {
+                                    distance = Vector2.Distance(en.CenterPoint, CenterPoint);
+                                    if (distance > 300)
+                                    {
+                                        state = EnemyState.Idle;
+                                        component = new IdleSearch();
+                                        velocity = Vector2.Zero;
+                                        animation_time = 0.0f;
+                                        player_found = false;
+                                        charger_state = ChargerState.none;
+                                    }
+                                }
+
+                                if (hitTest(en))
+                                {
+                                    Vector2 direction = en.CenterPoint - CenterPoint;
+                                    en.knockBack(direction, knockback_magnitude, enemy_damage);
+                                }
+                            }
                             break;
                         default:
-                            velocity = new Vector2(0.0f, 8.0f);
+                            charger_state = ChargerState.windUp;
+                            windup_timer = 0.0f;
                             break;
                     }
-
-                    foreach (Entity en in parentWorld.EntityList)
-                    {
-                        if (en == this)
-                            continue;
-                        else if (en is Player)
-                        {
-                            distance = Vector2.Distance(en.CenterPoint, CenterPoint);
-                            if (distance > 300)
-                            {
-                                state = EnemyState.Idle;
-                                component = new IdleSearch();
-                                velocity = Vector2.Zero;
-                                animation_time = 0.0f;
-                                player_found = false;
-                            }
-                        }
-
-                        if (hitTest(en))
-                        {
-                            Vector2 direction = en.CenterPoint - CenterPoint;
-                            en.knockBack(direction, knockback_magnitude, enemy_damage);
-                            break;
-                        }
-                    }
-
+                    
                     Vector2 pos = new Vector2(position.X, position.Y);
                     Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
                     Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
@@ -141,6 +192,8 @@ namespace PattyPetitGiant
                 if (state != EnemyState.Agressive)
                 {
                     disable_movement = true;
+                    player_found = true;
+
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
                         if (direction.X < 0)
