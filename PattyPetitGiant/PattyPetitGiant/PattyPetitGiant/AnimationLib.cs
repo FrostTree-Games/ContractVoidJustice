@@ -320,6 +320,16 @@ namespace PattyPetitGiant
             }
         }
 
+        /// <summary>
+        /// Loads a spine animation from disc
+        /// </summary>
+        /// <param name="folderName"></param>
+        /// <returns></returns>
+        public static SpineAnimationSet loadNewAnimationSet(string folderName)
+        {
+            return new SpineAnimationSet(folderName);
+        }
+
         public static void renderSpineEntities(Matrix camera, List<Entity> entList)
         {
             skeletonRenderer.setCameraMatrix(camera);

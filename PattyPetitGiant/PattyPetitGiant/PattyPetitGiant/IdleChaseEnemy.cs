@@ -55,9 +55,9 @@ namespace PattyPetitGiant
 
             this.parentWorld = parentWorld;
 
-            walk_down = AnimationLib.getSkeleton("chaseDown");
-            walk_right = AnimationLib.getSkeleton("chaseRight");
-            walk_up = AnimationLib.getSkeleton("chaseUp");
+            walk_down = AnimationLib.loadNewAnimationSet("chaseDown");
+            walk_right = AnimationLib.loadNewAnimationSet("chaseRight");
+            walk_up = AnimationLib.loadNewAnimationSet("chaseUp");
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
             current_skeleton.Skeleton.FlipX = false;

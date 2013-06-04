@@ -75,9 +75,9 @@ namespace PattyPetitGiant
             bullet_alive = false;
             bullet.bullet_damage = 5;
 
-            walk_down = AnimationLib.getSkeleton("zippyGunDown");
-            walk_right = AnimationLib.getSkeleton("zippyGunRight");
-            walk_up = AnimationLib.getSkeleton("zippyGunUp");
+            walk_down = AnimationLib.loadNewAnimationSet("zippyGunDown");
+            walk_right = AnimationLib.loadNewAnimationSet("zippyGunRight");
+            walk_up = AnimationLib.loadNewAnimationSet("zippyGunUp");
             current_skeleton = walk_down;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
             current_skeleton.Skeleton.FlipX = false;
