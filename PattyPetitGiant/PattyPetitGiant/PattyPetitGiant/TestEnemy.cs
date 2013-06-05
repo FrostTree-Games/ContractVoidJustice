@@ -48,9 +48,9 @@ namespace PattyPetitGiant
             damage_player_time = 0.0f;
             knockback_magnitude = 1.0f;
 
-            walk_down = AnimationLib.getSkeleton("zippyDown");
-            walk_right = AnimationLib.getSkeleton("zippyRight");
-            walk_up = AnimationLib.getSkeleton("zippyUp");
+            walk_down = AnimationLib.loadNewAnimationSet("zippyDown");
+            walk_right = AnimationLib.loadNewAnimationSet("zippyRight");
+            walk_up = AnimationLib.loadNewAnimationSet("zippyUp");
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
             current_skeleton.Skeleton.FlipX = false;
