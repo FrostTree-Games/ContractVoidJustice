@@ -136,8 +136,6 @@ namespace PattyPetitGiant
                                         break;
                                 }
                             }
-                            
-
                             break;
                         case ChargerState.charge:
                             foreach (Entity en in parentWorld.EntityList)
