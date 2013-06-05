@@ -15,7 +15,7 @@ namespace PattyPetitGiant
             /// Probability that a shopkeeper will be placed in a dead end room.
             /// </summary>
             public static float ShopkeeperProbability { get { return shopkeeperProbability; } }
-            private static float shopkeeperProbability = 0.17526f;
+            private static float shopkeeperProbability = 0.210312f;
         }
 
         public struct RoomColors

@@ -16,6 +16,8 @@ namespace PattyPetitGiant
         /// </summary>
         AnimationLib.FrameAnimationSet templateAnim = null;
 
+        private AnimationLib.SpineAnimationSet[] directionAnims = null;
+
         private bool moveWaitStepping;
         private float moveWaitTimer;
         private const float moveStepTime = 500f;
@@ -54,6 +56,18 @@ namespace PattyPetitGiant
 
             templateAnim = AnimationLib.getFrameAnimationSet("antiFairy");
             animation_time = 0.0f;
+
+            directionAnims = new AnimationLib.SpineAnimationSet[4];
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("chaseUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("chaseDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("chaseRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("chaseRight");
+
+            for (int i = 0; i < 4; i++)
+            {
+                directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("run");
+            }
 
             enemy_type = EnemyType.Prisoner;
         }
@@ -151,10 +165,14 @@ namespace PattyPetitGiant
                             velocity = new Vector2(molotovMovementSpeed, 0.0f);
                             break;
                     }
+
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
                 }
                 else
                 {
                     velocity = Vector2.Zero;
+
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
                 }
 
                 if (moveWaitTimer > moveStepTime)
@@ -170,6 +188,8 @@ namespace PattyPetitGiant
             }
             else if (molotovState == MolotovState.WindUp)
             {
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
+
                 windUpTimer += currentTime.ElapsedGameTime.Milliseconds;
 
                 if (windUpTimer > windUpDuration)
@@ -185,6 +205,8 @@ namespace PattyPetitGiant
             }
             else if (molotovState == MolotovState.Throwing)
             {
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
+
                 throwingTimer += currentTime.ElapsedGameTime.Milliseconds;
 
                 Vector2 throwDirection = Vector2.Zero;
@@ -259,12 +281,12 @@ namespace PattyPetitGiant
             Vector2 finalPos = parentWorld.Map.reloactePosition(position, newPos, dimensions);
 
             position = finalPos;
+
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, molotovState == MolotovState.MoveWait ? true : false);
         }
 
         public override void draw(SpriteBatch sb)
         {
-            templateAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(3, 3), 0.5f, Color.LimeGreen);
-
             if (molotovState == MolotovState.Throwing)
             {
                 templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(2, 2), 0.51f, animation_time, new Vector2(4, 4));
@@ -295,7 +317,16 @@ namespace PattyPetitGiant
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
         {
-            //base.spinerender(renderer);
+            AnimationLib.SpineAnimationSet currentSkeleton = directionAnims[(int)direction_facing];
+
+            currentSkeleton.Skeleton.RootBone.X = CenterPoint.X * (currentSkeleton.Skeleton.FlipX ? -1 : 1);
+            currentSkeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            currentSkeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            currentSkeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            currentSkeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(currentSkeleton.Skeleton);
         }
 
         /// <summary>

@@ -45,7 +45,8 @@ namespace PattyPetitGiant
             player_found = false;
             player_in_range = false;
             chase_stage = ChaseAttackStage.none;
-            
+
+            enemy_type = EnemyType.Prisoner;
             enemy_damage = 1;
             enemy_life = 15;
             knockback_magnitude = 5.0f;

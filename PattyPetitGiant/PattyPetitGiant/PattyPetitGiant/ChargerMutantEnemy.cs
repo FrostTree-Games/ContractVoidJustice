@@ -38,7 +38,7 @@ namespace PattyPetitGiant
             range_distance = 300.0f;
 
             state = EnemyState.Idle;
-            enemy_type = EnemyType.Alien;
+            enemy_type = EnemyType.Prisoner;
             component = new IdleSearch();
             charger_state = ChargerState.none;
 
