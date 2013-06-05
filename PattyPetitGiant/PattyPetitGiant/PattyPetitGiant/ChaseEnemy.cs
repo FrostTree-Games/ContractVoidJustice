@@ -28,10 +28,9 @@ namespace PattyPetitGiant
         private bool player_in_range;
         private ChaseAttackStage chase_stage;
 
-        public ChaseEnemy(LevelState parentWorld, float initialx, float initialy)
+        public ChaseEnemy(LevelState parentWorld, Vector2 position)
         {
-            position.X = initialx;
-            position.Y = initialy;
+            this.position = position;
             enemy_speed = 2.0f;
             velocity = new Vector2(0.0f, -1.0f*enemy_speed);
             dimensions = new Vector2(48f, 48f);
@@ -52,9 +51,9 @@ namespace PattyPetitGiant
             knockback_magnitude = 5.0f;
             wind_anim = 0.0f;
 
-            walk_down = AnimationLib.getSkeleton("chaseDown");
-            walk_right = AnimationLib.getSkeleton("chaseRight");
-            walk_up = AnimationLib.getSkeleton("chaseUp");
+            walk_down = AnimationLib.loadNewAnimationSet("chaseDown");
+            walk_right = AnimationLib.loadNewAnimationSet("chaseRight");
+            walk_up = AnimationLib.loadNewAnimationSet("chaseUp");
             current_skeleton = walk_up;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
             current_skeleton.Skeleton.FlipX = false;
@@ -251,27 +250,30 @@ namespace PattyPetitGiant
         {
             if (disable_movement_time == 0.0)
             {
+                chase_stage = ChaseAttackStage.none;
+                state = EnemyState.Moving;
+
                 disable_movement = true;
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
                     if (direction.X < 0)
                     {
-                        velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
+                        velocity = new Vector2(-4.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
+                        velocity = new Vector2(4.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                 }
                 else
                 {
                     if (direction.Y < 0)
                     {
-                        velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
+                        velocity = new Vector2(direction.X / 100f * magnitude, -4.0f * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 4.0f * magnitude);
                     }
                 }
                 enemy_life = enemy_life - damage;

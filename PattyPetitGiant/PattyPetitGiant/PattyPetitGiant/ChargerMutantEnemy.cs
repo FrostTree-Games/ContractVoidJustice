@@ -21,9 +21,9 @@ namespace PattyPetitGiant
         private ChargerState charger_state;
         private float windup_timer;
 
-        public ChargerMutantEnemy(LevelState parentWorld, float initial_x, float initial_y)
+        public ChargerMutantEnemy(LevelState parentWorld, Vector2 position)
         {
-            position = new Vector2(initial_x, initial_y);
+            this.position = position;
             dimensions = new Vector2(48.0f, 48.0f);
             velocity = Vector2.Zero;
 
