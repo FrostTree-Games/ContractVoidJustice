@@ -192,26 +192,27 @@ namespace PattyPetitGiant
                     default:
                         break;
                 }
-                Vector2 pos = new Vector2(position.X, position.Y);
-
-                Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-                position.X = finalPos.X;
-                position.Y = finalPos.Y;
-
                 if (enemy_life <= 0)
                 {
                     remove_from_list = true;
                 }
 
-                animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
-                current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, (wind_anim == 0)? true : false);
             }
+            Vector2 pos = new Vector2(position.X, position.Y);
+
+            Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
+
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, (wind_anim == 0) ? true : false);
+
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, sword_position, null, Color.Pink, 0.0f, Vector2.Zero, sword_hitbox, SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, sword_position, null, Color.Pink, 0.0f, Vector2.Zero, sword_hitbox, SpriteEffects.None, 0.5f);
             //chaseAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
         }
         public override void spinerender(SkeletonRenderer renderer)
@@ -255,22 +256,22 @@ namespace PattyPetitGiant
                 {
                     if (direction.X < 0)
                     {
-                        velocity = new Vector2(-1.0f * magnitude, direction.Y / 100 * magnitude);
+                        velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2(1.0f * magnitude, direction.Y / 100 * magnitude);
+                        velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
                     }
                 }
                 else
                 {
                     if (direction.Y < 0)
                     {
-                        velocity = new Vector2(direction.X / 100f * magnitude, -1.0f * magnitude);
+                        velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
                     }
                     else
                     {
-                        velocity = new Vector2((direction.X / 100f) * magnitude, 1.0f * magnitude);
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
                     }
                 }
                 enemy_life = enemy_life - damage;
