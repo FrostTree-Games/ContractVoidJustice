@@ -41,6 +41,13 @@ namespace PattyPetitGiant
             get { return item_hit; }
         }
 
+        protected float change_direction_time_threshold = 2000.0f;
+        public float Change_Direction_Time_Threshold
+        {
+            set { change_direction_time_threshold = value; }
+            get { return change_direction_time_threshold; }
+        }
+
         protected float change_direction_time = 0.0f;
         public float Change_Direction_Time 
         { 

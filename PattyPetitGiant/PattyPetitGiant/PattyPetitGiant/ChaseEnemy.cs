@@ -67,7 +67,7 @@ namespace PattyPetitGiant
             if (disable_movement == true)
             {
                 disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
-                if (disable_movement_time > 300)
+                if (disable_movement_time > 150)
                 {
                     velocity = Vector2.Zero;
                     disable_movement = false;
@@ -80,6 +80,7 @@ namespace PattyPetitGiant
                 {
                     case EnemyState.Moving:
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
                         foreach (Entity en in parentWorld.EntityList)
                         {
@@ -100,7 +101,7 @@ namespace PattyPetitGiant
                             component = new Chase();
                             state = EnemyState.Chase;
                             animation_time = 0.0f;
-                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("chase");
                         }
                         break;
                     case EnemyState.Chase:
@@ -178,13 +179,17 @@ namespace PattyPetitGiant
                                             wind_anim = 0.0f;
                                             animation_time = 0.0f;
                                         }
-                                        if (distance > 300.0f)
-                                        {
-                                            state = EnemyState.Moving;
-                                            component = new MoveSearch();
-                                            wind_anim = 0.0f;
-                                        }
+                                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("chase");
                                         break;
+                                }
+
+                                if (distance > 300.0f)
+                                {
+                                    state = EnemyState.Moving;
+                                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                                    component = new MoveSearch();
+                                    player_found = false;
+                                    wind_anim = 0.0f;
                                 }
                             }
                         }

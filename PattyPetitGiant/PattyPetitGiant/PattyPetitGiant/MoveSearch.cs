@@ -19,6 +19,7 @@ namespace PattyPetitGiant
         private bool wall_between = false;
         private double sight_angle1 = 1.2;
         private double sight_angle2 = 1.8;
+        private float parent_direction_time_threshold = 2000.0f;
 
         private int change_direction;
 
@@ -85,6 +86,7 @@ namespace PattyPetitGiant
             //((RangeEnemy)parent).Angle = angle;
             /*End search for player ***************************************************************************************************************************/
 
+            parent_direction_time_threshold = parent.Change_Direction_Time_Threshold;
             if (parent.Player_Found == false)
             {
                 int check_corners = 0;
@@ -140,7 +142,7 @@ namespace PattyPetitGiant
                     check_corners++;
                 }
 
-                if (parent.Change_Direction_Time > 2000)
+                if (parent.Change_Direction_Time > parent_direction_time_threshold)
                 {
                     change_direction = Game1.rand.Next(4);
                     //change_direction_time = 0.0f;
