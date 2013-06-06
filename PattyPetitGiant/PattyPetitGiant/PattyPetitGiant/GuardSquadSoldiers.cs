@@ -32,6 +32,9 @@ namespace PattyPetitGiant
             set { leader = value; }
             get { return leader; }
         }
+        
+        private float distance_from_follow_pt = 0.0f;
+        private float angle = 0.0f;
 
         public GuardSquadSoldiers(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -73,8 +76,8 @@ namespace PattyPetitGiant
 
                         if (distance > 96)
                         {
-                            float distance_from_follow_pt = Vector2.Distance(follow_point, CenterPoint);
-                            float angle = (float)(Math.Atan2(follow_point.Y - CenterPoint.Y, follow_point.X - CenterPoint.X));
+                            distance_from_follow_pt = Vector2.Distance(follow_point, CenterPoint);
+                            angle = (float)(Math.Atan2(follow_point.Y - CenterPoint.Y, follow_point.X - CenterPoint.X));
                             velocity = new Vector2(distance_from_follow_pt * (float)(Math.Cos(angle))/ 100.0f, distance_from_follow_pt * (float)(Math.Sin(angle)) / 100.0f);
 
                             if (Math.Abs(velocity.X) > (Math.Abs(velocity.Y)))
@@ -83,21 +86,11 @@ namespace PattyPetitGiant
                                 if (velocity.X < 0)
                                 {
                                     velocity = new Vector2(-1.5f, velocity.Y);
-                                    /*if (parent.Direction_Facing == GlobalGameConstants.Direction.Up && angle < -3 * Math.PI / 4 - 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Down && angle > 3 * Math.PI / 4 + 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Right)
-                                    {
-                                        parent.Direction_Facing = GlobalGameConstants.Direction.Left;
-                                        parent.Change_Direction_Time = 0.0f;
-                                    }*/
                                 }
                                 //enemy facing right
                                 else
                                 {
                                     velocity = new Vector2(1.5f, velocity.Y);
-                                    /*if (parent.Direction_Facing == GlobalGameConstants.Direction.Up && angle > -1 * Math.PI / 4 + 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Down && angle < Math.PI / 4 - 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Left)
-                                    {
-                                        parent.Direction_Facing = GlobalGameConstants.Direction.Right;
-                                        parent.Change_Direction_Time = 0.0f;
-                                    }*/
                                 }
                             }
                             else
@@ -106,31 +99,55 @@ namespace PattyPetitGiant
                                 if (velocity.Y < 0)
                                 {
                                     velocity = new Vector2(velocity.X, -1.5f);
-                                    /*if (parent.Direction_Facing == GlobalGameConstants.Direction.Left && angle > -3 * Math.PI / 4 + 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Right && angle < -1 * Math.PI / 4 - 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Down)
-                                    {
-                                        parent.Direction_Facing = GlobalGameConstants.Direction.Up;
-                                        parent.Change_Direction_Time = 0.0f;
-                                    }*/
                                 }
                                 //enemy facing down
                                 else
                                 {
                                     velocity = new Vector2(velocity.X, 1.5f);
-                                    /*if (parent.Direction_Facing == GlobalGameConstants.Direction.Left && angle < -3 * Math.PI / 4 - 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Right && angle > -1 * Math.PI / 4 + 0.10 || parent.Direction_Facing == GlobalGameConstants.Direction.Up)
-                                    {
-                                        parent.Direction_Facing = GlobalGameConstants.Direction.Down;
-                                        parent.Change_Direction_Time = 0.0f;
-                                    }*/
                                 }
                             }
-                            Console.WriteLine(velocity);
                         }
                         else
                         {
                             velocity = Vector2.Zero;
                         }
+
+                        if (player_found == true)
+                        {
+                            state = SquadSoldierState.Fire;
+                        }
                         break;
                     case SquadSoldierState.Fire:
+                        distance_from_follow_pt = Vector2.Distance(follow_point, CenterPoint);
+                            angle = (float)(Math.Atan2(follow_point.Y - CenterPoint.Y, follow_point.X - CenterPoint.X));
+                            velocity = new Vector2(distance_from_follow_pt * (float)(Math.Cos(angle))/ 100.0f, distance_from_follow_pt * (float)(Math.Sin(angle)) / 100.0f);
+
+                            if (Math.Abs(velocity.X) > (Math.Abs(velocity.Y)))
+                            {
+                                //enemy facing left
+                                if (velocity.X < 0)
+                                {
+                                    velocity = new Vector2(-1.5f, velocity.Y);
+                                }
+                                //enemy facing right
+                                else
+                                {
+                                    velocity = new Vector2(1.5f, velocity.Y);
+                                }
+                            }
+                            else
+                            {
+                                //enemy facing up
+                                if (velocity.Y < 0)
+                                {
+                                    velocity = new Vector2(velocity.X, -1.5f);
+                                }
+                                //enemy facing down
+                                else
+                                {
+                                    velocity = new Vector2(velocity.X, 1.5f);
+                                }
+                            }
                         break;
                     default:
                         break;

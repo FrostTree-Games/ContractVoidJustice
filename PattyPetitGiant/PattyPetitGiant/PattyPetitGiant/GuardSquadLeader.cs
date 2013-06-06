@@ -116,14 +116,45 @@ namespace PattyPetitGiant
                             squad_mates[1].Follow_Point = follow_point_2;
                         }
 
-                        player_found = false;
                         if (player_found)
                         {
                             state = SquadLeaderState.Direct;
+
+                            switch (direction_facing)
+                            {
+                                case GlobalGameConstants.Direction.Right:
+                                    follow_point_1.X = 128+follow_point_1.X;
+                                    follow_point_2.X = 128+follow_point_2.X;
+                                    break;
+                                case GlobalGameConstants.Direction.Left:
+                                    follow_point_1.X = follow_point_1.X - 128;
+                                    follow_point_2.X = follow_point_2.X - 128;
+                                    break;
+                                case GlobalGameConstants.Direction.Up:
+                                    follow_point_1.Y = follow_point_1.Y -128;
+                                    follow_point_2.Y = follow_point_2.Y -128;
+                                    break;
+                                default:
+                                    follow_point_1.Y = follow_point_1.Y + 128;
+                                    follow_point_2.Y = follow_point_2.Y + 128;
+                                    break;
+                            }
+
+                            squad_mates[0].Player_Found = true;
+                            squad_mates[1].Player_Found = true;
+
                             velocity = Vector2.Zero;
                         }
                         break;
                     case SquadLeaderState.Direct:
+                        if (squad_mates[0] != null)
+                        {
+                            squad_mates[0].Follow_Point = follow_point_1;
+                        }
+                        if (squad_mates[1] != null)
+                        {
+                            squad_mates[1].Follow_Point = follow_point_2;
+                        }
                         break;
                     default:
                         break;
