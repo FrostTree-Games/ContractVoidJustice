@@ -5,3 +5,4 @@ bomb.png
 sword.png
 gun.png
 gamepadSheet.png
+molotov.png

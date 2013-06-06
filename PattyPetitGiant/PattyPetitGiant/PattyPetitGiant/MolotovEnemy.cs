@@ -54,7 +54,7 @@ namespace PattyPetitGiant
 
             health = 15;
 
-            templateAnim = AnimationLib.getFrameAnimationSet("antiFairy");
+            templateAnim = AnimationLib.getFrameAnimationSet("molotov");
             animation_time = 0.0f;
 
             directionAnims = new AnimationLib.SpineAnimationSet[4];
@@ -289,12 +289,12 @@ namespace PattyPetitGiant
         {
             if (molotovState == MolotovState.Throwing)
             {
-                templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(2, 2), 0.51f, animation_time, new Vector2(4, 4));
+                templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(1, 1), 0.51f, animation_time / 100f, new Vector2(16, 16));
             }
 
             if (flame.active)
             {
-                templateAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(3, 3), 0.4f, Color.Red);
+                templateAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(1, 1), 0.4f, Color.White);
             }
         }
 
