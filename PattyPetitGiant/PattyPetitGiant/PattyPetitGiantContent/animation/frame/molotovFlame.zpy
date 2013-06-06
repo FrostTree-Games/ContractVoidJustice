@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name>molotovFlame</name>
+  <sheetName>molotovFlame.png</sheetName>
+  <initalX>0</initalX>
+  <initalY>0</initalY>
+  <offsetX>-24</offsetX>
+  <offsetY>-24</offsetY>
+  <frameWidth>96</frameWidth>
+  <frameHeight>72</frameHeight>
+  <frameCount>11</frameCount>
+  <frameSpeed>25</frameSpeed>
+  <loop>true</loop>
+</SerializableAnimationData>

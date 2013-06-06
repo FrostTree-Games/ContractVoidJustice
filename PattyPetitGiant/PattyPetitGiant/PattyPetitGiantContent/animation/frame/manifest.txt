@@ -27,3 +27,4 @@ keyPic
 keyEmptyPic
 antiFairy
 molotov
+molotovFlame

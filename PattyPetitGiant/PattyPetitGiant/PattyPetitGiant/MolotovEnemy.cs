@@ -11,10 +11,8 @@ namespace PattyPetitGiant
         private MolotovState molotovState;
         private MolotovFlame flame;
 
-        /// <summary>
-        /// will switch to a spine animation later
-        /// </summary>
-        AnimationLib.FrameAnimationSet templateAnim = null;
+        private AnimationLib.FrameAnimationSet templateAnim = null;
+        private AnimationLib.FrameAnimationSet flameAnim = null;
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
@@ -55,6 +53,7 @@ namespace PattyPetitGiant
             health = 15;
 
             templateAnim = AnimationLib.getFrameAnimationSet("molotov");
+            flameAnim = AnimationLib.getFrameAnimationSet("molotovFlame");
             animation_time = 0.0f;
 
             directionAnims = new AnimationLib.SpineAnimationSet[4];
@@ -294,7 +293,8 @@ namespace PattyPetitGiant
 
             if (flame.active)
             {
-                templateAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(1, 1), 0.4f, Color.White);
+                flameAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(1, 1), 0.4f, Color.White);
+                sb.Draw(Game1.whitePixel, flame.position, null, Color.Red, 0.0f, Vector2.Zero, 48, SpriteEffects.None, 0.2f);
             }
         }
 

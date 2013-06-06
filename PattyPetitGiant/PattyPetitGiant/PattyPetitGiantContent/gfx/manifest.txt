@@ -6,3 +6,4 @@ sword.png
 gun.png
 gamepadSheet.png
 molotov.png
+molotovFlame.png
