@@ -321,6 +321,16 @@ namespace PattyPetitGiant
 
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chase");
             }
+            else if (guardState == PatrolGuardState.WindUp)
+            {
+                velocity = Vector2.Zero;
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
+            }
+            else if (guardState == PatrolGuardState.Shooting)
+            {
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
+            }
 
             Vector2 newPos = position + (currentTime.ElapsedGameTime.Milliseconds * velocity);
             Vector2 finalPos = parentWorld.Map.reloactePosition(position, newPos, dimensions);
@@ -332,7 +342,15 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
- 	         //base.draw(sb);
+            for (int i = 0; i < bulletSupply; i++)
+            {
+                if (bullets[i].active == false)
+                {
+                    continue;
+                }
+
+                sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.Pink, 0.0f, Vector2.Zero, bullets[i].hitbox, SpriteEffects.None, 0.6f);
+            }
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
