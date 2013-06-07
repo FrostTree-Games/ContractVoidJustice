@@ -1,5 +1,6 @@
 derek.png
 tileTemplate.png
+scifiTemplate.png
 explosionlarge2.png
 bomb.png
 sword.png
