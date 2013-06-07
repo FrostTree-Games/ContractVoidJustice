@@ -233,6 +233,29 @@ namespace PattyPetitGiant
                             continue;
                         }
 
+                        if (Vector2.Distance(en.CenterPoint, CenterPoint) > GlobalGameConstants.TileSize.X * 6)
+                        {
+                            continue;
+                        }
+
+                        // very cruel angle checking at the moment. May refine later
+                        double theta = Math.Atan2(CenterPoint.Y - en.Position.Y, CenterPoint.X - en.Position.X);
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Right:
+                                if ( !(theta < Math.PI / 4 && theta > (Math.PI / -4)) ) { continue; }
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                if (!(theta < 3 * Math.PI / 4 && theta > Math.PI / 4)) { continue; }
+                                break;
+                            case GlobalGameConstants.Direction.Down:
+                                if (!(theta > -3 * Math.PI / 4 && theta < Math.PI / -4)) { continue; }
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                if (!(theta > 3 * Math.PI / 4 || theta < 3 * Math.PI / -4)) { continue; }
+                                break;
+                        }
+
                         if (en is Enemy)
                         {
                             if (((Enemy)en).EnemyFaction == EnemyType.Alien || ((Enemy)en).EnemyFaction == EnemyType.Prisoner)
@@ -243,6 +266,8 @@ namespace PattyPetitGiant
                         else if (en is Player)
                         {
                             target = en;
+
+                            Console.WriteLine(theta);
                         }
                         else if (en is ShopKeeper)
                         {
