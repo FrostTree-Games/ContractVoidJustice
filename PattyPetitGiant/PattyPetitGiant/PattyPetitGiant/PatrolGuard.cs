@@ -17,6 +17,7 @@ namespace PattyPetitGiant
             WindUp = 2,
             Shooting = 3,
             RetreatToCenter = 4,
+            KnockBack = 5,
         }
 
         private struct GunBullet
@@ -28,16 +29,20 @@ namespace PattyPetitGiant
             private float reloadTime;
             private const float bulletReloadDuration = 300f;
 
+            public PatrolGuard parent;
+
             private const float bulletSpeed = 0.6f;
 
             public Vector2 center { get { return position + (hitbox / 2.0f); } }
 
-            public GunBullet(Vector2 position, GlobalGameConstants.Direction direction)
+            public GunBullet(Vector2 position, GlobalGameConstants.Direction direction, PatrolGuard parent)
             {
                 active = true;
                 this.position = position;
                 hitbox = GlobalGameConstants.TileSize / new Vector2(2, 2);
                 reloadTime = 0.0f;
+
+                this.parent = parent;
 
                 switch (direction)
                 {
@@ -81,6 +86,24 @@ namespace PattyPetitGiant
                         return;
                     }
 
+                    foreach (Entity en in parentWorld.EntityList)
+                    {
+                        if (en == parent)
+                        {
+                            continue;
+                        }
+
+                        if (en is Player || en is Enemy || en is ShopKeeper)
+                        {
+                            if (hitTestBullet(en))
+                            {
+                                en.knockBack(Vector2.Normalize(en.CenterPoint - center), 2.0f, 5);
+                                active = false;
+                                return;
+                            }
+                        }
+                    }
+
                     position += velocity * currentTime.ElapsedGameTime.Milliseconds;
                 }
                 else
@@ -104,15 +127,20 @@ namespace PattyPetitGiant
         private const float patrolChaseSpeed = 0.095f;
 
         private float chaseWaitTime;
-        private const float chaseWaitDuration = 300f;
+        private const float chaseWaitDuration = 400f;
 
         private float windUpTime;
-        private const float windUpDuration = 500f;
+        private const float windUpDuration = 300f;
+
+        private float knockBackTime;
+        private const float knockBackDuration = 250f;
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
         private Entity target = null;
         private Vector2 chunkCenter;
+
+        private int health;
 
         public PatrolGuard(LevelState parentWorld, Vector2 position)
         {
@@ -137,6 +165,8 @@ namespace PattyPetitGiant
             {
                 directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("run");
             }
+
+            health = 15;
 
             //calculate the center of the chunk you're placed in
             chunkCenter.X = (((int)((position.X / (GlobalGameConstants.TileSize.X)) / GlobalGameConstants.TilesPerRoomWide)) * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
@@ -319,7 +349,7 @@ namespace PattyPetitGiant
 
                     velocity = -patrolChaseSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
                 }
-                else if (dist > GlobalGameConstants.TileSize.X * 5)
+                else if (dist > GlobalGameConstants.TileSize.X * 4)
                 {
                     chaseWaitTime -= currentTime.ElapsedGameTime.Milliseconds;
 
@@ -329,14 +359,38 @@ namespace PattyPetitGiant
                 {
                     chaseWaitTime += currentTime.ElapsedGameTime.Milliseconds;
 
+                    velocity = Vector2.Zero;
+
+                    if (direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+                    {
+                        if (CenterPoint.X < target.CenterPoint.X)
+                        {
+                            velocity.X += patrolChaseSpeed;
+                        }
+                        else if (CenterPoint.X > target.CenterPoint.X)
+                        {
+                            velocity.X -= patrolChaseSpeed;
+                        }
+                    }
+
+                    if (direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Right)
+                    {
+                        if (CenterPoint.Y < target.CenterPoint.Y)
+                        {
+                            velocity.Y += patrolChaseSpeed;
+                        }
+                        else if (CenterPoint.Y > target.CenterPoint.Y)
+                        {
+                            velocity.Y -= patrolChaseSpeed;
+                        }
+                    }
+
                     if (chaseWaitTime > chaseWaitDuration)
                     {
                         chaseWaitTime = 0.0f;
                         guardState = PatrolGuardState.WindUp;
                         animation_time = 0.0f;
                     }
-
-                    velocity = Vector2.Zero;
                 }
 
                 if (chaseWaitTime < 0) { chaseWaitTime = 0f; }
@@ -359,7 +413,7 @@ namespace PattyPetitGiant
                     {
                         if (!(bullets[i].active))
                         {
-                            bullets[i] = new GunBullet(CenterPoint - (bullets[i].hitbox / 2), direction_facing);
+                            bullets[i] = new GunBullet(CenterPoint - (bullets[i].hitbox / 2), direction_facing, this);
                             break;
                         }
                     }
@@ -382,6 +436,23 @@ namespace PattyPetitGiant
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chase");
                 }
 
+            }
+            else if (guardState == PatrolGuardState.KnockBack)
+            {
+                if (health < 0)
+                {
+                    remove_from_list = true;
+                    return;
+                }
+
+                knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (knockBackTime > knockBackDuration)
+                {
+                    target = null;
+
+                    guardState = PatrolGuardState.MoveWait;
+                }
             }
 
             Vector2 newPos = position + (currentTime.ElapsedGameTime.Milliseconds * velocity);
@@ -412,7 +483,19 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-            //base.knockBack(direction, magnitude, damage);
+            if (guardState == PatrolGuardState.KnockBack)
+            {
+                return;
+            }
+
+            health -= damage;
+
+            direction.Normalize();
+            velocity = direction * (magnitude / 2);
+
+            knockBackTime = 0.0f;
+
+            guardState = PatrolGuardState.KnockBack;
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
