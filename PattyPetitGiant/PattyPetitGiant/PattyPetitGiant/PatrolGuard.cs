@@ -28,7 +28,7 @@ namespace PattyPetitGiant
             private float reloadTime;
             private const float bulletReloadDuration = 300f;
 
-            private const float bulletSpeed = 1.0f;
+            private const float bulletSpeed = 0.6f;
 
             public Vector2 center { get { return position + (hitbox / 2.0f); } }
 
@@ -74,7 +74,7 @@ namespace PattyPetitGiant
                 {
                     reloadTime += currentTime.ElapsedGameTime.Milliseconds;
 
-                    if (parentWorld.Map.hitTestWall(center) || reloadTime > 5000f)
+                    if (reloadTime > 5000f || parentWorld.Map.hitTestWall(center))
                     {
                         active = false;
                         reloadTime = 0.0f;
@@ -102,6 +102,12 @@ namespace PattyPetitGiant
 
         private const float patrolMoveSpeed = 0.125f;
         private const float patrolChaseSpeed = 0.095f;
+
+        private float chaseWaitTime;
+        private const float chaseWaitDuration = 300f;
+
+        private float windUpTime;
+        private const float windUpDuration = 500f;
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
@@ -216,6 +222,7 @@ namespace PattyPetitGiant
 
                     if (target != null)
                     {
+                        chaseWaitTime = 0f;
                         guardState = PatrolGuardState.Chase;
                     }
                 }
@@ -237,26 +244,26 @@ namespace PattyPetitGiant
                     return;
                 }
 
-                double angle = Math.Atan2(CenterPoint.Y - chunkCenter.Y, CenterPoint.X - chunkCenter.X);
+                double theta = Math.Atan2(CenterPoint.Y - chunkCenter.Y, CenterPoint.X - chunkCenter.X);
 
-                if (angle < Math.PI / 4 || angle > (Math.PI * 2) - (Math.PI / 4))
+                if (theta < Math.PI / 4 || theta > (Math.PI * 2) - (Math.PI / 4))
                 {
                     direction_facing = GlobalGameConstants.Direction.Down;
                 }
-                else if (angle > Math.PI / 4 && angle < Math.PI - (Math.PI / 4))
+                else if (theta > Math.PI / 4 && theta < Math.PI - (Math.PI / 4))
                 {
                     direction_facing = GlobalGameConstants.Direction.Left;
                 }
-                else if (angle > Math.PI - (Math.PI / 4) / 4 && angle < Math.PI + (Math.PI / 4))
+                else if (theta > Math.PI - (Math.PI / 4) / 4 && theta < Math.PI + (Math.PI / 4))
                 {
                     direction_facing = GlobalGameConstants.Direction.Right;
                 }
-                else if (angle > Math.PI + (Math.PI / 4) / 4 && angle < (Math.PI * 2) - (Math.PI / 4))
+                else if (theta > Math.PI + (Math.PI / 4) / 4 && theta < (Math.PI * 2) - (Math.PI / 4))
                 {
                     direction_facing = GlobalGameConstants.Direction.Up;
                 }
 
-                velocity = -patrolMoveSpeed * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+                velocity = -patrolMoveSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
 
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
             }
@@ -308,16 +315,31 @@ namespace PattyPetitGiant
                 float dist = Vector2.Distance(CenterPoint, target.CenterPoint);
                 if (dist < GlobalGameConstants.TileSize.X * 3)
                 {
+                    chaseWaitTime -= currentTime.ElapsedGameTime.Milliseconds;
+
                     velocity = -patrolChaseSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
                 }
                 else if (dist > GlobalGameConstants.TileSize.X * 5)
                 {
+                    chaseWaitTime -= currentTime.ElapsedGameTime.Milliseconds;
+
                     velocity = patrolChaseSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
                 }
                 else
                 {
+                    chaseWaitTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (chaseWaitTime > chaseWaitDuration)
+                    {
+                        chaseWaitTime = 0.0f;
+                        guardState = PatrolGuardState.WindUp;
+                        animation_time = 0.0f;
+                    }
+
                     velocity = Vector2.Zero;
                 }
+
+                if (chaseWaitTime < 0) { chaseWaitTime = 0f; }
 
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chase");
             }
@@ -325,11 +347,41 @@ namespace PattyPetitGiant
             {
                 velocity = Vector2.Zero;
 
+                windUpTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (windUpTime > windUpDuration)
+                {
+                    windUpTime = 0.0f;
+                    animation_time = 0.0f;
+                    guardState = PatrolGuardState.Shooting;
+
+                    for (int i = 0; i < bulletSupply; i++)
+                    {
+                        if (!(bullets[i].active))
+                        {
+                            bullets[i] = new GunBullet(CenterPoint - (bullets[i].hitbox / 2), direction_facing);
+                            break;
+                        }
+                    }
+                }
+
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
             }
             else if (guardState == PatrolGuardState.Shooting)
             {
+                windUpTime += currentTime.ElapsedGameTime.Milliseconds;
+
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
+
+                if (windUpTime > windUpDuration)
+                {
+                    windUpTime = 0.0f;
+                    animation_time = 0.0f;
+                    guardState = PatrolGuardState.Chase;
+
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chase");
+                }
+
             }
 
             Vector2 newPos = position + (currentTime.ElapsedGameTime.Milliseconds * velocity);
@@ -337,7 +389,12 @@ namespace PattyPetitGiant
 
             position = finalPos;
 
-            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, true);
+            for (int i = 0; i < bulletSupply; i++)
+            {
+                bullets[i].update(parentWorld, currentTime);
+            }
+
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, (guardState == PatrolGuardState.MoveWait || guardState == PatrolGuardState.Chase || guardState == PatrolGuardState.RetreatToCenter) ? true : false);
         }
 
         public override void draw(SpriteBatch sb)
