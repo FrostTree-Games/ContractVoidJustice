@@ -101,6 +101,7 @@ namespace PattyPetitGiant
         private const float moveStepWaitTime = 500f;
 
         private const float patrolMoveSpeed = 0.125f;
+        private const float patrolChaseSpeed = 0.095f;
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
@@ -187,6 +188,42 @@ namespace PattyPetitGiant
                     }
                 }
 
+                if (target == null)
+                {
+                    foreach (Entity en in parentWorld.EntityList)
+                    {
+                        if (Vector2.Distance(en.CenterPoint, chunkCenter) > 500)
+                        {
+                            continue;
+                        }
+
+                        if (en is Enemy)
+                        {
+                            if (((Enemy)en).EnemyFaction == EnemyType.Alien || ((Enemy)en).EnemyFaction == EnemyType.Prisoner)
+                            {
+                                target = en;
+                            }
+                        }
+                        else if (en is Player)
+                        {
+                            target = en;
+                        }
+                        else if (en is ShopKeeper)
+                        {
+                            target = en;
+                        }
+                    }
+
+                    if (target != null)
+                    {
+                        guardState = PatrolGuardState.Chase;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Garbage target; clean before you change states Dan");
+                }
+
                 if (Vector2.Distance(CenterPoint, chunkCenter) > 500)
                 {
                     guardState = PatrolGuardState.RetreatToCenter;
@@ -220,14 +257,75 @@ namespace PattyPetitGiant
                 }
 
                 velocity = -patrolMoveSpeed * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
+            }
+            else if (guardState == PatrolGuardState.Chase)
+            {
+                //this employs short-circut evaluation for safe code, which I'm not sure if is a good idea
+                if (target == null || target.Remove_From_List == true)
+                {
+                    guardState = PatrolGuardState.MoveWait;
+
+                    target = null;
+
+                    return;
+                }
+
+                if (Vector2.Distance(target.CenterPoint, chunkCenter) > 500)
+                {
+                    guardState = PatrolGuardState.MoveWait;
+                    target = null;
+                    return;
+                }
+
+                double theta = Math.Atan2(target.CenterPoint.Y - CenterPoint.Y, target.CenterPoint.X - CenterPoint.X);
+
+                if (Math.Abs(Math.Sin(theta)) > Math.Abs(Math.Cos(theta)))
+                {
+                    if (Math.Sin(theta) < 0)
+                    {
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                    }
+                    else
+                    {
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                    }
+                }
+                else
+                {
+                    if (Math.Cos(theta) < 0)
+                    {
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                    }
+                    else
+                    {
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                    }
+                }
+
+                //approach player, but keep a distance
+                float dist = Vector2.Distance(CenterPoint, target.CenterPoint);
+                if (dist < GlobalGameConstants.TileSize.X * 3)
+                {
+                    velocity = -patrolChaseSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+                }
+                else if (dist > GlobalGameConstants.TileSize.X * 5)
+                {
+                    velocity = patrolChaseSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+                }
+                else
+                {
+                    velocity = Vector2.Zero;
+                }
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chase");
             }
 
             Vector2 newPos = position + (currentTime.ElapsedGameTime.Milliseconds * velocity);
             Vector2 finalPos = parentWorld.Map.reloactePosition(position, newPos, dimensions);
 
             position = finalPos;
-
-            directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
 
             directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, true);
         }
