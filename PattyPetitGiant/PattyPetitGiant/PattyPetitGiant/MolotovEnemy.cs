@@ -11,10 +11,8 @@ namespace PattyPetitGiant
         private MolotovState molotovState;
         private MolotovFlame flame;
 
-        /// <summary>
-        /// will switch to a spine animation later
-        /// </summary>
-        AnimationLib.FrameAnimationSet templateAnim = null;
+        private AnimationLib.FrameAnimationSet templateAnim = null;
+        private AnimationLib.FrameAnimationSet flameAnim = null;
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
@@ -54,15 +52,16 @@ namespace PattyPetitGiant
 
             health = 15;
 
-            templateAnim = AnimationLib.getFrameAnimationSet("antiFairy");
+            templateAnim = AnimationLib.getFrameAnimationSet("molotov");
+            flameAnim = AnimationLib.getFrameAnimationSet("molotovFlame");
             animation_time = 0.0f;
 
             directionAnims = new AnimationLib.SpineAnimationSet[4];
-            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("chaseUp");
-            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("chaseDown");
-            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("chaseRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("molotovUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("molotovDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("molotovRight");
             directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
-            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("chaseRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("molotovRight");
 
             for (int i = 0; i < 4; i++)
             {
@@ -289,12 +288,12 @@ namespace PattyPetitGiant
         {
             if (molotovState == MolotovState.Throwing)
             {
-                templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(2, 2), 0.51f, animation_time, new Vector2(4, 4));
+                templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(1, 1), 0.51f, animation_time / 100f, new Vector2(16, 16));
             }
 
             if (flame.active)
             {
-                templateAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(3, 3), 0.4f, Color.Red);
+                flameAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(1, 1), 0.4f, Color.White);
             }
         }
 

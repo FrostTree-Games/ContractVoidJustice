@@ -324,7 +324,7 @@ namespace PattyPetitGiant
 
         private void renderGameStuff(SpriteBatch sb)
         {
-            sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend, SamplerState.PointClamp, null, null, null, camera);
+            sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, camera);
 
             map.render(sb, 0.0f);
 
