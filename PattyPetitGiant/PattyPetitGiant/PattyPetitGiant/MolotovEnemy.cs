@@ -294,7 +294,6 @@ namespace PattyPetitGiant
             if (flame.active)
             {
                 flameAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(1, 1), 0.4f, Color.White);
-                sb.Draw(Game1.whitePixel, flame.position, null, Color.Red, 0.0f, Vector2.Zero, 48, SpriteEffects.None, 0.2f);
             }
         }
 

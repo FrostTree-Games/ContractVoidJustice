@@ -4,11 +4,11 @@
   <sheetName>molotovFlame.png</sheetName>
   <initalX>0</initalX>
   <initalY>0</initalY>
-  <offsetX>-24</offsetX>
-  <offsetY>-24</offsetY>
-  <frameWidth>96</frameWidth>
-  <frameHeight>72</frameHeight>
-  <frameCount>11</frameCount>
-  <frameSpeed>25</frameSpeed>
+  <offsetX>-48</offsetX>
+  <offsetY>-72</offsetY>
+  <frameWidth>160</frameWidth>
+  <frameHeight>160</frameHeight>
+  <frameCount>6</frameCount>
+  <frameSpeed>100</frameSpeed>
   <loop>true</loop>
 </SerializableAnimationData>
