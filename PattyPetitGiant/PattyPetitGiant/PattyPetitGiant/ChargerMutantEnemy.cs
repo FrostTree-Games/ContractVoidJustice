@@ -47,137 +47,151 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            switch (state)
+            if (disable_movement == true)
             {
-                case EnemyState.Idle:
-                    change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
-                    foreach (Entity en in parentWorld.EntityList)
-                    {
-                        if (en == this)
-                            continue;
-                        else if (en is Player)
+                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (disable_movement_time > 300)
+                {
+                    disable_movement_time = 0.0f;
+                    disable_movement = false;
+                    velocity = Vector2.Zero;
+                }
+            }
+            else
+            {
+                switch (state)
+                {
+                    case EnemyState.Idle:
+                        change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
+                        foreach (Entity en in parentWorld.EntityList)
                         {
-                            if (player_found == true)
+                            if (en == this)
+                                continue;
+                            else if (en is Player)
                             {
-                                switch (en.Direction_Facing)
+                                if (player_found == true)
                                 {
-                                    case GlobalGameConstants.Direction.Right:
-                                        direction_facing = GlobalGameConstants.Direction.Left;
-                                        break;
-                                    case GlobalGameConstants.Direction.Left:
-                                        direction_facing = GlobalGameConstants.Direction.Right;
-                                        break;
-                                    case GlobalGameConstants.Direction.Up:
-                                        direction_facing = GlobalGameConstants.Direction.Down;
-                                        break;
-                                    default:
-                                        direction_facing = GlobalGameConstants.Direction.Up;
-                                        break;
+                                    switch (en.Direction_Facing)
+                                    {
+                                        case GlobalGameConstants.Direction.Right:
+                                            direction_facing = GlobalGameConstants.Direction.Left;
+                                            break;
+                                        case GlobalGameConstants.Direction.Left:
+                                            direction_facing = GlobalGameConstants.Direction.Right;
+                                            break;
+                                        case GlobalGameConstants.Direction.Up:
+                                            direction_facing = GlobalGameConstants.Direction.Down;
+                                            break;
+                                        default:
+                                            direction_facing = GlobalGameConstants.Direction.Up;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    component.update(this, en, currentTime, parentWorld);
                                 }
                             }
-                            else
-                            {
-                                component.update(this, en, currentTime, parentWorld);
-                            }
                         }
-                    }
 
-                    if (player_found)
-                    {
-                        state = EnemyState.Agressive;
-                        velocity = Vector2.Zero;
-                    }
-                    else
-                    {
-                        if (change_direction_time > 5000)
+                        if (player_found)
                         {
-                            switch (direction_facing)
-                            {
-                                case GlobalGameConstants.Direction.Right:
-                                    direction_facing = GlobalGameConstants.Direction.Down;
-                                    break;
-                                case GlobalGameConstants.Direction.Left:
-                                    direction_facing = GlobalGameConstants.Direction.Up;
-                                    break;
-                                case GlobalGameConstants.Direction.Up:
-                                    direction_facing = GlobalGameConstants.Direction.Right;
-                                    break;
-                                default:
-                                    direction_facing = GlobalGameConstants.Direction.Left;
-                                    break;
-                            }
-                            change_direction_time = 0.0f;
+                            state = EnemyState.Agressive;
+                            velocity = Vector2.Zero;
                         }
-                    }
-                    break;
-                case EnemyState.Agressive:
-                    float distance = 0.0f;
-
-                    switch(charger_state)
-                    {
-                        case ChargerState.windUp:
-                            windup_timer += currentTime.ElapsedGameTime.Milliseconds;
-                            if (windup_timer > 300)
+                        else
+                        {
+                            if (change_direction_time > 5000)
                             {
-                                charger_state = ChargerState.charge;
                                 switch (direction_facing)
                                 {
                                     case GlobalGameConstants.Direction.Right:
-                                        velocity = new Vector2(8.0f, 0.0f);
+                                        direction_facing = GlobalGameConstants.Direction.Down;
                                         break;
                                     case GlobalGameConstants.Direction.Left:
-                                        velocity = new Vector2(-8.0f, 0.0f);
+                                        direction_facing = GlobalGameConstants.Direction.Up;
                                         break;
                                     case GlobalGameConstants.Direction.Up:
-                                        velocity = new Vector2(0.0f, -8.0f);
+                                        direction_facing = GlobalGameConstants.Direction.Right;
                                         break;
                                     default:
-                                        velocity = new Vector2(0.0f, 8.0f);
+                                        direction_facing = GlobalGameConstants.Direction.Left;
                                         break;
                                 }
+                                change_direction_time = 0.0f;
                             }
-                            break;
-                        case ChargerState.charge:
-                            foreach (Entity en in parentWorld.EntityList)
-                            {
-                                if (en == this)
-                                    continue;
-                                else if (en is Player)
+                        }
+                        break;
+                    case EnemyState.Agressive:
+                        float distance = 0.0f;
+
+                        switch (charger_state)
+                        {
+                            case ChargerState.windUp:
+                                windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+                                if (windup_timer > 300)
                                 {
-                                    distance = Vector2.Distance(en.CenterPoint, CenterPoint);
-                                    if (distance > 300)
+                                    charger_state = ChargerState.charge;
+                                    switch (direction_facing)
                                     {
-                                        state = EnemyState.Idle;
-                                        component = new IdleSearch();
-                                        velocity = Vector2.Zero;
-                                        animation_time = 0.0f;
-                                        player_found = false;
-                                        charger_state = ChargerState.none;
+                                        case GlobalGameConstants.Direction.Right:
+                                            velocity = new Vector2(8.0f, 0.0f);
+                                            break;
+                                        case GlobalGameConstants.Direction.Left:
+                                            velocity = new Vector2(-8.0f, 0.0f);
+                                            break;
+                                        case GlobalGameConstants.Direction.Up:
+                                            velocity = new Vector2(0.0f, -8.0f);
+                                            break;
+                                        default:
+                                            velocity = new Vector2(0.0f, 8.0f);
+                                            break;
                                     }
                                 }
-
-                                if (hitTest(en))
+                                break;
+                            case ChargerState.charge:
+                                foreach (Entity en in parentWorld.EntityList)
                                 {
-                                    Vector2 direction = en.CenterPoint - CenterPoint;
-                                    en.knockBack(direction, knockback_magnitude, enemy_damage);
+                                    if (en == this)
+                                        continue;
+                                    else if (en is Player)
+                                    {
+                                        distance = Vector2.Distance(en.CenterPoint, CenterPoint);
+                                        if (distance > 300)
+                                        {
+                                            state = EnemyState.Idle;
+                                            component = new IdleSearch();
+                                            velocity = Vector2.Zero;
+                                            animation_time = 0.0f;
+                                            player_found = false;
+                                            charger_state = ChargerState.none;
+                                        }
+                                    }
+
+                                    if (hitTest(en))
+                                    {
+                                        Vector2 direction = en.CenterPoint - CenterPoint;
+                                        en.knockBack(direction, knockback_magnitude, enemy_damage);
+                                    }
                                 }
-                            }
-                            break;
-                        default:
-                            charger_state = ChargerState.windUp;
-                            windup_timer = 0.0f;
-                            break;
-                    }
-                    
-                    Vector2 pos = new Vector2(position.X, position.Y);
-                    Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                    Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-                    position.X = finalPos.X;
-                    position.Y = finalPos.Y;
-                    break;
-                default:
-                    break;
+                                break;
+                            default:
+                                charger_state = ChargerState.windUp;
+                                windup_timer = 0.0f;
+                                break;
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
+
+            Vector2 pos = new Vector2(position.X, position.Y);
+            Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
         }
         public override void draw(SpriteBatch sb)
         {
