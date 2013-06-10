@@ -88,25 +88,25 @@ namespace PattyPetitGiant
                     }
                     break;
                 case PlayerButton.UseItem1:
-                    if(game_pad_state[control_number].Triggers.Left > 0.0 || key_board_state.IsKeyDown(Keys.A))
+                    if(game_pad_state[control_number].Triggers.Left > 0.0 || key_board_state.IsKeyDown(Keys.A) || game_pad_state[control_number].Buttons.A == ButtonState.Pressed)
                     {
                         return true;
                     }
                     break;
                 case PlayerButton.UseItem2:
-                    if (game_pad_state[control_number].Triggers.Right > 0.0 || key_board_state.IsKeyDown(Keys.S))
+                    if (game_pad_state[control_number].Triggers.Right > 0.0 || key_board_state.IsKeyDown(Keys.S) || game_pad_state[control_number].Buttons.B == ButtonState.Pressed)
                     {
                         return true;
                     }
                     break;
                 case PlayerButton.SwitchItem1:
-                    if (game_pad_state[control_number].Buttons.LeftShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.Q))
+                    if (game_pad_state[control_number].Buttons.LeftShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.Q) || game_pad_state[control_number].Buttons.X == ButtonState.Pressed)
                     {
                         return true;
                     }
                     break;
                 case PlayerButton.SwitchItem2:
-                    if (game_pad_state[control_number].Buttons.RightShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.W))
+                    if (game_pad_state[control_number].Buttons.RightShoulder == ButtonState.Pressed || key_board_state.IsKeyDown(Keys.W) || game_pad_state[control_number].Buttons.Y == ButtonState.Pressed)
                     {
                         return true;
                     }
