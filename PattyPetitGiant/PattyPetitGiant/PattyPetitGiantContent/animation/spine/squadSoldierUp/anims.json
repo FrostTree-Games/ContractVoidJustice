@@ -15,7 +15,9 @@
 	{ "name": "rFoot", "parent": "rCalf", "length": 5.95, "x": 13.6, "y": -0.02, "rotation": 23.79 },
 	{ "name": "rForearm", "parent": "rShoulder", "length": 11.57, "x": 10.87, "y": 0.02, "rotation": -27.2 },
 	{ "name": "lHand", "parent": "lForearm", "length": 6.3, "x": 11.37, "y": -0.02, "rotation": -9.9 },
-	{ "name": "rHand", "parent": "rForearm", "length": 6.21, "x": 11.58, "y": -0.14, "rotation": 2.25 }
+	{ "name": "rHand", "parent": "rForearm", "length": 6.21, "x": 11.58, "y": -0.14, "rotation": 2.25 },
+	{ "name": "gun", "parent": "rHand", "length": 12.25, "x": 16.34, "y": 9.93, "rotation": 359.99 },
+	{ "name": "muzzle", "parent": "rHand", "length": 13.17, "x": 40.59, "y": 9.37, "rotation": 359.99 }
 ],
 "slots": [
 	{ "name": "up/lCalf", "bone": "lCalf", "attachment": "lCalf" },
