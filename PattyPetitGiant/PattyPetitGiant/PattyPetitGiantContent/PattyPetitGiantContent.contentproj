@@ -79,6 +79,7 @@
     <None Include="animation\frame\molotovFlame.zpy">
       <Name>molotovFlame</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="animation\frame\wandPic.zpy">
       <SubType>Designer</SubType>

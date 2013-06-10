@@ -114,6 +114,7 @@
     <Compile Include="ToughPrisonerEnemy.cs" />
     <Compile Include="Walk.cs" />
     <Compile Include="WandOfGyges.cs" />
+    <Compile Include="WaveMotionGun.cs" />
     <Compile Include="XboxTools.cs" />
   </ItemGroup>
   <ItemGroup>
