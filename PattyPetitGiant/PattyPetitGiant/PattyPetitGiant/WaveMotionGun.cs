@@ -9,24 +9,40 @@ namespace PattyPetitGiant
 {
     class WaveMotionGun : Item
     {
+        private enum WaveMotionState
+        {
+            InvalidState = -1,
+            Wait = 0,
+            Shooting = 1,
+            Cooldown = 2,
+        }
+
         // didn't want to use an array for garbage reasons
         private WaveMotionBullet bullet1;
         private WaveMotionBullet bullet2;
         private WaveMotionBullet bullet3;
 
         private float shotTime = 0.0f;
-        private const float shotWaitTime = 150f;
-        private bool shooting = false;
+        private const float shotWaitTime = 300f;
+
+        private float timeBetweenShots = 0.0f;
+        private const float timeBetweenShotsDelay = 1000f;
+
+        private WaveMotionState state;
 
         public WaveMotionGun()
         {
             bullet1.active = false;
             bullet2.active = false;
             bullet3.active = false;
+
+            state = WaveMotionState.Wait;
         }
 
         private void updateBullets(LevelState parentWorld, GameTime currentTime)
         {
+            timeBetweenShots += currentTime.ElapsedGameTime.Milliseconds;
+
             bullet1.update(parentWorld, currentTime);
             bullet2.update(parentWorld, currentTime);
             bullet3.update(parentWorld, currentTime);
@@ -36,21 +52,9 @@ namespace PattyPetitGiant
         {
             updateBullets(parentWorld, currentTime);
 
-            if (shooting)
-            {
-                shotTime += currentTime.ElapsedGameTime.Milliseconds;
-
-                if (shotTime > shotWaitTime)
-                {
-                    shooting = false;
-                    parent.Disable_Movement = false;
-                    parent.State = Player.playerState.Moving;
-                }
-            }
-            else
+            if (state == WaveMotionState.Wait)
             {
                 shotTime = 0.0f;
-                shooting = true;
                 parent.Disable_Movement = true;
                 parent.Velocity = Vector2.Zero;
 
@@ -83,6 +87,31 @@ namespace PattyPetitGiant
                 else if (!bullet3.active)
                 {
                     bullet3 = new WaveMotionBullet(parent.CenterPoint, shotDirection);
+                }
+
+                state = WaveMotionState.Shooting;
+            }
+            else if (state == WaveMotionState.Shooting)
+            {
+                shotTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (shotTime > shotWaitTime)
+                {
+                    parent.Disable_Movement = false;
+                    parent.State = Player.playerState.Moving;
+
+                    timeBetweenShots = 0.0f;
+
+                    state = WaveMotionState.Cooldown;
+                }
+            }
+            else if (state == WaveMotionState.Cooldown)
+            {
+                timeBetweenShots += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (timeBetweenShots > timeBetweenShotsDelay)
+                {
+                    state = WaveMotionState.Wait;
                 }
             }
 
@@ -165,7 +194,7 @@ namespace PattyPetitGiant
 
                     if (hitTestEntity(en))
                     {
-                        en.knockBack(Vector2.Normalize(velocity), 3.0f, 10);
+                        en.knockBack(Vector2.Normalize(velocity), 1.5f, 4);
                         this.active = false;
                     }
                 }
