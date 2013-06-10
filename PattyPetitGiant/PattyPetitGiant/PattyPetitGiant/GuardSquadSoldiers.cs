@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 
 namespace PattyPetitGiant
 {
@@ -65,6 +66,14 @@ namespace PattyPetitGiant
             bullet_count = 0;
             bullet_timer = 0.0f;
             this.parentWorld = parentWorld;
+
+            walk_down = AnimationLib.loadNewAnimationSet("squadSoldierDown");
+            walk_right = AnimationLib.loadNewAnimationSet("squadSoldierRight");
+            walk_up = AnimationLib.loadNewAnimationSet("squadSoldierUp");
+            current_skeleton = walk_right;
+            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+            current_skeleton.Skeleton.FlipX = false;
+            animation_time = 0.0f;
         }
 
         public override void update(GameTime currentTime)
@@ -103,6 +112,20 @@ namespace PattyPetitGiant
             }
             else
             {
+                direction_facing = Leader.Direction_Facing;
+                switch (direction_facing)
+                {
+                    case GlobalGameConstants.Direction.Up:
+                        current_skeleton = walk_up;
+                        break;
+                    case GlobalGameConstants.Direction.Down:
+                        current_skeleton = walk_down;
+                        break;
+                    default:
+                        current_skeleton = walk_right;
+                        break;
+                }
+
                 switch (state)
                 {
                     case SquadSoldierState.Patrol:
@@ -112,6 +135,7 @@ namespace PattyPetitGiant
 
                         if (distance > 96)
                         {
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                             distance_from_follow_pt = Vector2.Distance(follow_point, CenterPoint);
                             angle = (float)(Math.Atan2(follow_point.Y - CenterPoint.Y, follow_point.X - CenterPoint.X));
                             velocity = new Vector2(distance_from_follow_pt * (float)(Math.Cos(angle))/ 100.0f, distance_from_follow_pt * (float)(Math.Sin(angle)) / 100.0f);
@@ -145,17 +169,20 @@ namespace PattyPetitGiant
                         }
                         else
                         {
+                            //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                             velocity = Vector2.Zero;
                         }
 
                         if (player_found == true)
                         {
                             state = SquadSoldierState.MoveIntoPosition;
+                            animation_time = 0.0f;
                         }
                         break;
                     case SquadSoldierState.MoveIntoPosition:
                         distance_from_follow_pt = Vector2.Distance(follow_point, CenterPoint);
                         angle = (float)(Math.Atan2(follow_point.Y - CenterPoint.Y, follow_point.X - CenterPoint.X));
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
                         if ((int)distance_from_follow_pt != 0)
                         {
@@ -193,48 +220,30 @@ namespace PattyPetitGiant
                             velocity = Vector2.Zero;
                             state = SquadSoldierState.WindUp;
                             direction_facing = Leader.Direction_Facing;
+                            animation_time = 0.0f;
                         }
                         break;
                     case SquadSoldierState.WindUp:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("windUp");
                         wind_up_timer += currentTime.ElapsedGameTime.Milliseconds;
                         if (wind_up_timer > 300)
                         {
-                            switch (direction_facing)
-                            {
-                                case GlobalGameConstants.Direction.Right:
-                                    start_angle = (float)(-1 * Math.PI / 4);
-                                    end_angle = (float)(1 * Math.PI / 4);
-                                    break;
-                                case GlobalGameConstants.Direction.Left:
-                                    start_angle = (float)(-3 * Math.PI / 4);
-                                    end_angle = (float)(3 * Math.PI / 4);
-                                    break;
-                                case GlobalGameConstants.Direction.Up:
-                                    start_angle = (float)(-1 * Math.PI / 4);
-                                    end_angle = (float)(-3 * Math.PI / 4);
-                                    break;
-                                default:
-                                    start_angle = (float)(1 * Math.PI / 4);
-                                    end_angle = (float)(3 * Math.PI / 4);
-                                    break;
-                            }
-                            angle = start_angle;
                             state = SquadSoldierState.Fire;
+                            animation_time = 0.0f;
                         }
                         break;
                     case SquadSoldierState.Fire:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
                         bullet_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        angle = (float)Math.Atan2(current_skeleton.Skeleton.FindBone("muzzle").WorldY - current_skeleton.Skeleton.FindBone("gun").WorldY, current_skeleton.Skeleton.FindBone("muzzle").WorldX - current_skeleton.Skeleton.FindBone("gun").WorldX);
+
                         if (bullet_count < max_bullet_count && bullet_timer>100)
                         {
-                            bullets[bullet_count] = new SquadBullet(CenterPoint);
+                            bullets[bullet_count] = new SquadBullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY));
+
                             bullets[bullet_count].velocity = new Vector2((float)(8.0*Math.Cos(angle)), (float)(8.0 * Math.Sin(angle)));
                             bullet_count++;
                             bullet_timer = 0.0f;
-                            angle += 0.1f;
-                            if (angle >= end_angle)
-                            {
-                                angle =start_angle;
-                            }
                         }
                         break;
                     default:
@@ -246,6 +255,9 @@ namespace PattyPetitGiant
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
             position.Y = finalPos.Y;
+
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
         public override void draw(SpriteBatch sb)
@@ -369,6 +381,27 @@ namespace PattyPetitGiant
                 }
 
             }
+        }
+
+        public override void spinerender(SkeletonRenderer renderer)
+        {
+            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+            {
+                current_skeleton.Skeleton.FlipX = false;
+            }
+            if (direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                current_skeleton.Skeleton.FlipX = true;
+            }
+
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            current_skeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(current_skeleton.Skeleton);
         }
     }
 }

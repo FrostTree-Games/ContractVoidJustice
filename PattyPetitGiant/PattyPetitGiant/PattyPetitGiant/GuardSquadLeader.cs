@@ -87,7 +87,7 @@ namespace PattyPetitGiant
                                 component.update(this, en, currentTime, parentWorld);
                             }
                         }
-
+                        
                         switch(direction_facing)
                         {
                             case GlobalGameConstants.Direction.Right:

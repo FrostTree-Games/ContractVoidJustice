@@ -10,3 +10,6 @@ zippyGunUp
 chaseDown
 chaseRight
 chaseUp
+squadSoldierDown
+squadSoldierRight
+squadSoldierUp
