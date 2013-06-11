@@ -14,6 +14,7 @@ namespace PattyPetitGiant
             Down = 1,
             Left = 2,
             Right = 0,
+            NoDirection = -1,
         }
 
         public enum itemType

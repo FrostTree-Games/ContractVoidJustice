@@ -157,15 +157,11 @@ namespace PattyPetitGiant
                         {
                             velocity.X = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Right;
-                            current_skeleton = walk_right ;
-                            current_skeleton.Skeleton.FlipX = false;
                         }
                         else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.LeftDirection))
                         {
                             velocity.X = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Left;
-                            current_skeleton = walk_right;
-                            current_skeleton.Skeleton.FlipX = true;
                         }
                         else
                         {
@@ -176,19 +172,38 @@ namespace PattyPetitGiant
                         {
                             velocity.Y = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Up;
-                            current_skeleton = walk_up;
-                            current_skeleton.Skeleton.FlipX = false;
                         }
                         else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
                         {
                             velocity.Y = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Down;
-                            current_skeleton = walk_down;
-                            current_skeleton.Skeleton.FlipX = false;
                         }
                         else
                         {
                             velocity.Y = 0.0f;
+                        }
+
+                        GlobalGameConstants.Direction analogDirection = InputDeviceManager.AnalogStickDirection();
+                        direction_facing = (analogDirection != GlobalGameConstants.Direction.NoDirection) ? analogDirection : direction_facing;
+
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Down:
+                                current_skeleton = walk_up;
+                                current_skeleton.Skeleton.FlipX = false;
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                current_skeleton = walk_down;
+                                current_skeleton.Skeleton.FlipX = false;
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                current_skeleton = walk_right;
+                                current_skeleton.Skeleton.FlipX = true;
+                                break;
+                            case GlobalGameConstants.Direction.Right:
+                                current_skeleton = walk_right;
+                                current_skeleton.Skeleton.FlipX = false;
+                                break;
                         }
 
                         //if player stands still then animation returns to idle

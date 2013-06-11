@@ -47,6 +47,47 @@ namespace PattyPetitGiant
             }
         }
 
+        private static GlobalGameConstants.Direction ConfirmAnalogStickDirection(int controlNumber)
+        {
+            if (float.IsNaN(game_pad_state[controlNumber].ThumbSticks.Left.X) || float.IsNaN(game_pad_state[controlNumber].ThumbSticks.Left.Y))
+            {
+                return GlobalGameConstants.Direction.NoDirection;
+            }
+
+            if (game_pad_state[controlNumber].ThumbSticks.Left.Length() < 0.05f)
+            {
+                return GlobalGameConstants.Direction.NoDirection;
+            }
+
+            if (Math.Abs(game_pad_state[controlNumber].ThumbSticks.Left.X) > Math.Abs(game_pad_state[controlNumber].ThumbSticks.Left.Y))
+            {
+                if (game_pad_state[controlNumber].ThumbSticks.Left.X < 0)
+                {
+                    return GlobalGameConstants.Direction.Left;
+                }
+                else
+                {
+                    return GlobalGameConstants.Direction.Right;
+                }
+            }
+            else
+            {
+                if (game_pad_state[controlNumber].ThumbSticks.Left.Y < 0)
+                {
+                    return GlobalGameConstants.Direction.Up;
+                }
+                else
+                {
+                    return GlobalGameConstants.Direction.Down;
+                }
+            }
+        }
+
+        public static GlobalGameConstants.Direction AnalogStickDirection()
+        {
+            return ConfirmAnalogStickDirection(current_game_pad);
+        }
+
         private static bool isButtonDownConfirm(PlayerButton button, int control_number)
         {
             switch (button)
