@@ -9,6 +9,13 @@ namespace PattyPetitGiant
 {
     class RiotShield : Item
     {
+        public enum RiotShieldState
+        {
+            InvalidState = -1,
+            ShieldDown = 0,
+            ShieldUp = 1,
+        }
+
         public RiotShield()
         {
             //
