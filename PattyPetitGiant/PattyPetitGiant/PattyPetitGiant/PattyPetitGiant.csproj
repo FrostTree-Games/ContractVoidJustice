@@ -132,6 +132,7 @@
     <Compile Include="ReturnChaseEnemy.cs" />
     <Compile Include="ScreenState.cs" />
     <Compile Include="ShopKeeper.cs" />
+    <Compile Include="ShotGun.cs" />
     <Compile Include="Sword.cs" />
     <Compile Include="TestEnemy.cs" />
     <Compile Include="TextureLib.cs" />

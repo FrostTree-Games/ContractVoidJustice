@@ -38,8 +38,6 @@ namespace PattyPetitGiant
         
         private float distance_from_follow_pt = 0.0f;
         private float angle = 0.0f;
-        private float start_angle = 0.0f;
-        private float end_angle = 0.0f;
         private float wind_up_timer = 0.0f;
 
         private int bullet_count;
@@ -258,14 +256,15 @@ namespace PattyPetitGiant
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
+
+            if( enemy_life <= 0)
+            {
+                remove_from_list = true;
+            }
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
-            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, start_angle, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, end_angle, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
-
             if (bullet_count > 0)
             {
                 for (int i = 0; i < bullet_count; i++)
@@ -278,6 +277,54 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
+            if (disable_movement_time == 0.0)
+            {
+                disable_movement = true;
+                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                {
+                    if (direction.X < 0)
+                    {
+                        velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                }
+                else
+                {
+                    if (direction.Y < 0)
+                    {
+                        velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
+                    }
+                }
+                enemy_life = enemy_life - damage;
+            }
+        }
+
+        public override void spinerender(SkeletonRenderer renderer)
+        {
+            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+            {
+                current_skeleton.Skeleton.FlipX = false;
+            }
+            if (direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                current_skeleton.Skeleton.FlipX = true;
+            }
+
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            current_skeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(current_skeleton.Skeleton);
         }
 
         private struct SquadBullet
@@ -381,27 +428,6 @@ namespace PattyPetitGiant
                 }
 
             }
-        }
-
-        public override void spinerender(SkeletonRenderer renderer)
-        {
-            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
-            {
-                current_skeleton.Skeleton.FlipX = false;
-            }
-            if (direction_facing == GlobalGameConstants.Direction.Left)
-            {
-                current_skeleton.Skeleton.FlipX = true;
-            }
-
-            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
-            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
-
-            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
-            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
-
-            current_skeleton.Skeleton.UpdateWorldTransform();
-            renderer.Draw(current_skeleton.Skeleton);
         }
     }
 }
