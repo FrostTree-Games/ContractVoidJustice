@@ -112,6 +112,7 @@
     <Compile Include="GuardSquadLeader.cs" />
     <Compile Include="GuardSquadSoldiers.cs" />
     <Compile Include="Gun.cs" />
+    <Compile Include="HermesSandalds.cs" />
     <Compile Include="IdleChaseEnemy.cs" />
     <Compile Include="IdleSearch.cs" />
     <Compile Include="InGameGUI.cs" />
@@ -130,6 +131,7 @@
     <Compile Include="Game1.cs" />
     <Compile Include="RangeEnemy.cs" />
     <Compile Include="ReturnChaseEnemy.cs" />
+    <Compile Include="RiotShield.cs" />
     <Compile Include="ScreenState.cs" />
     <Compile Include="ShopKeeper.cs" />
     <Compile Include="ShotGun.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="ToughPrisonerEnemy.cs" />
     <Compile Include="Walk.cs" />
     <Compile Include="WandOfGyges.cs" />
+    <Compile Include="WaveMotionGun.cs" />
     <Compile Include="XboxTools.cs" />
   </ItemGroup>
   <ItemGroup>

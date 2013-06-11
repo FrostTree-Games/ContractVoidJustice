@@ -14,6 +14,7 @@ namespace PattyPetitGiant
             Down = 1,
             Left = 2,
             Right = 0,
+            NoDirection = -1,
         }
 
         public enum itemType
@@ -27,6 +28,7 @@ namespace PattyPetitGiant
             BushidoBlade = 5,
             WandOfGyges = 6,
             ShotGun = 7,
+            WaveMotionGun = 8,
         }
 
         private static int gameResolutionWidth = 1280;

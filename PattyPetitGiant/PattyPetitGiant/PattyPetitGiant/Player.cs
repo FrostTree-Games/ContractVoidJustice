@@ -47,7 +47,9 @@ namespace PattyPetitGiant
 
         private float animation_time = 0.0f;
         public float Animation_Time { set { animation_time = value; } get { return animation_time; } }
-        private float switch_weapon_interval = 0.0f;
+
+        private bool item1_switch_button_down = false;
+        private bool item2_switch_button_down = false;
 
         private const float playerMoveSpeed = 2.0f;
 
@@ -71,7 +73,6 @@ namespace PattyPetitGiant
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
-            switch_weapon_interval = 0.0f;
 
             state = playerState.Moving;
 
@@ -127,7 +128,6 @@ namespace PattyPetitGiant
             }
             else if (state == playerState.Moving)
             {
-                switch_weapon_interval += currentTime.ElapsedGameTime.Milliseconds;
                 //knocked back
                 if (disable_movement == true)
                 {
@@ -157,15 +157,11 @@ namespace PattyPetitGiant
                         {
                             velocity.X = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Right;
-                            current_skeleton = walk_right ;
-                            current_skeleton.Skeleton.FlipX = false;
                         }
                         else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.LeftDirection))
                         {
                             velocity.X = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Left;
-                            current_skeleton = walk_right;
-                            current_skeleton.Skeleton.FlipX = true;
                         }
                         else
                         {
@@ -176,19 +172,38 @@ namespace PattyPetitGiant
                         {
                             velocity.Y = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Up;
-                            current_skeleton = walk_up;
-                            current_skeleton.Skeleton.FlipX = false;
                         }
                         else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
                         {
                             velocity.Y = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Down;
-                            current_skeleton = walk_down;
-                            current_skeleton.Skeleton.FlipX = false;
                         }
                         else
                         {
                             velocity.Y = 0.0f;
+                        }
+
+                        GlobalGameConstants.Direction analogDirection = InputDeviceManager.AnalogStickDirection();
+                        direction_facing = (analogDirection != GlobalGameConstants.Direction.NoDirection) ? analogDirection : direction_facing;
+
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Down:
+                                current_skeleton = walk_down;
+                                current_skeleton.Skeleton.FlipX = false;
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                current_skeleton = walk_up;
+                                current_skeleton.Skeleton.FlipX = false;
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                current_skeleton = walk_right;
+                                current_skeleton.Skeleton.FlipX = true;
+                                break;
+                            case GlobalGameConstants.Direction.Right:
+                                current_skeleton = walk_right;
+                                current_skeleton.Skeleton.FlipX = false;
+                                break;
                         }
 
                         //if player stands still then animation returns to idle
@@ -213,6 +228,7 @@ namespace PattyPetitGiant
                     player_item_2.daemonupdate(this, currentTime, parentWorld);
                 }
 
+                bool itemTouched = false;
 
                 //Check to see if player has encountered a pickup item
                 foreach (Entity en in parentWorld.EntityList)
@@ -224,22 +240,39 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            if (switch_weapon_interval > 100)
+                            itemTouched = true;
+
+                            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && !item1_switch_button_down)
                             {
-                                if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1))
-                                {
-                                    player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
-                                    GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
-                                }
-                                else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2))
-                                {
-                                    player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
-                                    GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
-                                }
-                                switch_weapon_interval = 0.0f;
+                                item1_switch_button_down = true;
+                            }
+                            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && item1_switch_button_down)
+                            {
+                                item1_switch_button_down = false;
+
+                                player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
+                                GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
+                            }
+
+                            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && !item2_switch_button_down)
+                            {
+                                item2_switch_button_down = true;
+                            }
+                            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && item2_switch_button_down)
+                            {
+                                item2_switch_button_down = false;
+
+                                player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
+                                GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
                             }
                         }
                     }
+                }
+
+                if (!itemTouched && (item1_switch_button_down || item2_switch_button_down))
+                {
+                    item1_switch_button_down = false;
+                    item2_switch_button_down = false;
                 }
 
             }

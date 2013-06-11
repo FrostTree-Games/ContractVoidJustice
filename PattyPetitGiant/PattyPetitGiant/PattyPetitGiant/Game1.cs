@@ -72,6 +72,8 @@ namespace PattyPetitGiant
             AnimationLib.loadSpineFromManifest();
             AnimationLib.loadFrameFromManifest();
 
+            AudioLib lb = new AudioLib();
+
             GlobalGameConstants.Player_Coin_Amount = 200;
 
             currentGameScreen = new LevelState();

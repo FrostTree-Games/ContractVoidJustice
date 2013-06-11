@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace PattyPetitGiant
 {
@@ -29,6 +30,8 @@ namespace PattyPetitGiant
         protected int sword_damage;
         private AnimationLib.FrameAnimationSet swordAnim;
         private float knockback_magnitude;
+
+        private const string swordSound = "testSword";
 
         public Sword(Vector2 initial_position)
         {
@@ -79,6 +82,8 @@ namespace PattyPetitGiant
                 {
                     sword_state = Sword_State.slash;
                     sword_swing = true;
+
+                    AudioLib.playSoundEffect(swordSound);
                 }
             }
             else if (sword_state == Sword_State.slash)
