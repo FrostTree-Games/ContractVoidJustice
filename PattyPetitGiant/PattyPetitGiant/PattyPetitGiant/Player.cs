@@ -69,7 +69,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword(position);
+            player_item_1 = new ShotGun();
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
@@ -102,45 +102,46 @@ namespace PattyPetitGiant
             {
                 parentWorld.NodeMap[currentNodeX, currentNodeY].visited = true;
             }
-
-            if (state == playerState.Item1)
+            //knocked back
+            if (disable_movement == true)
             {
-                if (player_item_1 == null)
+                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                if (disable_movement_time > 300)
                 {
-                    state = playerState.Moving;
-                }
-                else
-                {
-                    player_item_1.update(this, currentTime, parentWorld);
-                }
-                
-            }
-            else if (state == playerState.Item2 )
-            {
-                if (player_item_2 == null)
-                {
-                    state = playerState.Moving;
-                }
-                else
-                {
-                    player_item_2.update(this, currentTime, parentWorld);
+                    velocity = Vector2.Zero;
+                    disable_movement = false;
+                    disable_movement_time = 0;
                 }
             }
-            else if (state == playerState.Moving)
+            else
             {
-                //knocked back
-                if (disable_movement == true)
+                if (state == playerState.Item1)
                 {
-                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
-                    if (disable_movement_time > 300)
+                    if (player_item_1 == null)
                     {
-                        velocity = Vector2.Zero;
-                        disable_movement = false;
-                        disable_movement_time = 0;
+                        state = playerState.Moving;
+                    }
+                    else
+                    {
+                        player_item_1.update(this, currentTime, parentWorld);
+                    }
+
+                }
+                else if (state == playerState.Item2)
+                {
+                    if (player_item_2 == null)
+                    {
+                        state = playerState.Moving;
+                    }
+                    else
+                    {
+                        player_item_2.update(this, currentTime, parentWorld);
                     }
                 }
-                else
+                else if (state == playerState.Moving)
                 {
+
+
                     if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                     {
                         state = playerState.Item1;
@@ -217,64 +218,64 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    
-                }
-                if (player_item_1 != null)
-                {
-                    player_item_1.daemonupdate(this, currentTime, parentWorld);
-                }
-                if (player_item_2 != null)
-                {
-                    player_item_2.daemonupdate(this, currentTime, parentWorld);
-                }
+                    bool itemTouched = false;
 
-                bool itemTouched = false;
-
-                //Check to see if player has encountered a pickup item
-                foreach (Entity en in parentWorld.EntityList)
-                {
-                    if (en == this)
-                        continue;
-
-                    if (en is Pickup)
+                    //Check to see if player has encountered a pickup item
+                    foreach (Entity en in parentWorld.EntityList)
                     {
-                        if (hitTest(en))
+                        if (en == this)
+                            continue;
+
+                        if (en is Pickup)
                         {
-                            itemTouched = true;
-
-                            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && !item1_switch_button_down)
+                            if (hitTest(en))
                             {
-                                item1_switch_button_down = true;
-                            }
-                            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && item1_switch_button_down)
-                            {
-                                item1_switch_button_down = false;
+                                itemTouched = true;
 
-                                player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
-                                GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
-                            }
+                                if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && !item1_switch_button_down)
+                                {
+                                    item1_switch_button_down = true;
+                                }
+                                else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && item1_switch_button_down)
+                                {
+                                    item1_switch_button_down = false;
 
-                            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && !item2_switch_button_down)
-                            {
-                                item2_switch_button_down = true;
-                            }
-                            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && item2_switch_button_down)
-                            {
-                                item2_switch_button_down = false;
+                                    player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
+                                    GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
+                                }
 
-                                player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
-                                GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
+                                if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && !item2_switch_button_down)
+                                {
+                                    item2_switch_button_down = true;
+                                }
+                                else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && item2_switch_button_down)
+                                {
+                                    item2_switch_button_down = false;
+
+                                    player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
+                                    GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
+                                }
                             }
                         }
                     }
-                }
 
-                if (!itemTouched && (item1_switch_button_down || item2_switch_button_down))
-                {
-                    item1_switch_button_down = false;
-                    item2_switch_button_down = false;
-                }
 
+                    if (!itemTouched && (item1_switch_button_down || item2_switch_button_down))
+                    {
+                        item1_switch_button_down = false;
+                        item2_switch_button_down = false;
+                    }
+
+                }
+            }
+
+            if (player_item_1 != null)
+            {
+                player_item_1.daemonupdate(this, currentTime, parentWorld);
+            }
+            if (player_item_2 != null)
+            {
+                player_item_2.daemonupdate(this, currentTime, parentWorld);
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
