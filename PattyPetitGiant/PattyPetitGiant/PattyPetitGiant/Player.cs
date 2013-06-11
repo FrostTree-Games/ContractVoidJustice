@@ -69,7 +69,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword(position);
+            player_item_1 = new HermesSandals();
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
@@ -303,6 +303,11 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
+            if (state == playerState.Item1 || state == playerState.Item2)
+            {
+                state = playerState.Moving;
+            }
+
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
