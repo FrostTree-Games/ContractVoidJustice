@@ -257,6 +257,11 @@ namespace PattyPetitGiant
                 pauseDialogMinimumTime = 0;
             }
 
+            if (GlobalGameConstants.Player_Ammunition < 0)
+            {
+                GlobalGameConstants.Player_Ammunition = 0;
+            }
+
             foreach (Entity en in entityList)
             {
                 en.update(currentTime);
