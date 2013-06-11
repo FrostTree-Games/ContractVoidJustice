@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PattyPetitGiant
 {
-    class HermesSandalds : Item
+    class HermesSandals : Item
     {
         private enum HermesSandalsState
         {
@@ -27,7 +27,7 @@ namespace PattyPetitGiant
 
         private const float ammoCostPerSecond = 10f;
 
-        public HermesSandalds()
+        public HermesSandals()
         {
             state = HermesSandalsState.Idle;
         }

@@ -252,6 +252,11 @@ namespace PattyPetitGiant
             }
         }
 
+        private void renderText(SpriteBatch sb, Vector2 plus, Color clr)
+        {
+            //
+        }
+
         public void render(SpriteBatch sb)
         {
 
@@ -264,11 +269,30 @@ namespace PattyPetitGiant
             //sb.Begin();
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);
 
-            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.Black);
-            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.Black);
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.Black);
-            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), Color.Black);
-            sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.Black);
+            //draw a black 1px outline over the GUI font
+            for (int i = -1; i < 2; i++)
+            {
+                for (int j = -1; j < 2; j++)
+                {
+                    if (i == 0 || j == 0)
+                    {
+                        continue;
+                    }
+
+                    Vector2 offset = new Vector2(i, j);
+                    sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                    sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                    sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                    sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                    sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                }
+            }
+
+            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
             for (int i = 0; i < windowIsActive.Length; i++)
             {
