@@ -15,7 +15,8 @@ namespace PattyPetitGiant
         {
             Patrol,
             Direct,
-            Flee
+            Flee,
+            Reset,
         }
 
         
@@ -24,6 +25,7 @@ namespace PattyPetitGiant
         
         private GuardSquadSoldiers[] squad_mates = new GuardSquadSoldiers[2];
         private SquadLeaderState state = SquadLeaderState.Patrol;
+        
         private EnemyComponents component = new MoveSearch();
 
         public GuardSquadLeader(LevelState parentWorld, float initial_x, float initial_y)
@@ -84,7 +86,28 @@ namespace PattyPetitGiant
                                 continue;
                             else if (en is Player)
                             {
-                                component.update(this, en, currentTime, parentWorld);
+                                if (player_found == true)
+                                {
+                                    switch (en.Direction_Facing)
+                                    {
+                                        case GlobalGameConstants.Direction.Right:
+                                            direction_facing = GlobalGameConstants.Direction.Left;
+                                            break;
+                                        case GlobalGameConstants.Direction.Left:
+                                            direction_facing = GlobalGameConstants.Direction.Right;
+                                            break;
+                                        case GlobalGameConstants.Direction.Up:
+                                            direction_facing = GlobalGameConstants.Direction.Down;
+                                            break;
+                                        default:
+                                            direction_facing = GlobalGameConstants.Direction.Up;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    component.update(this, en, currentTime, parentWorld);
+                                }
                             }
                         }
                         
@@ -155,16 +178,37 @@ namespace PattyPetitGiant
                         {
                             squad_mates[1].Follow_Point = follow_point_2;
                         }
+
+                        if ((squad_mates[0] != null && squad_mates[1] != null && squad_mates[0].Reset_State_Flag == true && squad_mates[1].Reset_State_Flag == true) || squad_mates[0] != null && squad_mates[0].Reset_State_Flag == true || squad_mates[1] != null && squad_mates[1].Reset_State_Flag == true)
+                        {
+                            state = SquadLeaderState.Patrol;
+                            player_found = false;
+                        }
                         break;
                     default:
                         break;
                 }
             }
+
+            if (squad_mates[0] != null && squad_mates[0].Remove_From_List == true)
+            {
+                squad_mates[0].Follow_Point = follow_point_1;
+            }
+            if (squad_mates[1] != null && squad_mates[1].Remove_From_List == true)
+            {
+                squad_mates[1].Follow_Point = follow_point_2;
+            }
+
             Vector2 pos = new Vector2(position.X, position.Y);
             Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
             position.Y = finalPos.Y;
+
+            if(enemy_life <=0)
+            {
+                remove_from_list = true;
+            }
         }
 
         public override void draw(SpriteBatch sb)
@@ -176,6 +220,34 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
+            if (disable_movement_time == 0.0)
+            {
+                disable_movement = true;
+                player_found = true;
+                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                {
+                    if (direction.X < 0)
+                    {
+                        velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
+                    }
+                }
+                else
+                {
+                    if (direction.Y < 0)
+                    {
+                        velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
+                    }
+                    else
+                    {
+                        velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
+                    }
+                }
+                enemy_life = enemy_life - damage;
+            }
         }
 
         public void populateSquadMates()

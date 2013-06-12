@@ -18,7 +18,8 @@ namespace PattyPetitGiant
             MoveIntoPosition,
             WindUp,
             Fire,
-            Follow
+            Follow,
+            IndividualPatrol
         }
 
         private SquadSoldierState state = SquadSoldierState.Patrol;
@@ -35,7 +36,13 @@ namespace PattyPetitGiant
             set { leader = value; }
             get { return leader; }
         }
-        
+
+        private bool reset_state_flag = false;
+        public bool Reset_State_Flag
+        {
+            get { return reset_state_flag; }
+        }
+
         private float distance_from_follow_pt = 0.0f;
         private float angle = 0.0f;
         private float wind_up_timer = 0.0f;
@@ -43,8 +50,11 @@ namespace PattyPetitGiant
         private int bullet_count;
         private int bullet_inactive_count;
         private float bullet_timer = 0.0f;
+        private float firing_timer = 0.0f;
+
         private const int max_bullet_count = 10;
         private SquadBullet[] bullets = new SquadBullet[max_bullet_count];
+        private EnemyComponents component = new MoveSearch();
 
         public GuardSquadSoldiers(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -63,7 +73,10 @@ namespace PattyPetitGiant
             wind_up_timer = 0.0f;
             bullet_count = 0;
             bullet_timer = 0.0f;
+            firing_timer = 0.0f;
+            reset_state_flag = false;
             this.parentWorld = parentWorld;
+            change_direction_time_threshold = 4000.0f;
 
             walk_down = AnimationLib.loadNewAnimationSet("squadSoldierDown");
             walk_right = AnimationLib.loadNewAnimationSet("squadSoldierRight");
@@ -110,7 +123,11 @@ namespace PattyPetitGiant
             }
             else
             {
-                direction_facing = Leader.Direction_Facing;
+                if (leader != null)
+                {
+                    direction_facing = Leader.Direction_Facing;
+                }
+
                 switch (direction_facing)
                 {
                     case GlobalGameConstants.Direction.Up:
@@ -128,6 +145,7 @@ namespace PattyPetitGiant
                 {
                     case SquadSoldierState.Patrol:
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
+                        reset_state_flag = false;
                         float distance = Vector2.Distance(Leader.CenterPoint, CenterPoint);
                         direction_facing = Leader.Direction_Facing;
 
@@ -228,11 +246,14 @@ namespace PattyPetitGiant
                         {
                             state = SquadSoldierState.Fire;
                             animation_time = 0.0f;
+                            firing_timer = 0.0f;
+                            bullet_timer = 0.0f;
                         }
                         break;
                     case SquadSoldierState.Fire:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
                         bullet_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        firing_timer += currentTime.ElapsedGameTime.Milliseconds;
                         angle = (float)Math.Atan2(current_skeleton.Skeleton.FindBone("muzzle").WorldY - current_skeleton.Skeleton.FindBone("gun").WorldY, current_skeleton.Skeleton.FindBone("muzzle").WorldX - current_skeleton.Skeleton.FindBone("gun").WorldX);
 
                         if (bullet_count < max_bullet_count && bullet_timer>100)
@@ -242,6 +263,66 @@ namespace PattyPetitGiant
                             bullets[bullet_count].velocity = new Vector2((float)(8.0*Math.Cos(angle)), (float)(8.0 * Math.Sin(angle)));
                             bullet_count++;
                             bullet_timer = 0.0f;
+                        }
+                        if (firing_timer > 3000)
+                        {
+                            reset_state_flag = true;
+                            player_found = false;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                            if (leader != null)
+                            {
+                                state = SquadSoldierState.Patrol;
+                            }
+                            else
+                            {
+                                state = SquadSoldierState.IndividualPatrol;
+                            }
+                        }
+                        break;
+
+                    case SquadSoldierState.IndividualPatrol:
+                        change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                        //checks where the player is
+                        foreach (Entity en in parentWorld.EntityList)
+                        {
+                            if (en == this)
+                            {
+                                continue;
+                            }
+
+                            if (en is Player)
+                            {
+                                if (player_found == true)
+                                {
+                                    switch (en.Direction_Facing)
+                                    {
+                                        case GlobalGameConstants.Direction.Right:
+                                            direction_facing = GlobalGameConstants.Direction.Left;
+                                            break;
+                                        case GlobalGameConstants.Direction.Left:
+                                            direction_facing = GlobalGameConstants.Direction.Right;
+                                            break;
+                                        case GlobalGameConstants.Direction.Up:
+                                            direction_facing = GlobalGameConstants.Direction.Down;
+                                            break;
+                                        default:
+                                            direction_facing = GlobalGameConstants.Direction.Up;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    component.update(this, en, currentTime, parentWorld);
+                                }
+                            }
+                        }
+
+                        if (player_found == true)
+                        {
+                            state = SquadSoldierState.WindUp;
+                            velocity = Vector2.Zero;
+                            animation_time = 0.0f;
                         }
                         break;
                     default:
@@ -256,6 +337,12 @@ namespace PattyPetitGiant
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
+
+            if (leader != null && leader.Remove_From_List)
+            {
+                state = SquadSoldierState.IndividualPatrol;
+                leader = null;
+            }
 
             if( enemy_life <= 0)
             {
@@ -280,6 +367,11 @@ namespace PattyPetitGiant
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
+
+                if (state == SquadSoldierState.IndividualPatrol)
+                {
+                    player_found = true;
+                }
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
                     if (direction.X < 0)
