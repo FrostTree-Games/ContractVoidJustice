@@ -43,7 +43,7 @@ namespace PattyPetitGiant
         private int bullet_count;
         private int bullet_inactive_count;
         private float bullet_timer = 0.0f;
-        private const int max_bullet_count = 20;
+        private const int max_bullet_count = 10;
         private SquadBullet[] bullets = new SquadBullet[max_bullet_count];
 
         public GuardSquadSoldiers(LevelState parentWorld, float initial_x, float initial_y)
