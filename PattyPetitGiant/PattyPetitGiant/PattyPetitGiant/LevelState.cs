@@ -42,6 +42,10 @@ namespace PattyPetitGiant
         private List<Entity> entityList = null;
         public List<Entity> EntityList { get { return entityList; } }
 
+        private Coin[] coinPool = null;
+        private const int coinPoolSize = 50;
+        private int freeCoinIndex;
+
         private Entity cameraFocus = null;
         public Entity CameraFocus { get { return cameraFocus; } set { value = cameraFocus; } }
         Matrix camera;
@@ -69,6 +73,14 @@ namespace PattyPetitGiant
             keyModule = new LevelKeyModule();
 
             entityList = new List<Entity>();
+
+            coinPool = new Coin[coinPoolSize];
+            freeCoinIndex = 0;
+            for (int i = 0; i < coinPoolSize; i++)
+            {
+                coinPool[i] = new Coin(this, new Vector2(-100, -100));
+                entityList.Add(coinPool[i]);
+            }
 
             populateRooms(nodeMap, currentSeed);
 
@@ -208,6 +220,8 @@ namespace PattyPetitGiant
                     }
                 }
             }
+
+            GC.Collect();
         }
 
         /// <summary>
@@ -385,6 +399,23 @@ namespace PattyPetitGiant
             public InvalidLevelStateExcepton() { }
             public InvalidLevelStateExcepton(string message) { }
             public InvalidLevelStateExcepton(string message, System.Exception inner) { }
+        }
+
+        public void pushCoin(Vector2 position, Coin.CoinValue value)
+        {
+            int lastAt = freeCoinIndex;
+
+            do
+            {
+                freeCoinIndex = (freeCoinIndex + 1) % coinPoolSize;
+
+                if (coinPool[freeCoinIndex].State == Coin.CoinState.Inactive)
+                {
+                    coinPool[freeCoinIndex].activate(position, value);
+                    break;
+                }
+            }
+            while (freeCoinIndex != lastAt);
         }
     }
 }
