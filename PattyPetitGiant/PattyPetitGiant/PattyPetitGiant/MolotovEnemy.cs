@@ -76,6 +76,9 @@ namespace PattyPetitGiant
             if (health < 1)
             {
                 remove_from_list = true;
+
+                parentWorld.pushCoin(CenterPoint, Coin.CoinValue.Laurier);
+
                 return;
             }
 

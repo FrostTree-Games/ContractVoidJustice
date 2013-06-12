@@ -71,6 +71,8 @@ namespace PattyPetitGiant
                         {
                             GlobalGameConstants.Player_Coin_Amount = GlobalGameConstants.Player_Coin_Amount + (int)value;
 
+                            AudioLib.playSoundEffect("testCoin", (float)((Game1.rand.NextDouble() % 0.1f) - 0.05f));
+
                             state = CoinState.Inactive;
                         }
                     }

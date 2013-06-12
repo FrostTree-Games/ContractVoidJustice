@@ -200,6 +200,10 @@ namespace PattyPetitGiant
                 if (enemy_life <= 0)
                 {
                     remove_from_list = true;
+
+                    parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.CoinValue.Twoonie);
+                    parentWorld.pushCoin(CenterPoint + new Vector2(GlobalGameConstants.TileSize.X / 2, GlobalGameConstants.TileSize.Y / -2), Coin.CoinValue.Loonie);
+                    parentWorld.pushCoin(CenterPoint + GlobalGameConstants.TileSize / 2, Coin.CoinValue.Twoonie);
                 }
 
             }
