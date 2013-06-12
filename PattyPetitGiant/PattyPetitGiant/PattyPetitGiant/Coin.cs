@@ -40,6 +40,9 @@ namespace PattyPetitGiant
         private float animationTime;
 
         private bool isKnockedBack = false;
+        private const float knockBackSpeed = 0.4f;
+        private float knockedBackTime = 0.0f;
+        private const float knockBackDuration = 250f;
 
         public Coin(LevelState parentWorld, Vector2 position)
         {
@@ -48,7 +51,6 @@ namespace PattyPetitGiant
 
             dimensions = new Vector2(24, 24);
 
-            //change this back to inactive DAN
             state = CoinState.Inactive;
 
             coinAnim = AnimationLib.getFrameAnimationSet("testCoin");
@@ -71,12 +73,31 @@ namespace PattyPetitGiant
                         {
                             GlobalGameConstants.Player_Coin_Amount = GlobalGameConstants.Player_Coin_Amount + (int)value;
 
-                            AudioLib.playSoundEffect("testCoin", (float)((Game1.rand.NextDouble() % 0.1f) - 0.05f));
+                            AudioLib.playSoundEffect("testCoin");
 
                             state = CoinState.Inactive;
                         }
                     }
                 }
+
+                if (isKnockedBack)
+                {
+                    knockedBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (knockedBackTime > knockBackDuration)
+                    {
+                        isKnockedBack = false;
+                    }
+                }
+                else
+                {
+                    velocity = Vector2.Zero;
+                }
+
+                Vector2 nextStep = position + (velocity * currentTime.ElapsedGameTime.Milliseconds);
+
+                Vector2 finalPos = parentWorld.Map.reloactePosition(position, nextStep, dimensions);
+                position = finalPos;
             }
             else
             {
@@ -94,7 +115,18 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
-            return;
+            if (isKnockedBack)
+            {
+                return;
+            }
+            else
+            {
+                direction.Normalize();
+
+                isKnockedBack = true;
+                knockedBackTime = 0.0f;
+                velocity = direction * knockBackSpeed;
+            }
         }
 
         public void activate(Vector2 position, CoinValue value)
@@ -110,6 +142,9 @@ namespace PattyPetitGiant
             this.value = value;
 
             isKnockedBack = false;
+            float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
+            Console.WriteLine(randDir);
+            knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
 
             switch (value)
             {
