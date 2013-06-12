@@ -86,28 +86,7 @@ namespace PattyPetitGiant
                                 continue;
                             else if (en is Player)
                             {
-                                if (player_found == true)
-                                {
-                                    switch (en.Direction_Facing)
-                                    {
-                                        case GlobalGameConstants.Direction.Right:
-                                            direction_facing = GlobalGameConstants.Direction.Left;
-                                            break;
-                                        case GlobalGameConstants.Direction.Left:
-                                            direction_facing = GlobalGameConstants.Direction.Right;
-                                            break;
-                                        case GlobalGameConstants.Direction.Up:
-                                            direction_facing = GlobalGameConstants.Direction.Down;
-                                            break;
-                                        default:
-                                            direction_facing = GlobalGameConstants.Direction.Up;
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    component.update(this, en, currentTime, parentWorld);
-                                }
+                                component.update(this, en, currentTime, parentWorld);
                             }
                         }
                         
@@ -229,10 +208,12 @@ namespace PattyPetitGiant
                     if (direction.X < 0)
                     {
                         velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
+                        direction_facing = GlobalGameConstants.Direction.Right;
                     }
                     else
                     {
                         velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
+                        direction_facing = GlobalGameConstants.Direction.Left;
                     }
                 }
                 else
@@ -240,10 +221,12 @@ namespace PattyPetitGiant
                     if (direction.Y < 0)
                     {
                         velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
+                        direction_facing = GlobalGameConstants.Direction.Down;
                     }
                     else
                     {
                         velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
+                        direction_facing = GlobalGameConstants.Direction.Up;
                     }
                 }
                 enemy_life = enemy_life - damage;
