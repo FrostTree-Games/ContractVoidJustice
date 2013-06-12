@@ -64,6 +64,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>antiFairy</Name>
     </None>
+    <None Include="animation\frame\testCoin.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>testCoin</Name>
+    </None>
     <None Include="animation\frame\keyEmptyPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>keyEmptyPic</Name>

@@ -28,3 +28,4 @@ keyEmptyPic
 antiFairy
 molotov
 molotovFlame
+testCoin

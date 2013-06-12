@@ -9,36 +9,134 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PattyPetitGiant
 {
-    class Coin : Entity
+    public class Coin : Entity
     {
-        public Coin(LevelState parentWorld, float initial_x, float initial_y)
+        public enum CoinState
         {
-            position = new Vector2(initial_x, initial_y);
-            this.parentWorld = parentWorld;
-            dimensions = new Vector2(20.0f, 20.0f);
+            Active,
+            Inactive,
         }
+
+        public enum CoinValue
+        {
+            Loonie = 1,
+            Twoonie = 2,
+            Laurier = 5,
+            MacDonald = 10,
+            Elizabeth = 20,
+            Mackenzie = 50,
+            Borden = 100,
+        }
+
+        private CoinState state;
+        public CoinState State { get { return state; } }
+
+        private CoinValue value = CoinValue.Loonie;
+        public CoinValue Value { get { return value; } }
+
+        private Color shadeColor = Color.Yellow;
+
+        private AnimationLib.FrameAnimationSet coinAnim = null;
+        private float animationTime;
+
+        private bool isKnockedBack = false;
+
+        public Coin(LevelState parentWorld, Vector2 position)
+        {
+            this.position = position;
+            this.parentWorld = parentWorld;
+
+            dimensions = new Vector2(24, 24);
+
+            //change this back to inactive DAN
+            state = CoinState.Inactive;
+
+            coinAnim = AnimationLib.getFrameAnimationSet("testCoin");
+            animationTime = 0.0f;
+
+            isKnockedBack = false;
+        }
+
         public override void update(GameTime currentTime)
         {
-            foreach (Entity en in parentWorld.EntityList)
+            if (state == CoinState.Active)
             {
-                if (en is Player)
+                animationTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                foreach (Entity en in parentWorld.EntityList)
                 {
-                    if (hitTest(en))
+                    if (en is Player)
                     {
-                        GlobalGameConstants.Player_Coin_Amount = GlobalGameConstants.Player_Coin_Amount + 1;
-                        remove_from_list = true;
+                        if (hitTest(en))
+                        {
+                            GlobalGameConstants.Player_Coin_Amount = GlobalGameConstants.Player_Coin_Amount + (int)value;
+
+                            state = CoinState.Inactive;
+                        }
                     }
                 }
             }
-
+            else
+            {
+                position = new Vector2(-100, -100);
+            }
         }
+
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Brown, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            if (state == CoinState.Active)
+            {
+                coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.51f, shadeColor);
+            }
         }
+
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
             return;
+        }
+
+        public void activate(Vector2 position, CoinValue value)
+        {
+            if (state == CoinState.Active)
+            {
+                return;
+            }
+
+            state = CoinState.Active;
+
+            this.position = position;
+            this.value = value;
+
+            isKnockedBack = false;
+
+            switch (value)
+            {
+                case CoinValue.Loonie:
+                    shadeColor = Color.Brown;
+                    break;
+                case CoinValue.Twoonie:
+                    shadeColor = Color.White;
+                    break;
+                case CoinValue.Laurier:
+                    shadeColor = Color.LightBlue;
+                    break;
+                case CoinValue.MacDonald:
+                    shadeColor = Color.Purple;
+                    break;
+                case CoinValue.Elizabeth:
+                    shadeColor = Color.Green;
+                    break;
+                case CoinValue.Mackenzie:
+                    shadeColor = Color.Red;
+                    break;
+                case CoinValue.Borden:
+                    shadeColor = Color.Goldenrod;
+                    break;
+                default:
+                    shadeColor = Color.Brown;
+                    value = CoinValue.Loonie;
+                    break;
+            }
         }
     }
 }
