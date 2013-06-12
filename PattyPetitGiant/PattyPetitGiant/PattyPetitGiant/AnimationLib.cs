@@ -108,7 +108,7 @@ namespace PattyPetitGiant
                     frame = frameCount - 1;
                 }
 
-                sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), Color.White);
+                sb.Draw(sheet, position + new Vector2((int)offsetX, (int)offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, FrameHeight), Color.White);
             }
 
             public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Vector2 scale, float depth)
@@ -124,7 +124,7 @@ namespace PattyPetitGiant
                     frame = frameCount - 1;
                 }
 
-                sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
+                sb.Draw(sheet, position + new Vector2((int)offsetX, (int)offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
             }
 
             public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Vector2 scale, float depth, Color color)
@@ -140,7 +140,7 @@ namespace PattyPetitGiant
                     frame = frameCount - 1;
                 }
 
-                sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
+                sb.Draw(sheet, position + new Vector2((int)offsetX, (int)offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), color, 0.0f, Vector2.Zero, scale, SpriteEffects.None, depth);
             }
 
             public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Vector2 scale, float depth, float rotation, Vector2 centerPoint)
@@ -156,7 +156,7 @@ namespace PattyPetitGiant
                     frame = frameCount - 1;
                 }
 
-                sb.Draw(sheet, position + new Vector2(offsetX, offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, rotation, centerPoint, scale, SpriteEffects.None, depth);
+                sb.Draw(sheet, position + new Vector2((int)offsetX, (int)offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, rotation, centerPoint, scale, SpriteEffects.None, depth);
             }
         }
 
