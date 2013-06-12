@@ -218,6 +218,11 @@ namespace PattyPetitGiant
             position.Y = finalPos.Y;
 
             directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time, true);
+
+            if (enemy_life <= 0)
+            {
+                remove_from_list = true;
+            }
         }
         public override void draw(SpriteBatch sb)
         {
