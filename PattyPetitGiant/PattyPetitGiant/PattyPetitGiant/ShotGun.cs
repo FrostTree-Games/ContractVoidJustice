@@ -127,7 +127,6 @@ namespace PattyPetitGiant
 
                         shotgun_pellets[i].pellet_checked = true;
                         Vector2 direction = en.CenterPoint - shotgun_pellets[i].CenterPoint;
-                        Console.WriteLine(Vector2.Distance(en.CenterPoint, parent.CenterPoint) / 100);
                         en.knockBack(shotgun_pellets[i].velocity, shotgun_pellets[i].knockback_magnitude / (Vector2.Distance(en.CenterPoint, parent.CenterPoint) / 100), shotgun_pellets[i].pellet_damage * damage_multiplier);
                     }
                     else
