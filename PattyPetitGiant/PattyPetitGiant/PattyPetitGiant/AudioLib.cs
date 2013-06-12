@@ -96,5 +96,16 @@ namespace PattyPetitGiant
         {
             sfxLib[sfxName].Play();
         }
+
+        /// <summary>
+        /// Acquire a sound effect from the library.
+        /// </summary>
+        /// <param name="sfxName">The name of the sound effect as specified in the manifest file.</param>
+        /// /// <param name="pitchSlide">Adjust the pitch accordingly. (+/-)1.0f is a full octave. Passing 0.0f is the equivalent of no pitch changes.</param>
+        /// <returns></returns>
+        public static void playSoundEffect(string sfxName, float pitchSlide)
+        {
+            sfxLib[sfxName].Play(MediaPlayer.Volume, pitchSlide, 0.0f);
+        }
     }
 }

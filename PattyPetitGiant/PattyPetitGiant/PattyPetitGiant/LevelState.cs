@@ -42,6 +42,10 @@ namespace PattyPetitGiant
         private List<Entity> entityList = null;
         public List<Entity> EntityList { get { return entityList; } }
 
+        private Coin[] coinPool = null;
+        private const int coinPoolSize = 50;
+        private int freeCoinIndex;
+
         private Entity cameraFocus = null;
         public Entity CameraFocus { get { return cameraFocus; } set { value = cameraFocus; } }
         Matrix camera;
@@ -69,6 +73,14 @@ namespace PattyPetitGiant
             keyModule = new LevelKeyModule();
 
             entityList = new List<Entity>();
+
+            coinPool = new Coin[coinPoolSize];
+            freeCoinIndex = 0;
+            for (int i = 0; i < coinPoolSize; i++)
+            {
+                coinPool[i] = new Coin(this, new Vector2(-100, -100));
+                entityList.Add(coinPool[i]);
+            }
 
             populateRooms(nodeMap, currentSeed);
 
@@ -163,8 +175,6 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new GuardSquadLeader(this, (currentRoomX + 10) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
-                        //entityList.Add(new TestEnemy(this, new Vector2((currentRoomX + 10) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y)));
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
@@ -196,13 +206,13 @@ namespace PattyPetitGiant
                             switch (randomEnemyNumber % enemyTypeCount)
                             {
                                 case 0:
-                                    //entityList.Add(new MolotovEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    entityList.Add(new MolotovEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                                 case 1:
-                                    //entityList.Add(new ChaseEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    entityList.Add(new ChaseEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                                 case 2:
-                                    //entityList.Add(new ChargerMutantEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    entityList.Add(new ChargerMutantEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                             }
 
@@ -210,6 +220,8 @@ namespace PattyPetitGiant
                     }
                 }
             }
+
+            GC.Collect();
         }
 
         /// <summary>
@@ -255,6 +267,11 @@ namespace PattyPetitGiant
             {
                 state = LoadingState.LevelPaused;
                 pauseDialogMinimumTime = 0;
+            }
+
+            if (GlobalGameConstants.Player_Ammunition < 0)
+            {
+                GlobalGameConstants.Player_Ammunition = 0;
             }
 
             foreach (Entity en in entityList)
@@ -382,6 +399,23 @@ namespace PattyPetitGiant
             public InvalidLevelStateExcepton() { }
             public InvalidLevelStateExcepton(string message) { }
             public InvalidLevelStateExcepton(string message, System.Exception inner) { }
+        }
+
+        public void pushCoin(Vector2 position, Coin.CoinValue value)
+        {
+            int lastAt = freeCoinIndex;
+
+            do
+            {
+                freeCoinIndex = (freeCoinIndex + 1) % coinPoolSize;
+
+                if (coinPool[freeCoinIndex].State == Coin.CoinState.Inactive)
+                {
+                    coinPool[freeCoinIndex].activate(position, value);
+                    break;
+                }
+            }
+            while (freeCoinIndex != lastAt);
         }
     }
 }

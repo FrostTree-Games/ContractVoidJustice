@@ -13,3 +13,6 @@ chaseUp
 squadSoldierDown
 squadSoldierRight
 squadSoldierUp
+chargerDown
+chargerRight
+chargerUp

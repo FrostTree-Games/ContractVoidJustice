@@ -304,6 +304,11 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
+            if (state == playerState.Item1 || state == playerState.Item2)
+            {
+                state = playerState.Moving;
+            }
+
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;

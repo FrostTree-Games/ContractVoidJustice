@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 
 namespace PattyPetitGiant
 {
@@ -20,6 +21,8 @@ namespace PattyPetitGiant
         private EnemyComponents component;
         private ChargerState charger_state;
         private float windup_timer;
+
+        private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
         public ChargerMutantEnemy(LevelState parentWorld, Vector2 position)
         {
@@ -42,11 +45,26 @@ namespace PattyPetitGiant
             component = new IdleSearch();
             charger_state = ChargerState.none;
 
+            direction_facing = (GlobalGameConstants.Direction)(Game1.rand.Next() % 4);
+
             this.parentWorld = parentWorld;
+
+            directionAnims = new AnimationLib.SpineAnimationSet[4];
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("chargerUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("chargerDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("chargerRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("chargerRight");
+            for (int i = 0; i < 4; i++)
+            {
+                directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("idle");
+            }
         }
 
         public override void update(GameTime currentTime)
         {
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+
             if (disable_movement == true)
             {
                 disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -63,6 +81,8 @@ namespace PattyPetitGiant
                 switch (state)
                 {
                     case EnemyState.Idle:
+                        directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
+
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
                         foreach (Entity en in parentWorld.EntityList)
                         {
@@ -129,9 +149,11 @@ namespace PattyPetitGiant
                         switch (charger_state)
                         {
                             case ChargerState.windUp:
+                                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
                                 windup_timer += currentTime.ElapsedGameTime.Milliseconds;
                                 if (windup_timer > 300)
                                 {
+                                    animation_time = 0.0f;
                                     charger_state = ChargerState.charge;
                                     switch (direction_facing)
                                     {
@@ -151,6 +173,7 @@ namespace PattyPetitGiant
                                 }
                                 break;
                             case ChargerState.charge:
+                                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("charge");
                                 foreach (Entity en in parentWorld.EntityList)
                                 {
                                     if (en == this)
@@ -179,6 +202,7 @@ namespace PattyPetitGiant
                             default:
                                 charger_state = ChargerState.windUp;
                                 windup_timer = 0.0f;
+                                animation_time = 0.0f;
                                 break;
                         }
                         break;
@@ -192,10 +216,12 @@ namespace PattyPetitGiant
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
             position.Y = finalPos.Y;
+
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time, true);
         }
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
         }
         public override void knockBack(Vector2 direction, float magnitude, int damage)
         {
@@ -232,6 +258,20 @@ namespace PattyPetitGiant
 
                 enemy_life = enemy_life - damage;
             }
+        }
+
+        public override void spinerender(SkeletonRenderer renderer)
+        {
+            AnimationLib.SpineAnimationSet currentSkeleton = directionAnims[(int)direction_facing];
+
+            currentSkeleton.Skeleton.RootBone.X = CenterPoint.X * (currentSkeleton.Skeleton.FlipX ? -1 : 1);
+            currentSkeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            currentSkeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            currentSkeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            currentSkeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(currentSkeleton.Skeleton);
         }
     }
 }

@@ -81,6 +81,27 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
+            if (directions == DoorDirection.NorthSouth)
+            {
+                int rootTileX = (int)(position.X / GlobalGameConstants.TileSize.X);
+                int rootTileY = (int)(position.Y / GlobalGameConstants.TileSize.Y);
+
+                for (int i = 0; i < (int)(dimensions.Y / GlobalGameConstants.TileSize.Y); i++)
+                {
+                    parentWorld.Map.Map[rootTileX, rootTileY + i] = TileMap.TileType.WallUnidentified;
+                }
+            }
+            else
+            {
+                int rootTileX = (int)(position.X / GlobalGameConstants.TileSize.X);
+                int rootTileY = (int)(position.Y / GlobalGameConstants.TileSize.Y);
+
+                for (int i = 0; i < (int)(dimensions.X / GlobalGameConstants.TileSize.X); i++)
+                {
+                    parentWorld.Map.Map[rootTileX + i, rootTileY] = TileMap.TileType.WallUnidentified;
+                }
+            }
+
             //this is a bit complicated
             foreach (Entity en in parentWorld.EntityList)
             {
@@ -96,6 +117,27 @@ namespace PattyPetitGiant
                         else if (en is Player && parentWorld.KeyModule.isKeyFound(color))
                         {
                             remove_from_list = true;
+
+                            if (directions == DoorDirection.NorthSouth)
+                            {
+                                int rootTileX = (int)(position.X / GlobalGameConstants.TileSize.X);
+                                int rootTileY = (int)(position.Y / GlobalGameConstants.TileSize.Y);
+
+                                for (int i = 0; i < (int)(dimensions.Y / GlobalGameConstants.TileSize.Y); i++)
+                                {
+                                    parentWorld.Map.Map[rootTileX, rootTileY + i] = TileMap.TileType.NoWall;
+                                }
+                            }
+                            else
+                            {
+                                int rootTileX = (int)(position.X / GlobalGameConstants.TileSize.X);
+                                int rootTileY = (int)(position.Y / GlobalGameConstants.TileSize.Y);
+
+                                for (int i = 0; i < (int)(dimensions.X / GlobalGameConstants.TileSize.X); i++)
+                                {
+                                    parentWorld.Map.Map[rootTileX + i, rootTileY] = TileMap.TileType.NoWall;
+                                }
+                            }
                         }
                         else
                         {
@@ -124,7 +166,7 @@ namespace PattyPetitGiant
                                 }
                             }
 
-                            en.knockBack(repelDirection, 3.0f, 0);
+                            //en.knockBack(repelDirection, 3.0f, 0);
                         }
                     }
                 }
@@ -133,7 +175,7 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, parentWorld.KeyModule.KeyColorSet[(int)color], 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.45f);
+            sb.Draw(Game1.whitePixel, position, null, Color.Lerp(parentWorld.KeyModule.KeyColorSet[(int)color], new Color(0.0f, 0.0f, 1.0f, 0.25f), 0.5f), 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.45f);
             keyGraphic.drawAnimationFrame(0.0f, sb, position, new Vector2(3.0f, 3.0f), 0.5f);
         }
     }

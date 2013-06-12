@@ -29,6 +29,8 @@ namespace PattyPetitGiant
             WandOfGyges = 6,
             ShotGun = 7,
             WaveMotionGun = 8,
+            HermesSandals = 10,
+            RiotShield = 11,
         }
 
         private static int gameResolutionWidth = 1280;
