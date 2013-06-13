@@ -76,7 +76,7 @@ namespace PattyPetitGiant
 
             GlobalGameConstants.Player_Coin_Amount = 200;
 
-            currentGameScreen = new LevelState();
+            currentGameScreen = new LevelSelectState();
         }
 
         /// <summary>

@@ -94,6 +94,7 @@
     <Compile Include="InputDeviceManager.cs" />
     <Compile Include="KeySystem.cs" />
     <Compile Include="LevelKeyModule.cs" />
+    <Compile Include="LevelSelectState.cs" />
     <Compile Include="MolotovEnemy.cs" />
     <Compile Include="MoveSearch.cs" />
     <Compile Include="PatrolGuard.cs" />
