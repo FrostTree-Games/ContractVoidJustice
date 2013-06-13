@@ -73,7 +73,7 @@ namespace PattyPetitGiant
             {
                 downPressed = false;
 
-                if (selectedLevelY < levelMap.GetLength(1) - 1 && levelMap[selectedLevelX, selectedLevelY + 1].visible)
+                if (selectedLevelY < levelMap.GetLength(1) - 1 && levelMap[selectedLevelX, selectedLevelY + 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight < 1)
                 {
                     selectedLevelY++;
                 }
@@ -87,12 +87,15 @@ namespace PattyPetitGiant
             {
                 upPressed = false;
 
-                if (selectedLevelY > 0 && levelMap[selectedLevelX, selectedLevelY - 1].visible)
+                if (selectedLevelY > 0 && levelMap[selectedLevelX, selectedLevelY - 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight > -1)
                 {
                     selectedLevelY--;
                 }
             }
 
+            selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
+
+            /*
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection) && !rightPressed)
             {
                 rightPressed = true;
@@ -101,25 +104,22 @@ namespace PattyPetitGiant
             {
                 rightPressed = false;
 
-                if (selectedLevelX < levelMap.GetLength(0) - 1 && levelMap[selectedLevelX + 1, selectedLevelY].visible)
+                if (GameCampaign.PlayerLevelProgress < levelMap.GetLength(0) - 2)
                 {
-                    selectedLevelX++;
-                }
-            }
+                    GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
+                    GameCampaign.PlayerFloorHeight = selectedLevelY;
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.LeftDirection) && !leftPressed)
-            {
-                leftPressed = true;
-            }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.LeftDirection) && leftPressed)
-            {
-                leftPressed = false;
-
-                if (selectedLevelX > 0 && levelMap[selectedLevelX - 1, selectedLevelY].visible)
-                {
-                    selectedLevelX--;
+                    if (levelMap[GameCampaign.PlayerLevelProgress + 1, selectedLevelY].visible == false)
+                    {
+                        selectedLevelY = 1;
+                    }
                 }
-            }
+            }*/
+        }
+
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color)
+        {
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, 1), SpriteEffects.None, 0.5f);
         }
 
         public override void render(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
@@ -139,6 +139,23 @@ namespace PattyPetitGiant
 
                     sb.Draw(tex, new Vector2(i * 32, j * 32) + drawMapTestOffset, new Rectangle(16, 0, 16, 16), Color.White);
 
+                    if (i == GameCampaign.PlayerLevelProgress && j == GameCampaign.PlayerFloorHeight)
+                    {
+                        sb.Draw(Game1.whitePixel, new Vector2(i * 32 + 4, j * 32 + 4) + drawMapTestOffset, null, Color.Red, 0.0f, Vector2.Zero, 8.0f, SpriteEffects.None, 0.5f);
+
+                        if (levelMap[GameCampaign.PlayerLevelProgress + 1, GameCampaign.PlayerFloorHeight].visible)
+                        {
+                            drawLine(sb, new Vector2(i * 32 + 8, j * 32 + 8) + drawMapTestOffset, 32, 0.0f, Color.White);
+                        }
+                        if (GameCampaign.PlayerFloorHeight < 2 && levelMap[GameCampaign.PlayerLevelProgress + 1, GameCampaign.PlayerFloorHeight + 1].visible)
+                        {
+                            drawLine(sb, new Vector2(i * 32 + 8, j * 32 + 8) + drawMapTestOffset, 32, (float)(Math.PI / 4), Color.White);
+                        }
+                        if (GameCampaign.PlayerFloorHeight > 0 && levelMap[GameCampaign.PlayerLevelProgress + 1, GameCampaign.PlayerFloorHeight - 1].visible)
+                        {
+                            drawLine(sb, new Vector2(i * 32 + 8, j * 32 + 8) + drawMapTestOffset, 32, (float)(Math.PI / -4), Color.White);
+                        }
+                    }
                     if (i == selectedLevelX && j == selectedLevelY)
                     {
                         sb.Draw(Game1.whitePixel, new Vector2(i * 32 + 4, j * 32 + 4) + drawMapTestOffset, null, Color.Green, 0.0f, Vector2.Zero, 8.0f, SpriteEffects.None, 0.5f);

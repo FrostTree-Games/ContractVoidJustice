@@ -29,8 +29,31 @@ namespace PattyPetitGiant
         public static string Player_Item_1 = null;
         public static string Player_Item_2 = null;
 
+        /// <summary>
+        /// Indicates how many levels the player has completed so far in the campaign.
+        /// </summary>
+        public static int PlayerLevelProgress
+        {
+            get { return playerLevelProgress; }
+            set { playerLevelProgress = value % 6; }
+        }
+        private static int playerLevelProgress = 0;
+
+        /// <summary>
+        /// Indicates which of the three floors of the ship the player is on in the campaign.
+        /// </summary>
+        public static int PlayerFloorHeight
+        {
+            get { return playerFloorHeight; }
+            set { playerFloorHeight = value % 3; }
+        }
+        private static int playerFloorHeight = 1;
+
         public static void ResetPlayerValues()
         {
+            PlayerLevelProgress = 0;
+            PlayerFloorHeight = 1;
+
             player_health = 100;
             player_ammunition = 100;
             player_coin_amount = 200;
