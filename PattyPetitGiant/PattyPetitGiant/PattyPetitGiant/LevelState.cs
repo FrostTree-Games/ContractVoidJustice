@@ -347,12 +347,17 @@ namespace PattyPetitGiant
 
             foreach (Entity en in entityList)
             {
+                if (Vector2.Distance(en.Position, cameraFocus.Position) > 1000)
+                {
+                    continue;
+                }
+
                 en.draw(sb);
             }
 
             sb.End();
 
-            AnimationLib.renderSpineEntities(camera, entityList);
+            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus);
 
             gui.render(sb);
         }
