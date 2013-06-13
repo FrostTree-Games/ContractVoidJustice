@@ -39,8 +39,7 @@ namespace PattyPetitGiant
 
         private bool upPressed = false;
         private bool downPressed = false;
-        private bool leftPressed = false;
-        private bool rightPressed = false;
+        private bool confirmPressed = false;
 
         public LevelSelectState()
         {
@@ -59,8 +58,8 @@ namespace PattyPetitGiant
             levelMap[levelMap.GetLength(0) - 1, 0].visible = false;
             levelMap[levelMap.GetLength(0) - 1, 2].visible = false;
 
-            selectedLevelX = 0;
-            selectedLevelY = 1;
+            selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
+            selectedLevelY = GameCampaign.PlayerFloorHeight;
         }
 
         protected override void doUpdate(Microsoft.Xna.Framework.GameTime currentTime)
@@ -94,6 +93,20 @@ namespace PattyPetitGiant
             }
 
             selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
+
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
+            {
+                confirmPressed = true;
+            }
+            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && confirmPressed)
+            {
+                confirmPressed = false;
+
+                GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
+                GameCampaign.PlayerFloorHeight = selectedLevelY;
+
+                isComplete = true;
+            }
 
             /*
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection) && !rightPressed)
@@ -170,7 +183,7 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            throw new NotImplementedException();
+            return ScreenStateType.LevelState;
         }
     }
 }

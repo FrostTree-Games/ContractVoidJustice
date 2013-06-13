@@ -221,6 +221,7 @@ namespace PattyPetitGiant
                 }
             }
 
+            // run a garbage collection to clean up the heap before running
             GC.Collect();
         }
 
@@ -391,7 +392,7 @@ namespace PattyPetitGiant
         {
             if (endFlagReached)
             {
-                return ScreenStateType.LevelState;
+                return ScreenStateType.LevelSelectState;
             }
             else
             {
