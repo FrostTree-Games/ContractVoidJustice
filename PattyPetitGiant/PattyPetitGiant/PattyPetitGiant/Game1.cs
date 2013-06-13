@@ -74,7 +74,7 @@ namespace PattyPetitGiant
 
             AudioLib lb = new AudioLib();
 
-            GlobalGameConstants.Player_Coin_Amount = 200;
+            GameCampaign.ResetPlayerValues();
 
             currentGameScreen = new LevelSelectState();
         }

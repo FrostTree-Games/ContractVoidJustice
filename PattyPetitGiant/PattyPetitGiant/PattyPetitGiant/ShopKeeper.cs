@@ -162,7 +162,7 @@ namespace PattyPetitGiant
 
         private void purchaseTransaction(int goldValue)
         {
-            GlobalGameConstants.Player_Coin_Amount -= goldValue;
+            GameCampaign.Player_Coin_Amount -= goldValue;
         }
 
         public override void update(GameTime currentTime)
@@ -264,7 +264,7 @@ namespace PattyPetitGiant
                                     {
                                         overlapMessage = soldOutMessage;
                                     }
-                                    else if (itemPrices[i] > GlobalGameConstants.Player_Coin_Amount)
+                                    else if (itemPrices[i] > GameCampaign.Player_Coin_Amount)
                                     {
                                         overlapMessage = noWayMessage;
                                     }
@@ -273,7 +273,7 @@ namespace PattyPetitGiant
                                         overlapMessage = buyMessage;
                                     }
 
-                                    if (switchItemPressed && !(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && GlobalGameConstants.Player_Coin_Amount >= itemPrices[i])
+                                    if (switchItemPressed && !(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && GameCampaign.Player_Coin_Amount >= itemPrices[i])
                                     {
                                         items[i].Position = drawItemPos;
 

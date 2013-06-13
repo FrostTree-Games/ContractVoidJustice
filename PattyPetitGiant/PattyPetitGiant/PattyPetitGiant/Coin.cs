@@ -71,7 +71,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            GlobalGameConstants.Player_Coin_Amount = GlobalGameConstants.Player_Coin_Amount + (int)value;
+                            GameCampaign.Player_Coin_Amount = GameCampaign.Player_Coin_Amount + (int)value;
 
                             AudioLib.playSoundEffect("testCoin");
 

@@ -52,14 +52,14 @@ namespace PattyPetitGiant
                         break;
                 }
 
-                if (GlobalGameConstants.Player_Item_1 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+                if (GameCampaign.Player_Item_1 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                 {
                     state = HermesSandalsState.Idle;
 
                     parent.Disable_Movement = false;
                     parent.State = Player.playerState.Moving;
                 }
-                else if (GlobalGameConstants.Player_Item_2 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+                else if (GameCampaign.Player_Item_2 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
                 {
                     state = HermesSandalsState.Idle;
 
@@ -69,7 +69,7 @@ namespace PattyPetitGiant
 
                 parent.Animation_Time += (currentTime.ElapsedGameTime.Milliseconds / 400f);
 
-                GlobalGameConstants.Player_Ammunition -= (currentTime.ElapsedGameTime.Milliseconds / 1000f) * ammoCostPerSecond;
+                GameCampaign.Player_Ammunition -= (currentTime.ElapsedGameTime.Milliseconds / 1000f) * ammoCostPerSecond;
             }
             else if (state == HermesSandalsState.WindUp)
             {
@@ -79,7 +79,7 @@ namespace PattyPetitGiant
 
                 if (windUpTime > windUpDuration)
                 {
-                    if (GlobalGameConstants.Player_Ammunition > 0.01f)
+                    if (GameCampaign.Player_Ammunition > 0.01f)
                     {
                         state = HermesSandalsState.Running;
                     }

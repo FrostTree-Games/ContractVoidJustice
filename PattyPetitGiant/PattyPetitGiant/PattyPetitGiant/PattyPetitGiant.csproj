@@ -108,6 +108,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyComponents.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="GameCampaign.cs" />
     <Compile Include="GlobalGameConstants.cs" />
     <Compile Include="GuardSquadLeader.cs" />
     <Compile Include="GuardSquadSoldiers.cs" />
