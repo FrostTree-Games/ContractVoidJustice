@@ -113,6 +113,15 @@ namespace PattyPetitGiant
                     disable_movement = false;
                     disable_movement_time = 0;
                 }
+
+                if (player_item_1 != null)
+                {
+                    player_item_1.daemonupdate(this, currentTime, parentWorld);
+                }
+                if (player_item_2 != null)
+                {
+                    player_item_2.daemonupdate(this, currentTime, parentWorld);
+                }
             }
             else
             {
@@ -267,16 +276,15 @@ namespace PattyPetitGiant
                         item2_switch_button_down = false;
                     }
 
+                    if (player_item_1 != null)
+                    {
+                        player_item_1.daemonupdate(this, currentTime, parentWorld);
+                    }
+                    if (player_item_2 != null)
+                    {
+                        player_item_2.daemonupdate(this, currentTime, parentWorld);
+                    }
                 }
-            }
-
-            if (player_item_1 != null)
-            {
-                player_item_1.daemonupdate(this, currentTime, parentWorld);
-            }
-            if (player_item_2 != null)
-            {
-                player_item_2.daemonupdate(this, currentTime, parentWorld);
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
