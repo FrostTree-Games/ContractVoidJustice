@@ -70,6 +70,7 @@ namespace PattyPetitGiant
             private int frameWidth, frameHeight;
             public int FrameWidth { get { return frameWidth; } }
             public int FrameHeight { get { return frameHeight; } }
+            public Vector2 FrameDimensions { get { return new Vector2(frameWidth, frameHeight); } }
 
             private int frameCount = 0;
             public int FrameCount { get { return frameCount; } }

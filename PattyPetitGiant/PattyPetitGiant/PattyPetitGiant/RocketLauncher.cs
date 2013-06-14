@@ -29,18 +29,30 @@ namespace PattyPetitGiant
         private const float shootDuration = 500f;
         private const float coolDownDuration = 100f;
 
+        private AnimationLib.FrameAnimationSet explosionAnim = null;
+
+        private const string rocketSound = "testRocket";
+        private const string explosionSound = "testExplosion";
+
         public RocketLauncher()
         {
             rocket.active = false;
 
             state = RocketLauncherState.IdleWait;
+
+            explosionAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
         }
 
         private void updateRocketAndExplosion(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             if (rocket.active)
             {
-                rocket.update(currentTime, parentWorld);
+                rocket.update(currentTime, parentWorld, this);
+            }
+
+            if (explosion.active)
+            {
+                explosion.update(currentTime, parentWorld, parent);
             }
 
             lastUpdateTime = currentTime;
@@ -52,12 +64,17 @@ namespace PattyPetitGiant
             
             if (state == RocketLauncherState.IdleWait)
             {
-                if (!rocket.active)
+                if (!rocket.active && !explosion.active)
                 {
                     parent.Velocity = Vector2.Zero;
 
                     timer = 0;
                     state = RocketLauncherState.WindUp;
+                }
+                else
+                {
+                    parent.Disable_Movement = false;
+                    parent.State = Player.playerState.Moving;
                 }
             }
             else if (state == RocketLauncherState.WindUp)
@@ -69,7 +86,8 @@ namespace PattyPetitGiant
                     timer = 0;
                     state = RocketLauncherState.Shooting;
 
-                    rocket = new Rocket(parent.CenterPoint, parent.Direction_Facing);
+                    AudioLib.playSoundEffect(rocketSound);
+                    rocket = new Rocket(parent.CenterPoint - (rocket.dimensions / 2), parent.Direction_Facing);
                 }
             }
             else if (state == RocketLauncherState.Shooting)
@@ -99,8 +117,6 @@ namespace PattyPetitGiant
             {
                 throw new Exception("Invalid Rocket Launcher State");
             }
-
-            Console.WriteLine("{0}", state.ToString());
         }
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -125,6 +141,13 @@ namespace PattyPetitGiant
             {
                 sb.Draw(Game1.whitePixel, rocket.position, null, Color.Pink, 0.0f, Vector2.Zero, rocket.dimensions, SpriteEffects.None, 0.6f);
             }
+
+            if (explosion.active)
+            {
+                //sb.Draw(Game1.whitePixel, explosion.position, null, Color.Red, 0.0f, Vector2.Zero, explosion.dimensions, SpriteEffects.None, 0.6f);
+
+                explosionAnim.drawAnimationFrame(explosion.animationTime, sb, explosion.position, explosion.dimensions / explosionAnim.FrameDimensions, 0.7f);
+            }
         }
 
         public GlobalGameConstants.itemType ItemType()
@@ -137,12 +160,19 @@ namespace PattyPetitGiant
             return "RocketLauncher";
         }
 
+        public void popExplosion(Vector2 position)
+        {
+            AudioLib.playSoundEffect(explosionSound);
+            explosion = new Explosion(position);
+        }
+
         private struct Explosion
         {
             public bool active;
 
             public Vector2 position;
             public Vector2 dimensions;
+            public Vector2 centerPoint { get { return position + (dimensions / 2); } }
 
             public float timeAlive;
             public const float maxTimeAlive = 700;
@@ -153,7 +183,7 @@ namespace PattyPetitGiant
             {
                 active = true;
 
-                dimensions = GlobalGameConstants.TileSize * 2;
+                dimensions = GlobalGameConstants.TileSize * 3;
                 this.position = position - (dimensions / 2);
 
                 timeAlive = 0;
@@ -171,9 +201,33 @@ namespace PattyPetitGiant
                 return true;
             }
 
-            public void update(GameTime currentTime, LevelState parentWorld)
+            public void update(GameTime currentTime, LevelState parentWorld, Player parent)
             {
-                //
+                if (!active)
+                {
+                    return;
+                }
+
+                animationTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                timeAlive += currentTime.ElapsedGameTime.Milliseconds;
+                if (timeAlive > maxTimeAlive)
+                {
+                    active = false;
+                }
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (Vector2.Distance(en.CenterPoint, centerPoint) > 250)
+                    {
+                        continue;
+                    }
+
+                    if (hitTestWithEntity(en))
+                    {
+                        en.knockBack(Vector2.Normalize(en.CenterPoint - centerPoint), 3.5f, 5, parent);
+                    }
+                }
             }
         }
 
@@ -185,7 +239,7 @@ namespace PattyPetitGiant
             public Vector2 dimensions;
             public Vector2 centerPoint { get { return position + (dimensions / 2); } }
             public Vector2 velocity;
-            private const float rocketSpeed = 0.5f;
+            private const float rocketSpeed = 0.75f;
 
             public float timeAlive;
             public const float maxTimeAlive = 2000;
@@ -233,7 +287,7 @@ namespace PattyPetitGiant
                 return true;
             }
 
-            public void update(GameTime currentTime, LevelState parentWorld)
+            public void update(GameTime currentTime, LevelState parentWorld, RocketLauncher launcherItem)
             {
                 if (!active)
                 {
@@ -244,7 +298,7 @@ namespace PattyPetitGiant
 
                 if (timeAlive > maxTimeAlive || parentWorld.Map.hitTestWall(centerPoint))
                 {
-                    // CHANGE TO EXPLOSION
+                    launcherItem.popExplosion(centerPoint);
                     active = false;
                     return;
                 }
@@ -261,7 +315,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTestWithEntity(en))
                         {
-                            // CHANGE TO EXPLOSION
+                            launcherItem.popExplosion(centerPoint);
                             active = false;
                             return;
                         }

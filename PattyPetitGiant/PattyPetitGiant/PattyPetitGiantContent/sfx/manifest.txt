@@ -1,3 +1,5 @@
 testSword
 unlockDoor
 testCoin
+testRocket
+testExplosion
