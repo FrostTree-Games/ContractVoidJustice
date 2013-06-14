@@ -30,7 +30,7 @@ namespace PattyPetitGiant
             ShotGun = 7,
             WaveMotionGun = 8,
             HermesSandals = 10,
-            RiotShield = 11,
+            RocketLauncher = 11,
         }
 
         private static int gameResolutionWidth = 1280;

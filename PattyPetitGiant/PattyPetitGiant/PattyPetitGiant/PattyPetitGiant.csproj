@@ -134,6 +134,7 @@
     <Compile Include="RangeEnemy.cs" />
     <Compile Include="ReturnChaseEnemy.cs" />
     <Compile Include="RiotShield.cs" />
+    <Compile Include="RocketLauncher.cs" />
     <Compile Include="ScreenState.cs" />
     <Compile Include="ShopKeeper.cs" />
     <Compile Include="ShotGun.cs" />

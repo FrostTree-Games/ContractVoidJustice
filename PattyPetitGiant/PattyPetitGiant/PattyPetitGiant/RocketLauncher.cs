@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace PattyPetitGiant
 {
-    class RiotShield : Item
+    class RocketLauncher : Item
     {
-        public enum RiotShieldState
-        {
-            InvalidState = -1,
-            ShieldDown = 0,
-            ShieldUp = 1,
-        }
-
-        public RiotShield()
+        public RocketLauncher()
         {
             //
         }
@@ -43,7 +35,8 @@ namespace PattyPetitGiant
 
         public string getEnumType()
         {
-            return "RiotShield";
+            return "RocketLauncher";
         }
+
     }
 }
