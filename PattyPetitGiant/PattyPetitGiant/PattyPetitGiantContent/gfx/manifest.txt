@@ -8,3 +8,4 @@ gun.png
 gamepadSheet.png
 molotov.png
 molotovFlame.png
+snakeBod.png

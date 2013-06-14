@@ -115,7 +115,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            en.knockBack(en.CenterPoint - CenterPoint, 4.0f, antiFairyDamage);
+                            en.knockBack(en.CenterPoint - CenterPoint, 4.0f, antiFairyDamage, this);
                         }
                     }
                     else if (en is Enemy && !(en == this))

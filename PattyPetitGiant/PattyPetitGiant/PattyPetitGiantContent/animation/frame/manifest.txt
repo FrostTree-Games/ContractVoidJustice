@@ -29,3 +29,6 @@ antiFairy
 molotov
 molotovFlame
 testCoin
+snakeA
+snakeB
+snakeC

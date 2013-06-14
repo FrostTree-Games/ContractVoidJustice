@@ -213,6 +213,10 @@ namespace PattyPetitGiant
         {
             sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
         }
-        
+
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
+        {
+            base.knockBack(direction, magnitude, damage, attacker);
+        }
     }
 }
