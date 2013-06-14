@@ -223,6 +223,7 @@ namespace PattyPetitGiant
                 }
             }
 
+            // run a garbage collection to clean up the heap before running
             GC.Collect();
         }
 
@@ -271,9 +272,9 @@ namespace PattyPetitGiant
                 pauseDialogMinimumTime = 0;
             }
 
-            if (GlobalGameConstants.Player_Ammunition < 0)
+            if (GameCampaign.Player_Ammunition < 0)
             {
-                GlobalGameConstants.Player_Ammunition = 0;
+                GameCampaign.Player_Ammunition = 0;
             }
 
             foreach (Entity en in entityList)
@@ -349,12 +350,17 @@ namespace PattyPetitGiant
 
             foreach (Entity en in entityList)
             {
+                if (Vector2.Distance(en.Position, cameraFocus.Position) > 1000)
+                {
+                    continue;
+                }
+
                 en.draw(sb);
             }
 
             sb.End();
 
-            AnimationLib.renderSpineEntities(camera, entityList);
+            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus);
 
             gui.render(sb);
         }
@@ -388,7 +394,7 @@ namespace PattyPetitGiant
         {
             if (endFlagReached)
             {
-                return ScreenStateType.LevelState;
+                return ScreenStateType.LevelSelectState;
             }
             else
             {

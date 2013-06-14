@@ -156,11 +156,11 @@ namespace PattyPetitGiant
             enemy_type = EnemyType.Guard;
 
             directionAnims = new AnimationLib.SpineAnimationSet[4];
-            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("molotovUp");
-            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("molotovDown");
-            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("molotovRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("patrolUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("patrolDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("patrolRight");
             directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
-            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("molotovRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("patrolRight");
             for (int i = 0; i < 4; i++)
             {
                 directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("run");

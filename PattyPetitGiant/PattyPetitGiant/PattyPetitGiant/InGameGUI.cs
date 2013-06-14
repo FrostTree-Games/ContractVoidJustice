@@ -260,11 +260,11 @@ namespace PattyPetitGiant
         public void render(SpriteBatch sb)
         {
 
-            string player_health_display = "Health: " + GlobalGameConstants.Player_Health;
-            string ammunition_amount_display = "Ammunition: " + GlobalGameConstants.Player_Ammunition;
-            string coin_amount_display = "Coin: " + GlobalGameConstants.Player_Coin_Amount;
-            string player_item_1 = "Item 1: " + GlobalGameConstants.Player_Item_1;
-            string player_item_2 = "Item 2: " + GlobalGameConstants.Player_Item_2;
+            string player_health_display = "Health: " + GameCampaign.Player_Health;
+            string ammunition_amount_display = "Ammunition: " + GameCampaign.Player_Ammunition;
+            string coin_amount_display = "Coin: " + GameCampaign.Player_Coin_Amount;
+            string player_item_1 = "Item 1: " + GameCampaign.Player_Item_1;
+            string player_item_2 = "Item 2: " + GameCampaign.Player_Item_2;
 
             //sb.Begin();
             sb.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, null, null);

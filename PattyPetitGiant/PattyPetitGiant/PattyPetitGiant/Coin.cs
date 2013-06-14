@@ -71,7 +71,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
-                            GlobalGameConstants.Player_Coin_Amount = GlobalGameConstants.Player_Coin_Amount + (int)value;
+                            GameCampaign.Player_Coin_Amount = GameCampaign.Player_Coin_Amount + (int)value;
 
                             AudioLib.playSoundEffect("testCoin");
 
@@ -143,7 +143,6 @@ namespace PattyPetitGiant
 
             isKnockedBack = false;
             float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
-            Console.WriteLine(randDir);
             knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
 
             switch (value)

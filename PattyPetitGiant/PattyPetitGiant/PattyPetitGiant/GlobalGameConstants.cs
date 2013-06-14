@@ -50,26 +50,6 @@ namespace PattyPetitGiant
         public static int TilesPerRoomWide { get { return tilesPerRoomWide; } }
         public static int TilesPerRoomHigh { get { return tilesPerRoomHigh; } }
 
-        private static float player_health = 100.00f;
-        public static float Player_Health 
-        {
-            set { player_health = value; }
-            get { return player_health; } 
-        }
-        private static float player_ammunition = 100;
-        public static float Player_Ammunition
-        {
-            set { player_ammunition = value; }
-            get { return player_ammunition; }
-        }
-        private static int player_coin_amount = 0;
-        public static int Player_Coin_Amount
-        {
-            set { player_coin_amount = value; }
-            get { return player_coin_amount; }
-        }
 
-        public static string Player_Item_1 = null;
-        public static string Player_Item_2 = null;
     }
 }

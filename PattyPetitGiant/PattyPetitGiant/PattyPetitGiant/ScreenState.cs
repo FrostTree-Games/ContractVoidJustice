@@ -16,6 +16,7 @@ namespace PattyPetitGiant
             LevelState = 1,
             OptionsMenu = 2,
             GameSetupMenu = 3,
+            LevelSelectState = 4,
         }
 
         protected bool pause = false;
@@ -51,6 +52,8 @@ namespace PattyPetitGiant
             {
                 case ScreenStateType.LevelState:
                     return new LevelState();
+                case ScreenStateType.LevelSelectState:
+                    return new LevelSelectState();
                 default:
                     return null;
             }

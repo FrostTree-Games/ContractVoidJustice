@@ -50,7 +50,7 @@ namespace PattyPetitGiant
                 bullet.bullet_damage = 10;
                 bullet_alive = true;
 
-                GlobalGameConstants.Player_Ammunition = GlobalGameConstants.Player_Ammunition - 1;
+                GameCampaign.Player_Ammunition = GameCampaign.Player_Ammunition - 1;
 
                 bullet_alive_time = 0.0f;
 

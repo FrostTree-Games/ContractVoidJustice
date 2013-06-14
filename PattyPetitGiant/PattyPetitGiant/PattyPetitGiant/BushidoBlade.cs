@@ -43,7 +43,7 @@ namespace PattyPetitGiant
             hitbox = new Vector2(48.0f, 48.0f);
             sword_damage = 999999999;
             item_state_time = 0.0f;
-            player_health = GlobalGameConstants.Player_Health;
+            player_health = GameCampaign.Player_Health;
             animation_time = 0.0f;
             bushidoAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
             knockback_magnitude = 1.0f;
@@ -114,14 +114,14 @@ namespace PattyPetitGiant
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            if (GlobalGameConstants.Player_Health != player_health && GlobalGameConstants.Player_Health > 0)
+            if (GameCampaign.Player_Health != player_health && GameCampaign.Player_Health > 0)
             {
                 bushido_state = BushidoState.bushido;
             }
 
             if (bushido_state == BushidoState.bushido)
             {
-                GlobalGameConstants.Player_Health = 0;
+                GameCampaign.Player_Health = 0;
                 parent.Velocity = Vector2.Zero;
                 position = parent.CenterPoint - new Vector2(24.0f * 3.0f, 24.0f * 3.0f);
                 //animate bushido death
