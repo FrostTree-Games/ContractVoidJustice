@@ -7,7 +7,7 @@ namespace PattyPetitGiant
 {
     public class DungeonGenerator
     {
-        private const float probability_connectOldRooms = 0.1f;
+        private const float probability_connectOldRooms = 0.145f;
 
         public class DungeonGeneratonValues
         {
