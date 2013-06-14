@@ -28,6 +28,18 @@ namespace PattyPetitGiant
             set { disable_movement_time = value; } 
         }
 
+        public enum EnemyType
+        {
+            NoType = 0,
+            Guard = 1,
+            Prisoner = 2,
+            Alien = 4,
+            Player = 8,
+        }
+
+        protected EnemyType enemy_type;
+        public EnemyType Enemy_Type { get { return enemy_type; } }
+
         protected Vector2 position = Vector2.Zero;
         public Vector2 Position { get { return position; } set { position = value; } }
         public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X/2, position.Y + dimensions.Y/2); } }
@@ -71,7 +83,12 @@ namespace PattyPetitGiant
         /// <param name="direction">direction you want to send the entity</param>
         /// <param name="magnitude">how much force the entity will send you</param>
         /// <param name="damage">how damage the entity does</param>
-        public abstract void knockBack(Vector2 direction, float magnitude, int damage);
+        public abstract void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker);
+
+        public void knockBack(Vector2 direction, float magnitude, int damage)
+        {
+            knockBack(direction, magnitude, damage, null);
+        }
 
         public abstract void update(GameTime currentTime);
 

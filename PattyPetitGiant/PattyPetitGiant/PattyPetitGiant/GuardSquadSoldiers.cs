@@ -67,7 +67,7 @@ namespace PattyPetitGiant
             knockback_magnitude = 2.0f;
             disable_movement = false;
             disable_movement_time = 0.0f;
-            player_found = false;
+            enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
             wind_up_timer = 0.0f;
@@ -77,6 +77,7 @@ namespace PattyPetitGiant
             reset_state_flag = false;
             this.parentWorld = parentWorld;
             change_direction_time_threshold = 4000.0f;
+            enemy_type = EnemyType.Guard;
 
             walk_down = AnimationLib.loadNewAnimationSet("squadSoldierDown");
             walk_right = AnimationLib.loadNewAnimationSet("squadSoldierRight");
@@ -189,7 +190,7 @@ namespace PattyPetitGiant
                             velocity = Vector2.Zero;
                         }
 
-                        if (player_found == true)
+                        if (enemy_found == true)
                         {
                             state = SquadSoldierState.MoveIntoPosition;
                             animation_time = 0.0f;
@@ -267,7 +268,7 @@ namespace PattyPetitGiant
                         if (firing_timer > 3000)
                         {
                             reset_state_flag = true;
-                            player_found = false;
+                            enemy_found = false;
                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                             if (leader != null)
                             {
@@ -283,46 +284,29 @@ namespace PattyPetitGiant
                     case SquadSoldierState.IndividualPatrol:
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
-                        //checks where the player is
-                        foreach (Entity en in parentWorld.EntityList)
-                        {
-                            if (en == this)
-                            {
-                                continue;
-                            }
 
-                            if (en is Player)
-                            {
-                                if (player_found == true)
-                                {
-                                    switch (en.Direction_Facing)
-                                    {
-                                        case GlobalGameConstants.Direction.Right:
-                                            direction_facing = GlobalGameConstants.Direction.Left;
-                                            break;
-                                        case GlobalGameConstants.Direction.Left:
-                                            direction_facing = GlobalGameConstants.Direction.Right;
-                                            break;
-                                        case GlobalGameConstants.Direction.Up:
-                                            direction_facing = GlobalGameConstants.Direction.Down;
-                                            break;
-                                        default:
-                                            direction_facing = GlobalGameConstants.Direction.Up;
-                                            break;
-                                    }
-                                }
-                                else
-                                {
-                                    component.update(this, en, currentTime, parentWorld);
-                                }
-                            }
-                        }
-
-                        if (player_found == true)
+                        if (enemy_found == true)
                         {
                             state = SquadSoldierState.WindUp;
                             velocity = Vector2.Zero;
                             animation_time = 0.0f;
+                        }
+                        else
+                        {
+                            //checks where the player is
+                            foreach (Entity en in parentWorld.EntityList)
+                            {
+                                if (en == this)
+                                {
+                                    continue;
+                                }
+
+                                if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                {
+                                    component.update(this, en, currentTime, parentWorld);
+
+                                }
+                            }
                         }
                         break;
                     default:
@@ -362,7 +346,7 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             if (disable_movement_time == 0.0)
             {
@@ -370,7 +354,7 @@ namespace PattyPetitGiant
 
                 if (state == SquadSoldierState.IndividualPatrol)
                 {
-                    player_found = true;
+                    enemy_found = true;
                 }
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
@@ -395,6 +379,31 @@ namespace PattyPetitGiant
                     }
                 }
                 enemy_life = enemy_life - damage;
+            }
+
+            if (attacker == null)
+            {
+                return;
+            }
+            else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+            {
+                enemy_found = true;
+
+                switch (attacker.Direction_Facing)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                        break;
+                    default:
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                        break;
+                }
             }
         }
 

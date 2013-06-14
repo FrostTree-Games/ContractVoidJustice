@@ -19,7 +19,7 @@ namespace PattyPetitGiant
             Item2,
             Item_Pickup
         }
-
+        
         public struct PlayerItems
         {
             public GlobalGameConstants.itemType item1;
@@ -69,7 +69,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new ShotGun();
+            player_item_1 = new Sword(position);
             player_item_2 = new DungeonMap();
             GlobalGameConstants.Player_Item_1 = player_item_1.getEnumType();
             GlobalGameConstants.Player_Item_2 = player_item_2.getEnumType();
@@ -83,12 +83,13 @@ namespace PattyPetitGiant
             this.parentWorld = parentWorld;
 
             remove_from_list = false;
-
             walk_down = AnimationLib.getSkeleton("jensenDown");
             walk_right = AnimationLib.getSkeleton("jensenRight");
             walk_up = AnimationLib.getSkeleton("jensenUp");
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+
+            enemy_type = EnemyType.Player;
         }
 
         public override void update(GameTime currentTime)
@@ -302,7 +303,7 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             if (state == playerState.Item1 || state == playerState.Item2)
             {

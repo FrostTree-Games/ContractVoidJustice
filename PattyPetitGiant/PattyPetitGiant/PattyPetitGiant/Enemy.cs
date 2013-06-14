@@ -21,17 +21,6 @@ namespace PattyPetitGiant
             Firing
         }
 
-        public enum EnemyType
-        {
-            NoType = 0,
-            Guard = 1,
-            Prisoner = 2,
-            Alien = 4,
-        }
-
-        protected EnemyType enemy_type;
-        public EnemyType EnemyFaction { get { return enemy_type; } }
-
         protected EnemyState state = EnemyState.Moving;
 
         private bool item_hit;
@@ -72,8 +61,8 @@ namespace PattyPetitGiant
 
         protected float knockback_magnitude;
 
-        protected bool player_found;
-        public bool Player_Found { set { player_found = value; } get { return player_found; } }
+        protected bool enemy_found;
+        public bool Enemy_Found { set { enemy_found = value; } get { return enemy_found; } }
 
         protected AnimationLib.SpineAnimationSet walk_down = null;
         protected AnimationLib.SpineAnimationSet walk_right = null;
@@ -134,7 +123,7 @@ namespace PattyPetitGiant
                     if (en is Player)
                     {
                         Vector2 direction = CenterPoint - en.CenterPoint;
-                        en.knockBack(direction, knockback_magnitude, enemy_damage);
+                        en.knockBack(direction, knockback_magnitude, enemy_damage, this);
                         en.Disable_Movement = true;
                         ((Player)en).State = Player.playerState.Moving;
                     }
@@ -168,7 +157,7 @@ namespace PattyPetitGiant
             sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             return;
         }

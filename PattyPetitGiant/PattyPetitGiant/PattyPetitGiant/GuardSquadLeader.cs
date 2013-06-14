@@ -19,7 +19,6 @@ namespace PattyPetitGiant
             Reset,
         }
 
-        
         private Vector2 follow_point_1 = Vector2.Zero;
         private Vector2 follow_point_2 = Vector2.Zero;
         
@@ -56,10 +55,11 @@ namespace PattyPetitGiant
             enemy_damage = 5;
             disable_movement = false;
             disable_movement_time = 0.0f;
-            player_found = false;
+            enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
             change_direction_time_threshold = 5000.0f;
+            enemy_type = EnemyType.Guard;
         }
 
         public override void update(GameTime currentTime)
@@ -80,16 +80,19 @@ namespace PattyPetitGiant
                 {
                     case SquadLeaderState.Patrol:
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
-                        foreach (Entity en in parentWorld.EntityList)
+
+                        if (enemy_found == false)
                         {
-                            if (en == this)
-                                continue;
-                            else if (en is Player)
+                            foreach (Entity en in parentWorld.EntityList)
                             {
-                                component.update(this, en, currentTime, parentWorld);
+                                if (en == this)
+                                    continue;
+                                else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                {
+                                    component.update(this, en, currentTime, parentWorld);
+                                }
                             }
                         }
-                        
                         switch(direction_facing)
                         {
                             case GlobalGameConstants.Direction.Right:
@@ -118,7 +121,7 @@ namespace PattyPetitGiant
                             squad_mates[1].Follow_Point = follow_point_2;
                         }
 
-                        if (player_found)
+                        if (enemy_found)
                         {
                             state = SquadLeaderState.Direct;
 
@@ -142,8 +145,8 @@ namespace PattyPetitGiant
                                     break;
                             }
 
-                            squad_mates[0].Player_Found = true;
-                            squad_mates[1].Player_Found = true;
+                            squad_mates[0].Enemy_Found = true;
+                            squad_mates[1].Enemy_Found = true;
 
                             velocity = Vector2.Zero;
                         }
@@ -161,7 +164,7 @@ namespace PattyPetitGiant
                         if ((squad_mates[0] != null && squad_mates[1] != null && squad_mates[0].Reset_State_Flag == true && squad_mates[1].Reset_State_Flag == true) || squad_mates[0] != null && squad_mates[0].Reset_State_Flag == true || squad_mates[1] != null && squad_mates[1].Reset_State_Flag == true)
                         {
                             state = SquadLeaderState.Patrol;
-                            player_found = false;
+                            enemy_found = false;
                         }
                         break;
                     default:
@@ -197,12 +200,12 @@ namespace PattyPetitGiant
             sb.Draw(Game1.whitePixel, follow_point_2, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(16, 16), SpriteEffects.None, 1.0f);
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
-                player_found = true;
+                enemy_found = true;
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
                     if (direction.X < 0)
@@ -230,6 +233,31 @@ namespace PattyPetitGiant
                     }
                 }
                 enemy_life = enemy_life - damage;
+            }
+
+            if (attacker == null)
+            {
+                return;
+            }
+            else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+            {
+                enemy_found = true;
+
+                switch (attacker.Direction_Facing)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                        break;
+                    default:
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                        break;
+                }
             }
         }
 

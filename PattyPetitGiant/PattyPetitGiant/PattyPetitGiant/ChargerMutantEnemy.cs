@@ -21,6 +21,7 @@ namespace PattyPetitGiant
         private EnemyComponents component;
         private ChargerState charger_state;
         private float windup_timer;
+        private float charge_timer;
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
@@ -36,15 +37,16 @@ namespace PattyPetitGiant
             knockback_magnitude = 8.0f;
             enemy_damage = 20;
             enemy_life = 10;
-            player_found = false;
+            enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
+            charge_timer = 0.0f;
 
             state = EnemyState.Idle;
             enemy_type = EnemyType.Prisoner;
             component = new IdleSearch();
             charger_state = ChargerState.none;
-
+            
             direction_facing = (GlobalGameConstants.Direction)(Game1.rand.Next() % 4);
 
             this.parentWorld = parentWorld;
@@ -84,38 +86,21 @@ namespace PattyPetitGiant
                         directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
 
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
-                        foreach (Entity en in parentWorld.EntityList)
+                        //first if state is if enemy was knocked back by a enemy of a different type
+                        if (enemy_found == false)
                         {
-                            if (en == this)
-                                continue;
-                            else if (en is Player)
+                            foreach (Entity en in parentWorld.EntityList)
                             {
-                                if (player_found == true)
-                                {
-                                    switch (en.Direction_Facing)
-                                    {
-                                        case GlobalGameConstants.Direction.Right:
-                                            direction_facing = GlobalGameConstants.Direction.Left;
-                                            break;
-                                        case GlobalGameConstants.Direction.Left:
-                                            direction_facing = GlobalGameConstants.Direction.Right;
-                                            break;
-                                        case GlobalGameConstants.Direction.Up:
-                                            direction_facing = GlobalGameConstants.Direction.Down;
-                                            break;
-                                        default:
-                                            direction_facing = GlobalGameConstants.Direction.Up;
-                                            break;
-                                    }
-                                }
-                                else
+                                if (en == this)
+                                    continue;
+                                else if (en is Player)
                                 {
                                     component.update(this, en, currentTime, parentWorld);
                                 }
                             }
                         }
 
-                        if (player_found)
+                        if (enemy_found)
                         {
                             state = EnemyState.Agressive;
                             velocity = Vector2.Zero;
@@ -144,8 +129,6 @@ namespace PattyPetitGiant
                         }
                         break;
                     case EnemyState.Agressive:
-                        float distance = 0.0f;
-
                         switch (charger_state)
                         {
                             case ChargerState.windUp:
@@ -170,33 +153,32 @@ namespace PattyPetitGiant
                                             velocity = new Vector2(0.0f, 8.0f);
                                             break;
                                     }
+                                    charge_timer = 0.0f;
                                 }
                                 break;
                             case ChargerState.charge:
                                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("charge");
+                                charge_timer += currentTime.ElapsedGameTime.Milliseconds;
                                 foreach (Entity en in parentWorld.EntityList)
                                 {
                                     if (en == this)
                                         continue;
-                                    else if (en is Player)
-                                    {
-                                        distance = Vector2.Distance(en.CenterPoint, CenterPoint);
-                                        if (distance > 300)
-                                        {
-                                            state = EnemyState.Idle;
-                                            component = new IdleSearch();
-                                            velocity = Vector2.Zero;
-                                            animation_time = 0.0f;
-                                            player_found = false;
-                                            charger_state = ChargerState.none;
-                                        }
-                                    }
-
                                     if (hitTest(en))
                                     {
                                         Vector2 direction = en.CenterPoint - CenterPoint;
                                         en.knockBack(direction, knockback_magnitude, enemy_damage);
                                     }
+                                }
+
+                                if (charge_timer > 800)
+                                {
+                                    state = EnemyState.Idle;
+                                    component = new IdleSearch();
+                                    velocity = Vector2.Zero;
+                                    animation_time = 0.0f;
+                                    charge_timer = 0.0f;
+                                    enemy_found = false;
+                                    charger_state = ChargerState.none;
                                 }
                                 break;
                             default:
@@ -228,15 +210,14 @@ namespace PattyPetitGiant
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
         }
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             if (disable_movement_time == 0.0)
             {
                 if (state != EnemyState.Agressive)
                 {
                     disable_movement = true;
-                    player_found = true;
-
+                    
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
                         if (direction.X < 0)
@@ -262,6 +243,30 @@ namespace PattyPetitGiant
                 }
 
                 enemy_life = enemy_life - damage;
+            }
+
+            if (attacker == null)
+            {
+                return;
+            }
+            if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+            {
+                enemy_found = true;
+                switch (attacker.Direction_Facing)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                        break;
+                    default:
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                        break;
+                }
             }
         }
 

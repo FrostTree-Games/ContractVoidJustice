@@ -256,19 +256,12 @@ namespace PattyPetitGiant
                                 break;
                         }
 
-                        if (en is Enemy)
-                        {
-                            if (((Enemy)en).EnemyFaction == EnemyType.Alien || ((Enemy)en).EnemyFaction == EnemyType.Prisoner)
-                            {
-                                target = en;
-                            }
-                        }
-                        else if (en is Player)
+                     
+                        if (en.Enemy_Type != enemy_type || en.Enemy_Type != EnemyType.NoType)
                         {
                             target = en;
-
-                            Console.WriteLine(theta);
                         }
+                        
                         else if (en is ShopKeeper)
                         {
                             target = en;
@@ -506,7 +499,7 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             if (guardState == PatrolGuardState.KnockBack)
             {
@@ -521,6 +514,12 @@ namespace PattyPetitGiant
             knockBackTime = 0.0f;
 
             guardState = PatrolGuardState.KnockBack;
+
+            //where you look in the entity's direction and start chasing them
+            if (attacker != null && (attacker.Enemy_Type != EnemyType.NoType && attacker.Enemy_Type!= enemy_type))
+            {
+                target = attacker;
+            }
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)

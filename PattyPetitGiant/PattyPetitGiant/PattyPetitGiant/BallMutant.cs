@@ -71,7 +71,7 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    if (player_found)
+                    if (enemy_found)
                     {
                         state = EnemyState.Agressive;
                         component = new Chase();
@@ -128,7 +128,7 @@ namespace PattyPetitGiant
                                 component = new IdleSearch();
                                 velocity = Vector2.Zero;
                                 animation_time = 0.0f;
-                                player_found = false;
+                                enemy_found = false;
                             }
                         }
 
@@ -176,7 +176,7 @@ namespace PattyPetitGiant
             }
         }
         
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             if (disable_movement_time == 0.0)
             {
