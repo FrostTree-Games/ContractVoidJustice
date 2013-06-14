@@ -89,6 +89,7 @@
     <Compile Include="GuardSquadSoldiers.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="HermesSandalds.cs" />
+    <Compile Include="HookPrisonerEnemy.cs" />
     <Compile Include="IdleChaseEnemy.cs" />
     <Compile Include="IdleSearch.cs" />
     <Compile Include="InGameGUI.cs" />
@@ -118,7 +119,6 @@
     <Compile Include="TestEnemy.cs" />
     <Compile Include="TextureLib.cs" />
     <Compile Include="TileMap.cs" />
-    <Compile Include="ToughPrisonerEnemy.cs" />
     <Compile Include="Walk.cs" />
     <Compile Include="WandOfGyges.cs" />
     <Compile Include="WaveMotionGun.cs" />

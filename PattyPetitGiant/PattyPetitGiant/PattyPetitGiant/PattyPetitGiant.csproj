@@ -143,7 +143,7 @@
     <Compile Include="TestEnemy.cs" />
     <Compile Include="TextureLib.cs" />
     <Compile Include="TileMap.cs" />
-    <Compile Include="ToughPrisonerEnemy.cs" />
+    <Compile Include="HookPrisonerEnemy.cs" />
     <Compile Include="Walk.cs" />
     <Compile Include="WandOfGyges.cs" />
     <Compile Include="WaveMotionGun.cs" />
