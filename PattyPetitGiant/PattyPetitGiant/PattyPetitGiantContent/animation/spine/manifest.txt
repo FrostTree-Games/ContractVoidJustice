@@ -16,3 +16,6 @@ squadSoldierUp
 chargerDown
 chargerRight
 chargerUp
+patrolDown
+patrolRight
+patrolUp
