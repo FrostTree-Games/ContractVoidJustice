@@ -78,6 +78,7 @@ namespace PattyPetitGiant
                         }
                     }
 
+                    /*
                     if (enemy_found)
                     {
                         state = EnemyState.Agressive;
@@ -112,6 +113,7 @@ namespace PattyPetitGiant
                         }
                     }
 
+                    */
                     Vector2 pos = new Vector2(position.X, position.Y);
                     Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
                     Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
