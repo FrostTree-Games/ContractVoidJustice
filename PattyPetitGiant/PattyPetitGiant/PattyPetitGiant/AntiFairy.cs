@@ -15,6 +15,8 @@ namespace PattyPetitGiant
             NorthEast = 1,
             SouthEast = 2,
             SouthWest = 3,
+            KnockedBack = 4,
+            MomentaryStall = 5,
         }
 
         private const float antiFairyVelocity = 3.0f;
@@ -28,6 +30,12 @@ namespace PattyPetitGiant
         private AntiFairy other = null;
         private bool doubled;
 
+        private float knockBackTime;
+        private const float knockBackDuration = 600f;
+
+        private float waitTime;
+        private const float waitDuration = 300f;
+
         public AntiFairy(LevelState parentWorld, Vector2 position)
         {
             this.position = position;
@@ -36,6 +44,9 @@ namespace PattyPetitGiant
 
             anim = AnimationLib.getFrameAnimationSet("antiFairy");
             animationTime = 0.0f;
+
+            enemy_type = EnemyType.Guard;
+            enemy_life = 70;
 
             if (position.X > 0)
             {
@@ -59,36 +70,60 @@ namespace PattyPetitGiant
 
             animationTime += currentTime.ElapsedGameTime.Milliseconds;
 
-            switch (fairyState)
+            if (fairyState == AntiFairyState.MomentaryStall)
             {
-                case AntiFairyState.NorthEast:
-                    velocity = new Vector2(antiFairyVelocity, -antiFairyVelocity);
-                    break;
-                case AntiFairyState.NorthWest:
-                    velocity = new Vector2(-antiFairyVelocity, -antiFairyVelocity);
-                    break;
-                case AntiFairyState.SouthWest:
-                    velocity = new Vector2(-antiFairyVelocity, antiFairyVelocity);
-                    break;
-                case AntiFairyState.SouthEast:
-                    velocity = new Vector2(antiFairyVelocity, antiFairyVelocity);
-                    break;
-            }
+                velocity = Vector2.Zero;
 
-            foreach (Entity en in parentWorld.EntityList)
-            {
-                if (en is Player)
+                waitTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (waitTime > waitDuration)
                 {
-                    if (hitTest(en))
-                    {
-                        en.knockBack(en.CenterPoint - CenterPoint, 4.0f, antiFairyDamage);
-                    }
+                    fairyState = (AntiFairyState)(Game1.rand.Next() % 4);
                 }
-                else if (en is Enemy && !(en == this))
+            }
+            else if (fairyState == AntiFairyState.KnockedBack)
+            {
+                knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (knockBackTime > knockBackDuration)
                 {
-                    if (hitTest(en))
+                    waitTime = 0.0f;
+                    fairyState = AntiFairyState.MomentaryStall;
+                }
+            }
+            else
+            {
+                switch (fairyState)
+                {
+                    case AntiFairyState.NorthEast:
+                        velocity = new Vector2(antiFairyVelocity, -antiFairyVelocity);
+                        break;
+                    case AntiFairyState.NorthWest:
+                        velocity = new Vector2(-antiFairyVelocity, -antiFairyVelocity);
+                        break;
+                    case AntiFairyState.SouthWest:
+                        velocity = new Vector2(-antiFairyVelocity, antiFairyVelocity);
+                        break;
+                    case AntiFairyState.SouthEast:
+                        velocity = new Vector2(antiFairyVelocity, antiFairyVelocity);
+                        break;
+                }
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en is Player)
                     {
-                        en.knockBack(en.Position - position, 2.0f, 0);
+                        if (hitTest(en))
+                        {
+                            en.knockBack(en.CenterPoint - CenterPoint, 4.0f, antiFairyDamage);
+                        }
+                    }
+                    else if (en is Enemy && !(en == this))
+                    {
+                        if (hitTest(en))
+                        {
+                            en.knockBack(en.Position - position, 2.0f, 0);
+                        }
                     }
                 }
             }
@@ -96,43 +131,50 @@ namespace PattyPetitGiant
             Vector2 nextStep = position + (velocity);
             Vector2 finalPos = parentWorld.Map.reloactePosition(position, nextStep, dimensions);
 
-            if (nextStep != finalPos)
+            if (fairyState != AntiFairyState.KnockedBack && fairyState != AntiFairyState.MomentaryStall)
             {
-                if (nextStep.X != finalPos.X)
+                if (nextStep != finalPos)
                 {
-                    switch (fairyState)
+                    if (nextStep.X != finalPos.X)
                     {
-                        case AntiFairyState.NorthEast:
-                            fairyState = AntiFairyState.NorthWest;
-                            break;
-                        case AntiFairyState.NorthWest:
-                            fairyState = AntiFairyState.NorthEast;
-                            break;
-                        case AntiFairyState.SouthEast:
-                            fairyState = AntiFairyState.SouthWest;
-                            break;
-                        case AntiFairyState.SouthWest:
-                            fairyState = AntiFairyState.SouthEast;
-                            break;
+                        switch (fairyState)
+                        {
+                            case AntiFairyState.NorthEast:
+                                fairyState = AntiFairyState.NorthWest;
+                                break;
+                            case AntiFairyState.NorthWest:
+                                fairyState = AntiFairyState.NorthEast;
+                                break;
+                            case AntiFairyState.SouthEast:
+                                fairyState = AntiFairyState.SouthWest;
+                                break;
+                            case AntiFairyState.SouthWest:
+                                fairyState = AntiFairyState.SouthEast;
+                                break;
+                        }
+                    }
+                    else if (nextStep.Y != finalPos.Y)
+                    {
+                        switch (fairyState)
+                        {
+                            case AntiFairyState.NorthEast:
+                                fairyState = AntiFairyState.SouthEast;
+                                break;
+                            case AntiFairyState.NorthWest:
+                                fairyState = AntiFairyState.SouthWest;
+                                break;
+                            case AntiFairyState.SouthEast:
+                                fairyState = AntiFairyState.NorthEast;
+                                break;
+                            case AntiFairyState.SouthWest:
+                                fairyState = AntiFairyState.NorthWest;
+                                break;
+                        }
                     }
                 }
-                else if (nextStep.Y != finalPos.Y)
+                else
                 {
-                    switch (fairyState)
-                    {
-                        case AntiFairyState.NorthEast:
-                            fairyState = AntiFairyState.SouthEast;
-                            break;
-                        case AntiFairyState.NorthWest:
-                            fairyState = AntiFairyState.SouthWest;
-                            break;
-                        case AntiFairyState.SouthEast:
-                            fairyState = AntiFairyState.NorthEast;
-                            break;
-                        case AntiFairyState.SouthWest:
-                            fairyState = AntiFairyState.NorthWest;
-                            break;
-                    }
+                    position = finalPos;
                 }
             }
             else
@@ -153,7 +195,18 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            //
+            if (fairyState == AntiFairyState.KnockedBack)
+            {
+                return;
+            }
+
+            fairyState = AntiFairyState.KnockedBack;
+            knockBackTime = 0;
+
+            direction.Normalize();
+            velocity = 6 * direction;
+
+            enemy_life -= damage;
         }
 
         public void duplicate()
