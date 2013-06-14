@@ -44,7 +44,7 @@ namespace PattyPetitGiant
 
                         if (!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
                     }
                     break;
@@ -55,7 +55,7 @@ namespace PattyPetitGiant
 
                         if (!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
                     }
                     break;
@@ -66,7 +66,7 @@ namespace PattyPetitGiant
 
                         if (!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
 
                     }
@@ -78,7 +78,7 @@ namespace PattyPetitGiant
 
                         if (!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
                     }
                     break;
@@ -87,7 +87,7 @@ namespace PattyPetitGiant
             /*End search for player ***************************************************************************************************************************/
 
             parent_direction_time_threshold = parent.Change_Direction_Time_Threshold;
-            if (parent.Player_Found == false)
+            if (parent.Enemy_Found == false)
             {
                 int check_corners = 0;
                 Vector2 nextStep_temp = new Vector2(parent.Position.X + parent.Velocity.X, parent.Position.Y + parent.Velocity.Y);

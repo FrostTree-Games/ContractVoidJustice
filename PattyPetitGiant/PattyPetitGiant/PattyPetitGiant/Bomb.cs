@@ -93,7 +93,7 @@ namespace PattyPetitGiant
                                     Vector2 direction = en.CenterPoint - center_placed_bomb;
                                     float temp_knockback_magnitude = knockback_magnitude / (Vector2.Distance(center_placed_bomb, en.CenterPoint)/hitbox.X);
                                     
-                                    en.knockBack(direction, temp_knockback_magnitude, bomb_damage);
+                                    en.knockBack(direction, temp_knockback_magnitude, bomb_damage, parent);
                                 }
                             }
                             else if (en is Enemy || en is ShopKeeper)

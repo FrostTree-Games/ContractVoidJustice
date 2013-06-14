@@ -43,7 +43,7 @@ namespace PattyPetitGiant
             knockback_magnitude = 10.0f;
             enemy_damage = 20;
             enemy_life = 10;
-            player_found = false;
+            enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
             angle = 0.0f;
@@ -67,45 +67,51 @@ namespace PattyPetitGiant
                     {
                         if (en == this)
                             continue;
-                        else if (en is Player)
+                        else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
                         {
-                            component.update(this, en, currentTime, parentWorld);
-
-                            if (player_found)
+                            if (enemy_found == false)
                             {
-                                state = EnemyState.Agressive;
-                                chain_state = ChainState.Throw;
-                                velocity = Vector2.Zero;
-
-                                angle = (float)Math.Atan2(en.CenterPoint.Y - CenterPoint.Y, en.CenterPoint.X - CenterPoint.X);
-                                distance = Vector2.Distance(CenterPoint, en.CenterPoint);
-
-                                switch (direction_facing)
-                                {
-                                    case GlobalGameConstants.Direction.Right:
-                                        chain_velocity = new Vector2(8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
-                                        chain_position = CenterPoint + new Vector2(dimensions.X / 2, 0);
-                                        chain_speed = chain_velocity.X;
-                                        break;
-                                    case GlobalGameConstants.Direction.Left:
-                                        chain_velocity = new Vector2(-8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
-                                        chain_position = CenterPoint - new Vector2(dimensions.X / 2, 0);
-                                        chain_speed = Math.Abs(chain_velocity.Y);
-                                        break;
-                                    case GlobalGameConstants.Direction.Up:
-                                        chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), -8.0f);
-                                        chain_position = CenterPoint - new Vector2(0, dimensions.X / 2);
-                                        chain_speed = Math.Abs(chain_velocity.Y);
-                                        break;
-                                    default:
-                                        chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), 8.0f);
-                                        chain_position = CenterPoint + new Vector2(0, dimensions.X / 2);
-                                        chain_speed = Math.Abs(chain_velocity.Y);
-                                        break;
-                                }
+                                component.update(this, en, currentTime, parentWorld);
                             }
+                            
+                            
                         }
-                    }                    
+                    }
+
+                    if (enemy_found)
+                    {
+                        state = EnemyState.Agressive;
+                        chain_state = ChainState.Throw;
+                        velocity = Vector2.Zero;
+
+                        angle = (float)Math.Atan2(en.CenterPoint.Y - CenterPoint.Y, en.CenterPoint.X - CenterPoint.X);
+                        distance = Vector2.Distance(CenterPoint, en.CenterPoint);
+
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Right:
+                                chain_velocity = new Vector2(8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
+                                chain_position = CenterPoint + new Vector2(dimensions.X / 2, 0);
+                                chain_speed = chain_velocity.X;
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                chain_velocity = new Vector2(-8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
+                                chain_position = CenterPoint - new Vector2(dimensions.X / 2, 0);
+                                chain_speed = Math.Abs(chain_velocity.Y);
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), -8.0f);
+                                chain_position = CenterPoint - new Vector2(0, dimensions.X / 2);
+                                chain_speed = Math.Abs(chain_velocity.Y);
+                                break;
+                            default:
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), 8.0f);
+                                chain_position = CenterPoint + new Vector2(0, dimensions.X / 2);
+                                chain_speed = Math.Abs(chain_velocity.Y);
+                                break;
+                        }
+                    }
+
                     Vector2 pos = new Vector2(position.X, position.Y);
                     Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
                     Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
@@ -155,11 +161,11 @@ namespace PattyPetitGiant
                                 if (en_chained != null)
                                 {
                                     Vector2 direction = en_chained.CenterPoint - CenterPoint;
-                                    en_chained.knockBack(direction, knockback_magnitude, enemy_damage);
+                                    en_chained.knockBack(direction, knockback_magnitude, enemy_damage, this);
                                 }
                                 chain_state = ChainState.Neutral;
                                 en_chained = null;
-                                player_found = false;
+                                enemy_found = false;
                             }
                             break;
                         default:
@@ -207,8 +213,12 @@ namespace PattyPetitGiant
             return true;
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
+            if (attacker == null)
+            {
+                return;
+            }
             if (disable_movement_time == 0.0)
             {
                 if(chain_state == ChainState.Neutral)
@@ -237,6 +247,31 @@ namespace PattyPetitGiant
                     }
 
                 enemy_life = enemy_life - damage;
+            }
+
+            if (attacker == null)
+            {
+                return;
+            }
+            else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+            {
+                enemy_found = true;
+
+                switch (attacker.Direction_Facing)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                        break;
+                    default:
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                        break;
+                }
             }
         }
     }

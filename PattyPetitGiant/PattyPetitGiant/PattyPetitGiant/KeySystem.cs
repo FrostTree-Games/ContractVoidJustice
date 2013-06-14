@@ -74,7 +74,7 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             return;
         }
@@ -206,8 +206,13 @@ namespace PattyPetitGiant
             keyGraphic = AnimationLib.getFrameAnimationSet("keyPic");
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
+            if (attacker == null)
+            {
+                return;
+            }
+
             if (isKnockedBack)
             {
                 return;

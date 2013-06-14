@@ -55,7 +55,7 @@ namespace PattyPetitGiant
             this.parentWorld = parentWorld;
             dimensions = new Vector2(48.0f, 48.0f);
             velocity = new Vector2(0.0f, 1.0f);
-            player_found = false;
+            enemy_found = false;
 
             state = EnemyState.Moving;
             component = new MoveSearch();
@@ -142,7 +142,7 @@ namespace PattyPetitGiant
                                 }
                             }
 
-                            if (player_found == true)
+                            if (enemy_found == true)
                             {
                                 state = EnemyState.Firing;
                                 velocity = Vector2.Zero;
@@ -213,7 +213,7 @@ namespace PattyPetitGiant
                                 }
                                 else
                                 {
-                                    player_found = false;
+                                    enemy_found = false;
                                     if (animation_time > 0.3)
                                     {
                                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
@@ -347,8 +347,13 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
+            if (attacker == null)
+            {
+                return;
+            }
+
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;

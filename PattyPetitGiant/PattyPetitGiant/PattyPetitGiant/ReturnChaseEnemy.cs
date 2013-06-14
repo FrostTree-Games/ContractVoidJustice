@@ -64,7 +64,7 @@ namespace PattyPetitGiant
 
             direction_facing = GlobalGameConstants.Direction.Right;
             change_direction_time = 0.0f;
-            player_found = false;
+            enemy_found = false;
             state = EnemyState.Idle;
 
             component = new IdleSearch();
@@ -113,7 +113,7 @@ namespace PattyPetitGiant
                                 break;
                             }
                         }
-                        if (player_found)
+                        if (enemy_found)
                         {
                             component = new Chase();
                             state = EnemyState.Chase;

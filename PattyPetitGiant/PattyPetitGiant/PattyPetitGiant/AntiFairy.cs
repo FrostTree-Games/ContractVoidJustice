@@ -151,7 +151,7 @@ namespace PattyPetitGiant
             anim.drawAnimationFrame(animationTime, sb, position, new Vector2(3.0f, 3.0f), 0.6f);
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             //
         }

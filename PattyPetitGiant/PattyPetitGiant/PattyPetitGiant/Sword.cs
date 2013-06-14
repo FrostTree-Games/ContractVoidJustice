@@ -95,7 +95,7 @@ namespace PattyPetitGiant
                         if (hitTest(en))
                         {
                             Vector2 direction = en.CenterPoint - parent.CenterPoint;
-                            en.knockBack(direction, knockback_magnitude, sword_damage);
+                            en.knockBack(direction, knockback_magnitude, sword_damage, parent);
                         }
                     }
                 }

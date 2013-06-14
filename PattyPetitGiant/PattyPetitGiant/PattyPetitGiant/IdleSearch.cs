@@ -38,7 +38,7 @@ namespace PattyPetitGiant
 
                         if(!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
                     }
                     //((IdleChaseEnemy)parent).Angle1 = (float)(-1 * sight_angle1 + Math.PI / 2);
@@ -51,7 +51,7 @@ namespace PattyPetitGiant
 
                         if (!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
                     }
                     //((IdleChaseEnemy)parent).Angle1 = (float)(sight_angle1 + Math.PI / 2);
@@ -64,7 +64,7 @@ namespace PattyPetitGiant
 
                         if (!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
                         
                     }
@@ -78,7 +78,7 @@ namespace PattyPetitGiant
 
                         if (!wall_between)
                         {
-                            parent.Player_Found = true;
+                            parent.Enemy_Found = true;
                         }
                     }
                     //((IdleChaseEnemy)parent).Angle1 = (float)(sight_angle1);

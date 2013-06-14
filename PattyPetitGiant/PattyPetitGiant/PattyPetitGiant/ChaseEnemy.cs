@@ -42,7 +42,7 @@ namespace PattyPetitGiant
             direction_facing = GlobalGameConstants.Direction.Up;
             change_direction_time = 0.0f;
             this.parentWorld = parentWorld;
-            player_found = false;
+            enemy_found = false;
             player_in_range = false;
             chase_stage = ChaseAttackStage.none;
 
@@ -82,26 +82,28 @@ namespace PattyPetitGiant
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
-                        foreach (Entity en in parentWorld.EntityList)
-                        {
-                            if (en == this)
-                            {
-                                continue;
-                            }
-
-                            if (en is Player)
-                            {
-                                float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
-                                component.update(this, en, currentTime, parentWorld);
-                            }
-                        }
-
-                        if (player_found)
+                        if (enemy_found)
                         {
                             component = new Chase();
                             state = EnemyState.Chase;
                             animation_time = 0.0f;
                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("chase");
+                        }
+                        else
+                        {
+                            foreach (Entity en in parentWorld.EntityList)
+                            {
+                                if (en == this)
+                                {
+                                    continue;
+                                }
+
+                                if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                {
+                                    float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
+                                    component.update(this, en, currentTime, parentWorld);
+                                }
+                            }
                         }
                         break;
                     case EnemyState.Chase:
@@ -113,7 +115,7 @@ namespace PattyPetitGiant
                             if (en == this)
                                 continue;
 
-                            if (en is Player)
+                            if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
                             {
                                 //component won't update when the swing is in effect
                                 float distance = Vector2.Distance(en.CenterPoint, CenterPoint);
@@ -183,12 +185,12 @@ namespace PattyPetitGiant
                                         break;
                                 }
 
-                                if (distance > 300.0f)
+                                if (distance > 300.0f || en.Remove_From_List)
                                 {
                                     state = EnemyState.Moving;
                                     current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                                     component = new MoveSearch();
-                                    player_found = false;
+                                    enemy_found = false;
                                     wind_anim = 0.0f;
                                 }
                             }
@@ -256,7 +258,7 @@ namespace PattyPetitGiant
             renderer.Draw(current_skeleton.Skeleton);
         }
 
-        public override void knockBack(Vector2 direction, float magnitude, int damage)
+        public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             if (disable_movement_time == 0.0)
             {
@@ -287,6 +289,31 @@ namespace PattyPetitGiant
                     }
                 }
                 enemy_life = enemy_life - damage;
+            }
+
+            if (attacker == null)
+            {
+                return;
+            }
+            else if(attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+            {
+                enemy_found = true;
+
+                switch (attacker.Direction_Facing)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                        break;
+                    default:
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                        break;
+                }
             }
         }
 
