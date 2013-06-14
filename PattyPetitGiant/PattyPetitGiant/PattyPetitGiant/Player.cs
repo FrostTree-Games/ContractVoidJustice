@@ -69,7 +69,8 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword(position);
+            player_item_1 = new ShotGun();
+            //player_item_1 = new Sword(position);
             player_item_2 = new DungeonMap();
             GameCampaign.Player_Item_1 = player_item_1.getEnumType();
             GameCampaign.Player_Item_2 = player_item_2.getEnumType();
@@ -292,7 +293,7 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
             if (player_item_1 != null)
             {
                 player_item_1.draw(sb);

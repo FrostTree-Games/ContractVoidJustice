@@ -7,10 +7,9 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-
 namespace PattyPetitGiant
 {
-    class Bomb : Item
+    class Bomb : Item 
     {
         private enum Bomb_State
         {
