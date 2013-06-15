@@ -18,28 +18,88 @@ namespace PattyPetitGiant
         }
 
         private float direction;
+        private const float wormSpeed = 0.20f;
+        private const float turnAmount = 0.05f;
+
+        private float switchTimer;
+        private float switchDuration;
+        private const float averageSwitchDuration = 1000f;
+        private float dirModifier;
+
+        private const int positionsCount = 6;
+        private Vector2[] tailAPositions = null;
+        private float[] tailARotations = null;
+        private Vector2[] tailBPositions = null;
+        private float[] tailBRotations = null;
+        int tailMostRecent;
+        //private Vector2 tailB;
 
         private AnimationLib.FrameAnimationSet testAnim = null;
+        private AnimationLib.FrameAnimationSet tailAnimA = null;
+        private AnimationLib.FrameAnimationSet tailAnimB = null;
 
         public SnakeWorm(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
             this.position = position;
+            this.dimensions = new Vector2(24);
+
+            velocity = Vector2.Zero;
 
             direction = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+            dirModifier = 1.0f;
+            switchTimer = 0.0f;
+            switchDuration = averageSwitchDuration;
 
-            testAnim = AnimationLib.getFrameAnimationSet("antiFairy");
+            tailAPositions = new Vector2[positionsCount];
+            tailARotations = new float[positionsCount];
+            tailBPositions = new Vector2[positionsCount];
+            tailBRotations = new float[positionsCount];
+            tailMostRecent = 0;
+            for (int i = 0; i < positionsCount; i++)
+            {
+                tailAPositions[i] = position;
+                tailARotations[i] = direction;
+                tailBPositions[i] = position;
+                tailBRotations[i] = direction;
+            }
+
+            testAnim = AnimationLib.getFrameAnimationSet("snakeA");
+            tailAnimA = AnimationLib.getFrameAnimationSet("snakeB");
+            tailAnimB = AnimationLib.getFrameAnimationSet("snakeC");
             animation_time = 0;
         }
 
         public override void update(GameTime currentTime)
         {
-            direction += 0.1f;
+            switchTimer += currentTime.ElapsedGameTime.Milliseconds;
+            if (switchTimer > switchDuration)
+            {
+                dirModifier *= -1;
+
+                switchTimer = 0;
+                switchDuration = averageSwitchDuration + (float)(1000f * Game1.rand.NextDouble());
+            }
+
+            direction += turnAmount * dirModifier;
+
+            tailBPositions[tailMostRecent] = tailAPositions[(tailMostRecent + 2) % positionsCount];
+            tailBRotations[tailMostRecent] = tailARotations[tailMostRecent];
+            tailAPositions[tailMostRecent] = position;
+            tailARotations[tailMostRecent] = direction;
+            tailMostRecent = (tailMostRecent + 1) % positionsCount;
+
+            velocity = new Vector2((float)(Math.Cos(direction) * wormSpeed), (float)(Math.Sin(direction) * wormSpeed));
+
+            Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
+            position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
         }
 
         public override void draw(SpriteBatch sb)
         {
-            testAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1), 0.5f, direction, new Vector2(8));
+            tailAnimB.drawAnimationFrame(0.0f, sb, tailBPositions[((tailMostRecent + 1) + positionsCount) % positionsCount] + tailAnimB.FrameDimensions / 2, new Vector2(1), 0.49f, tailBRotations[((tailMostRecent + 1) + positionsCount) % positionsCount], tailAnimB.FrameDimensions / 2);
+            tailAnimA.drawAnimationFrame(0.0f, sb, tailAPositions[((tailMostRecent + 1) + positionsCount) % positionsCount] + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailARotations[((tailMostRecent + 1) + positionsCount) % positionsCount], tailAnimA.FrameDimensions / 2);
+            testAnim.drawAnimationFrame(0.0f, sb, position + dimensions/2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

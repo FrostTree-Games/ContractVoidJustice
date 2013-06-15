@@ -175,7 +175,11 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new GuardSquadLeader(this, (currentRoomX) * GlobalGameConstants.TileSize.X, (currentRoomY + 10) * GlobalGameConstants.TileSize.Y));
+
+                        for (int q = 0; q < 20; q++)
+                        {
+                            entityList.Add(new SnakeWorm(this, new Vector2((currentRoomX) * GlobalGameConstants.TileSize.X + 100, (currentRoomY + 10) * GlobalGameConstants.TileSize.Y)));
+                        }
                         //entityList.Add(new GuardSquadLeader(this, new Vector2((currentRoomX ) * GlobalGameConstants.TileSize.X, (currentRoomY + 10) * GlobalGameConstants.TileSize.Y)));
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
