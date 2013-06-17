@@ -17,6 +17,8 @@ namespace PattyPetitGiant
             Dying = 3, // may not use
         }
 
+        private SnakeWormState snakeState;
+
         private float direction;
         private const float wormSpeed = 0.20f;
         private const float turnAmount = 0.05f;
@@ -25,6 +27,10 @@ namespace PattyPetitGiant
         private float switchDuration;
         private const float averageSwitchDuration = 1000f;
         private float dirModifier;
+
+        private float knockBackTime;
+        private const float knockBackDuration = 750f;
+        private const float knockBackMagnitude = 0.4f;
 
         private const int positionsCount = 6;
         private Vector2[] tailAPositions = null;
@@ -44,12 +50,16 @@ namespace PattyPetitGiant
             this.position = position;
             this.dimensions = new Vector2(24);
 
+            snakeState = SnakeWormState.Moving;
+
             velocity = Vector2.Zero;
 
             direction = (float)(Game1.rand.NextDouble() * Math.PI * 2);
             dirModifier = 1.0f;
             switchTimer = 0.0f;
             switchDuration = averageSwitchDuration;
+
+            enemy_life = 16;
 
             tailAPositions = new Vector2[positionsCount];
             tailARotations = new float[positionsCount];
@@ -72,24 +82,47 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            switchTimer += currentTime.ElapsedGameTime.Milliseconds;
-            if (switchTimer > switchDuration)
+            if (snakeState == SnakeWormState.Moving)
             {
-                dirModifier *= -1;
+                switchTimer += currentTime.ElapsedGameTime.Milliseconds;
+                if (switchTimer > switchDuration)
+                {
+                    dirModifier *= -1;
 
-                switchTimer = 0;
-                switchDuration = averageSwitchDuration + (float)(1000f * Game1.rand.NextDouble());
+                    switchTimer = 0;
+                    switchDuration = averageSwitchDuration + (float)(1000f * Game1.rand.NextDouble());
+                }
+
+                direction += turnAmount * dirModifier;
+
+                velocity = new Vector2((float)(Math.Cos(direction) * wormSpeed), (float)(Math.Sin(direction) * wormSpeed));
+
+                if (enemy_life < 1)
+                {
+                    snakeState = SnakeWormState.Dying;
+                }
             }
+            else if (snakeState == SnakeWormState.KnockedBack)
+            {
+                knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
 
-            direction += turnAmount * dirModifier;
+                direction += turnAmount * 3;
+
+                if (knockBackTime > knockBackDuration)
+                {
+                    snakeState = SnakeWormState.Moving;
+                }
+            }
+            else if (snakeState == SnakeWormState.Dying)
+            {
+                remove_from_list = true;
+            }
 
             tailBPositions[tailMostRecent] = tailAPositions[(tailMostRecent + 2) % positionsCount];
             tailBRotations[tailMostRecent] = tailARotations[tailMostRecent];
             tailAPositions[tailMostRecent] = position;
             tailARotations[tailMostRecent] = direction;
             tailMostRecent = (tailMostRecent + 1) % positionsCount;
-
-            velocity = new Vector2((float)(Math.Cos(direction) * wormSpeed), (float)(Math.Sin(direction) * wormSpeed));
 
             Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
             position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
@@ -104,7 +137,18 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            base.knockBack(direction, magnitude, damage, attacker);
+            if (snakeState == SnakeWormState.KnockedBack)
+            {
+                return;
+            }
+
+            snakeState = SnakeWormState.KnockedBack;
+
+            enemy_life -= damage;
+
+            knockBackTime = 0;
+            direction.Normalize();
+            velocity = direction * knockBackMagnitude;
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
