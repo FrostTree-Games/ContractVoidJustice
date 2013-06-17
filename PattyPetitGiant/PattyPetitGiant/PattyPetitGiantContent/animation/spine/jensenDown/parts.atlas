@@ -3,136 +3,178 @@ img.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-torso copy
+muzzle1
   rotate: false
-  xy: 1, 231
-  size: 300, 279
-  orig: 300, 279
+  xy: 1, 7
+  size: 80, 56
+  orig: 80, 56
   offset: 0, 0
   index: -1
-machete
+muzzle2
   rotate: false
-  xy: 1, 1
-  size: 162, 228
-  orig: 162, 228
+  xy: 83, 7
+  size: 80, 56
+  orig: 80, 56
   offset: 0, 0
   index: -1
-lThigh
+shotgunMuzzle1
   rotate: false
-  xy: 303, 315
-  size: 125, 195
-  orig: 125, 195
+  xy: 165, 7
+  size: 80, 56
+  orig: 80, 56
   offset: 0, 0
   index: -1
-rThigh copy
+shotgunMuzzle2
   rotate: false
-  xy: 165, 34
-  size: 125, 195
-  orig: 125, 195
+  xy: 247, 7
+  size: 80, 56
+  orig: 80, 56
   offset: 0, 0
   index: -1
-lCalf
+machinegun
   rotate: false
-  xy: 430, 299
-  size: 107, 211
-  orig: 107, 211
+  xy: 329, 46
+  size: 64, 17
+  orig: 64, 17
   offset: 0, 0
   index: -1
-rCalf copy
+shotgun
   rotate: false
-  xy: 539, 299
-  size: 107, 211
-  orig: 107, 211
-  offset: 0, 0
-  index: -1
-pelvis copy
-  rotate: false
-  xy: 648, 362
-  size: 153, 148
-  orig: 153, 148
-  offset: 0, 0
-  index: -1
-head copy
-  rotate: false
-  xy: 803, 312
-  size: 101, 198
-  orig: 101, 198
-  offset: 0, 0
-  index: -1
-lShoulder copy
-  rotate: false
-  xy: 906, 323
-  size: 67, 187
-  orig: 67, 187
-  offset: 0, 0
-  index: -1
-lForearm copy
-  rotate: false
-  xy: 975, 402
-  size: 48, 108
-  orig: 48, 108
-  offset: 0, 0
-  index: -1
-rForearm
-  rotate: false
-  xy: 975, 292
-  size: 48, 108
-  orig: 48, 108
-  offset: 0, 0
-  index: -1
-rShoulder
-  rotate: false
-  xy: 292, 42
-  size: 67, 187
-  orig: 67, 187
-  offset: 0, 0
-  index: -1
-lFoot
-  rotate: false
-  xy: 648, 255
-  size: 67, 105
-  orig: 67, 105
-  offset: 0, 0
-  index: -1
-rFoot copy
-  rotate: false
-  xy: 717, 255
-  size: 67, 105
-  orig: 67, 105
-  offset: 0, 0
-  index: -1
-lHand
-  rotate: false
-  xy: 303, 241
-  size: 40, 72
-  orig: 40, 72
-  offset: 0, 0
-  index: -1
-rHand
-  rotate: false
-  xy: 345, 241
-  size: 40, 72
-  orig: 40, 72
+  xy: 329, 26
+  size: 48, 18
+  orig: 48, 18
   offset: 0, 0
   index: -1
 bomb
   rotate: false
-  xy: 786, 262
-  size: 48, 48
-  orig: 48, 48
+  xy: 395, 36
+  size: 32, 27
+  orig: 32, 27
   offset: 0, 0
   index: -1
-cockrifle
+sword
   rotate: false
-  xy: 836, 262
-  size: 48, 48
-  orig: 48, 48
+  xy: 429, 31
+  size: 32, 32
+  orig: 32, 32
   offset: 0, 0
   index: -1
-empty
+torso
   rotate: false
-  xy: 165, 28
+  xy: 463, 32
+  size: 26, 31
+  orig: 26, 31
+  offset: 0, 0
+  index: -1
+pistol
+  rotate: false
+  xy: 329, 4
+  size: 24, 20
+  orig: 24, 20
+  offset: 0, 0
+  index: -1
+lShoulder
+  rotate: false
+  xy: 491, 35
+  size: 11, 28
+  orig: 11, 28
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 355, 9
+  size: 17, 15
+  orig: 17, 15
+  offset: 0, 0
+  index: -1
+lThigh
+  rotate: false
+  xy: 379, 26
+  size: 12, 18
+  orig: 12, 18
+  offset: 0, 0
+  index: -1
+pelvis
+  rotate: false
+  xy: 374, 14
+  size: 21, 10
+  orig: 21, 10
+  offset: 0, 0
+  index: -1
+rHand
+  rotate: false
+  xy: 504, 54
+  size: 7, 9
+  orig: 7, 9
+  offset: 0, 0
+  index: -1
+rCalf
+  rotate: false
+  xy: 397, 14
+  size: 11, 20
+  orig: 11, 20
+  offset: 0, 0
+  index: -1
+rThigh
+  rotate: false
+  xy: 410, 14
+  size: 11, 20
+  orig: 11, 20
+  offset: 0, 0
+  index: -1
+rShoulder
+  rotate: false
+  xy: 423, 10
+  size: 11, 19
+  orig: 11, 19
+  offset: 0, 0
+  index: -1
+lCalf
+  rotate: false
+  xy: 436, 8
+  size: 10, 21
+  orig: 10, 21
+  offset: 0, 0
+  index: -1
+rFoot
+  rotate: false
+  xy: 448, 16
+  size: 10, 13
+  orig: 10, 13
+  offset: 0, 0
+  index: -1
+lFoot
+  rotate: false
+  xy: 448, 2
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+null
+  rotate: false
+  xy: 1, 1
   size: 4, 4
   orig: 4, 4
+  offset: 0, 0
+  index: -1
+rForearm
+  rotate: false
+  xy: 460, 14
+  size: 8, 15
+  orig: 8, 15
+  offset: 0, 0
+  index: -1
+lForearm
+  rotate: false
+  xy: 470, 18
+  size: 8, 12
+  orig: 8, 12
+  offset: 0, 0
+  index: -1
+lHand
+  rotate: false
+  xy: 504, 45
+  size: 6, 7
+  orig: 6, 7
   offset: 0, 0
   index: -1
