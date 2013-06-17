@@ -60,6 +60,7 @@ namespace PattyPetitGiant
             switchDuration = averageSwitchDuration;
 
             enemy_life = 16;
+            enemy_type = EnemyType.Alien;
 
             tailAPositions = new Vector2[positionsCount];
             tailARotations = new float[positionsCount];
@@ -100,6 +101,22 @@ namespace PattyPetitGiant
                 if (enemy_life < 1)
                 {
                     snakeState = SnakeWormState.Dying;
+                }
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en.Enemy_Type == EnemyType.Alien)
+                    {
+                        continue;
+                    }
+
+                    if (Vector2.Distance(en.CenterPoint, CenterPoint) < 500f)
+                    {
+                        if (hitTest(en))
+                        {
+                            en.knockBack(en.Position - position, 2.0f, 5);
+                        }
+                    }
                 }
             }
             else if (snakeState == SnakeWormState.KnockedBack)
