@@ -31,6 +31,8 @@ namespace PattyPetitGiant
             WaveMotionGun = 8,
             HermesSandals = 10,
             RocketLauncher = 11,
+            LazerGun = 12,
+            FlameThrower = 13,
         }
 
         private static int gameResolutionWidth = 1280;

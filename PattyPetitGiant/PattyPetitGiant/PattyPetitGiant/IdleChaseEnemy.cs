@@ -92,7 +92,7 @@ namespace PattyPetitGiant
                                 continue;
                             else if (en is Player)
                             {
-                                component.update(this, en, currentTime, parentWorld);
+                                //component.update(this, en, currentTime, parentWorld);
                                 break;
                             }
                         }

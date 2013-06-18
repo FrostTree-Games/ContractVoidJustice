@@ -35,7 +35,7 @@ namespace PattyPetitGiant
 
             direction_facing = GlobalGameConstants.Direction.Right;
 
-            velocity = new Vector2(1.0f, 0.0f);
+            velocity = new Vector2(0.0f, 0.0f);
 
             change_direction_time = 0.0f;
             change_direction = 0;

@@ -83,6 +83,7 @@
     <Compile Include="Enemy.cs" />
     <Compile Include="EnemyComponents.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="FlameThrower.cs" />
     <Compile Include="GameCampaign.cs" />
     <Compile Include="GlobalGameConstants.cs" />
     <Compile Include="GuardSquadLeader.cs" />
@@ -95,6 +96,7 @@
     <Compile Include="InGameGUI.cs" />
     <Compile Include="InputDeviceManager.cs" />
     <Compile Include="KeySystem.cs" />
+    <Compile Include="LazerGun.cs" />
     <Compile Include="LevelKeyModule.cs" />
     <Compile Include="LevelSelectState.cs" />
     <Compile Include="MolotovEnemy.cs" />
