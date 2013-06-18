@@ -24,6 +24,8 @@ namespace PattyPetitGiant
         private Entity targetEntity;
         private Vector2 targetPosition;
 
+        private const float attackRadius = 500f;
+
         //if aggressionTime maxes out, then the entity goes from idle to chase
         private float aggressionTime;
         private const float maxAggressionTime = 1000f;
@@ -97,7 +99,7 @@ namespace PattyPetitGiant
                     {
                         if (en.Enemy_Type == EnemyType.Player || en.Enemy_Type == EnemyType.Guard || en.Enemy_Type == EnemyType.Prisoner)
                         {
-                            if (Vector2.Distance(en.Position, position) < 300f && (targetEntity == null || Vector2.Distance(en.Position, position) < Vector2.Distance(targetEntity.Position, position)))
+                            if (Vector2.Distance(en.Position, position) < attackRadius && (targetEntity == null || Vector2.Distance(en.Position, position) < Vector2.Distance(targetEntity.Position, position)))
                             {
                                 targetEntity = en;
                             }
