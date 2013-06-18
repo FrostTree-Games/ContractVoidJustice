@@ -584,6 +584,106 @@
 			}
 		}
 	},
+	"hurt": {
+		"bones": {
+			"lThigh": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -28.42 },
+					{ "time": 0.1666, "angle": -41.24 },
+					{ "time": 0.2666, "angle": -34 },
+					{ "time": 0.5, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.1, "x": 11.15, "y": -7.19 },
+					{ "time": 0.5, "x": 0, "y": 0 }
+				]
+			},
+			"pelvis": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -24.1 },
+					{ "time": 0.5, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.1, "x": 7.88, "y": -9.91 },
+					{ "time": 0.1666, "x": 11, "y": -13.55 },
+					{ "time": 0.5, "x": 0, "y": 0 }
+				]
+			},
+			"rThigh": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": 27.17 },
+					{ "time": 0.2666, "angle": 50.25 },
+					{ "time": 0.5, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.1, "x": 13.31, "y": -17.63 },
+					{ "time": 0.5, "x": 0, "y": 0 }
+				]
+			},
+			"torso": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -49.05 },
+					{ "time": 0.2666, "angle": -40.83 },
+					{ "time": 0.5, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.1, "x": 15.52, "y": -11.79 },
+					{ "time": 0.1666, "x": 18.12, "y": -17.51 },
+					{ "time": 0.5, "x": 0, "y": 0 }
+				]
+			},
+			"lShoulder": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -20.98 },
+					{ "time": 0.1666, "angle": -1.03 },
+					{ "time": 0.2666, "angle": -10.5 },
+					{ "time": 0.5, "angle": 0 }
+				]
+			},
+			"rCalf": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -116.76 },
+					{ "time": 0.1666, "angle": -123.73 },
+					{ "time": 0.5, "angle": 0 }
+				]
+			},
+			"rShoulder": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": 74.31 },
+					{ "time": 0.1666, "angle": 88.28 },
+					{ "time": 0.2666, "angle": 74.99 },
+					{ "time": 0.5, "angle": 0 }
+				]
+			},
+			"lForearm": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": 0.09 },
+					{ "time": 0.1666, "angle": -1.45 },
+					{ "time": 0.5, "angle": 0 }
+				]
+			},
+			"rForearm": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -18.97 },
+					{ "time": 0.2666, "angle": -15.41 },
+					{ "time": 0.5, "angle": 0 }
+				]
+			}
+		}
+	},
 	"idle": {
 		"bones": {
 			"rHand": {
