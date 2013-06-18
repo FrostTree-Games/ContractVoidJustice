@@ -64,6 +64,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>antiFairy</Name>
     </None>
+    <None Include="animation\frame\konamiPic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>konamiPic</Name>
+    </None>
     <None Include="animation\frame\snakeA.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>snakeA</Name>

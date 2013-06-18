@@ -69,8 +69,7 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new FlameThrower();
-            //player_item_1 = new Sword(position);
+            player_item_1 = new Sword(position);
             player_item_2 = new DungeonMap();
             GameCampaign.Player_Item_1 = player_item_1.getEnumType();
             GameCampaign.Player_Item_2 = player_item_2.getEnumType();
@@ -79,7 +78,7 @@ namespace PattyPetitGiant
 
             disable_movement = false;
 
-            direction_facing = GlobalGameConstants.Direction.Right;
+            direction_facing = GlobalGameConstants.Direction.Down;
 
             this.parentWorld = parentWorld;
 
@@ -301,7 +300,8 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+
             if (player_item_1 != null)
             {
                 player_item_1.draw(sb);
@@ -352,35 +352,35 @@ namespace PattyPetitGiant
 
         private void setAnimationWeapons()
         {
-            switch (player_item_2.ItemType())
+            switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_1.ItemType() : player_item_2.ItemType())
             {
                 case GlobalGameConstants.itemType.Sword:
-                    current_skeleton.Skeleton.SetAttachment("leftHand", "lSword01");
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lSword");
                     break;
                 case GlobalGameConstants.itemType.Bomb:
-                    current_skeleton.Skeleton.SetAttachment("leftHand", "lBomb01");
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lBomb");
                     break;
                 case GlobalGameConstants.itemType.Gun:
-                    current_skeleton.Skeleton.SetAttachment("leftHand", "lGun01");
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lPistol");
                     break;
                 default:
-                    current_skeleton.Skeleton.SetAttachment("leftHand", "lEmpty");
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lEmpty");
                     break;
             }
 
-            switch (player_item_1.ItemType())
+            switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_2.ItemType() : player_item_1.ItemType())
             {
                 case GlobalGameConstants.itemType.Sword:
-                    current_skeleton.Skeleton.SetAttachment("rightHand", "rSword01");
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rSword");
                     break;
                 case GlobalGameConstants.itemType.Bomb:
-                    current_skeleton.Skeleton.SetAttachment("rightHand", "rBomb01");
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rBomb");
                     break;
                 case GlobalGameConstants.itemType.Gun:
-                    current_skeleton.Skeleton.SetAttachment("rightHand", "rGun01");
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rPistol");
                     break;
                 default:
-                    current_skeleton.Skeleton.SetAttachment("rightHand", "rEmpty");
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rEmpty");
                     break;
             }
         }
@@ -391,9 +391,6 @@ namespace PattyPetitGiant
 
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y+(dimensions.Y/2f);
-
-            current_skeleton.Skeleton.RootBone.ScaleX = 0.1f;
-            current_skeleton.Skeleton.RootBone.ScaleY = 0.1f;
 
             current_skeleton.Skeleton.UpdateWorldTransform();
             renderer.Draw(current_skeleton.Skeleton);

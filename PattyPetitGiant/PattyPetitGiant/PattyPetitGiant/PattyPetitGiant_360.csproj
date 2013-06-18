@@ -116,6 +116,7 @@
     <Compile Include="ScreenState.cs" />
     <Compile Include="ShopKeeper.cs" />
     <Compile Include="ShotGun.cs" />
+    <Compile Include="AlienChaser.cs" />
     <Compile Include="SnakeWorm.cs" />
     <Compile Include="Sword.cs" />
     <Compile Include="TestEnemy.cs" />

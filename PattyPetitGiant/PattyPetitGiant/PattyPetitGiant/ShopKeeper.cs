@@ -73,7 +73,7 @@ namespace PattyPetitGiant
 
         private bool switchItemPressed;
 
-        private Entity attacker = null;
+        private Entity attackerTarget = null;
         private FireBall projectile;
         private float fireballDelayPassed;
         private const float fireballDelay = 400f;
@@ -105,17 +105,16 @@ namespace PattyPetitGiant
 
             //test shop data for now
             {
-                itemPrices[0] = 170;
-                itemPrices[1] = 30;
-                itemPrices[2] = 200;
-
-                itemsForSale[0] = GlobalGameConstants.itemType.Bomb;
-                itemsForSale[1] = GlobalGameConstants.itemType.Compass;
+                itemsForSale[0] = GlobalGameConstants.itemType.HermesSandals;
+                itemsForSale[1] = GlobalGameConstants.itemType.ShotGun;
                 itemsForSale[2] = GlobalGameConstants.itemType.WandOfGyges;
 
-                itemMessages[0] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "Bombs will destroy enemies in a radius, but watch out! They're dangerous!");
-                itemMessages[1] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "The compass will point in the direction of the level's exit.");
-                itemMessages[2] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, "A magical wand that seems to let its weilder bend space and location.");
+                for (int i = 0; i < 3; i++)
+                {
+                    itemPrices[i] = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].price;
+                    itemIcons[i] = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].pickupImage;
+                    itemMessages[i] = new InGameGUI.BoxWindow("shopkeeperMessage", GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 2, 300, GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].message);
+                }
             }
 
             items[0] = new Pickup(parentWorld, -500, -500, itemsForSale[0]);
@@ -123,36 +122,6 @@ namespace PattyPetitGiant
             items[2] = new Pickup(parentWorld, -500, -500, itemsForSale[2]);
             parentWorld.EntityList.AddRange(items);
 
-            getItemIcons();
-        }
-
-        private void getItemIcons()
-        {
-            for (int i = 0; i < 3; i++)
-            {
-                switch (itemsForSale[i])
-                {
-                    case GlobalGameConstants.itemType.Gun:
-                        itemIcons[i] = AnimationLib.getFrameAnimationSet("gunPic");
-                        break;
-                    case GlobalGameConstants.itemType.Sword:
-                        itemIcons[i] = AnimationLib.getFrameAnimationSet("swordPic");
-                        break;
-                    case GlobalGameConstants.itemType.Bomb:
-                        itemIcons[i] = AnimationLib.getFrameAnimationSet("bombPic");
-                        break;
-                    case GlobalGameConstants.itemType.Compass:
-                        itemIcons[i] = AnimationLib.getFrameAnimationSet("compassPic");
-                        break;
-                    case GlobalGameConstants.itemType.WandOfGyges:
-                        itemIcons[i] = AnimationLib.getFrameAnimationSet("wandPic");
-                        break;
-                    case GlobalGameConstants.itemType.NoItem:
-                    default:
-                        itemIcons[i] = AnimationLib.getFrameAnimationSet("flagPic");
-                        break;
-                }
-            }
         }
 
         private double distance(Vector2 a, Vector2 b)
@@ -176,17 +145,17 @@ namespace PattyPetitGiant
 
             if (state == ShopKeeperState.Enraged)
             {
-                if (attacker != null)
+                if (attackerTarget != null)
                 {
-                    double angle = Math.Atan2(attacker.Position.Y - position.Y, attacker.Position.X - position.X);
+                    double angle = Math.Atan2(attackerTarget.Position.Y - position.Y, attackerTarget.Position.X - position.X);
 
-                    if (Vector2.Distance(CenterPoint, attacker.CenterPoint) - distanceToMaintainFromAttacker > GlobalGameConstants.TileSize.Y)
+                    if (Vector2.Distance(CenterPoint, attackerTarget.CenterPoint) - distanceToMaintainFromAttacker > GlobalGameConstants.TileSize.Y)
                     {
                         velocity = FireBall.fireBallVelocity / 4 * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
 
                         velocity += FireBall.fireBallVelocity / 8 * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
                     }
-                    else if (Vector2.Distance(CenterPoint, attacker.CenterPoint) - distanceToMaintainFromAttacker < -1 * GlobalGameConstants.TileSize.Y)
+                    else if (Vector2.Distance(CenterPoint, attackerTarget.CenterPoint) - distanceToMaintainFromAttacker < -1 * GlobalGameConstants.TileSize.Y)
                     {
                         velocity = -1 * FireBall.fireBallVelocity / 4 * new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
                     }
@@ -223,7 +192,7 @@ namespace PattyPetitGiant
                 {
                     fireballDelayPassed += currentTime.ElapsedGameTime.Milliseconds;
 
-                    if (attacker != null)
+                    if (attackerTarget != null)
                     {
                         if (fireballDelayPassed > fireballDelay && attackPoint != new Vector2(-1, -1))
                         {
@@ -231,7 +200,7 @@ namespace PattyPetitGiant
                         }
                         else if (fireballDelayPassed > attackPointSetDelay && attackPoint == new Vector2(-1, -1))
                         {
-                            attackPoint = attacker.CenterPoint;
+                            attackPoint = attackerTarget.CenterPoint;
                         }
                     }
                 }
@@ -367,12 +336,14 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (attacker == null)
+            if (attackerTarget != null)
             {
                 return;
             }
 
             health -= damage;
+
+            parentWorld.GUI.popBox("thankYou");
 
             if (state == ShopKeeperState.Normal)
             {
@@ -388,24 +359,7 @@ namespace PattyPetitGiant
                     items[i].Position = drawItemPos;
                 }
 
-                foreach (Entity en in parentWorld.EntityList)
-                {
-                    if (!(en is Player || en is Enemy))
-                    {
-                        continue;
-                    }
-
-                    if (attacker == null)
-                    {
-                        attacker = en;
-                        continue;
-                    }
-
-                    if (Vector2.Distance(CenterPoint, en.CenterPoint) < Vector2.Distance(CenterPoint, attacker.CenterPoint))
-                    {
-                        attacker = en;
-                    }
-                }
+                attackerTarget = attacker;
 
                 state = ShopKeeperState.Enraged;
             }
@@ -424,6 +378,8 @@ namespace PattyPetitGiant
             {
                 return;
             }
+
+            parentWorld.GUI.popBox("thankYou");
 
             for (int i = 0; i < items.Length; i++)
             {
@@ -444,15 +400,15 @@ namespace PattyPetitGiant
                     continue;
                 }
 
-                if (attacker == null)
+                if (attackerTarget == null)
                 {
-                    attacker = en;
+                    attackerTarget = en;
                     continue;
                 }
 
-                if (Vector2.Distance(CenterPoint, en.CenterPoint) < Vector2.Distance(CenterPoint, attacker.CenterPoint))
+                if (Vector2.Distance(CenterPoint, en.CenterPoint) < Vector2.Distance(CenterPoint, attackerTarget.CenterPoint))
                 {
-                    attacker = en;
+                    attackerTarget = en;
                 }
             }
 

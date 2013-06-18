@@ -74,6 +74,8 @@ namespace PattyPetitGiant
 
             AudioLib lb = new AudioLib();
 
+            GlobalGameConstants.WeaponDictionary.InitalizePriceData();
+
             GameCampaign.ResetPlayerValues();
 
             currentGameScreen = new LevelSelectState();

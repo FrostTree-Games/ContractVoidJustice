@@ -89,6 +89,7 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlienChaser.cs" />
     <Compile Include="AnimationLib.cs" />
     <Compile Include="AntiFairy.cs" />
     <Compile Include="AudioLib.cs" />

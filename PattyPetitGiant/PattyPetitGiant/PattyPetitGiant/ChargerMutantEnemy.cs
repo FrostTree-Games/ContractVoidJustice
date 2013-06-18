@@ -36,7 +36,7 @@ namespace PattyPetitGiant
             windup_timer = 0.0f;
             knockback_magnitude = 8.0f;
             enemy_damage = 20;
-            enemy_life = 10;
+            enemy_life = 9999;
             enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
@@ -77,6 +77,8 @@ namespace PattyPetitGiant
                     disable_movement = false;
                     velocity = Vector2.Zero;
                 }
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
             }
             else
             {
@@ -217,6 +219,7 @@ namespace PattyPetitGiant
                 if (state != EnemyState.Agressive)
                 {
                     disable_movement = true;
+                    animation_time = 0;
                     
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {

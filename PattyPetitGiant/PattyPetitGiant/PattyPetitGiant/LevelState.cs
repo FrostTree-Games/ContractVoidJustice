@@ -60,7 +60,7 @@ namespace PattyPetitGiant
 
         public LevelState()
         {
-            currentSeed = Game1.rand.Next();
+            currentSeed = "Sophie".GetHashCode();
 
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
@@ -175,8 +175,6 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-                        //entityList.Add(new HookPrisonerEnemy(this, (currentRoomX) * GlobalGameConstants.TileSize.X, (currentRoomY + 10) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new IdleChaseEnemy(this, new Vector2((currentRoomX ) * GlobalGameConstants.TileSize.X, (currentRoomY + 10) * GlobalGameConstants.TileSize.Y)));
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
@@ -208,13 +206,13 @@ namespace PattyPetitGiant
                             switch (randomEnemyNumber % enemyTypeCount)
                             {
                                 case 0:
-                                    //entityList.Add(new MolotovEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    entityList.Add(new MolotovEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                                 case 1:
-                                    //entityList.Add(new ChaseEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    entityList.Add(new ChaseEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                                 case 2:
-                                    //entityList.Add(new ChargerMutantEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
+                                    entityList.Add(new ChargerMutantEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
                                     break;
                             }
 
