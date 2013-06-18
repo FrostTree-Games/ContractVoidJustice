@@ -343,6 +343,8 @@ namespace PattyPetitGiant
 
             health -= damage;
 
+            parentWorld.GUI.popBox("thankYou");
+
             if (state == ShopKeeperState.Normal)
             {
                 for (int i = 0; i < items.Length; i++)
@@ -376,6 +378,8 @@ namespace PattyPetitGiant
             {
                 return;
             }
+
+            parentWorld.GUI.popBox("thankYou");
 
             for (int i = 0; i < items.Length; i++)
             {
