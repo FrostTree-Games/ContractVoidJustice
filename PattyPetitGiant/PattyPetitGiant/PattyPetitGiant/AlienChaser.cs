@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PattyPetitGiant
 {
-    class SlowChaser : Enemy
+    class AlienChaser : Enemy
     {
         private enum SlowChaserState
         {
@@ -36,7 +36,7 @@ namespace PattyPetitGiant
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
-        public SlowChaser(LevelState parentWorld, Vector2 position)
+        public AlienChaser(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
             this.position = position;
