@@ -24,17 +24,26 @@ namespace PattyPetitGiant
         private Entity targetEntity;
         private Vector2 targetPosition;
 
+        //if aggressionTime maxes out, then the entity goes from idle to chase
+        private float aggressionTime;
+        private const float maxAggressionTime = 1000f;
+
         private const float walkSpeed = 0.1f;
         private const int numberOfChaseIterations = 3;
         private const float chaseSpeed = 0.500f;
 
         private float timer;
-        private const float idleTime = 750f;
+        private const float idleTime = 200f;
         private const float windUpTime = 500f;
         private const float chaseTime = 350f;
         private const float coolDownTime = 2000f;
 
+        private float knockBackTime;
+        private const float knockBackDuration = 250f;
+
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
+
+        private AnimationLib.FrameAnimationSet konamiAlert = null;
 
         public AlienChaser(LevelState parentWorld, Vector2 position)
         {
@@ -43,11 +52,14 @@ namespace PattyPetitGiant
             this.dimensions = GlobalGameConstants.TileSize;
 
             enemy_type = EnemyType.Alien;
+            enemy_life = 10;
             chaserState = SlowChaserState.Idle;
 
             direction_facing = GlobalGameConstants.Direction.Down;
 
             animation_time = 0.0f;
+
+            konamiAlert = AnimationLib.getFrameAnimationSet("konamiPic");
 
             directionAnims = new AnimationLib.SpineAnimationSet[4];
             directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("patrolUp");
@@ -59,6 +71,8 @@ namespace PattyPetitGiant
             {
                 directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("run");
             }
+
+            aggressionTime = 0.0f;
         }
 
         public override void update(GameTime currentTime)
@@ -90,12 +104,25 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    if (targetEntity != null)
+                    if (targetEntity != null && aggressionTime > maxAggressionTime)
                     {
                         targetPosition = targetEntity.CenterPoint;
                         timer = 0;
                         chaseIteration = 0;
                         chaserState = SlowChaserState.WindUp;
+                    }
+                    else if (targetEntity != null && aggressionTime <= maxAggressionTime)
+                    {
+                        aggressionTime += currentTime.ElapsedGameTime.Milliseconds;
+                    }
+                    else if (targetEntity == null)
+                    {
+                        aggressionTime -= currentTime.ElapsedGameTime.Milliseconds;
+
+                        if (aggressionTime < 0)
+                        {
+                            aggressionTime = 0;
+                        }
                     }
                 }
             }
@@ -158,6 +185,7 @@ namespace PattyPetitGiant
                 {
                     timer = 0;
                     chaserState = SlowChaserState.Idle;
+                    aggressionTime = maxAggressionTime * 0.8f;
                 }
                 else if (timer > coolDownTime / 4)
                 {
@@ -167,6 +195,26 @@ namespace PattyPetitGiant
             else if (chaserState == SlowChaserState.KnockedBack)
             {
                 state = EnemyState.Moving;
+
+                if (enemy_life < 1)
+                {
+                    chaserState = SlowChaserState.Dying;
+                    return;
+                }
+
+                knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (knockBackTime > knockBackDuration)
+                {
+                    targetEntity = null;
+                    chaserState = SlowChaserState.Idle;
+                    aggressionTime = 0.95f * maxAggressionTime;
+                }
+            }
+            else if (chaserState == SlowChaserState.Dying)
+            {
+                remove_from_list = true;
+                return;
             }
             else
             {
@@ -226,7 +274,12 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            if (chaserState == SlowChaserState.WindUp && chaseIteration == 0)
+            {
+                konamiAlert.drawAnimationFrame(0, sb, position - new Vector2(0, konamiAlert.FrameHeight * 3), new Vector2(3), 0.7f);
+            }
+
+            sb.Draw(Game1.whitePixel, position, null, Color.Lerp(Color.Blue, Color.Red, aggressionTime / maxAggressionTime), 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -236,7 +289,14 @@ namespace PattyPetitGiant
                 return;
             }
 
-            //
+            enemy_life -= damage;
+
+            direction.Normalize();
+            velocity = direction * (magnitude / 2);
+
+            knockBackTime = 0.0f;
+
+            chaserState = SlowChaserState.KnockedBack;
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)

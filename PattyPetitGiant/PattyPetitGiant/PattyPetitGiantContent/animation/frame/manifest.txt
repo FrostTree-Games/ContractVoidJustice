@@ -32,3 +32,4 @@ testCoin
 snakeA
 snakeB
 snakeC
+konamiPic
