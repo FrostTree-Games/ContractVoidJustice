@@ -60,51 +60,51 @@ namespace PattyPetitGiant
             shot.active = false;
         }
 
-        public void update(Player parent, GameTime currentTime, LevelState parentWorld)
+        private void updateShot(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            if (shot.active)
+            shot.updateShot(currentTime);
+
+            if (parentWorld.Map.hitTestWall(shot.centerPoint))
             {
-                shot.updateShot(currentTime);
-
-                if (parentWorld.Map.hitTestWall(shot.centerPoint))
+                shot.active = false;
+            }
+            else
+            {
+                foreach (Entity en in parentWorld.EntityList)
                 {
-                    shot.active = false;
-                }
-                else
-                {
-                    foreach (Entity en in parentWorld.EntityList)
+                    if (en is Player)
                     {
-                        if (en is Enemy || en is ShopKeeper || en is Pickup)
+                        continue;
+                    }
+
+                    if (en is Enemy || en is ShopKeeper || en is Pickup || en is Key)
+                    {
+                        if (shot.hitTestEntity(en))
                         {
-                            if (shot.hitTestEntity(en))
+                            if (en is ShopKeeper)
                             {
-                                if (en is ShopKeeper)
-                                {
-                                    ((ShopKeeper)en).poke();
-                                }
+                                ((ShopKeeper)en).poke();
+                            }
 
-                                Vector2 swap = parent.Position;
-                                parent.Position = en.Position;
-                                en.Position = swap;
+                            Vector2 swap = parent.Position;
+                            parent.Position = en.Position;
+                            en.Position = swap;
 
-                                shot.active = false;
+                            shot.active = false;
 
-                                if (en is AntiFairy)
-                                {
-                                    ((AntiFairy)en).duplicate();
-                                }
+                            if (en is AntiFairy)
+                            {
+                                ((AntiFairy)en).duplicate();
                             }
                         }
                     }
                 }
-
-                if (!shot.active)
-                {
-                    parent.Disable_Movement = false;
-                    parent.State = Player.playerState.Moving;
-                }
             }
-            else
+        }
+
+        public void update(Player parent, GameTime currentTime, LevelState parentWorld)
+        {
+            if (!shot.active)
             {
                 float direction = -1.0f;
 
@@ -125,17 +125,17 @@ namespace PattyPetitGiant
                 }
 
                 shot = new MagicalShot(parent.CenterPoint, direction);
-                parent.Velocity = Vector2.Zero;
-                parent.Disable_Movement = true;
             }
+
+            updateShot(parent, currentTime, parentWorld);
+
+            parent.Disable_Movement = false;
+            parent.State = Player.playerState.Moving;
         }
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            if (shot.active)
-            {
-                shot.active = false;
-            }
+            updateShot(parent, currentTime, parentWorld);
         }
 
         public GlobalGameConstants.itemType ItemType()
