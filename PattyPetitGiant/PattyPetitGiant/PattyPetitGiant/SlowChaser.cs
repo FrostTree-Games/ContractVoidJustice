@@ -34,6 +34,8 @@ namespace PattyPetitGiant
         private const float chaseTime = 350f;
         private const float coolDownTime = 2000f;
 
+        private AnimationLib.SpineAnimationSet[] directionAnims = null;
+
         public SlowChaser(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -46,6 +48,17 @@ namespace PattyPetitGiant
             direction_facing = GlobalGameConstants.Direction.Down;
 
             animation_time = 0.0f;
+
+            directionAnims = new AnimationLib.SpineAnimationSet[4];
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("patrolUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("patrolDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("patrolRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("patrolRight");
+            for (int i = 0; i < 4; i++)
+            {
+                directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("run");
+            }
         }
 
         public override void update(GameTime currentTime)
@@ -57,6 +70,8 @@ namespace PattyPetitGiant
                 state = EnemyState.Moving;
 
                 timer += currentTime.ElapsedGameTime.Milliseconds;
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
 
                 velocity = Vector2.Zero;
 
@@ -90,6 +105,8 @@ namespace PattyPetitGiant
 
                 velocity = Vector2.Zero;
 
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chaseWindUp");
+
                 timer += currentTime.ElapsedGameTime.Milliseconds;
 
                 if (timer > windUpTime)
@@ -106,6 +123,8 @@ namespace PattyPetitGiant
                 state = EnemyState.Chase;
 
                 timer += currentTime.ElapsedGameTime.Milliseconds;
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chase");
 
                 if (timer > chaseTime)
                 {
@@ -132,6 +151,8 @@ namespace PattyPetitGiant
                 state = EnemyState.Idle;
 
                 timer += currentTime.ElapsedGameTime.Milliseconds;
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
 
                 if (timer > coolDownTime)
                 {
@@ -174,8 +195,33 @@ namespace PattyPetitGiant
                 }
             }
 
+            if (Math.Abs(velocity.X) > Math.Abs(velocity.Y))
+            {
+                if (velocity.X > 0)
+                {
+                    direction_facing = GlobalGameConstants.Direction.Right;
+                }
+                else if (velocity.X < 0)
+                {
+                    direction_facing = GlobalGameConstants.Direction.Left;
+                }
+            }
+            else if (Math.Abs(velocity.X) < Math.Abs(velocity.Y))
+            {
+                if (velocity.Y > 0)
+                {
+                    direction_facing = GlobalGameConstants.Direction.Down;
+                }
+                else if (velocity.Y < 0)
+                {
+                    direction_facing = GlobalGameConstants.Direction.Up;
+                }
+            }
+
             Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
             position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
+
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, true);
         }
 
         public override void draw(SpriteBatch sb)
@@ -195,7 +241,16 @@ namespace PattyPetitGiant
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
         {
-            //base.spinerender(renderer);
+            AnimationLib.SpineAnimationSet currentSkeleton = directionAnims[(int)direction_facing];
+
+            currentSkeleton.Skeleton.RootBone.X = CenterPoint.X * (currentSkeleton.Skeleton.FlipX ? -1 : 1);
+            currentSkeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            currentSkeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            currentSkeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            currentSkeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(currentSkeleton.Skeleton);
         }
     }
 }
