@@ -46,6 +46,18 @@ namespace PattyPetitGiant
                 case GlobalGameConstants.itemType.WandOfGyges:
                     item_type = player_item.ItemType();
                     return new WandOfGyges();
+                case GlobalGameConstants.itemType.ShotGun:
+                    item_type = player_item.ItemType();
+                    return new ShotGun();
+                case GlobalGameConstants.itemType.WaveMotionGun:
+                    item_type = player_item.ItemType();
+                    return new WaveMotionGun();
+                case GlobalGameConstants.itemType.HermesSandals:
+                    item_type = player_item.ItemType();
+                    return new HermesSandals();
+                case GlobalGameConstants.itemType.RocketLauncher:
+                    item_type = player_item.ItemType();
+                    return new RocketLauncher();
                 default:
                     item_type = player_item.ItemType();
                     return new Sword(position);
@@ -56,34 +68,15 @@ namespace PattyPetitGiant
         {
             AnimationLib.FrameAnimationSet dropAnim = null;
 
-            switch (item_type)
-            {
-                case GlobalGameConstants.itemType.Sword:
-                    dropAnim = AnimationLib.getFrameAnimationSet("swordPic");
-                    break;
-                case GlobalGameConstants.itemType.Gun:
-                    dropAnim = AnimationLib.getFrameAnimationSet("gunPic");
-                    break;
-                case GlobalGameConstants.itemType.Bomb:
-                    dropAnim = AnimationLib.getFrameAnimationSet("bombPic");
-                    break;
-                case GlobalGameConstants.itemType.Compass:
-                    dropAnim = AnimationLib.getFrameAnimationSet("compassPic");
-                    break;
-                case GlobalGameConstants.itemType.DungeonMap:
-                    dropAnim = AnimationLib.getFrameAnimationSet("dungeonMapPic");
-                    break;
-                case GlobalGameConstants.itemType.WandOfGyges:
-                    dropAnim = AnimationLib.getFrameAnimationSet("wandPic");
-                    break;
-                default:
-                    sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
-                    break;
-            }
+            dropAnim = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)item_type].pickupImage;
 
             if (dropAnim != null)
             {
                 dropAnim.drawAnimationFrame(0.0f, sb, Position, new Vector2(1.0f, 1.0f), 0.5f);
+            }
+            else
+            {
+                sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
             }
         }
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
