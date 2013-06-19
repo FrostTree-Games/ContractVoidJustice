@@ -9,175 +9,197 @@ using Microsoft.Xna.Framework.Input;
 
 namespace PattyPetitGiant
 {
-    struct Bullet
-    {
-        public Vector2 hitbox;
-        public Vector2 position;
-        public Vector2 velocity;
-        public int bullet_damage;
-        public GlobalGameConstants.Direction bullet_direction;
-    }
     class Gun : Item
     {
-        private Vector2 hitbox = Vector2.Zero;
-        private Vector2 position = Vector2.Zero;
-        private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
-        private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Gun;
-        private bool bullet_alive = false;
-        private float bullet_alive_time = 0.0f;
-        private float knockback_magnitude;
-
-        private Bullet bullet = new Bullet();
-
-        public Gun(Vector2 initial_position)
+        private struct GunBullet
         {
-            hitbox = new Vector2(48.0f, 48.0f);
-            position = initial_position;
-            bullet_alive_time = 0.0f;
-            bullet_alive = false;
-            item_type = GlobalGameConstants.itemType.Gun;
-            knockback_magnitude = 1.0f;
+            public bool active;
+
+            public Vector2 position;
+            private const float radius = 24f;
+            public float Radius { get { return radius; } }
+            public float direction;
+            public float timePassed;
+            private const float maxBulletTime = 1750f;
+
+            private const float motionBulletSpeed = 0.5f;
+
+            public GunBullet(Vector2 position, float direction)
+            {
+                this.position = position;
+                this.direction = direction;
+                this.active = true;
+                timePassed = 0.0f;
+            }
+
+            public bool hitTestEntity(Entity en)
+            {
+                return (Vector2.Distance(en.CenterPoint, position) < radius);
+            }
+
+            public void update(LevelState parentWorld, GameTime currentTime)
+            {
+                if (!active)
+                {
+                    return;
+                }
+
+                timePassed += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (timePassed > maxBulletTime || parentWorld.Map.hitTestWall(position))
+                {
+                    active = false;
+                    return;
+                }
+
+                //calculate directional velocity by taking d/dt of a predefined parametric path (Dan just did some calc on a rotation matrix and tweaked the values until it looked good)
+                Vector2 velocity = new Vector2((float)Math.Cos(direction), (float)Math.Sin(direction)) * motionBulletSpeed;
+
+                position += velocity * currentTime.ElapsedGameTime.Milliseconds;
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en is Player)
+                    {
+                        continue;
+                    }
+
+                    if (hitTestEntity(en))
+                    {
+                        en.knockBack(Vector2.Normalize(velocity), 1.5f, 4);
+                        this.active = false;
+                    }
+                }
+            }
+
+            public void draw(SpriteBatch sb)
+            {
+                if (active)
+                {
+                    sb.Draw(Game1.whitePixel, position - new Vector2(radius / 2), null, Color.Green, 0, Vector2.Zero, radius, SpriteEffects.None, 0.69f);
+                }
+            }
         }
+
+        private enum GunState
+        {
+            Idle = 0,
+            WindUp = 1,
+            Fire = 2,
+        }
+
+        private GunBullet b;
+
+        private GunState state;
+        private float timer;
+        private const float windUpTime = 125f;
+        private const float timeBetweenShots = 300f;
+
+        private const float gunAmmoCost = 2f;
+        public float GunAmmoCost { get { return gunAmmoCost; } }
+
+        public Gun()
+        {
+            b = new GunBullet(Vector2.Zero, 0.0f);
+            b.active = false;
+
+            timer = 9999;
+
+            state = GunState.Idle;
+        }
+
+        private void updateBullets(Player parent, GameTime currentTime, LevelState parentWorld)
+        {
+            b.update(parentWorld, currentTime);
+        }
+
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            position = parent.CenterPoint;
-            item_direction = parent.Direction_Facing;
-            
-            if (bullet_alive == false)
+            if (state == GunState.Idle)
             {
-                bullet.hitbox = new Vector2(10.0f, 10.0f);
-                bullet.velocity = new Vector2(0.0f, 0.0f);
-                bullet.bullet_damage = 10;
-                bullet_alive = true;
+                timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                GameCampaign.Player_Ammunition = GameCampaign.Player_Ammunition - 1;
+                if (!b.active && timer > timeBetweenShots)
+                {
+                    state = GunState.WindUp;
+                    timer = 0;
 
-                bullet_alive_time = 0.0f;
-
-                if (item_direction == GlobalGameConstants.Direction.Right)
-                {
-                    bullet.position.X = parent.CenterPoint.X + (parent.Dimensions.X / 2) + (bullet.hitbox.X / 2);
-                    bullet.position.Y = parent.CenterPoint.Y;
-                    bullet.velocity.X = 5.0f;
-                    bullet.bullet_direction = item_direction;
-                }
-                else if (item_direction == GlobalGameConstants.Direction.Left)
-                {
-                    bullet.position.X = parent.CenterPoint.X - (parent.Dimensions.X / 2) - (bullet.hitbox.X / 2);
-                    bullet.position.Y = parent.CenterPoint.Y;
-                    bullet.velocity.X = -5.0f;
-                    bullet.bullet_direction = item_direction;
-                }
-                else if (item_direction == GlobalGameConstants.Direction.Up)
-                {
-                    bullet.position.Y = parent.CenterPoint.Y - (parent.Dimensions.Y / 2) - (bullet.hitbox.Y / 2);
-                    bullet.position.X = parent.CenterPoint.X;
-                    bullet.velocity.Y = -5.0f;
-                    bullet.bullet_direction = item_direction;
+                    parent.Animation_Time = 0;
                 }
                 else
                 {
-                    bullet.position.Y = parent.CenterPoint.Y + (parent.Dimensions.Y / 2) + (bullet.hitbox.Y / 2);
-                    bullet.position.X = parent.CenterPoint.X;
-                    bullet.velocity.Y = 5.0f;
-                    bullet.bullet_direction = item_direction;
+                    parent.Disable_Movement = true;
+                    parent.State = Player.playerState.Moving;
                 }
             }
-            
-            parent.State = Player.playerState.Moving;
+            else if (state == GunState.WindUp)
+            {
+                timer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (GameCampaign.Player_Item_1 == "Gun")
+                {
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lPistol" : "rPistol");
+                }
+                else if (GameCampaign.Player_Item_2 == "Gun")
+                {
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rPistol" : "lPistol");
+                }
+
+                if (timer > windUpTime)
+                {
+                    state = GunState.Fire;
+                }
+            }
+            else if (state == GunState.Fire)
+            {
+                float direction = (float)((int)(parent.Direction_Facing) * (Math.PI / 2));
+
+                b = new GunBullet(parent.CenterPoint, direction);
+                b.position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+
+                timer = 0;
+                state = GunState.Idle;
+
+                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
+
+                parent.State = Player.playerState.Moving;
+                parent.Disable_Movement = true;
+                parent.Velocity = Vector2.Zero;
+            }
+            else
+            {
+                throw new Exception("Gun placed into invalid state");
+            }
+
+            updateBullets(parent, currentTime, parentWorld);
         }
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            bullet_alive_time += currentTime.ElapsedGameTime.Milliseconds;
-            Vector2 nextStep_temp = Vector2.Zero;
+            updateBullets(parent, currentTime, parentWorld);
 
-            if (bullet_alive == true)
+            if (state == GunState.Idle)
             {
-                foreach (Entity en in parentWorld.EntityList)
-                {
-                    if (en is Enemy || en is ShopKeeper)
-                    {
-                        if (hitTest(en))
-                        {
-                            Vector2 direction = bullet.position - en.Position;
-                            en.knockBack(direction, knockback_magnitude, bullet.bullet_damage);
-                            bullet_alive = false;
-                        }
-                    }
-                }
-
-                if (bullet_alive_time > 1000)
-                {
-                    bullet_alive = false;
-                    bullet_alive_time = 0.0f;
-                }
-                else
-                {
-                    nextStep_temp = new Vector2(bullet.position.X - (bullet.hitbox.X/2) + bullet.velocity.X, (bullet.position.Y + bullet.velocity.X));
-                }
-
-                bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
-                int check_corners = 0;
-                while (check_corners != 4)
-                {
-                    if (on_wall != true)
-                    {
-                        if (check_corners == 0)
-                        {
-                            nextStep_temp = new Vector2(bullet.position.X + (bullet.hitbox.X / 2) + bullet.velocity.X, bullet.position.Y + bullet.velocity.Y);
-                        }
-                        else if (check_corners == 1)
-                        {
-                            nextStep_temp = new Vector2(bullet.position.X + bullet.velocity.X, bullet.position.Y - (bullet.hitbox.Y / 2) + bullet.velocity.Y);
-                        }
-                        else if (check_corners == 2)
-                        {
-                            nextStep_temp = new Vector2(bullet.position.X + bullet.velocity.X, position.Y + bullet.hitbox.Y + bullet.velocity.Y);
-                        }
-                        else
-                        {
-                            bullet.position += bullet.velocity;
-                        }
-                        on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
-                    }
-                    else
-                    {
-                        bullet_alive = false;
-                        bullet_alive_time = 0.0f;
-                        break;
-                    }
-                    check_corners++;
-                }
+                timer += currentTime.ElapsedGameTime.Milliseconds;
             }
-
         }
 
         public GlobalGameConstants.itemType ItemType()
         {
-            return item_type;
+            return GlobalGameConstants.itemType.Gun;
         }
 
         public string getEnumType()
         {
-            return item_type.ToString();
+            return "Gun";
         }
 
         public void draw(SpriteBatch sb)
         {
-            if (bullet_alive)
+            if (b.active)
             {
-                sb.Draw(Game1.whitePixel, bullet.position, null, Color.Pink, 0.0f, Vector2.Zero, bullet.hitbox, SpriteEffects.None, 0.5f);
+                sb.Draw(Game1.whitePixel, b.position - (new Vector2(b.Radius) / 2) , null, Color.Pink, 0.0f, Vector2.Zero, new Vector2(b.Radius), SpriteEffects.None, 0.5f);
             }
-        }
-
-        public bool hitTest(Entity other)
-        {
-            if ((bullet.position.X - (bullet.hitbox.X / 2)) > other.Position.X + other.Dimensions.X || (bullet.position.X + (bullet.hitbox.X / 2)) < other.Position.X || (bullet.position.Y - (bullet.hitbox.Y / 2)) > other.Position.Y + other.Dimensions.Y || (bullet.position.Y + (bullet.hitbox.Y / 2)) < other.Position.Y)
-            {
-                return false;
-            }
-            return true;
         }
     }
 }
