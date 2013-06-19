@@ -50,7 +50,7 @@ namespace PattyPetitGiant
             switch (flamethrower_state)
             {
                 case FlameThrowerState.Neutral:
-                    if ((GameCampaign.Player_Item_1 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1)) || (GameCampaign.Player_Item_1 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1)))
+                    if ((GameCampaign.Player_Item_1 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1)) || (GameCampaign.Player_Item_2 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2)))
                     {
                         switch (parent.Direction_Facing)
                         {
@@ -61,12 +61,18 @@ namespace PattyPetitGiant
                                 break;
                             case GlobalGameConstants.Direction.Left:
                                 position = parent.CenterPoint - new Vector2(parent.Dimensions.X / 2, 0);
+                                angle1 = (float)(1 * Math.PI / 1.2);
+                                angle2 = (float)(-1 * Math.PI / 1.2);
                                 break;
                             case GlobalGameConstants.Direction.Up:
                                 position = parent.CenterPoint - new Vector2(0, parent.Dimensions.Y / 2);
+                                angle1 = (float)(-1 * Math.PI / 1.5);
+                                angle2 = (float)(-1 * Math.PI / 3);
                                 break;
                             default:
                                 position = parent.CenterPoint + new Vector2(0, parent.Dimensions.Y / 2);
+                                angle1 = (float)(Math.PI / 3);
+                                angle2 = (float)(Math.PI / 1.5);
                                 break;
                         }
                     }
@@ -102,6 +108,22 @@ namespace PattyPetitGiant
                         }
                     }
                     * */
+
+                    foreach (Entity en in parentWorld.EntityList)
+                    {
+                        if (en is Enemy)
+                        {
+                            if (hitTest(en))
+                            {
+                            }
+                        }
+                    }
+
+                    if ((GameCampaign.Player_Item_1 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1)) || (GameCampaign.Player_Item_2 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2)))
+                    {
+                        flamethrower_state = FlameThrowerState.Neutral;
+                        parent.State = Player.playerState.Moving;
+                    }                    
                     break;
                 case FlameThrowerState.Reset:
                     break;
@@ -126,6 +148,37 @@ namespace PattyPetitGiant
         {
             sb.Draw(Game1.whitePixel, position, null, Color.White, angle1, Vector2.Zero, new Vector2(64.0f, 10.0f), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, position, null, Color.White, angle2, Vector2.Zero, new Vector2(64.0f, 10.0f), SpriteEffects.None, 0.5f);
+        }
+
+        public bool hitTest(Entity other)
+        {
+            int check_enemy_corners = 0;
+            float angle_to_enemy = 0.0f;
+            while (check_enemy_corners != 4)
+            {
+                if (check_enemy_corners == 0)
+                {
+                    angle_to_enemy = (float)(Math.Atan2(player.CenterPoint.Y - parent.CenterPoint.Y, player.CenterPoint.X - parent.CenterPoint.X));
+                }
+                else if (check_enemy_corners == 1)
+                {
+                }
+                else if (check_enemy_corners == 2)
+                {
+                }
+                else
+                {
+                }
+                
+            }
+
+            return false;
+            /*if (position.X > other.Position.X + other.Dimensions.X || position.X + dimensions.X < other.Position.X || position.Y > other.Position.Y + other.Dimensions.Y || position.Y + dimensions.Y < other.Position.Y)
+            {
+                return false;
+            }
+
+            return true;*/
         }
     }
 }
