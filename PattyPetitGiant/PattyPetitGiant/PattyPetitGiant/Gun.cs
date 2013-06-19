@@ -37,7 +37,7 @@ namespace PattyPetitGiant
                 return (Vector2.Distance(en.CenterPoint, position) < radius);
             }
 
-            public void update(LevelState parentWorld, GameTime currentTime)
+            public void update(LevelState parentWorld, GameTime currentTime, Player parent)
             {
                 if (!active)
                 {
@@ -66,7 +66,7 @@ namespace PattyPetitGiant
 
                     if (hitTestEntity(en))
                     {
-                        en.knockBack(Vector2.Normalize(velocity), 1.5f, 4);
+                        en.knockBack(Vector2.Normalize(velocity), 1.5f, 4, parent);
                         this.active = false;
                     }
                 }
@@ -110,7 +110,7 @@ namespace PattyPetitGiant
 
         private void updateBullets(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            b.update(parentWorld, currentTime);
+            b.update(parentWorld, currentTime, parent);
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
