@@ -336,11 +336,6 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (attackerTarget != null)
-            {
-                return;
-            }
-
             health -= damage;
 
             parentWorld.GUI.popBox("thankYou");

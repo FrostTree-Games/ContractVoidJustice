@@ -20,9 +20,9 @@ namespace PattyPetitGiant
             public float Radius { get { return radius; } }
             public float direction;
             public float timePassed;
-            private const float maxBulletTime = 1750f;
+            private const float maxBulletTime = 1250;
 
-            private const float motionBulletSpeed = 0.5f;
+            private const float motionBulletSpeed = 0.95f;
 
             public GunBullet(Vector2 position, float direction)
             {
@@ -37,10 +37,11 @@ namespace PattyPetitGiant
                 return (Vector2.Distance(en.CenterPoint, position) < radius);
             }
 
-            public void update(LevelState parentWorld, GameTime currentTime)
+            public void update(LevelState parentWorld, GameTime currentTime, Player parent)
             {
                 if (!active)
                 {
+                    timePassed += currentTime.ElapsedGameTime.Milliseconds;
                     return;
                 }
 
@@ -49,6 +50,7 @@ namespace PattyPetitGiant
                 if (timePassed > maxBulletTime || parentWorld.Map.hitTestWall(position))
                 {
                     active = false;
+                    timePassed = 0;
                     return;
                 }
 
@@ -66,8 +68,9 @@ namespace PattyPetitGiant
 
                     if (hitTestEntity(en))
                     {
-                        en.knockBack(Vector2.Normalize(velocity), 1.5f, 4);
+                        en.knockBack(Vector2.Normalize(velocity), 1.5f, 4, parent);
                         this.active = false;
+                        timePassed = 0;
                     }
                 }
             }
@@ -88,20 +91,33 @@ namespace PattyPetitGiant
             Fire = 2,
         }
 
-        private GunBullet b;
+        private GunBullet[] b = null;
 
         private GunState state;
         private float timer;
-        private const float windUpTime = 125f;
-        private const float timeBetweenShots = 300f;
+        private const float windUpTime = 90f;
+        private const float timeBetweenShots = 50f;
+
+        private const int numberOfOnScreenBullets = 10;
 
         private const float gunAmmoCost = 2f;
         public float GunAmmoCost { get { return gunAmmoCost; } }
 
+        private void pushBullet(Vector2 position, float direction)
+        {
+            for (int i = 0; i < numberOfOnScreenBullets; i++)
+            {
+                if (!b[i].active)
+                {
+                    b[i] = new GunBullet(position, direction);
+                    return;
+                }
+            }
+        }
+
         public Gun()
         {
-            b = new GunBullet(Vector2.Zero, 0.0f);
-            b.active = false;
+            b = new GunBullet[numberOfOnScreenBullets];
 
             timer = 9999;
 
@@ -110,7 +126,22 @@ namespace PattyPetitGiant
 
         private void updateBullets(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            b.update(parentWorld, currentTime);
+            for (int i = 0; i < numberOfOnScreenBullets; i++)
+            {
+                b[i].update(parentWorld, currentTime, parent);
+            }
+        }
+
+        private bool anyBulletsFree()
+        {
+            bool aBulletIsFree = false;
+
+            for (int i = 0; i < numberOfOnScreenBullets; i++)
+            {
+                aBulletIsFree = aBulletIsFree || (!b[i].active);
+            }
+
+            return aBulletIsFree;
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -119,10 +150,12 @@ namespace PattyPetitGiant
             {
                 timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                if (!b.active && timer > timeBetweenShots)
+                if (timer > timeBetweenShots)
                 {
                     state = GunState.WindUp;
                     timer = 0;
+
+                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
 
                     parent.Animation_Time = 0;
                 }
@@ -152,11 +185,6 @@ namespace PattyPetitGiant
             }
             else if (state == GunState.Fire)
             {
-                float direction = (float)((int)(parent.Direction_Facing) * (Math.PI / 2));
-
-                b = new GunBullet(parent.CenterPoint, direction);
-                b.position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
-
                 timer = 0;
                 state = GunState.Idle;
 
@@ -196,9 +224,12 @@ namespace PattyPetitGiant
 
         public void draw(SpriteBatch sb)
         {
-            if (b.active)
+            for (int i = 0; i < numberOfOnScreenBullets; i++)
             {
-                sb.Draw(Game1.whitePixel, b.position - (new Vector2(b.Radius) / 2) , null, Color.Pink, 0.0f, Vector2.Zero, new Vector2(b.Radius), SpriteEffects.None, 0.5f);
+                if (b[i].active)
+                {
+                    sb.Draw(Game1.whitePixel, b[i].position - (new Vector2(b[i].Radius) / 2), null, Color.Pink, 0.0f, Vector2.Zero, new Vector2(b[i].Radius), SpriteEffects.None, 0.5f);
+                }
             }
         }
     }
