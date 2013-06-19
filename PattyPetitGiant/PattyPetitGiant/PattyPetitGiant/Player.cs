@@ -137,6 +137,17 @@ namespace PattyPetitGiant
                         player_item_1.update(this, currentTime, parentWorld);
                     }
 
+
+                    if (player_item_2 != null)
+                    {
+                        player_item_2.daemonupdate(this, currentTime, parentWorld);
+                    }
+
+                    if (player_item_1 != null)
+                    {
+                        player_item_1.daemonupdate(this, currentTime, parentWorld);
+                    }
+
                 }
                 else if (state == playerState.Item2)
                 {
