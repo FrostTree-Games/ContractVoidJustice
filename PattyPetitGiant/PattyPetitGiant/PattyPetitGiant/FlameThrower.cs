@@ -21,12 +21,11 @@ namespace PattyPetitGiant
         private FlameThrowerState flamethrower_state = FlameThrowerState.Neutral;
         private Vector2 position = Vector2.Zero;
         private Vector2 dimensions = new Vector2(48, 48);
-        private float flame_timer = 0.0f;
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.FlameThrower;
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
         
         private const int max_flames = 10;
-        private const float knockback_magnitude = 5.0f;
+        private const float knockback_magnitude = 2.0f;
         private const float max_flame_range = 96.0f;
 
         private int damage;
@@ -52,25 +51,22 @@ namespace PattyPetitGiant
                 case FlameThrowerState.Neutral:
                     if ((GameCampaign.Player_Item_1 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1)) || (GameCampaign.Player_Item_2 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2)))
                     {
+                        position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
                         switch (parent.Direction_Facing)
                         {
                             case GlobalGameConstants.Direction.Right:
-                                position = parent.CenterPoint + new Vector2(parent.Dimensions.X / 2, 0);
                                 angle1 = (float)(-1 * Math.PI / 6);
                                 angle2 = (float)(Math.PI / 6);
                                 break;
                             case GlobalGameConstants.Direction.Left:
-                                position = parent.CenterPoint - new Vector2(parent.Dimensions.X / 2, 0);
                                 angle1 = (float)(1 * Math.PI / 1.2);
                                 angle2 = (float)(-1 * Math.PI / 1.2);
                                 break;
                             case GlobalGameConstants.Direction.Up:
-                                position = parent.CenterPoint - new Vector2(0, parent.Dimensions.Y / 2);
                                 angle1 = (float)(-1 * Math.PI / 1.5);
                                 angle2 = (float)(-1 * Math.PI / 3);
                                 break;
                             default:
-                                position = parent.CenterPoint + new Vector2(0, parent.Dimensions.Y / 2);
                                 angle1 = (float)(Math.PI / 3);
                                 angle2 = (float)(Math.PI / 1.5);
                                 break;
@@ -79,43 +75,15 @@ namespace PattyPetitGiant
                     flamethrower_state = FlameThrowerState.Fire;
                     break;
                 case FlameThrowerState.Fire:
-
-                    /*
-                     * bullet_timer += currentTime.ElapsedGameTime.Milliseconds;
-                    firing_timer += currentTime.ElapsedGameTime.Milliseconds;
-                    angle = (float)Math.Atan2(current_skeleton.Skeleton.FindBone("muzzle").WorldY - current_skeleton.Skeleton.FindBone("gun").WorldY, current_skeleton.Skeleton.FindBone("muzzle").WorldX - current_skeleton.Skeleton.FindBone("gun").WorldX);
-
-                    if (bullet_count < max_bullet_count && bullet_timer>100)
-                    {
-                        bullets[bullet_count] = new SquadBullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY));
-
-                        bullets[bullet_count].velocity = new Vector2((float)(8.0*Math.Cos(angle)), (float)(8.0 * Math.Sin(angle)));
-                        bullet_count++;
-                        bullet_timer = 0.0f;
-                    }
-                    if (firing_timer > 3000)
-                    {
-                        reset_state_flag = true;
-                        enemy_found = false;
-                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
-                        if (leader != null)
-                        {
-                            state = SquadSoldierState.Patrol;
-                        }
-                        else
-                        {
-                            state = SquadSoldierState.IndividualPatrol;
-                        }
-                    }
-                    * */
                     
-                    position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
                     foreach (Entity en in parentWorld.EntityList)
                     {
                         if (en is Enemy)
                         {
                             if (hitTest(en))
                             {
+                                Vector2 direction = en.CenterPoint - parent.CenterPoint;
+                                en.knockBack(direction, knockback_magnitude, damage, parent);   
                             }
                         }
                     }
@@ -147,39 +115,57 @@ namespace PattyPetitGiant
 
         public void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.White, angle1, Vector2.Zero, new Vector2(64.0f, 10.0f), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.whitePixel, position, null, Color.White, angle2, Vector2.Zero, new Vector2(64.0f, 10.0f), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, position, null, Color.White, angle1, Vector2.Zero, new Vector2(96.0f, 10.0f), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, position, null, Color.White, angle2, Vector2.Zero, new Vector2(96.0f, 10.0f), SpriteEffects.None, 0.5f);
         }
 
         public bool hitTest(Entity other)
         {
             int check_enemy_corners = 0;
             float angle_to_enemy = 0.0f;
+            float distance_to_enemy = 0.0f;
             while (check_enemy_corners != 4)
             {
                 if (check_enemy_corners == 0)
                 {
                     angle_to_enemy = (float)(Math.Atan2(other.Position.Y - position.Y, other.Position.X - position.X));
+                    distance_to_enemy = Vector2.Distance(position, other.Position);
+                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    {
+                        return true;
+                    }
                 }
                 else if (check_enemy_corners == 1)
                 {
+                    angle_to_enemy = (float)(Math.Atan2(other.Position.Y - position.Y, (other.Position.X + other.Dimensions.X) - position.X));
+                    distance_to_enemy = Vector2.Distance(position, other.Position + new Vector2(other.Dimensions.X, 0));
+                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    {
+                        return true;
+                    }
                 }
                 else if (check_enemy_corners == 2)
                 {
+                    angle_to_enemy = (float)(Math.Atan2((other.Position.Y + other.Dimensions.Y)- position.Y, other.Position.X - position.X));
+                    distance_to_enemy = Vector2.Distance(position, other.Position + new Vector2(0, other.Dimensions.Y));
+                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    {
+                        return true;
+                    }
                 }
                 else
                 {
+                    angle_to_enemy = (float)(Math.Atan2((other.Position.Y + other.Dimensions.Y)- position.Y, (other.Position.X + other.Dimensions.X)- position.X));
+                    distance_to_enemy = Vector2.Distance(position, other.Position + other.Dimensions);
+                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    {
+                        return true;
+                    }
                 }
-                
+                check_enemy_corners++;
             }
 
             return false;
-            /*if (position.X > other.Position.X + other.Dimensions.X || position.X + dimensions.X < other.Position.X || position.Y > other.Position.Y + other.Dimensions.Y || position.Y + dimensions.Y < other.Position.Y)
-            {
-                return false;
-            }
-
-            return true;*/
         }
     }
 }
