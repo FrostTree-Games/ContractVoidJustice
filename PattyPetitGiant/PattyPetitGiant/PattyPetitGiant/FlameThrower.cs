@@ -108,7 +108,8 @@ namespace PattyPetitGiant
                         }
                     }
                     * */
-
+                    
+                    position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
                     foreach (Entity en in parentWorld.EntityList)
                     {
                         if (en is Enemy)
@@ -158,7 +159,7 @@ namespace PattyPetitGiant
             {
                 if (check_enemy_corners == 0)
                 {
-                    angle_to_enemy = (float)(Math.Atan2(player.CenterPoint.Y - parent.CenterPoint.Y, player.CenterPoint.X - parent.CenterPoint.X));
+                    angle_to_enemy = (float)(Math.Atan2(other.Position.Y - position.Y, other.Position.X - position.X));
                 }
                 else if (check_enemy_corners == 1)
                 {

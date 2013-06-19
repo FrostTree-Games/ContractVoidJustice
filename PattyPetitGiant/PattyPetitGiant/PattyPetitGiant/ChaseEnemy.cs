@@ -28,6 +28,8 @@ namespace PattyPetitGiant
         private bool player_in_range;
         private ChaseAttackStage chase_stage;
 
+        private bool death = false;
+
         public ChaseEnemy(LevelState parentWorld, Vector2 position)
         {
             this.position = position;
@@ -73,6 +75,7 @@ namespace PattyPetitGiant
                     disable_movement = false;
                     disable_movement_time = 0;
                 }
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("hurt");
             }
             else
             {
@@ -196,12 +199,20 @@ namespace PattyPetitGiant
                             }
                         }
                         break;
+                    case EnemyState.Death:
+                        break;
                     default:
                         break;
                 }
-                if (enemy_life <= 0)
+                if (enemy_life <= 0 && death == false)
                 {
-                    remove_from_list = true;
+                    //remove_from_list = true;
+
+                    death = true;
+                    state = EnemyState.Death;
+                    animation_time = 0.0f;
+                    wind_anim = 1;
+                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("die");
 
                     parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.CoinValue.Twoonie);
                     parentWorld.pushCoin(CenterPoint + new Vector2(GlobalGameConstants.TileSize.X / 2, GlobalGameConstants.TileSize.Y / -2), Coin.CoinValue.Loonie);
@@ -217,6 +228,8 @@ namespace PattyPetitGiant
             position.Y = finalPos.Y;
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+
+            //decides if the animation loops or not
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, (wind_anim == 0) ? true : false);
 
         }
@@ -260,59 +273,62 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (disable_movement_time == 0.0)
+            if (death == false)
             {
-                chase_stage = ChaseAttackStage.none;
-                state = EnemyState.Moving;
-
-                disable_movement = true;
-                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                if (disable_movement_time == 0.0)
                 {
-                    if (direction.X < 0)
+                    chase_stage = ChaseAttackStage.none;
+                    state = EnemyState.Moving;
+
+                    disable_movement = true;
+                    if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
-                        velocity = new Vector2(-4.0f * magnitude, direction.Y / 100 * magnitude);
+                        if (direction.X < 0)
+                        {
+                            velocity = new Vector2(-4.0f * magnitude, direction.Y / 100 * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2(4.0f * magnitude, direction.Y / 100 * magnitude);
+                        }
                     }
                     else
                     {
-                        velocity = new Vector2(4.0f * magnitude, direction.Y / 100 * magnitude);
+                        if (direction.Y < 0)
+                        {
+                            velocity = new Vector2(direction.X / 100f * magnitude, -4.0f * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2((direction.X / 100f) * magnitude, 4.0f * magnitude);
+                        }
                     }
+                    enemy_life = enemy_life - damage;
                 }
-                else
+
+                if (attacker == null)
                 {
-                    if (direction.Y < 0)
-                    {
-                        velocity = new Vector2(direction.X / 100f * magnitude, -4.0f * magnitude);
-                    }
-                    else
-                    {
-                        velocity = new Vector2((direction.X / 100f) * magnitude, 4.0f * magnitude);
-                    }
+                    return;
                 }
-                enemy_life = enemy_life - damage;
-            }
-
-            if (attacker == null)
-            {
-                return;
-            }
-            else if(attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
-            {
-                enemy_found = true;
-
-                switch (attacker.Direction_Facing)
+                else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
                 {
-                    case GlobalGameConstants.Direction.Right:
-                        direction_facing = GlobalGameConstants.Direction.Left;
-                        break;
-                    case GlobalGameConstants.Direction.Left:
-                        direction_facing = GlobalGameConstants.Direction.Right;
-                        break;
-                    case GlobalGameConstants.Direction.Up:
-                        direction_facing = GlobalGameConstants.Direction.Down;
-                        break;
-                    default:
-                        direction_facing = GlobalGameConstants.Direction.Up;
-                        break;
+                    enemy_found = true;
+
+                    switch (attacker.Direction_Facing)
+                    {
+                        case GlobalGameConstants.Direction.Right:
+                            direction_facing = GlobalGameConstants.Direction.Left;
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            direction_facing = GlobalGameConstants.Direction.Right;
+                            break;
+                        case GlobalGameConstants.Direction.Up:
+                            direction_facing = GlobalGameConstants.Direction.Down;
+                            break;
+                        default:
+                            direction_facing = GlobalGameConstants.Direction.Up;
+                            break;
+                    }
                 }
             }
         }

@@ -18,7 +18,8 @@ namespace PattyPetitGiant
             Agressive,
             Chase,
             Idle,
-            Firing
+            Firing,
+            Death,
         }
 
         protected EnemyState state = EnemyState.Moving;

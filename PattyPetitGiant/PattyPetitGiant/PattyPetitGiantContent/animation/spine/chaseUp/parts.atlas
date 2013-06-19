@@ -3,115 +3,129 @@ img.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+blood
+  rotate: false
+  xy: 1, 47
+  size: 48, 16
+  orig: 48, 16
+  offset: 0, 0
+  index: -1
 sword
   rotate: false
-  xy: 1, 30
+  xy: 1, 13
   size: 32, 32
   orig: 32, 32
   offset: 0, 0
   index: -1
 torso
   rotate: false
-  xy: 1, 1
+  xy: 35, 18
   size: 18, 27
   orig: 18, 27
   offset: 0, 0
   index: -1
-lThigh
-  rotate: false
-  xy: 35, 39
-  size: 12, 23
-  orig: 12, 23
-  offset: 0, 0
-  index: -1
-rThigh
-  rotate: false
-  xy: 21, 5
-  size: 11, 23
-  orig: 11, 23
-  offset: 0, 0
-  index: -1
-head
-  rotate: false
-  xy: 49, 42
-  size: 10, 20
-  orig: 10, 20
-  offset: 0, 0
-  index: -1
-lShoulder
-  rotate: false
-  xy: 61, 45
-  size: 13, 17
-  orig: 13, 17
-  offset: 0, 0
-  index: -1
-pelvis
-  rotate: false
-  xy: 76, 49
-  size: 17, 13
-  orig: 17, 13
-  offset: 0, 0
-  index: -1
 rCalf
   rotate: false
-  xy: 95, 46
+  xy: 51, 47
   size: 13, 16
   orig: 13, 16
   offset: 0, 0
   index: -1
-rShoulder
+lThigh
   rotate: false
-  xy: 110, 45
-  size: 12, 17
-  orig: 12, 17
+  xy: 55, 22
+  size: 12, 23
+  orig: 12, 23
+  offset: 0, 0
+  index: -1
+pelvis
+  rotate: false
+  xy: 66, 50
+  size: 17, 13
+  orig: 17, 13
+  offset: 0, 0
+  index: -1
+rThigh
+  rotate: false
+  xy: 69, 25
+  size: 11, 23
+  orig: 11, 23
   offset: 0, 0
   index: -1
 lCalf
   rotate: false
-  xy: 35, 22
+  xy: 35, 1
   size: 12, 15
   orig: 12, 15
   offset: 0, 0
   index: -1
 rForearm
   rotate: false
-  xy: 49, 25
+  xy: 49, 1
   size: 11, 15
   orig: 11, 15
   offset: 0, 0
   index: -1
-lForeArm
-  rotate: false
-  xy: 34, 4
-  size: 7, 16
-  orig: 7, 16
-  offset: 0, 0
-  index: -1
 rFoot
   rotate: false
-  xy: 62, 33
+  xy: 1, 1
   size: 8, 10
   orig: 8, 10
   offset: 0, 0
   index: -1
 lFoot
   rotate: false
-  xy: 43, 10
+  xy: 11, 1
   size: 7, 10
   orig: 7, 10
   offset: 0, 0
   index: -1
-lHand
+lShoulder
   rotate: false
-  xy: 62, 25
-  size: 5, 6
-  orig: 5, 6
+  xy: 85, 46
+  size: 13, 17
+  orig: 13, 17
+  offset: 0, 0
+  index: -1
+rShoulder
+  rotate: false
+  xy: 100, 46
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 114, 43
+  size: 10, 20
+  orig: 10, 20
+  offset: 0, 0
+  index: -1
+lForeArm
+  rotate: false
+  xy: 82, 28
+  size: 7, 16
+  orig: 7, 16
   offset: 0, 0
   index: -1
 rHand
   rotate: false
-  xy: 72, 36
+  xy: 20, 4
   size: 5, 7
   orig: 5, 7
+  offset: 0, 0
+  index: -1
+lHand
+  rotate: false
+  xy: 91, 38
+  size: 5, 6
+  orig: 5, 6
+  offset: 0, 0
+  index: -1
+null
+  rotate: false
+  xy: 27, 7
+  size: 4, 4
+  orig: 4, 4
   offset: 0, 0
   index: -1
