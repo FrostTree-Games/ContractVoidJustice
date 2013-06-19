@@ -25,7 +25,7 @@ namespace PattyPetitGiant
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
         
         private const int max_flames = 10;
-        private const float knockback_magnitude = 2.0f;
+        private const float knockback_magnitude = 0.8f;
         private const float max_flame_range = 96.0f;
 
         private int damage;
@@ -130,7 +130,7 @@ namespace PattyPetitGiant
                 {
                     angle_to_enemy = (float)(Math.Atan2(other.Position.Y - position.Y, other.Position.X - position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position);
-                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
                     {
                         return true;
                     }
@@ -139,7 +139,7 @@ namespace PattyPetitGiant
                 {
                     angle_to_enemy = (float)(Math.Atan2(other.Position.Y - position.Y, (other.Position.X + other.Dimensions.X) - position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position + new Vector2(other.Dimensions.X, 0));
-                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
                     {
                         return true;
                     }
@@ -148,7 +148,7 @@ namespace PattyPetitGiant
                 {
                     angle_to_enemy = (float)(Math.Atan2((other.Position.Y + other.Dimensions.Y)- position.Y, other.Position.X - position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position + new Vector2(0, other.Dimensions.Y));
-                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
                     {
                         return true;
                     }
@@ -157,7 +157,7 @@ namespace PattyPetitGiant
                 {
                     angle_to_enemy = (float)(Math.Atan2((other.Position.Y + other.Dimensions.Y)- position.Y, (other.Position.X + other.Dimensions.X)- position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position + other.Dimensions);
-                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && distance_to_enemy <= 96.0)
+                    if (angle_to_enemy > angle1 || angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
                     {
                         return true;
                     }
