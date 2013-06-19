@@ -101,7 +101,7 @@ namespace PattyPetitGiant
                         damage = damage * lazer_damage_multiplier;
                     }
 
-                    if (GameCampaign.Player_Item_1 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+                    if ((GameCampaign.Player_Item_1 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1)) || (GameCampaign.Player_Item_2 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2)))
                     {
                         lazer_state = LazerState.Fire;
                     }
