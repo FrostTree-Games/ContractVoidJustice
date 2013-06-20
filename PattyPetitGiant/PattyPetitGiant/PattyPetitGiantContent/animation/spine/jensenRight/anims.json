@@ -314,6 +314,11 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "null" },
@@ -646,16 +651,16 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" },
-					{ "time": 0.1666, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "muzzle1" },
 					{ "time": 0.0333, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" },
+					{ "time": 0.1666, "name": "null" }
 				]
 			}
 		}
@@ -837,16 +842,16 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" },
-					{ "time": 0.1666, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.0333, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" },
+					{ "time": 0.1666, "name": "null" }
 				]
 			}
 		}
@@ -1025,16 +1030,16 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" },
-					{ "time": 0.1666, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.0333, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" },
+					{ "time": 0.1666, "name": "null" }
 				]
 			}
 		}
@@ -2332,6 +2337,11 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "null" }

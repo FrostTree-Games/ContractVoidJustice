@@ -59,7 +59,6 @@
 			"shotgunMuzzle1": { "x": 38.02, "y": -6.51, "width": 80, "height": 56 },
 			"shotgunMuzzle2": { "x": 35.99, "y": -4.23, "width": 80, "height": 56 }
 		},
-		
 		"lWeapon": {
 			"lBomb": { "name": "bomb", "x": 16.82, "y": -2.15, "rotation": 9.9, "width": 32, "height": 27 },
 			"lMGun": { "name": "machinegun", "x": 21.33, "y": 1.32, "rotation": 347.64, "width": 64, "height": 17 },
@@ -219,6 +218,11 @@
 		},
 		"slots": {
 			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			},
+			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "null" }
 				]
@@ -1707,6 +1711,11 @@
 					{ "time": 0, "name": "null" },
 					{ "time": 0.3333, "name": "null" },
 					{ "time": 0.6666, "name": "null" }
+				]
+			},
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}

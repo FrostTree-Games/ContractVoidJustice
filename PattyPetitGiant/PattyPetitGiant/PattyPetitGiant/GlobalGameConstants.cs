@@ -33,6 +33,7 @@ namespace PattyPetitGiant
             RocketLauncher = 11,
             LazerGun = 12,
             FlameThrower = 13,
+            MachineGun = 14,
         }
 
         private static int gameResolutionWidth = 1280;
@@ -90,6 +91,9 @@ namespace PattyPetitGiant
                 weaponInfo[(int)itemType.RocketLauncher] = new WeaponInformation(120, "A one-handed device that fires rockets that combust on explosion. Avoid shooting it in close quarters.", "gunPic");
                 weaponInfo[(int)itemType.ShotGun] = new WeaponInformation(170, "A shotgun formely used by space mobsters to rob banks with.", "gunPic");
                 weaponInfo[(int)itemType.DungeonMap] = new WeaponInformation(45, "Allows you to see the corridors of the current floor of the ship.", "gunPic");
+                weaponInfo[(int)itemType.FlameThrower] = new WeaponInformation(200, "Badassery. Enough said.", "gunPic");
+                weaponInfo[(int)itemType.LazerGun] = new WeaponInformation(159, "A hard laser that can burn flesh in an instant.", "gunPic");
+                weaponInfo[(int)itemType.MachineGun] = new WeaponInformation(100, "Rapid-fire gunplay has never been so satisfying!", "gunPic");
             }
         }
     }

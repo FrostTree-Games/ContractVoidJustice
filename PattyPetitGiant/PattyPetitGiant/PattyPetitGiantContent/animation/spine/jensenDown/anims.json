@@ -61,6 +61,7 @@
 			"shotgunMuzzle1": { "x": 29.65, "y": 0.04, "rotation": 2.81, "width": 80, "height": 56 },
 			"shotgunMuzzle2": { "x": 27.5, "y": -1.82, "rotation": 2.81, "width": 80, "height": 56 }
 		},
+
 		"lWeapon": {
 			"lBomb": { "name": "bomb", "x": 17.71, "y": 3.19, "rotation": 1.81, "width": 32, "height": 27 },
 			"lMGun": { "name": "machinegun", "x": 19.87, "y": -8.94, "scaleY": -1, "rotation": 350.98, "width": 64, "height": 17 },
@@ -272,6 +273,18 @@
 					{ "time": 2, "x": 0, "y": 0 }
 				]
 			}
+		},
+		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			}
 		}
 	},
 	"lBomb": {
@@ -384,6 +397,18 @@
 			"rForeArm": {
 				"rotate": [
 					{ "time": 0, "angle": 109.16 }
+				]
+			}
+		},
+		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}
@@ -1988,6 +2013,11 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "null" },

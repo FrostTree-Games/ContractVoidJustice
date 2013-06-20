@@ -18,6 +18,7 @@ namespace PattyPetitGiant
             Shooting = 3,
             RetreatToCenter = 4,
             KnockBack = 5,
+            Dying = 6,
         }
 
         private struct GunBullet
@@ -463,14 +464,22 @@ namespace PattyPetitGiant
                     return;
                 }
 
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
+
                 knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
 
                 if (knockBackTime > knockBackDuration)
                 {
-                    target = null;
+                    //target = null;
 
-                    guardState = PatrolGuardState.MoveWait;
+                    guardState = PatrolGuardState.Chase;
                 }
+            }
+            else if (guardState == PatrolGuardState.Dying)
+            {
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("die");
+
+                velocity = Vector2.Zero;
             }
 
             Vector2 newPos = position + (currentTime.ElapsedGameTime.Milliseconds * velocity);
@@ -497,6 +506,8 @@ namespace PattyPetitGiant
 
                 sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.Pink, 0.0f, Vector2.Zero, bullets[i].hitbox, SpriteEffects.None, 0.6f);
             }
+
+            sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.6f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -508,12 +519,33 @@ namespace PattyPetitGiant
 
             health -= damage;
 
+            if (health <= 0 && guardState != PatrolGuardState.Dying)
+            {
+                guardState = PatrolGuardState.Dying;
+                animation_time = 0;
+
+                velocity = Vector2.Zero;
+
+                dimensions /= 8;
+
+                parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.CoinValue.Elizabeth);
+                parentWorld.pushCoin(CenterPoint + GlobalGameConstants.TileSize / 2, Coin.CoinValue.Laurier);
+
+                return;
+            }
+            else if (guardState == PatrolGuardState.Dying)
+            {
+                //push blood animations here
+                return;
+            }
+
             direction.Normalize();
             velocity = direction * (magnitude / 2);
 
             knockBackTime = 0.0f;
 
             guardState = PatrolGuardState.KnockBack;
+            animation_time = 0;
 
             //where you look in the entity's direction and start chasing them
             if (attacker != null && (attacker.Enemy_Type != EnemyType.NoType && attacker.Enemy_Type!= enemy_type))
