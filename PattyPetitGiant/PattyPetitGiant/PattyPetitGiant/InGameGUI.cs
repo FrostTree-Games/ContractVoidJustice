@@ -259,6 +259,7 @@ namespace PattyPetitGiant
 
         public void render(SpriteBatch sb)
         {
+            Color textColor = Game1.GameIsRunningSlowly ? Color.Red : Color.White;
 
             string player_health_display = "Health: " + GameCampaign.Player_Health;
             string ammunition_amount_display = "Ammunition: " + GameCampaign.Player_Ammunition;
@@ -288,11 +289,11 @@ namespace PattyPetitGiant
                 }
             }
 
-            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-            sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+            sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
             for (int i = 0; i < windowIsActive.Length; i++)
             {
