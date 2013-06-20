@@ -125,6 +125,7 @@
     <Compile Include="LazerGun.cs" />
     <Compile Include="LevelKeyModule.cs" />
     <Compile Include="LevelSelectState.cs" />
+    <Compile Include="MachineGun.cs" />
     <Compile Include="MolotovEnemy.cs" />
     <Compile Include="MoveSearch.cs" />
     <Compile Include="PatrolGuard.cs" />

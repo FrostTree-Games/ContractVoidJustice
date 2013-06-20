@@ -54,7 +54,6 @@ namespace PattyPetitGiant
                     return;
                 }
 
-                //calculate directional velocity by taking d/dt of a predefined parametric path (Dan just did some calc on a rotation matrix and tweaked the values until it looked good)
                 Vector2 velocity = new Vector2((float)Math.Cos(direction), (float)Math.Sin(direction)) * motionBulletSpeed;
 
                 position += velocity * currentTime.ElapsedGameTime.Milliseconds;
