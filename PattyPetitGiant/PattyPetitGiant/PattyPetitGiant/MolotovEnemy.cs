@@ -35,6 +35,8 @@ namespace PattyPetitGiant
 
         private int health;
 
+        private string[] deathAnims = { "die", "die2", "die3" };
+
         public MolotovEnemy(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -73,15 +75,6 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            if (health < 1)
-            {
-                remove_from_list = true;
-
-                parentWorld.pushCoin(CenterPoint, Coin.CoinValue.Laurier);
-
-                return;
-            }
-
             animation_time += currentTime.ElapsedGameTime.Milliseconds;
 
             if (molotovState == MolotovState.InvalidState)
@@ -264,10 +257,18 @@ namespace PattyPetitGiant
             {
                 knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
 
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
+
                 if (knockBackTime > knockBackDuration)
                 {
                     molotovState = MolotovState.MoveWait;
                 }
+            }
+            else if (molotovState == MolotovState.Dying)
+            {
+                velocity = Vector2.Zero;
+
+                //
             }
             else
             {
@@ -307,6 +308,13 @@ namespace PattyPetitGiant
                 return;
             }
 
+            if (molotovState == MolotovState.Dying)
+            {
+                //pop some blood later
+
+                return;
+            }
+
             direction.Normalize();
             velocity = direction * (magnitude / 2);
 
@@ -314,7 +322,23 @@ namespace PattyPetitGiant
 
             knockBackTime = 0.0f;
 
-            molotovState = MolotovState.KnockedBack;
+            animation_time = 0;
+
+            if (health > 0)
+            {
+                molotovState = MolotovState.KnockedBack;
+            }
+            else
+            {
+                molotovState = MolotovState.Dying;
+
+                parentWorld.pushCoin(CenterPoint, Coin.CoinValue.Laurier);
+                parentWorld.pushCoin(CenterPoint, Coin.CoinValue.MacDonald);
+
+                dimensions /= 8;
+
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(deathAnims[Game1.rand.Next() % 3]);
+            }
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
@@ -356,6 +380,10 @@ namespace PattyPetitGiant
             /// For logic when knocked backwards.
             /// </summary>
             KnockedBack = 3,
+            /// <summary>
+            /// When the enemy is dead. 
+            /// </summary>
+            Dying = 4,
         }
 
         /// <summary>
