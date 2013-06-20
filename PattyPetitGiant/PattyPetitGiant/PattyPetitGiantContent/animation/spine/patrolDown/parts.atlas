@@ -24,102 +24,109 @@ sword
   orig: 64, 17
   offset: 0, 0
   index: -1
+blood
+  rotate: false
+  xy: 165, 28
+  size: 48, 16
+  orig: 48, 16
+  offset: 0, 0
+  index: -1
 torso
   rotate: false
-  xy: 165, 16
+  xy: 231, 35
   size: 19, 28
   orig: 19, 28
   offset: 0, 0
   index: -1
 lShoulder
   rotate: false
-  xy: 231, 47
+  xy: 215, 28
   size: 14, 16
   orig: 14, 16
   offset: 0, 0
   index: -1
 rShoulder
   rotate: false
-  xy: 186, 27
+  xy: 165, 9
   size: 13, 17
   orig: 13, 17
   offset: 0, 0
   index: -1
-lThigh
-  rotate: false
-  xy: 201, 26
-  size: 11, 18
-  orig: 11, 18
-  offset: 0, 0
-  index: -1
 rThigh
   rotate: false
-  xy: 214, 25
+  xy: 252, 44
   size: 11, 19
   orig: 11, 19
   offset: 0, 0
   index: -1
-lForearm
+lThigh
   rotate: false
-  xy: 165, 1
-  size: 9, 13
-  orig: 9, 13
-  offset: 0, 0
-  index: -1
-rForearm
-  rotate: false
-  xy: 176, 2
-  size: 9, 12
-  orig: 9, 12
+  xy: 265, 45
+  size: 11, 18
+  orig: 11, 18
   offset: 0, 0
   index: -1
 lCalf
   rotate: false
-  xy: 227, 27
+  xy: 180, 9
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
 pelvis
   rotate: false
-  xy: 238, 36
+  xy: 278, 54
   size: 17, 9
   orig: 17, 9
   offset: 0, 0
   index: -1
-lFoot
-  rotate: false
-  xy: 247, 52
-  size: 7, 11
-  orig: 7, 11
-  offset: 0, 0
-  index: -1
-head
-  rotate: false
-  xy: 238, 19
-  size: 10, 15
-  orig: 10, 15
-  offset: 0, 0
-  index: -1
 rCalf
   rotate: false
-  xy: 227, 8
+  xy: 191, 9
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
-lHand
+head
   rotate: false
-  xy: 186, 16
-  size: 6, 9
-  orig: 6, 9
+  xy: 202, 11
+  size: 10, 15
+  orig: 10, 15
+  offset: 0, 0
+  index: -1
+lForearm
+  rotate: false
+  xy: 214, 13
+  size: 9, 13
+  orig: 9, 13
+  offset: 0, 0
+  index: -1
+rForearm
+  rotate: false
+  xy: 297, 51
+  size: 9, 12
+  orig: 9, 12
+  offset: 0, 0
+  index: -1
+lFoot
+  rotate: false
+  xy: 308, 52
+  size: 7, 11
+  orig: 7, 11
   offset: 0, 0
   index: -1
 rFoot
   rotate: false
-  xy: 238, 6
+  xy: 317, 52
   size: 7, 11
   orig: 7, 11
+  offset: 0, 0
+  index: -1
+lHand
+  rotate: false
+  xy: 326, 54
+  size: 6, 9
+  orig: 6, 9
   offset: 0, 0
   index: -1
 null
@@ -131,7 +138,7 @@ null
   index: -1
 rHand
   rotate: false
-  xy: 187, 6
+  xy: 202, 1
   size: 6, 8
   orig: 6, 8
   offset: 0, 0

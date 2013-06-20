@@ -23,6 +23,9 @@ namespace PattyPetitGiant
         public static Texture2D whitePixel = null;
         public static Random rand = new Random();
 
+        private static bool gameIsRunningSlowly;
+        public static bool GameIsRunningSlowly { get { return gameIsRunningSlowly; } }
+
         private ScreenState currentGameScreen = null;
 
         private InputDeviceManager input_device = null;
@@ -100,6 +103,8 @@ namespace PattyPetitGiant
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+
+            gameIsRunningSlowly = gameTime.IsRunningSlowly;
 
             if (currentGameScreen.IsComplete)
             {

@@ -70,8 +70,13 @@ namespace PattyPetitGiant
             velocity = Vector2.Zero;
 
 
+<<<<<<< HEAD
             player_item_1 = new Gun();
             player_item_2 = new Gun();
+=======
+            player_item_1 = new MachineGun();
+            player_item_2 = new DungeonMap();
+>>>>>>> 4ee47d000406952658adc395daa7df0d97a2785f
             GameCampaign.Player_Item_1 = player_item_1.getEnumType();
             GameCampaign.Player_Item_2 = player_item_2.getEnumType();
 
@@ -143,11 +148,6 @@ namespace PattyPetitGiant
                         player_item_2.daemonupdate(this, currentTime, parentWorld);
                     }
 
-                    if (player_item_1 != null)
-                    {
-                        player_item_1.daemonupdate(this, currentTime, parentWorld);
-                    }
-
                 }
                 else if (state == playerState.Item2)
                 {
@@ -158,6 +158,11 @@ namespace PattyPetitGiant
                     else
                     {
                         player_item_2.update(this, currentTime, parentWorld);
+                    }
+
+                    if (player_item_1 != null)
+                    {
+                        player_item_1.daemonupdate(this, currentTime, parentWorld);
                     }
                 }
                 else if (state == playerState.Moving)
@@ -375,6 +380,9 @@ namespace PattyPetitGiant
                 case GlobalGameConstants.itemType.Gun:
                     current_skeleton.Skeleton.SetAttachment("lWeapon", "lPistol");
                     break;
+                case GlobalGameConstants.itemType.MachineGun:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lMGun");
+                    break;
                 default:
                     current_skeleton.Skeleton.SetAttachment("lWeapon", "lEmpty");
                     break;
@@ -390,6 +398,9 @@ namespace PattyPetitGiant
                     break;
                 case GlobalGameConstants.itemType.Gun:
                     current_skeleton.Skeleton.SetAttachment("rWeapon", "rPistol");
+                    break;
+                case GlobalGameConstants.itemType.MachineGun:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rMGun");
                     break;
                 default:
                     current_skeleton.Skeleton.SetAttachment("rWeapon", "rEmpty");
