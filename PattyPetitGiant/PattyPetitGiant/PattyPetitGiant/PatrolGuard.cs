@@ -464,15 +464,15 @@ namespace PattyPetitGiant
                     return;
                 }
 
-                //directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
 
                 knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
 
                 if (knockBackTime > knockBackDuration)
                 {
-                    target = null;
+                    //target = null;
 
-                    guardState = PatrolGuardState.MoveWait;
+                    guardState = PatrolGuardState.Chase;
                 }
             }
             else if (guardState == PatrolGuardState.Dying)
