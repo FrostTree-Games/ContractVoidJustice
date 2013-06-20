@@ -506,6 +506,8 @@ namespace PattyPetitGiant
 
                 sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.Pink, 0.0f, Vector2.Zero, bullets[i].hitbox, SpriteEffects.None, 0.6f);
             }
+
+            sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.6f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -523,6 +525,8 @@ namespace PattyPetitGiant
                 animation_time = 0;
 
                 velocity = Vector2.Zero;
+
+                dimensions /= 8;
 
                 parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.CoinValue.Elizabeth);
                 parentWorld.pushCoin(CenterPoint + GlobalGameConstants.TileSize / 2, Coin.CoinValue.Laurier);
