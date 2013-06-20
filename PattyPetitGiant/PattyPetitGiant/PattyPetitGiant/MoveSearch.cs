@@ -121,19 +121,19 @@ namespace PattyPetitGiant
                         {
                             case GlobalGameConstants.Direction.Right:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Left;
-                                parent.Velocity = new Vector2(-1.0f, 0.0f);
+                                parent.Velocity = new Vector2(-1*parent.Velocity_Speed, 0.0f);
                                 break;
                             case GlobalGameConstants.Direction.Left:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Right;
-                                parent.Velocity = new Vector2(1.0f, 0.0f);
+                                parent.Velocity = new Vector2(parent.Velocity_Speed, 0.0f);
                                 break;
                             case GlobalGameConstants.Direction.Up:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Down;
-                                parent.Velocity = new Vector2(0.0f, 1.0f);
+                                parent.Velocity = new Vector2(0.0f, parent.Velocity_Speed);
                                 break;
                             default:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Up;
-                                parent.Velocity = new Vector2(0.0f, -1.0f);
+                                parent.Velocity = new Vector2(0.0f, -1*parent.Velocity_Speed);
                                 break;
                         }
                         break;
@@ -152,19 +152,19 @@ namespace PattyPetitGiant
                         {
                             case 0:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Right;
-                                parent.Velocity = new Vector2(1.0f, 0.0f);
+                                parent.Velocity = new Vector2(parent.Velocity_Speed, 0.0f);
                                 break;
                             case 1:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Left;
-                                parent.Velocity = new Vector2(-1.0f, 0.0f);
+                                parent.Velocity = new Vector2(-1 * parent.Velocity_Speed, 0.0f);
                                 break;
                             case 2:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Up;
-                                parent.Velocity = new Vector2(0.0f, -1.0f);
+                                parent.Velocity = new Vector2(0.0f, -1.0f * parent.Velocity_Speed);
                                 break;
                             default:
                                 parent.Direction_Facing = GlobalGameConstants.Direction.Down;
-                                parent.Velocity = new Vector2(0.0f, 1.0f);
+                                parent.Velocity = new Vector2(0.0f, parent.Velocity_Speed);
                                 break;
                         }
                         parent.Change_Direction_Time = 0.0f;

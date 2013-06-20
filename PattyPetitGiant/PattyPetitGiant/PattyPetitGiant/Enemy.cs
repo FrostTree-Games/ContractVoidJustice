@@ -65,6 +65,9 @@ namespace PattyPetitGiant
         protected bool enemy_found;
         public bool Enemy_Found { set { enemy_found = value; } get { return enemy_found; } }
 
+        protected float velocity_speed = 1.0f;
+        public float Velocity_Speed{ set { velocity_speed = value; } get { return velocity_speed; } }
+
         protected AnimationLib.SpineAnimationSet walk_down = null;
         protected AnimationLib.SpineAnimationSet walk_right = null;
         protected AnimationLib.SpineAnimationSet walk_up = null;

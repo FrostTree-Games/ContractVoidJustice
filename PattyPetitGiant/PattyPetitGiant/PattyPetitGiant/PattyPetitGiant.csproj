@@ -113,6 +113,7 @@
     <Compile Include="FlameThrower.cs" />
     <Compile Include="GameCampaign.cs" />
     <Compile Include="GlobalGameConstants.cs" />
+    <Compile Include="GuardMech.cs" />
     <Compile Include="GuardSquadLeader.cs" />
     <Compile Include="GuardSquadSoldiers.cs" />
     <Compile Include="Gun.cs" />

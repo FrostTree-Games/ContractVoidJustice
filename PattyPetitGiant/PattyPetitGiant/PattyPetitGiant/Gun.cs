@@ -95,8 +95,8 @@ namespace PattyPetitGiant
 
         private GunState state;
         private float timer;
-        private const float windUpTime = 90f;
-        private const float timeBetweenShots = 50f;
+        private const float windUpTime = 0;
+        private const float timeBetweenShots = 0f;
 
         private const int numberOfOnScreenBullets = 10;
 
@@ -169,11 +169,11 @@ namespace PattyPetitGiant
             {
                 timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                if (GameCampaign.Player_Item_1 == "Gun")
+                if (GameCampaign.Player_Item_1 == "Gun" && parent.State == Player.playerState.Item1)
                 {
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lPistol" : "rPistol");
                 }
-                else if (GameCampaign.Player_Item_2 == "Gun")
+                else if (GameCampaign.Player_Item_2 == "Gun" && parent.State == Player.playerState.Item2)
                 {
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rPistol" : "lPistol");
                 }
