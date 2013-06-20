@@ -50,7 +50,7 @@ namespace PattyPetitGiant
             change_direction_time = 0.0f;
             this.parentWorld = parentWorld;
             enemy_type = EnemyType.Guard;
-            change_direction_time_threshold = 300.0f;
+            change_direction_time_threshold = 3000.0f;
             direction_facing = GlobalGameConstants.Direction.Right;
 
             component = new MoveSearch();
