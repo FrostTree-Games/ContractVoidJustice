@@ -3,136 +3,143 @@ img.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+blood
+  rotate: false
+  xy: 1, 15
+  size: 48, 16
+  orig: 48, 16
+  offset: 0, 0
+  index: -1
 torso
   rotate: false
-  xy: 1, 7
+  xy: 51, 7
   size: 17, 24
   orig: 17, 24
   offset: 0, 0
   index: -1
-null
-  rotate: false
-  xy: 1, 1
-  size: 4, 4
-  orig: 4, 4
-  offset: 0, 0
-  index: -1
 rThigh
   rotate: false
-  xy: 20, 10
+  xy: 70, 10
   size: 11, 21
   orig: 11, 21
   offset: 0, 0
   index: -1
-rag1
-  rotate: false
-  xy: 20, 1
-  size: 5, 7
-  orig: 5, 7
-  offset: 0, 0
-  index: -1
-lHand
-  rotate: false
-  xy: 27, 2
-  size: 5, 6
-  orig: 5, 6
-  offset: 0, 0
-  index: -1
 lThigh
   rotate: false
-  xy: 33, 12
+  xy: 83, 12
   size: 10, 19
   orig: 10, 19
   offset: 0, 0
   index: -1
-rag2
-  rotate: false
-  xy: 34, 4
-  size: 5, 6
-  orig: 5, 6
-  offset: 0, 0
-  index: -1
-rHand
-  rotate: false
-  xy: 41, 4
-  size: 4, 6
-  orig: 4, 6
-  offset: 0, 0
-  index: -1
 head
   rotate: false
-  xy: 45, 13
+  xy: 95, 13
   size: 10, 18
   orig: 10, 18
   offset: 0, 0
   index: -1
-pelvis
-  rotate: false
-  xy: 47, 1
-  size: 15, 10
-  orig: 15, 10
-  offset: 0, 0
-  index: -1
 lShoulder
   rotate: false
-  xy: 57, 13
+  xy: 107, 13
   size: 9, 18
   orig: 9, 18
   offset: 0, 0
   index: -1
-rFoot
+pelvis
   rotate: false
-  xy: 64, 1
-  size: 9, 10
-  orig: 9, 10
-  offset: 0, 0
-  index: -1
-Bottle
-  rotate: false
-  xy: 68, 18
-  size: 12, 13
-  orig: 12, 13
-  offset: 0, 0
-  index: -1
-rCalf
-  rotate: false
-  xy: 75, 2
-  size: 10, 14
-  orig: 10, 14
-  offset: 0, 0
-  index: -1
-lCalf
-  rotate: false
-  xy: 82, 18
-  size: 10, 13
-  orig: 10, 13
-  offset: 0, 0
-  index: -1
-lFoot
-  rotate: false
-  xy: 87, 6
-  size: 8, 10
-  orig: 8, 10
+  xy: 95, 1
+  size: 15, 10
+  orig: 15, 10
   offset: 0, 0
   index: -1
 rShoulder
   rotate: false
-  xy: 97, 14
+  xy: 118, 14
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
+Bottle
+  rotate: false
+  xy: 129, 18
+  size: 12, 13
+  orig: 12, 13
+  offset: 0, 0
+  index: -1
+rFoot
+  rotate: false
+  xy: 112, 1
+  size: 9, 10
+  orig: 9, 10
+  offset: 0, 0
+  index: -1
+lCalf
+  rotate: false
+  xy: 143, 18
+  size: 10, 13
+  orig: 10, 13
+  offset: 0, 0
+  index: -1
+rCalf
+  rotate: false
+  xy: 155, 17
+  size: 10, 14
+  orig: 10, 14
+  offset: 0, 0
+  index: -1
 lForearm
   rotate: false
-  xy: 108, 15
+  xy: 167, 15
   size: 6, 16
   orig: 6, 16
   offset: 0, 0
   index: -1
 rForearm
   rotate: false
-  xy: 116, 15
+  xy: 175, 15
   size: 6, 16
   orig: 6, 16
+  offset: 0, 0
+  index: -1
+lFoot
+  rotate: false
+  xy: 1, 3
+  size: 8, 10
+  orig: 8, 10
+  offset: 0, 0
+  index: -1
+rag1
+  rotate: false
+  xy: 70, 1
+  size: 5, 7
+  orig: 5, 7
+  offset: 0, 0
+  index: -1
+lHand
+  rotate: false
+  xy: 183, 25
+  size: 5, 6
+  orig: 5, 6
+  offset: 0, 0
+  index: -1
+rag2
+  rotate: false
+  xy: 11, 7
+  size: 5, 6
+  orig: 5, 6
+  offset: 0, 0
+  index: -1
+null
+  rotate: false
+  xy: 11, 1
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+rHand
+  rotate: false
+  xy: 77, 2
+  size: 4, 6
+  orig: 4, 6
   offset: 0, 0
   index: -1

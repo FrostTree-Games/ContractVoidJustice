@@ -3,136 +3,143 @@ img.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+blood
+  rotate: false
+  xy: 1, 15
+  size: 48, 16
+  orig: 48, 16
+  offset: 0, 0
+  index: -1
 torso
   rotate: false
-  xy: 1, 4
+  xy: 51, 4
   size: 18, 27
   orig: 18, 27
   offset: 0, 0
   index: -1
 lThigh
   rotate: false
-  xy: 21, 8
+  xy: 71, 8
   size: 12, 23
   orig: 12, 23
   offset: 0, 0
   index: -1
 rThigh
   rotate: false
-  xy: 35, 8
+  xy: 85, 8
   size: 11, 23
   orig: 11, 23
   offset: 0, 0
   index: -1
 pelvis
   rotate: false
-  xy: 48, 18
+  xy: 98, 18
   size: 17, 13
   orig: 17, 13
   offset: 0, 0
   index: -1
 lCalf
   rotate: false
-  xy: 48, 1
+  xy: 98, 1
   size: 12, 15
   orig: 12, 15
   offset: 0, 0
   index: -1
 rCalf
   rotate: false
-  xy: 67, 15
+  xy: 117, 15
   size: 13, 16
   orig: 13, 16
   offset: 0, 0
   index: -1
 head
   rotate: false
-  xy: 82, 13
+  xy: 132, 13
   size: 10, 18
   orig: 10, 18
   offset: 0, 0
   index: -1
 lShoulder
   rotate: false
-  xy: 94, 13
+  xy: 144, 13
   size: 9, 18
   orig: 9, 18
   offset: 0, 0
   index: -1
 rShoulder
   rotate: false
-  xy: 105, 14
+  xy: 155, 14
   size: 9, 17
   orig: 9, 17
   offset: 0, 0
   index: -1
 Bottle
   rotate: false
-  xy: 116, 18
+  xy: 166, 18
   size: 12, 13
   orig: 12, 13
   offset: 0, 0
   index: -1
 lForeArm
   rotate: false
-  xy: 130, 15
+  xy: 180, 15
   size: 6, 16
   orig: 6, 16
   offset: 0, 0
   index: -1
 rForearm
   rotate: false
-  xy: 138, 15
+  xy: 188, 15
   size: 6, 16
   orig: 6, 16
   offset: 0, 0
   index: -1
 rFoot
   rotate: false
-  xy: 62, 1
+  xy: 1, 3
   size: 8, 10
   orig: 8, 10
   offset: 0, 0
   index: -1
 lFoot
   rotate: false
-  xy: 146, 21
+  xy: 112, 1
   size: 7, 10
   orig: 7, 10
   offset: 0, 0
   index: -1
 rag1
   rotate: false
-  xy: 155, 24
+  xy: 196, 24
   size: 5, 7
   orig: 5, 7
   offset: 0, 0
   index: -1
 lHand
   rotate: false
-  xy: 162, 25
+  xy: 11, 7
   size: 5, 6
   orig: 5, 6
   offset: 0, 0
   index: -1
+null
+  rotate: false
+  xy: 11, 1
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
 rag2
   rotate: false
-  xy: 169, 25
+  xy: 196, 16
   size: 5, 6
   orig: 5, 6
   offset: 0, 0
   index: -1
 rHand
   rotate: false
-  xy: 176, 25
+  xy: 203, 25
   size: 4, 6
   orig: 4, 6
-  offset: 0, 0
-  index: -1
-null
-  rotate: false
-  xy: 146, 15
-  size: 4, 4
-  orig: 4, 4
   offset: 0, 0
   index: -1
