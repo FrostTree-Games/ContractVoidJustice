@@ -21,6 +21,7 @@ namespace PattyPetitGiant
         SpriteBatch spriteBatch;
         public static SpriteFont font;
         public static Texture2D whitePixel = null;
+        public static Texture2D testArrow = null;
         public static Random rand = new Random();
 
         private static bool gameIsRunningSlowly;
@@ -63,6 +64,7 @@ namespace PattyPetitGiant
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             whitePixel = Content.Load<Texture2D>("whitePixel");
+            testArrow = Content.Load<Texture2D>("gfx/testArrow");
 
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadFromManifest();

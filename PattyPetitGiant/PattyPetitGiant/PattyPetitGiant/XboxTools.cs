@@ -64,5 +64,56 @@ namespace PattyPetitGiant
         {
             return en.Remove_From_List;
         }
+
+
+        /// <summary>
+        /// A function for linear interpolation on values of degrees.
+        /// Copypasted from http://stackoverflow.com/questions/2708476/rotation-interpolation
+        /// </summary>
+        /// <param name="start">First degree value to interpolate</param>
+        /// <param name="end">Second degree value to interpolate</param>
+        /// <param name="amount">Interpolation value</param>
+        /// <returns></returns>
+        public static float LerpDegrees(float start, float end, float amount)
+        {
+            float difference = Math.Abs(end - start);
+            if (difference > 180)
+            {
+                // We need to add on to one of the values.
+                if (end > start)
+                {
+                    // We'll add it on to start...
+                    start += 360;
+                }
+                else
+                {
+                    // Add it on to end.
+                    end += 360;
+                }
+            }
+
+            // Interpolate it.
+            float value = (start + ((end - start) * amount));
+
+            // Wrap it..
+            float rangeZero = 360;
+
+            if (value >= 0 && value <= 360)
+                return value;
+
+            return (value % rangeZero);
+        }
+
+        /// <summary>
+        /// A function for linear interpolation on values of radians.
+        /// </summary>
+        /// <param name="start">First radian value to interpolate</param>
+        /// <param name="end">Second radian value to interpolate</param>
+        /// <param name="amount">Interpolation value</param>
+        /// <returns></returns>
+        public static float LerpRadians(float start, float end, float amount)
+        {
+            return LerpDegrees(start * (float)(Math.PI / 180), end * (float)(Math.PI / 180), amount);
+        }
     }
 }
