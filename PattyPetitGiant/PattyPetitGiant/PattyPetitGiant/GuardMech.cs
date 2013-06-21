@@ -71,6 +71,7 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
+            float distanceSCOPE = float.MaxValue;
 
             if (disable_movement == true)
             {
@@ -141,7 +142,7 @@ namespace PattyPetitGiant
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
                         
-                        float distance = Vector2.Distance(position, entity_found.Position);
+                        distanceSCOPE = Vector2.Distance(position, entity_found.Position);
 
                         Console.WriteLine("Range");
 
@@ -152,7 +153,7 @@ namespace PattyPetitGiant
                             enemy_found = false;
                             mech_state = MechState.Moving;
                         }
-                        else if (distance < 192)
+                        else if (distanceSCOPE < 192)
                         {
                             windup_timer = 0.0f;
                             mech_state = MechState.Melee;
@@ -171,7 +172,7 @@ namespace PattyPetitGiant
                             enemy_found = false;
                             mech_state = MechState.Moving;
                         }
-                        else if (distance > 192)
+                        else if (distanceSCOPE > 192)
                         {
                             windup_timer = 0.0f;
                             mech_state = MechState.Firing;
