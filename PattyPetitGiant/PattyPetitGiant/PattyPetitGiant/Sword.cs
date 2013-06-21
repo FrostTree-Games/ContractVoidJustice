@@ -33,9 +33,8 @@ namespace PattyPetitGiant
 
         private const string swordSound = "testSword";
 
-        public Sword(Vector2 initial_position)
+        public Sword()
         {
-            position = initial_position;
             hitbox.X = 48.0f;
             hitbox.Y = 48.0f;
             item_state_time = 0.0f;

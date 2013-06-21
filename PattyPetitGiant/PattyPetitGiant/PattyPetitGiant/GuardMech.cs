@@ -10,7 +10,7 @@ using Spine;
 
 namespace PattyPetitGiant
 {
-    class GuardMech : Enemy
+    class GuardMech : Enemy, SpineEntity
     {
         public enum MechState
         {
@@ -29,6 +29,7 @@ namespace PattyPetitGiant
         private float firing_timer = 0.0f;
         private MechState mech_state = MechState.Moving;
         private EnemyComponents component = null;
+        private Entity entity_found = null;
 
         public struct Grenades
         {
@@ -37,7 +38,7 @@ namespace PattyPetitGiant
         public GuardMech(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
-            dimensions = new Vector2(48, 48);
+            dimensions = new Vector2(72, 72);
             velocity = new Vector2(0.8f, 0.0f);
 
             windup_timer = 0.0f;
@@ -55,11 +56,22 @@ namespace PattyPetitGiant
 
             component = new MoveSearch();
             mech_state = MechState.Moving;
-            velocity_speed = 0.8f;
+            enemy_type = EnemyType.Guard;
+            velocity_speed = 3.0f;
+            entity_found = null;
+
+            walk_down = AnimationLib.loadNewAnimationSet("squadSoldierDown");
+            walk_right = AnimationLib.loadNewAnimationSet("squadSoldierRight");
+            walk_up = AnimationLib.loadNewAnimationSet("squadSoldierUp");
+            current_skeleton = walk_right;
+            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+            current_skeleton.Skeleton.FlipX = false;
+            animation_time = 0.0f;
         }
 
         public override void update(GameTime currentTime)
         {
+
             if (disable_movement == true)
             {
                 disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -75,18 +87,95 @@ namespace PattyPetitGiant
                 switch(mech_state)
                 {
                     case MechState.Moving:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
-                        Console.WriteLine("First " + direction_facing);
                         foreach(Entity en in parentWorld.EntityList)
                         {
-                            component.update(this, en, currentTime, parentWorld);
+                            if (en == this)
+                                continue;
+                            else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                            {
+                                component.update(this, en, currentTime, parentWorld);
+                                if(enemy_found)
+                                {
+                                    entity_found = en;
+                                    break;
+                                }
+                            }
                         }
-                        enemy_found = false;
-                        Console.WriteLine(direction_facing);
+
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Right:
+                                velocity = new Vector2(0.5f, 0f);
+                                current_skeleton = walk_right;
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                velocity = new Vector2(-0.5f, 0f);
+                                current_skeleton = walk_right;
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                velocity = new Vector2(0f, -0.5f);
+                                current_skeleton = walk_up;
+                                break;
+                            default:
+                                velocity = new Vector2(0.0f, 0.5f);
+                                current_skeleton = walk_down;
+                                break;
+                        }
+
+                        if (enemy_found)
+                        {
+                            float distance = Vector2.Distance(position, entity_found.Position);
+                            if (distance > 192 && distance < 300)
+                            {
+                                mech_state = MechState.Firing;
+                            }
+                            else
+                            {
+                                mech_state = MechState.Melee;
+                            }
+                        }
                         break;
                     case MechState.Firing:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        
+                        float distance = Vector2.Distance(position, entity_found.Position);
+
+                        Console.WriteLine("Range");
+
+                        velocity = Vector2.Zero;
+                        if (windup_timer > 5000)
+                        {
+                            windup_timer = 0.0f;
+                            enemy_found = false;
+                            mech_state = MechState.Moving;
+                        }
+                        else if (distance < 192)
+                        {
+                            windup_timer = 0.0f;
+                            mech_state = MechState.Melee;
+                        }
                         break;
                     case MechState.Melee:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+
+                        Console.WriteLine("Melee");
+
+                        velocity = Vector2.Zero;
+                        if (windup_timer > 5000)
+                        {
+                            windup_timer = 0.0f;
+                            enemy_found = false;
+                            mech_state = MechState.Moving;
+                        }
+                        else if (distance > 192)
+                        {
+                            windup_timer = 0.0f;
+                            mech_state = MechState.Firing;
+                        }
                         break;
                     case MechState.Reset:
                         break;
@@ -102,6 +191,9 @@ namespace PattyPetitGiant
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
             position.Y = finalPos.Y;
+
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
         public override void draw(SpriteBatch sb)
@@ -111,6 +203,27 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
+        }
+
+        public override void spinerender(SkeletonRenderer renderer)
+        {
+            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+            {
+                current_skeleton.Skeleton.FlipX = false;
+            }
+            if (direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                current_skeleton.Skeleton.FlipX = true;
+            }
+
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            current_skeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(current_skeleton.Skeleton);
         }
     }
 }

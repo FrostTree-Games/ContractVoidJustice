@@ -60,7 +60,7 @@ namespace PattyPetitGiant
                     return new RocketLauncher();
                 default:
                     item_type = player_item.ItemType();
-                    return new Sword(position);
+                    return new Sword();
             }
         }
 

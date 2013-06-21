@@ -24,6 +24,13 @@ sword
   orig: 72, 24
   offset: 0, 0
   index: -1
+blood
+  rotate: false
+  xy: 165, 21
+  size: 48, 16
+  orig: 48, 16
+  offset: 0, 0
+  index: -1
 torso
   rotate: false
   xy: 239, 21
@@ -33,98 +40,98 @@ torso
   index: -1
 lThigh
   rotate: false
-  xy: 165, 7
+  xy: 276, 33
   size: 19, 30
   orig: 19, 30
   offset: 0, 0
   index: -1
 rThigh
   rotate: false
-  xy: 276, 33
+  xy: 276, 1
   size: 19, 30
   orig: 19, 30
   offset: 0, 0
   index: -1
 lShoulder
   rotate: false
-  xy: 186, 5
+  xy: 297, 31
   size: 14, 32
   orig: 14, 32
   offset: 0, 0
   index: -1
 rShoulder
   rotate: false
-  xy: 297, 36
+  xy: 313, 36
   size: 16, 27
   orig: 16, 27
   offset: 0, 0
   index: -1
 rForearm
   rotate: false
-  xy: 202, 10
+  xy: 297, 2
   size: 12, 27
   orig: 12, 27
   offset: 0, 0
   index: -1
-pelvis
-  rotate: false
-  xy: 216, 22
-  size: 21, 15
-  orig: 21, 15
-  offset: 0, 0
-  index: -1
 lCalf
   rotate: false
-  xy: 315, 41
+  xy: 331, 41
   size: 14, 22
   orig: 14, 22
   offset: 0, 0
   index: -1
 rCalf
   rotate: false
-  xy: 315, 41
+  xy: 331, 41
   size: 14, 22
   orig: 14, 22
   offset: 0, 0
   index: -1
+pelvis
+  rotate: false
+  xy: 215, 22
+  size: 21, 15
+  orig: 21, 15
+  offset: 0, 0
+  index: -1
 head
   rotate: false
-  xy: 331, 48
+  xy: 347, 48
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
 lFoot
   rotate: false
-  xy: 352, 49
+  xy: 368, 49
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 rFoot
   rotate: false
-  xy: 352, 49
+  xy: 368, 49
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 lForearm
   rotate: false
-  xy: 368, 48
+  xy: 384, 48
   size: 10, 15
   orig: 10, 15
   offset: 0, 0
   index: -1
 rHand
   rotate: false
-  xy: 276, 22
+  xy: 165, 10
   size: 10, 9
   orig: 10, 9
   offset: 0, 0
   index: -1
 lHand
   rotate: false
-  xy: 216, 12
+  xy: 396, 55
   size: 6, 8
   orig: 6, 8
   offset: 0, 0
