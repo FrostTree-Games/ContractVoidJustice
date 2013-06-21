@@ -6,17 +6,19 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 
 namespace PattyPetitGiant
 {
-    class GuardSquadLeader : Enemy
+    class GuardSquadLeader : Enemy, SpineEntity
     {
         private enum SquadLeaderState
         {
             Patrol,
             Direct,
-            Flee,
+            Fight,
             Reset,
+            Dying,
         }
 
         private Vector2 follow_point_1 = Vector2.Zero;
@@ -24,8 +26,19 @@ namespace PattyPetitGiant
         
         private GuardSquadSoldiers[] squad_mates = new GuardSquadSoldiers[2];
         private SquadLeaderState state = SquadLeaderState.Patrol;
-        
+        private Entity entity_found = false;
+
+        private const int max_number_bullets = 3;
+        private const float time_between_shots_threshold = 500.0f;
+
+        private Bullet[] bullets = new Bullet[max_number_bullets];
         private EnemyComponents component = new MoveSearch();
+        private int bullet_number = 0;
+        private float time_between_shots = 0.0f;
+
+        private bool loop = true;
+        private bool death = false;
+        private string[] deathAnims = { "die", "die2", "die3" };
 
         public GuardSquadLeader(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -60,115 +73,164 @@ namespace PattyPetitGiant
             range_distance = 300.0f;
             change_direction_time_threshold = 5000.0f;
             enemy_type = EnemyType.Guard;
+            death = false;
+
+            walk_down = AnimationLib.loadNewAnimationSet("squadLeaderDown");
+            walk_right = AnimationLib.loadNewAnimationSet("squadLeaderRight");
+            walk_up = AnimationLib.loadNewAnimationSet("squadLeaderUp");
+            current_skeleton = walk_right;
+            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+            current_skeleton.Skeleton.FlipX = false;
+            animation_time = 0.0f;
         }
 
         public override void update(GameTime currentTime)
         {
-            if (disable_movement == true)
+            if (bullet_number > max_number_bullets)
             {
-                disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
-                if (disable_movement_time > 300)
-                {
-                    disable_movement = false;
-                    disable_movement_time = 0.0f;
-                    velocity = Vector2.Zero;
-                }
-            }
-            else
-            {
-                switch (state)
-                {
-                    case SquadLeaderState.Patrol:
-                        change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
-                        if (enemy_found == false)
-                        {
-                            foreach (Entity en in parentWorld.EntityList)
+            }
+
+            if (death == false)
+            {
+                if (disable_movement == true)
+                {
+                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                    if (disable_movement_time > 300)
+                    {
+                        disable_movement = false;
+                        disable_movement_time = 0.0f;
+                        velocity = Vector2.Zero;
+                    }
+                }
+                else
+                {
+                    switch (state)
+                    {
+                        case SquadLeaderState.Patrol:
+                            change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+
+                            if (enemy_found == false)
                             {
-                                if (en == this)
-                                    continue;
-                                else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                foreach (Entity en in parentWorld.EntityList)
                                 {
-                                    component.update(this, en, currentTime, parentWorld);
+                                    if (en == this)
+                                        continue;
+                                    else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                    {
+                                        component.update(this, en, currentTime, parentWorld);
+                                        if(enemy_found)
+                                        {
+                                            entity_found = en;
+                                            break;
+                                        }
+                                    }
                                 }
                             }
-                        }
-                        switch(direction_facing)
-                        {
-                            case GlobalGameConstants.Direction.Right:
-                                follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-3 * Math.PI / 4)));
-                                follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(3 * Math.PI / 4)));
-                                break;
-                            case GlobalGameConstants.Direction.Left:
-                                follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(Math.PI / 4)));
-                                follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-1 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-1 * Math.PI / 4)));
-                                break;
-                            case GlobalGameConstants.Direction.Up:
-                                follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(3 * Math.PI / 4)));
-                                follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(Math.PI / 4))); 
-                                break;
-                            default:
-                                follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-1 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-1 * Math.PI / 4)));
-                                follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-3 * Math.PI / 4)));
-                                break;
-                        }
-                        if (squad_mates[0] != null)
-                        {
-                            squad_mates[0].Follow_Point = follow_point_1;
-                        }
-                        if (squad_mates[1] != null)
-                        {
-                            squad_mates[1].Follow_Point = follow_point_2;
-                        }
-
-                        if (enemy_found)
-                        {
-                            state = SquadLeaderState.Direct;
-
                             switch (direction_facing)
                             {
                                 case GlobalGameConstants.Direction.Right:
-                                    follow_point_1.X = 128+follow_point_1.X;
-                                    follow_point_2.X = 128+follow_point_2.X;
+                                    follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-3 * Math.PI / 4)));
+                                    follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(3 * Math.PI / 4)));
+                                    current_skeleton = walk_right;
                                     break;
                                 case GlobalGameConstants.Direction.Left:
-                                    follow_point_1.X = follow_point_1.X - 128;
-                                    follow_point_2.X = follow_point_2.X - 128;
+                                    follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(Math.PI / 4)));
+                                    follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-1 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-1 * Math.PI / 4)));
+                                    current_skeleton = walk_right;
                                     break;
                                 case GlobalGameConstants.Direction.Up:
-                                    follow_point_1.Y = follow_point_1.Y -128;
-                                    follow_point_2.Y = follow_point_2.Y -128;
+                                    follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(3 * Math.PI / 4)));
+                                    follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(Math.PI / 4)));
+                                    current_skeleton = walk_up;
                                     break;
                                 default:
-                                    follow_point_1.Y = follow_point_1.Y + 128;
-                                    follow_point_2.Y = follow_point_2.Y + 128;
+                                    follow_point_1 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-1 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-1 * Math.PI / 4)));
+                                    follow_point_2 = new Vector2((float)(CenterPoint.X + 64 * Math.Cos(-3 * Math.PI / 4)), (float)(CenterPoint.Y + 64 * Math.Sin(-3 * Math.PI / 4)));
+                                    current_skeleton = walk_down;
                                     break;
                             }
+                            if (squad_mates[0] != null)
+                            {
+                                squad_mates[0].Follow_Point = follow_point_1;
+                            }
+                            if (squad_mates[1] != null)
+                            {
+                                squad_mates[1].Follow_Point = follow_point_2;
+                            }
 
-                            squad_mates[0].Enemy_Found = true;
-                            squad_mates[1].Enemy_Found = true;
+                            if (enemy_found)
+                            {
+                                state = SquadLeaderState.Direct;
 
-                            velocity = Vector2.Zero;
-                        }
-                        break;
-                    case SquadLeaderState.Direct:
-                        if (squad_mates[0] != null)
-                        {
-                            squad_mates[0].Follow_Point = follow_point_1;
-                        }
-                        if (squad_mates[1] != null)
-                        {
-                            squad_mates[1].Follow_Point = follow_point_2;
-                        }
+                                switch (direction_facing)
+                                {
+                                    case GlobalGameConstants.Direction.Right:
+                                        follow_point_1.X = 128 + follow_point_1.X;
+                                        follow_point_2.X = 128 + follow_point_2.X;
+                                        break;
+                                    case GlobalGameConstants.Direction.Left:
+                                        follow_point_1.X = follow_point_1.X - 128;
+                                        follow_point_2.X = follow_point_2.X - 128;
+                                        break;
+                                    case GlobalGameConstants.Direction.Up:
+                                        follow_point_1.Y = follow_point_1.Y - 128;
+                                        follow_point_2.Y = follow_point_2.Y - 128;
+                                        break;
+                                    default:
+                                        follow_point_1.Y = follow_point_1.Y + 128;
+                                        follow_point_2.Y = follow_point_2.Y + 128;
+                                        break;
+                                }
 
-                        if ((squad_mates[0] != null && squad_mates[1] != null && squad_mates[0].Reset_State_Flag == true && squad_mates[1].Reset_State_Flag == true) || squad_mates[0] != null && squad_mates[0].Reset_State_Flag == true || squad_mates[1] != null && squad_mates[1].Reset_State_Flag == true)
-                        {
-                            state = SquadLeaderState.Patrol;
-                            enemy_found = false;
-                        }
-                        break;
-                    default:
-                        break;
+                                squad_mates[0].Enemy_Found = true;
+                                squad_mates[1].Enemy_Found = true;
+
+                                velocity = Vector2.Zero;
+                            }
+                            break;
+                        case SquadLeaderState.Direct:
+
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+
+                            if (squad_mates[0] != null)
+                            {
+                                squad_mates[0].Follow_Point = follow_point_1;
+                            }
+                            if (squad_mates[1] != null)
+                            {
+                                squad_mates[1].Follow_Point = follow_point_2;
+                            }
+
+                            if ((squad_mates[0] != null && squad_mates[1] != null && squad_mates[0].Reset_State_Flag == true && squad_mates[1].Reset_State_Flag == true) || squad_mates[0] != null && squad_mates[0].Reset_State_Flag == true || squad_mates[1] != null && squad_mates[1].Reset_State_Flag == true)
+                            {
+                                state = SquadLeaderState.Patrol;
+                                enemy_found = false;
+                            }
+
+                            float distance_from_enemy = Vector2.Distance(position, entity_found.Position);
+                            if (distance_from_enemy > 96)
+                            {
+                                state = SquadLeaderState.Fight;
+                            }
+                            break;
+                        case SquadLeaderState.Fight:
+                            //firing bullet
+                            time_between_shots += currentTime.ElapsedGameTime.Milliseconds;
+
+                            if (bullet_number < max_number_bullets && time_between_shots > time_between_shots_threshold)
+                            {
+                                bullets[bullet_number] = new Bullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY)); 
+                                bullet_number++;
+                                time_between_shots = 0.0f;
+                            }
+                            break;
+                        case SquadLeaderState.Dying:
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
 
@@ -187,10 +249,27 @@ namespace PattyPetitGiant
             position.X = finalPos.X;
             position.Y = finalPos.Y;
 
-            if(enemy_life <=0)
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, loop);
+
+            for (int i = 0; i < max_number_bullets; i++)
             {
-                remove_from_list = true;
+                if (bullets[i].active == true)
+                {
+                    bullets[i].update(parentWorld, this, currentTime);
+                }
             }
+
+            if(enemy_life <=0 && death == false)
+            {
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(deathAnims[Game1.rand.Next() % 3]);
+                state = SquadLeaderState.Dying;
+                animation_time = 0.0f;
+                loop = false;
+                death = true;
+                //remove_from_list = true;
+            }
+
         }
 
         public override void draw(SpriteBatch sb)
@@ -206,6 +285,8 @@ namespace PattyPetitGiant
             {
                 disable_movement = true;
                 enemy_found = true;
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("hurt");
+
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
                     if (direction.X < 0)
@@ -272,6 +353,118 @@ namespace PattyPetitGiant
             parentWorld.EntityList.Add(en);
             squad_mates[1] = en;
             squad_mates[1].Leader = this;
+        }
+
+        public override void spinerender(SkeletonRenderer renderer)
+        {
+            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+            {
+                current_skeleton.Skeleton.FlipX = false;
+            }
+            if (direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                current_skeleton.Skeleton.FlipX = true;
+            }
+
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            current_skeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(current_skeleton.Skeleton);
+        }
+
+        public struct Bullet
+        {
+            public bool active = false;
+            private Vector2 velocity = Vector2.Zero;
+            private Vector2 position = Vector2.Zero;
+            private Vector2 dimensions = new Vector2(10, 10);
+            private Vector2 nextStep_temp = Vector2.Zero;
+
+            private const float max_time_alive = 2000.0f;
+
+            private float knockback_magnitude = 3.0f;
+            private float time_alive = 0.0f;
+            private int bullet_damage = 3;
+
+            public Bullet(Vector2 position)
+            {
+                this.position = position;
+                nextStep_temp = Vector2.Zero;
+                active = true;
+            }
+
+            public bool hitTestBullet(Entity other)
+            {
+                if ((position.X - (dimensions.X / 2)) > other.Position.X + other.Dimensions.X || (position.X + (dimensions.X / 2)) < other.Position.X || (position.Y - (dimensions.Y / 2)) > other.Position.Y + other.Dimensions.Y || (position.Y + (dimensions.Y / 2)) < other.Position.Y)
+                {
+                    return false;
+                }
+                return true;
+            }
+
+            public void update(LevelState parentWorld, Entity parent, GameTime currentTime)
+            {
+                time_alive += currentTime.ElapsedGameTime.Milliseconds;
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en == parent)
+                        continue;
+                    if (hitTestBullet(en))
+                    {
+                        Vector2 direction = en.Position - position;
+                        en.knockBack(direction, knockback_magnitude, bullet_damage, parent);
+                        active = false;
+                        return;
+                    }
+                }
+
+                if (time_alive > max_time_alive)
+                {
+                    active = false;
+                }
+                else
+                {
+                    nextStep_temp = new Vector2(position.X - (dimensions.X / 2) + velocity.X, (position.Y + velocity.X));
+                }
+
+                bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                int check_corners = 0;
+                while (check_corners != 4)
+                {
+                    if (on_wall == false)
+                    {
+                        if (check_corners == 0)
+                        {
+                            nextStep_temp = new Vector2(position.X + (dimensions.X / 2) + velocity.X, position.Y + velocity.Y);
+                        }
+                        else if (check_corners == 1)
+                        {
+                            nextStep_temp = new Vector2(position.X + velocity.X, position.Y - (dimensions.Y / 2) + velocity.Y);
+                        }
+                        else if (check_corners == 2)
+                        {
+                            nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                        }
+                        else
+                        {
+                            position += velocity;
+                        }
+                        on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                    }
+                    else
+                    {
+                        active = false;
+                        time_alive = 0.0f;
+                        break;
+                    }
+                    check_corners++;
+                }
+            }
         }
     }
 }

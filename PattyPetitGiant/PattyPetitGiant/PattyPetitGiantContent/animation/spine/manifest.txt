@@ -19,3 +19,6 @@ chargerUp
 patrolDown
 patrolRight
 patrolUp
+squadLeaderDown
+squadLeaderRight
+squadLeaderUp
