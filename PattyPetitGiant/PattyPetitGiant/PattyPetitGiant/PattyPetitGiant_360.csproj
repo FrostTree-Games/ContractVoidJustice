@@ -70,6 +70,7 @@
     <Compile Include="BallMutant.cs" />
     <Compile Include="BetaEndLevelFag.cs" />
     <Compile Include="Bomb.cs" />
+    <Compile Include="BroodLord.cs" />
     <Compile Include="BushidoBlade.cs" />
     <Compile Include="ChargerMutantEnemy.cs" />
     <Compile Include="Chase.cs" />
