@@ -51,7 +51,10 @@ namespace PattyPetitGiant
         private bool item1_switch_button_down = false;
         private bool item2_switch_button_down = false;
 
-        private const float playerMoveSpeed = 2.0f;
+        private const float playerMoveSpeed = 3.0f;
+
+        //lol doom 
+        private const string doom = "DOOM";
 
         private playerState state = playerState.Moving;
         public playerState State
@@ -70,7 +73,7 @@ namespace PattyPetitGiant
             velocity = Vector2.Zero;
 
             player_item_1 = new Sword();
-            player_item_2 = new MachineGun();
+            player_item_2 = new Sword();
             GameCampaign.Player_Item_1 = player_item_1.getEnumType();
             GameCampaign.Player_Item_2 = player_item_2.getEnumType();
 
@@ -90,6 +93,9 @@ namespace PattyPetitGiant
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
             enemy_type = EnemyType.Player;
+
+            //lol doom
+            AudioLib.playSoundEffect(doom);
         }
 
         public override void update(GameTime currentTime)

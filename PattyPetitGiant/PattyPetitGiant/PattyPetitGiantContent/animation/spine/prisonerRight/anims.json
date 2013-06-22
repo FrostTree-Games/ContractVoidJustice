@@ -1,0 +1,233 @@
+{
+"bones": [
+	{ "name": "root", "y": -1.07 },
+	{ "name": "lThigh", "parent": "root", "length": 14.31, "x": 4.99, "y": 33.31, "rotation": -87.74 },
+	{ "name": "pelvis", "parent": "root", "length": 7.23, "x": 0.43, "y": 30.63, "rotation": 84.6 },
+	{ "name": "rThigh", "parent": "root", "length": 13.64, "x": -2.36, "y": 31.01, "rotation": -98.13 },
+	{ "name": "torso", "parent": "root", "length": 19.25, "x": 1.33, "y": 37.83, "rotation": 90 },
+	{ "name": "head", "parent": "torso", "length": 10.5, "x": 19.11, "y": 0.88, "rotation": 1.8 },
+	{ "name": "lCalf", "parent": "lThigh", "length": 10.7, "x": 14.7, "y": -0.17, "rotation": -1.8 },
+	{ "name": "lShoulder", "parent": "torso", "length": 11.1, "x": 18.53, "y": -3.78, "rotation": -160.48 },
+	{ "name": "rCalf", "parent": "rThigh", "length": 11.1, "x": 13.17, "y": -0.38, "rotation": -2.72 },
+	{ "name": "rShoulder", "parent": "torso", "length": 13.97, "x": 20.17, "y": 8.7, "rotation": 160.75 },
+	{ "name": "lFoot", "parent": "lCalf", "length": 6.26, "x": 10.69, "y": -0.08, "rotation": 7.68 },
+	{ "name": "lForeArm", "parent": "lShoulder", "length": 12.61, "x": 11.27, "y": 0.01, "rotation": -16.65 },
+	{ "name": "rFoot", "parent": "rCalf", "length": 6.2, "x": 11.11, "y": -0.11, "rotation": 13.29 },
+	{ "name": "rForearm", "parent": "rShoulder", "length": 11.65, "x": 13.97, "y": 0.01, "rotation": 13.71 },
+	{ "name": "lHand", "parent": "lForeArm", "length": 7.26, "x": 11.75, "y": -0.04, "rotation": 4.95 },
+	{ "name": "rHand", "parent": "rForearm", "length": 6.7, "x": 11.65, "y": 0.02, "rotation": 3.63 }
+],
+"slots": [
+	{ "name": "right/head", "bone": "head", "attachment": "head" },
+	{ "name": "right/rFoot", "bone": "rFoot", "attachment": "rFoot" },
+	{ "name": "right/lFoot", "bone": "lFoot", "attachment": "lFoot" },
+	{ "name": "right/rCalf", "bone": "rCalf", "attachment": "rCalf" },
+	{ "name": "right/lCalf", "bone": "lCalf", "attachment": "lCalf" },
+	{ "name": "right/rThigh", "bone": "rThigh", "attachment": "rThigh" },
+	{ "name": "right/lThigh", "bone": "lThigh", "attachment": "lThigh" },
+	{ "name": "right/pelvis", "bone": "pelvis", "attachment": "pelvis" },
+	{ "name": "right/lShoulder", "bone": "lShoulder", "attachment": "lShoulder" },
+	{ "name": "right/torso", "bone": "torso", "attachment": "torso" },
+	{ "name": "right/rShoulder", "bone": "rShoulder", "attachment": "rShoulder" },
+	{ "name": "right/rForeArm", "bone": "rForearm", "attachment": "rForeArm" },
+	{ "name": "right/lForeArm", "bone": "lForeArm", "attachment": "lForeArm" },
+	{ "name": "right/rHand", "bone": "rHand", "attachment": "rHand" },
+	{ "name": "right/lHand", "bone": "lHand", "attachment": "lHand" }
+],
+"skins": {
+	"default": {
+		"right/head": {
+			"head": { "x": 6.37, "y": 0.67, "rotation": -91.8, "width": 7, "height": 16 }
+		},
+		"right/lCalf": {
+			"lCalf": { "x": 4.09, "y": -0.08, "rotation": 89.54, "width": 10, "height": 13 }
+		},
+		"right/lFoot": {
+			"lFoot": { "x": 2.51, "y": 0.67, "rotation": 81.86, "width": 8, "height": 10 }
+		},
+		"right/lForeArm": {
+			"lForeArm": { "x": 7.49, "y": 0.2, "rotation": 87.14, "width": 6, "height": 16 }
+		},
+		"right/lHand": {
+			"lHand": { "x": 3.64, "y": -0.27, "rotation": 82.19, "width": 5, "height": 6 }
+		},
+		"right/lShoulder": {
+			"lShoulder": { "x": 6.49, "y": 0.79, "rotation": 70.48, "width": 12, "height": 17 }
+		},
+		"right/lThigh": {
+			"lThigh": { "x": 5.65, "y": -0.23, "rotation": 87.74, "width": 10, "height": 19 }
+		},
+		"right/pelvis": {
+			"pelvis": { "x": 1.96, "y": -0.75, "rotation": -84.6, "width": 15, "height": 10 }
+		},
+		"right/rCalf": {
+			"rCalf": { "x": 3.53, "y": 0.17, "rotation": 100.85, "width": 10, "height": 14 }
+		},
+		"right/rFoot": {
+			"rFoot": { "x": 3.43, "y": 0.83, "rotation": 87.56, "width": 9, "height": 10 }
+		},
+		"right/rForeArm": {
+			"rForeArm": { "x": 6.41, "y": -2.25, "rotation": 95.53, "width": 11, "height": 15 }
+		},
+		"right/rHand": {
+			"rHand": { "x": 3.21, "y": -0.21, "rotation": 91.89, "width": 5, "height": 6 }
+		},
+		"right/rShoulder": {
+			"rShoulder": { "x": 7.09, "y": -1.41, "rotation": 109.24, "width": 9, "height": 15 }
+		},
+		"right/rThigh": {
+			"rThigh": { "x": 4.08, "y": -1.09, "rotation": 98.13, "width": 11, "height": 21 }
+		},
+		"right/torso": {
+			"torso": { "x": 9.8, "y": 1.4, "rotation": -90, "width": 17, "height": 24 }
+		}
+	}
+},
+"animations": {
+	"chase": {},
+	"idle": {
+		"bones": {
+			"root": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"lThigh": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"pelvis": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"rThigh": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"torso": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"head": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"lCalf": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"lShoulder": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"rCalf": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"rShoulder": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"lFoot": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"lForeArm": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"rFoot": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"rForearm": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"lHand": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			},
+			"rHand": {
+				"rotate": [
+					{ "time": 0, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			}
+		}
+	},
+	"run": {
+		"bones": {
+			"lShoulder": {
+				"rotate": [
+					{ "time": 0, "angle": 96.47 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 }
+				]
+			}
+		}
+	}
+}
+}

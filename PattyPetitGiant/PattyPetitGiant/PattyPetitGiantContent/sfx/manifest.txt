@@ -3,3 +3,8 @@ unlockDoor
 testCoin
 testRocket
 testExplosion
+swordHit
+pistolTEST
+MGHit
+MGFire
+DOOM

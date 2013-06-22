@@ -22,6 +22,10 @@ namespace PattyPetitGiant
             private const float maxBulletTime = 700;
 
             private const float motionBulletSpeed = 0.80f;
+            //sound shit
+            private const string MGHitSound = "MGHit";
+
+            private const int MGDamage = 3;
 
             public GunBullet(Vector2 position, float direction)
             {
@@ -73,9 +77,10 @@ namespace PattyPetitGiant
 
                     if (hitTestEntity(en))
                     {
-                        en.knockBack(Vector2.Normalize(velocity), 0.3f, 1, parent);
+                        en.knockBack(Vector2.Normalize(velocity), 0.3f, MGDamage, parent);
                         this.active = false;
                         timePassed = 0;
+                        AudioLib.playSoundEffect(MGHitSound);
                     }
                 }
             }
@@ -94,6 +99,9 @@ namespace PattyPetitGiant
 
         private float fireTimer;
         private const float durationBetweenShots = 100;
+        //sound shit
+        private const string MGFireSound = "MGFire";
+        
 
         public MachineGun()
         {
@@ -109,6 +117,7 @@ namespace PattyPetitGiant
                 if (!bullets[i].active)
                 {
                     bullets[i] = new GunBullet(position, direction + (float)(Math.PI / 9 * Game1.rand.NextDouble() - (Math.PI / 18)));
+                    AudioLib.playSoundEffect(MGFireSound);
                     return;
                 }
             }

@@ -32,13 +32,14 @@ namespace PattyPetitGiant
         private float knockback_magnitude;
 
         private const string swordSound = "testSword";
+        private const string swordHitSound = "swordHit";
 
         public Sword()
         {
             hitbox.X = 48.0f;
             hitbox.Y = 48.0f;
             item_state_time = 0.0f;
-            sword_damage = 5;
+            sword_damage = 8;
             knockback_magnitude = 1.0f;
 
             sword_state = Sword_State.preslash;
@@ -95,6 +96,7 @@ namespace PattyPetitGiant
                         {
                             Vector2 direction = en.CenterPoint - parent.CenterPoint;
                             en.knockBack(direction, knockback_magnitude, sword_damage, parent);
+                            AudioLib.playSoundEffect(swordHitSound);
                         }
                     }
                 }

@@ -166,17 +166,42 @@ namespace PattyPetitGiant
                     if (rooms[i, j].attributes.Contains("key"))
                     {
                         entityList.Add(new Key(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), LevelKeyModule.KeyColor.Blue));
+                        // spawn lots of these fags
+                        for (int asdf = 0; asdf < 10; asdf++)
+                        {
+                            for (int jkl = 0; jkl < 10; jkl++)
+                            {
+                                entityList.Add(new ChaseEnemy(this, new Vector2((currentRoomX + jkl) * GlobalGameConstants.TileSize.X, (currentRoomY - asdf) * (GlobalGameConstants.TileSize.Y))));
+                            }
+                        }
+                    
                     }
 
                     if (rooms[i, j].attributes.Contains("shopkeeper"))
                     {
                         entityList.Add(new ShopKeeper(this, new Vector2(i * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X) - GlobalGameConstants.TileSize.X / 2, j * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y + (5 * GlobalGameConstants.TileSize.Y))));
+                        // spawn lots of these fags
+                        for (int asdf = 0; asdf < 10; asdf++)
+                        {
+                            for (int jkl = 0; jkl < 10; jkl++)
+                            {
+                                entityList.Add(new ChaseEnemy(this, new Vector2((currentRoomX + jkl) * GlobalGameConstants.TileSize.X, (currentRoomY - asdf) * (GlobalGameConstants.TileSize.Y))));
+                            }
+                        }
                     }
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
                         entityList.Add(new GuardMech(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
-                        //entityList.Add(new ChaseEnemy(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y)));
+
+                        // spawn lots of these fags
+                        for (int asdf = 0; asdf < 10; asdf++)
+                        {
+                            for (int jkl = 0; jkl < 10; jkl++)
+                            {
+                                entityList.Add(new ChaseEnemy(this, new Vector2((currentRoomX + jkl) * GlobalGameConstants.TileSize.X, (currentRoomY - asdf) * (GlobalGameConstants.TileSize.Y))));
+                            }
+                        }
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
@@ -185,10 +210,20 @@ namespace PattyPetitGiant
                             entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
                             end_flag_placed = true;
                         }
+                        // spawn lots of these fags
+                        for (int asdf = 0; asdf < 10; asdf++)
+                        {
+                            for (int jkl = 0; jkl < 10; jkl++)
+                            {
+                                entityList.Add(new ChaseEnemy(this, new Vector2((currentRoomX + jkl) * GlobalGameConstants.TileSize.X, (currentRoomY - asdf) * (GlobalGameConstants.TileSize.Y))));
+                            }
+                        }
                     }
                     else
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
+                        // lol hax
+                        //intensityLevel = intensityLevel + 15;
 
                         for (int ec = 0; ec < intensityLevel; ec++)
                         {
@@ -202,8 +237,10 @@ namespace PattyPetitGiant
                             }
                             while (map.Map[randX + (GlobalGameConstants.TilesPerRoomWide * i), randY + (GlobalGameConstants.TilesPerRoomHigh * j)] != TileMap.TileType.NoWall);
 
+
                             const int enemyTypeCount = 3;
                             int randomEnemyNumber = rand.Next(); ;
+
 
                             switch (randomEnemyNumber % enemyTypeCount)
                             {
