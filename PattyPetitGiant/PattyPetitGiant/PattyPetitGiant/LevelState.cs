@@ -60,7 +60,7 @@ namespace PattyPetitGiant
 
         public LevelState()
         {
-            currentSeed = "Sophie".GetHashCode();
+            currentSeed = Game1.rand.Next();
 
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
