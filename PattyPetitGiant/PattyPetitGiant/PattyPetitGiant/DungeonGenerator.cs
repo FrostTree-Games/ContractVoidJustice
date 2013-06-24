@@ -437,25 +437,25 @@ namespace PattyPetitGiant
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X, room.Y - 1);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.South)] = room;
                         model[room.X, room.Y - 1] = room.Children[(int)newDir];
-                        addedRooms.Add(room.Children[(int)newDir]);
+                        //addedRooms.Add(room.Children[(int)newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.South:
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X, room.Y + 1);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.North)] = room;
                         model[room.X, room.Y + 1] = room.Children[(int)newDir];
-                        addedRooms.Add(room.Children[(int)newDir]);
+                        //addedRooms.Add(room.Children[(int)newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.East:
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X + 1, room.Y);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.West)] = room;
                         model[room.X + 1, room.Y] = room.Children[(int)newDir];
-                        addedRooms.Add(room.Children[(int)newDir]);
+                        //addedRooms.Add(room.Children[(int)newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.West:
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X - 1, room.Y);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.East)] = room;
                         model[room.X - 1, room.Y] = room.Children[(int)newDir];
-                        addedRooms.Add(room.Children[(int)newDir]);
+                        //addedRooms.Add(room.Children[(int)newDir]);
                         break;
                 }
 
@@ -493,6 +493,14 @@ namespace PattyPetitGiant
             addedRooms.Add(endingRoom);
             themeRooms.Add(endingRoom);
             model[randX, randY] = endingRoom;
+
+            randY = (rand.Next() % 2) + 2;
+            randX = rand.Next() % GlobalGameConstants.StandardMapSize.x;
+            DungeonRoomClass shopRoom = new DungeonRoomClass(null, randX, randY);
+            shopRoom.Attributes.Add("shopkeeper");
+            addedRooms.Add(shopRoom);
+            themeRooms.Add(shopRoom);
+            model[randX, randY] = shopRoom;
 
             while (!isRoomFullyConnected(startingRoom, themeRooms))
             {
