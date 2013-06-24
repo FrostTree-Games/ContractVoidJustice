@@ -176,7 +176,7 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
                         //entityList.Add(new GuardSquadLeader(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y)));
+                        //entityList.Add(new BroodLord(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X + 200, (currentRoomY) * GlobalGameConstants.TileSize.Y + 300)));
                     }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
