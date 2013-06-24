@@ -388,14 +388,21 @@ namespace PattyPetitGiant
             return foundAllThemeRooms;
         }
 
-        private static void addRoom(DungeonRoomClass room, List<DungeonRoomClass> addedRooms, DungeonRoomClass[,] model, Random rand)
+        private static DungeonRoomClass addRoom(DungeonRoomClass room, List<DungeonRoomClass> addedRooms, DungeonRoomClass[,] model, Random rand)
         {
+            DungeonRoomClass output = null;
+
             //pick a random direction to place a new room
             DungeonRoomClass.ChildDirection newDir = (DungeonRoomClass.ChildDirection)(rand.Next() % 4);
 
             if ((newDir == DungeonRoomClass.ChildDirection.North && room.Y == 0) || (newDir == DungeonRoomClass.ChildDirection.West && room.X == 0) || (newDir == DungeonRoomClass.ChildDirection.South && room.Y == model.GetLength(1) - 1) || (newDir == DungeonRoomClass.ChildDirection.East && room.X == model.GetLength(0) - 1))
             {
-                return;
+                return room;
+            }
+
+            if (room.Children[(int)newDir] != null)
+            {
+                return room;
             }
 
             if ((newDir == DungeonRoomClass.ChildDirection.North && model[room.X, room.Y - 1] != null) || (newDir == DungeonRoomClass.ChildDirection.West && model[room.X - 1, room.Y] != null) || (newDir == DungeonRoomClass.ChildDirection.South && model[room.X, room.Y + 1] != null) || (newDir == DungeonRoomClass.ChildDirection.East && model[room.X + 1, room.Y] != null))
@@ -419,41 +426,43 @@ namespace PattyPetitGiant
                         model[room.X - 1, room.Y].Children[(int)DungeonRoomClass.ChildDirection.East] = room;
                         break;
                 }
+
+                return room;
             }
             else
             {
                 switch (newDir)
                 {
                     case DungeonRoomClass.ChildDirection.North:
-                        Console.WriteLine(model[room.X, room.Y - 1]);
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X, room.Y - 1);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.South)] = room;
                         model[room.X, room.Y - 1] = room.Children[(int)newDir];
                         addedRooms.Add(room.Children[(int)newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.South:
-                        Console.WriteLine(model[room.X, room.Y + 1]);
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X, room.Y + 1);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.North)] = room;
                         model[room.X, room.Y + 1] = room.Children[(int)newDir];
                         addedRooms.Add(room.Children[(int)newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.East:
-                        Console.WriteLine(model[room.X + 1, room.Y]);
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X + 1, room.Y);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.West)] = room;
                         model[room.X + 1, room.Y] = room.Children[(int)newDir];
                         addedRooms.Add(room.Children[(int)newDir]);
                         break;
                     case DungeonRoomClass.ChildDirection.West:
-                        Console.WriteLine(model[room.X - 1, room.Y]);
                         room.Children[(int)newDir] = new DungeonRoomClass(room, room.X - 1, room.Y);
                         room.Children[(int)newDir].Children[(int)(DungeonRoomClass.ChildDirection.East)] = room;
                         model[room.X - 1, room.Y] = room.Children[(int)newDir];
                         addedRooms.Add(room.Children[(int)newDir]);
                         break;
                 }
+
+                output = room.Children[(int)newDir];
             }
+
+            return output;
         }
 
         public static DungeonRoom[,] generateRoomData(int desiredWidth, int desiredHeight, int seed)
@@ -477,7 +486,7 @@ namespace PattyPetitGiant
             themeRooms.Add(startingRoom);
             model[randX, randY] = startingRoom;
 
-            randY = 0;
+            randY = rand.Next() % 2;
             randX = rand.Next() % GlobalGameConstants.StandardMapSize.x;
             DungeonRoomClass endingRoom = new DungeonRoomClass(null, randX, randY);
             endingRoom.Attributes.Add("end");
@@ -489,26 +498,15 @@ namespace PattyPetitGiant
             {
                 int randRoom = rand.Next() % addedRooms.Count;
 
-                addRoom(addedRooms[randRoom], addedRooms, model, rand);
+                DungeonRoomClass room = addedRooms[randRoom];
+                DungeonRoomClass room2 = addRoom(room, addedRooms, model, rand);
+
+                addedRooms.Remove(room);
+                addedRooms.Add(room2);
             }
 
             //compute intensity values
             computeDungeonIntensity(model, startingRoom.X, startingRoom.Y);
-
-            // place exit room
-            bool placedEnd = false;
-            /*
-            while (!placedEnd)
-            {
-                DungeonRoomClass finalRoomCandidate = addedRooms[rand.Next() % addedRooms.Count];
-
-                if (finalRoomCandidate.Intensity > 0.95f)
-                {
-                    finalRoomCandidate.Attributes.Add("end");
-                    placedEnd = true;
-                }
-            }
-             * */
 
             // litter attributes around dungeon
             {
@@ -531,7 +529,7 @@ namespace PattyPetitGiant
             {
                 for (int j = 0; j < output.GetLength(1); j++)
                 {
-                    if (model[i, j] != null && !(model[i,j] is NullRoomSpace))
+                    if (model[i, j] != null && !(model[i, j] is NullRoomSpace))
                     {
                         output[i, j] = model[i, j].outputStruct();
                     }
