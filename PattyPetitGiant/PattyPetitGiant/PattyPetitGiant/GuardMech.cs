@@ -30,11 +30,8 @@ namespace PattyPetitGiant
         private MechState mech_state = MechState.Moving;
         private EnemyComponents component = null;
         private Entity entity_found = null;
-
-        public struct Grenades
-        {
-        }
-
+        private Grenades grenade;
+        
         public GuardMech(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
@@ -60,6 +57,8 @@ namespace PattyPetitGiant
             velocity_speed = 3.0f;
             entity_found = null;
 
+            grenade = new Grenades(Vector2.Zero, 0.0f);
+
             walk_down = AnimationLib.loadNewAnimationSet("squadSoldierDown");
             walk_right = AnimationLib.loadNewAnimationSet("squadSoldierRight");
             walk_up = AnimationLib.loadNewAnimationSet("squadSoldierUp");
@@ -71,7 +70,7 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            float distanceSCOPE = float.MaxValue;
+            float distance = float.MaxValue;
 
             if (disable_movement == true)
             {
@@ -127,7 +126,7 @@ namespace PattyPetitGiant
 
                         if (enemy_found)
                         {
-                            float distance = Vector2.Distance(position, entity_found.Position);
+                            distance = Vector2.Distance(position, entity_found.Position);
                             if (distance > 192 && distance < 300)
                             {
                                 mech_state = MechState.Firing;
@@ -141,23 +140,83 @@ namespace PattyPetitGiant
                     case MechState.Firing:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
-                        
-                        distanceSCOPE = Vector2.Distance(position, entity_found.Position);
+                        float angle = (float)Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X);
 
-                        Console.WriteLine("Range");
+                        distance = Vector2.Distance(position, entity_found.Position);
 
                         velocity = Vector2.Zero;
-                        if (windup_timer > 5000)
+                        if (windup_timer > 2000)
                         {
                             windup_timer = 0.0f;
-                            enemy_found = false;
-                            mech_state = MechState.Moving;
+                            if (grenade.active == false)
+                            {
+                                grenade = new Grenades(position, angle);
+                                grenade.active = true;
+                            }
+                                                        
+                            //enemy_found = false;
+                            //mech_state = MechState.Moving;
                         }
-                        else if (distanceSCOPE < 192)
+                        /*else if (distance < 192)
                         {
                             windup_timer = 0.0f;
                             mech_state = MechState.Melee;
+                        }*/
+
+                        Console.WriteLine(angle);
+                        Console.WriteLine(direction_facing);
+                        switch(direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Right:
+                                if(angle < -1 * Math.PI/3.27)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Up;
+                                    current_skeleton = walk_up;
+                                }
+                                else if (angle > Math.PI / 3.27)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Down;
+                                    current_skeleton = walk_down;
+                                }
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                if (angle < Math.PI / 1.44 && angle > Math.PI/1.5)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Down;
+                                    current_skeleton = walk_down;
+                                }
+                                else if (angle > -1*Math.PI / 1.44 && angle< -1*Math.PI/1.5)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Up;
+                                    current_skeleton = walk_up;
+                                }
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                if (angle < -1 * Math.PI / 1.24)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Left;
+                                    current_skeleton = walk_right;
+                                }
+                                else if (angle > -1 * Math.PI / 5.14)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Right;
+                                    current_skeleton = walk_right;
+                                }
+                                break;
+                            default:
+                                if (angle < Math.PI / 5.14)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Right;
+                                    current_skeleton = walk_right;
+                                }
+                                else if (angle > Math.PI / 1.24)
+                                {
+                                    direction_facing = GlobalGameConstants.Direction.Left;
+                                    current_skeleton = walk_right;
+                                }
+                                break;
                         }
+
                         break;
                     case MechState.Melee:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
@@ -172,7 +231,7 @@ namespace PattyPetitGiant
                             enemy_found = false;
                             mech_state = MechState.Moving;
                         }
-                        else if (distanceSCOPE > 192)
+                        else if (distance > 192)
                         {
                             windup_timer = 0.0f;
                             mech_state = MechState.Firing;
@@ -185,6 +244,11 @@ namespace PattyPetitGiant
                     default:
                         break;
                 }
+            }
+
+            if (grenade.active)
+            {
+                grenade.update(parentWorld, currentTime, this);
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
@@ -200,6 +264,10 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
             sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            if(grenade.active)
+            {
+                sb.Draw(Game1.whitePixel, grenade.Position, null, Color.Blue, 0.0f, Vector2.Zero, grenade.Dimensions, SpriteEffects.None, 0.5f);
+            }
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -225,6 +293,94 @@ namespace PattyPetitGiant
 
             current_skeleton.Skeleton.UpdateWorldTransform();
             renderer.Draw(current_skeleton.Skeleton);
+        }
+
+        public struct Grenades
+        {
+            private Vector2 position;
+            public Vector2 Position { get { return position; } }
+
+            private Vector2 dimensions;
+            public Vector2 Dimensions { get { return dimensions; } }
+
+            private Vector2 velocity;
+            public bool active;
+
+            private enum GrenadeState
+            {
+                Travel,
+                Explosion,
+                Reset
+            }
+            private GrenadeState state;
+
+            private float active_timer;
+            private const float max_active_time = 2000.0f;
+
+            public Grenades(Vector2 parent_position, float angle)
+            {
+                this.position = parent_position;
+                dimensions = new Vector2(16, 16);
+                velocity = new Vector2((float)(4*Math.Cos(angle)), (float)(4*Math.Sin(angle)));
+
+                state = GrenadeState.Travel;
+
+                active = false;
+                active_timer = 0.0f;
+            }
+
+            public void update(LevelState parentWorld, GameTime currentTime, Entity parent)
+            {
+                active_timer += currentTime.ElapsedGameTime.Milliseconds;
+                if (active)
+                {
+                    switch(state)
+                    {
+                        case GrenadeState.Travel:
+                        if (active_timer > max_active_time)
+                        {
+                            active = false;
+                            position = Vector2.Zero;
+                        }
+                        else
+                        {
+                            foreach (Entity en in parentWorld.EntityList)
+                            {
+                                if (en == parent)
+                                    continue;
+                                else if (grenadeHitTest(en))
+                                {
+                                    state = GrenadeState.Explosion;
+                                    active_timer = 0.0f;
+                                }
+                            }
+                            position += velocity;
+                        }
+                        break;
+                        case GrenadeState.Explosion:
+                        dimensions = new Vector2(96, 96);
+                        position = position - (dimensions / 2);
+                        if (active_timer > max_active_time)
+                        {
+                            active_timer = 0.0f;
+                            state = GrenadeState.Travel;
+                        }
+                        break;
+                        case GrenadeState.Reset:
+                        break;
+                    }
+                }
+            }
+
+            public bool grenadeHitTest(Entity other)
+            {
+                if (position.X > other.Position.X + other.Dimensions.X || position.X + dimensions.X < other.Position.X || position.Y > other.Position.Y + other.Dimensions.Y || position.Y + dimensions.Y < other.Position.Y)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
     }
 }
