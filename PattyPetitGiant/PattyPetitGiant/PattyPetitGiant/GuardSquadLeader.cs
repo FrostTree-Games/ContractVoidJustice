@@ -26,7 +26,7 @@ namespace PattyPetitGiant
         
         private GuardSquadSoldiers[] squad_mates = new GuardSquadSoldiers[2];
         private SquadLeaderState state = SquadLeaderState.Patrol;
-        private Entity entity_found = false;
+        private Entity entity_found = null;
 
         private const int max_number_bullets = 3;
         private const float time_between_shots_threshold = 500.0f;
@@ -35,6 +35,7 @@ namespace PattyPetitGiant
         private EnemyComponents component = new MoveSearch();
         private int bullet_number = 0;
         private float time_between_shots = 0.0f;
+        private int bullet_inactive_number = 0;
 
         private bool loop = true;
         private bool death = false;
@@ -86,9 +87,26 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            if (bullet_number > max_number_bullets)
+            if (bullet_number > 0)
             {
+                bullet_inactive_number = 0;
+                for (int i = 0; i < bullet_number; i++)
+                {
+                    if (bullets[i].active)
+                    {
+                        bullets[i].update(parentWorld, this, currentTime);
+                    }
+                    else
+                    {
+                        bullet_inactive_number++;
+                    }
+                }
 
+                if (bullet_inactive_number == max_number_bullets)
+                {
+                    bullet_number = 0;
+                    bullet_inactive_number = 0;
+                }
             }
 
             if (death == false)
@@ -210,10 +228,10 @@ namespace PattyPetitGiant
                             }
 
                             float distance_from_enemy = Vector2.Distance(position, entity_found.Position);
-                            if (distance_from_enemy > 96)
+                            /*if (distance_from_enemy > 96)
                             {
                                 state = SquadLeaderState.Fight;
-                            }
+                            }*/
                             break;
                         case SquadLeaderState.Fight:
                             //firing bullet
@@ -285,6 +303,7 @@ namespace PattyPetitGiant
             {
                 disable_movement = true;
                 enemy_found = true;
+                entity_found = attacker;
                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("hurt");
 
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
@@ -314,6 +333,7 @@ namespace PattyPetitGiant
                     }
                 }
                 enemy_life = enemy_life - damage;
+                state = SquadLeaderState.Patrol;
             }
 
             if (attacker == null)
@@ -378,22 +398,28 @@ namespace PattyPetitGiant
 
         public struct Bullet
         {
-            public bool active = false;
-            private Vector2 velocity = Vector2.Zero;
-            private Vector2 position = Vector2.Zero;
-            private Vector2 dimensions = new Vector2(10, 10);
-            private Vector2 nextStep_temp = Vector2.Zero;
+            public bool active;
+            private Vector2 velocity;
+            private Vector2 position;
+            private Vector2 dimensions;
+            private Vector2 nextStep_temp;
 
             private const float max_time_alive = 2000.0f;
 
-            private float knockback_magnitude = 3.0f;
-            private float time_alive = 0.0f;
-            private int bullet_damage = 3;
+            private float knockback_magnitude;
+            private float time_alive;
+            private int bullet_damage;
 
             public Bullet(Vector2 position)
             {
                 this.position = position;
                 nextStep_temp = Vector2.Zero;
+                velocity = Vector2.Zero;
+                position = Vector2.Zero;
+                dimensions = new Vector2(10, 10);
+                knockback_magnitude = 3.0f;
+                time_alive = 0.0f;
+                bullet_damage = 3;
                 active = true;
             }
 

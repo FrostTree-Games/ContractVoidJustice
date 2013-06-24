@@ -33,7 +33,7 @@ namespace PattyPetitGiant
             {
                 case GlobalGameConstants.itemType.Bomb:
                     item_type = player_item.ItemType();
-                    return new Bomb(position);
+                    return new Bomb();
                 case GlobalGameConstants.itemType.Gun:
                     item_type = player_item.ItemType();
                     return new Gun();

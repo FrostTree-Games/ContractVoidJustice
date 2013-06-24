@@ -225,7 +225,20 @@ namespace PattyPetitGiant
 
                     if (hitTestWithEntity(en))
                     {
-                        en.knockBack(Vector2.Normalize(en.CenterPoint - centerPoint), 3.5f, 5, parent);
+                        Vector2 direction = en.CenterPoint - centerPoint;
+                        float rocket_knockback_power = Vector2.Distance(centerPoint, en.CenterPoint) / dimensions.X;
+                        
+                        if (rocket_knockback_power < 1 || float.IsNaN(rocket_knockback_power))
+                        {
+                            rocket_knockback_power = 1.0f;
+                        }
+
+                        Console.WriteLine(rocket_knockback_power);
+
+                        float knockback_magnitude = 5 / rocket_knockback_power;
+                                                                        
+
+                        en.knockBack(en.CenterPoint - centerPoint, knockback_magnitude, 5, parent);
                     }
                 }
             }

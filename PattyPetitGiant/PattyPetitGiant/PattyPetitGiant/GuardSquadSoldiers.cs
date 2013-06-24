@@ -507,7 +507,7 @@ namespace PattyPetitGiant
                     if (hitTestBullet(en))
                     {
                         Vector2 direction = en.Position - position;
-                        en.knockBack(direction, knockback_magnitude, bullet_damage);
+                        en.knockBack(direction, knockback_magnitude, bullet_damage, parent);
                         active = false;
                         return;
                     }

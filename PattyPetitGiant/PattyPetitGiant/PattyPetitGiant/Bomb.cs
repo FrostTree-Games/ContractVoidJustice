@@ -32,9 +32,8 @@ namespace PattyPetitGiant
         private float animation_time;
         private float knockback_magnitude;
 
-        public Bomb(Vector2 initial_position)
+        public Bomb()
         {
-            position = initial_position;
             hitbox = hitbox_placed;
             time_explosion = 0.0f;
             bomb_state = Bomb_State.reset;
@@ -90,8 +89,16 @@ namespace PattyPetitGiant
                                 if (hitTest(en))
                                 {
                                     Vector2 direction = en.CenterPoint - center_placed_bomb;
-                                    float temp_knockback_magnitude = knockback_magnitude / (Vector2.Distance(center_placed_bomb, en.CenterPoint)/hitbox.X);
-                                    
+
+                                    float bomb_knockback_power = Vector2.Distance(center_placed_bomb, en.CenterPoint) / hitbox.X;
+
+                                    if (bomb_knockback_power < 1)
+                                    {
+                                        bomb_knockback_power = 1.0f;
+                                    }
+
+                                    float temp_knockback_magnitude = knockback_magnitude / bomb_knockback_power;
+
                                     en.knockBack(direction, temp_knockback_magnitude, bomb_damage, parent);
                                 }
                             }
@@ -100,8 +107,15 @@ namespace PattyPetitGiant
                                 if (hitTest(en))
                                 {
                                     Vector2 direction = en.CenterPoint - center_placed_bomb;
-                                    float temp_knockback_magnitude = knockback_magnitude / (Vector2.Distance(center_placed_bomb, en.CenterPoint) / hitbox.X);
+                                    float bomb_knockback_power = Vector2.Distance(center_placed_bomb, en.CenterPoint) / hitbox.X;
 
+                                    if (bomb_knockback_power < 1)
+                                    {
+                                        bomb_knockback_power = 1.0f;
+                                    }
+
+                                    float temp_knockback_magnitude = knockback_magnitude / bomb_knockback_power;
+                                                                        
                                     en.knockBack(direction, temp_knockback_magnitude, bomb_damage);
                                 }
                             }
