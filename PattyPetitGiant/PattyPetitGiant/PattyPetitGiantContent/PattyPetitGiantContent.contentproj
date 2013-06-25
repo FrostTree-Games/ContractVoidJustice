@@ -560,8 +560,32 @@
       <Name>keyRoomO</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\startNode.ftc">
-      <Name>startNode</Name>
+    <None Include="chunk\startingZoneA.ftc">
+      <Name>startingZoneA</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneB.ftc">
+      <Name>startingZoneB</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneC.ftc">
+      <Name>startingZoneC</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneD.ftc">
+      <Name>startingZoneD</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneE.ftc">
+      <Name>startingZoneE</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneF.ftc">
+      <Name>startingZoneF</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneG.ftc">
+      <Name>startingZoneG</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\testShop.ftc">

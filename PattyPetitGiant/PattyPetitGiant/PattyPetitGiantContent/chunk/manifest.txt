@@ -1,4 +1,10 @@
-startNode.ftc
+startingZoneA.ftc
+startingZoneB.ftc
+startingZoneC.ftc
+startingZoneD.ftc
+startingZoneE.ftc
+startingZoneF.ftc
+startingZoneG.ftc
 testA.ftc
 testB.ftc
 testC.ftc
