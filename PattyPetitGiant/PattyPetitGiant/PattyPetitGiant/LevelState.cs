@@ -96,6 +96,59 @@ namespace PattyPetitGiant
             state = LoadingState.LevelRunning;
         }
 
+        private void placeMonstersInRoom(int roomTileX, int roomTileY, Entity.EnemyType faction, float intensity, Random rand)
+        {
+            int iteration = 0;
+            int placedMonsterCount = 0;
+
+            while (placedMonsterCount < 3)
+            {
+            // deeply-nested loops; justified as a special continue statement
+            MonsterCheck:
+
+                if (iteration > 10)
+                {
+                    return;
+                }
+                
+                iteration++;
+                int randX = rand.Next() % GlobalGameConstants.TilesPerRoomWide;
+                int randY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
+
+                // don't place an entity on an edge;
+                if (randX == 0 || randX == GlobalGameConstants.TilesPerRoomWide - 1 || randY == 0 || randY == GlobalGameConstants.TilesPerRoomHigh - 1)
+                {
+                    goto MonsterCheck;
+                }
+
+                for (int i = randX - 1; i <= randX + 1; i++)
+                {
+                    for (int j = randY - 1; j <= randY + 1; j++)
+                    {
+                        if (map.Map[roomTileX + i, roomTileY + j] != TileMap.TileType.NoWall)
+                        {
+                            goto MonsterCheck; //bad vibes man; I feel like Dijkstra's breathing down my neck
+                        }
+                    }
+                }
+
+                placedMonsterCount++;
+
+                if (faction == Entity.EnemyType.Prisoner)
+                {
+                    entityList.Add(new ChaseEnemy(this, new Vector2((roomTileX + randX) * GlobalGameConstants.TileSize.X, (roomTileY + randY) * GlobalGameConstants.TileSize.Y)));
+                }
+                else if (faction == Entity.EnemyType.Guard)
+                {
+                    //
+                }
+                else if (faction == Entity.EnemyType.Alien)
+                {
+                    //
+                }
+            }
+        }
+
         /// <summary>
         /// Populates a dungeon with entities depending on its properties
         /// </summary>
@@ -190,35 +243,7 @@ namespace PattyPetitGiant
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                        for (int ec = 0; ec < intensityLevel; ec++)
-                        {
-                            int randX = 0;
-                            int randY = 0;
-
-                            do
-                            {
-                                randX = rand.Next() % GlobalGameConstants.TilesPerRoomWide;
-                                randY = rand.Next() % GlobalGameConstants.TilesPerRoomHigh;
-                            }
-                            while (map.Map[randX + (GlobalGameConstants.TilesPerRoomWide * i), randY + (GlobalGameConstants.TilesPerRoomHigh * j)] != TileMap.TileType.NoWall);
-
-                            const int enemyTypeCount = 3;
-                            int randomEnemyNumber = rand.Next(); ;
-
-                            switch (randomEnemyNumber % enemyTypeCount)
-                            {
-                                case 0:
-                                    //entityList.Add(new MolotovEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
-                                    break;
-                                case 1:
-                                    //entityList.Add(new ChaseEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
-                                    break;
-                                case 2:
-                                    //entityList.Add(new ChargerMutantEnemy(this, new Vector2((randX * GlobalGameConstants.TileSize.X) + (GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomWide * i), (randY * GlobalGameConstants.TileSize.Y) + (GlobalGameConstants.TileSize.Y * GlobalGameConstants.TilesPerRoomHigh * j))));
-                                    break;
-                            }
-
-                        }
+                        placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Prisoner, intensityLevel, rand);
                     }
                 }
             }
@@ -356,6 +381,11 @@ namespace PattyPetitGiant
                 }
 
                 en.draw(sb);
+
+                if (en.Position.X < 0 || en.Position.Y < 0 || en.Position.X > map.SizeInPixels.X || en.Position.Y > map.SizeInPixels.Y)
+                {
+                    throw new Exception("Entity escaped map: " + en.Position.ToString());
+                }
             }
 
             sb.End();
