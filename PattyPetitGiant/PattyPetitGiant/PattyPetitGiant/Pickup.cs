@@ -29,37 +29,33 @@ namespace PattyPetitGiant
         //after the item gets picked up, it gets replaced with the item the player dropped
         public Item assignItem(Item player_item, GameTime currentTime)
         {
+            item_type = player_item.ItemType();
+
             switch (item_type)
             {
                 case GlobalGameConstants.itemType.Bomb:
-                    item_type = player_item.ItemType();
                     return new Bomb();
                 case GlobalGameConstants.itemType.Gun:
-                    item_type = player_item.ItemType();
                     return new Gun();
                 case GlobalGameConstants.itemType.Compass:
-                    item_type = player_item.ItemType();
                     return new Compass();
                 case GlobalGameConstants.itemType.DungeonMap:
-                    item_type = player_item.ItemType();
                     return new DungeonMap();
                 case GlobalGameConstants.itemType.WandOfGyges:
-                    item_type = player_item.ItemType();
                     return new WandOfGyges();
                 case GlobalGameConstants.itemType.ShotGun:
-                    item_type = player_item.ItemType();
                     return new ShotGun();
                 case GlobalGameConstants.itemType.WaveMotionGun:
-                    item_type = player_item.ItemType();
                     return new WaveMotionGun();
                 case GlobalGameConstants.itemType.HermesSandals:
-                    item_type = player_item.ItemType();
                     return new HermesSandals();
                 case GlobalGameConstants.itemType.RocketLauncher:
-                    item_type = player_item.ItemType();
                     return new RocketLauncher();
+                case GlobalGameConstants.itemType.FlameThrower:
+                    return new FlameThrower();
+                case GlobalGameConstants.itemType.LazerGun:
+                    return new LazerGun();
                 default:
-                    item_type = player_item.ItemType();
                     return new Sword();
             }
         }
