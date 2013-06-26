@@ -160,7 +160,7 @@ namespace PattyPetitGiant
                     }
                     else if (randomSpawnValue < 0.5)
                     {
-                        //entityList.Add(new ChargerMutantEnemy(this, spawnPos));
+                        entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }
                     else
                     {
@@ -253,8 +253,6 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new GuardMech(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
-                        //entityList.Add(new BroodLord(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X + 200, (currentRoomY) * GlobalGameConstants.TileSize.Y + 300)));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
