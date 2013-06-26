@@ -233,8 +233,6 @@ namespace PattyPetitGiant
                             rocket_knockback_power = 1.0f;
                         }
 
-                        Console.WriteLine(rocket_knockback_power);
-
                         float knockback_magnitude = 5 / rocket_knockback_power;
                                                                         
 
