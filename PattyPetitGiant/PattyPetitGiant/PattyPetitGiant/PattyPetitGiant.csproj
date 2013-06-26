@@ -130,6 +130,7 @@
     <Compile Include="MachineGun.cs" />
     <Compile Include="MolotovEnemy.cs" />
     <Compile Include="MoveSearch.cs" />
+    <Compile Include="MutantAcidSpitter.cs" />
     <Compile Include="PatrolGuard.cs" />
     <Compile Include="Pickup.cs" />
     <Compile Include="Item.cs" />
