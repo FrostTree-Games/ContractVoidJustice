@@ -30,6 +30,7 @@ namespace PattyPetitGiant
         private float windup_timer = 0.0f;
         private float firing_timer = 0.0f;
         private bool melee_active = false;
+        private bool death = false;
 
         private MechState mech_state = MechState.Moving;
         private EnemyComponents component = null;
@@ -65,6 +66,7 @@ namespace PattyPetitGiant
             enemy_type = EnemyType.Guard;
             velocity_speed = 3.0f;
             entity_found = null;
+            death = false;
 
             grenade = new Grenades(Vector2.Zero, 0.0f);
 
@@ -98,17 +100,21 @@ namespace PattyPetitGiant
                     case MechState.Moving:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
-                        foreach(Entity en in parentWorld.EntityList)
+
+                        if (enemy_found == false)
                         {
-                            if (en == this)
-                                continue;
-                            else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                            foreach (Entity en in parentWorld.EntityList)
                             {
-                                component.update(this, en, currentTime, parentWorld);
-                                if(enemy_found)
+                                if (en == this)
+                                    continue;
+                                else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
                                 {
-                                    entity_found = en;
-                                    break;
+                                    component.update(this, en, currentTime, parentWorld);
+                                    if (enemy_found)
+                                    {
+                                        entity_found = en;
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -153,7 +159,7 @@ namespace PattyPetitGiant
                     case MechState.Firing:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
-                        angle = (float)Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X);
+                        angle = (float)Math.Atan2(entity_found.CenterPoint.Y - position.Y, entity_found.CenterPoint.X - position.X);
 
                         distance = Vector2.Distance(position, entity_found.Position);
 
@@ -368,6 +374,11 @@ namespace PattyPetitGiant
                 grenade.update(parentWorld, currentTime, this);
             }
 
+            if (enemy_life <= 0)
+            {
+
+            }
+
             Vector2 pos = new Vector2(position.X, position.Y);
             Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
@@ -393,6 +404,62 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
+            if (death == false)
+            {
+                if (disable_movement_time == 0.0)
+                {
+                    disable_movement = true;
+                    if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                    {
+                        if (direction.X < 0)
+                        {
+                            velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
+                        }
+                    }
+                    else
+                    {
+                        if (direction.Y < 0)
+                        {
+                            velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
+                        }
+                    }
+                    enemy_life = enemy_life - damage;
+                }
+
+                if (attacker == null)
+                {
+                    return;
+                }
+                else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+                {
+                    enemy_found = true;
+                    entity_found = attacker;
+
+                    switch (attacker.Direction_Facing)
+                    {
+                        case GlobalGameConstants.Direction.Right:
+                            direction_facing = GlobalGameConstants.Direction.Left;
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            direction_facing = GlobalGameConstants.Direction.Right;
+                            break;
+                        case GlobalGameConstants.Direction.Up:
+                            direction_facing = GlobalGameConstants.Direction.Down;
+                            break;
+                        default:
+                            direction_facing = GlobalGameConstants.Direction.Up;
+                            break;
+                    }
+                }
+            }
         }
 
         public override void spinerender(SkeletonRenderer renderer)

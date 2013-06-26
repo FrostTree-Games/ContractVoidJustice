@@ -377,11 +377,7 @@ namespace PattyPetitGiant
                 if (disable_movement_time == 0.0)
                 {
                     disable_movement = true;
-                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("hurt");
-                    if (state == SquadSoldierState.IndividualPatrol)
-                    {
-                        enemy_found = true;
-                    }
+
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
                         if (direction.X < 0)
