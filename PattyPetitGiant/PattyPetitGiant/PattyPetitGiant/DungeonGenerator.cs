@@ -495,12 +495,20 @@ namespace PattyPetitGiant
             model[randX, randY] = endingRoom;
 
             randY = (rand.Next() % 2) + 2;
-            randX = rand.Next() % GlobalGameConstants.StandardMapSize.x;
+            randX = 0;
             DungeonRoomClass shopRoom = new DungeonRoomClass(null, randX, randY);
             shopRoom.Attributes.Add("shopkeeper");
             addedRooms.Add(shopRoom);
             themeRooms.Add(shopRoom);
             model[randX, randY] = shopRoom;
+
+            //randY = (rand.Next() % 2) + 2;
+            randX = (rand.Next() % (GlobalGameConstants.StandardMapSize.x - 1)) + 1;
+            DungeonRoomClass pickupRoom = new DungeonRoomClass(null, randX, randY);
+            pickupRoom.Attributes.Add("pickup");
+            addedRooms.Add(pickupRoom);
+            themeRooms.Add(pickupRoom);
+            model[randX, randY] = pickupRoom;
 
             while (!isRoomFullyConnected(startingRoom, themeRooms))
             {
@@ -515,22 +523,6 @@ namespace PattyPetitGiant
 
             //compute intensity values
             computeDungeonIntensity(model, startingRoom.X, startingRoom.Y);
-
-            // litter attributes around dungeon
-            {
-                foreach (DungeonRoomClass room in addedRooms)
-                {
-                    // place occasional shopkeeper
-                    if (room.ActualChildCount == 1 && !(room.Attributes.Contains("end")))
-                    {
-                        if (rand.NextDouble() < DungeonGeneratonValues.ShopkeeperProbability)
-                        {
-                            room.Attributes.Add("shopkeeper");
-                            continue;
-                        }
-                    }
-                }
-            }
 
             //convert the class data to a room strucutre model
             for (int i = 0; i < output.GetLength(0); i++)

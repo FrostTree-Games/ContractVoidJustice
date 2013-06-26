@@ -231,6 +231,10 @@ namespace PattyPetitGiant
                         //entityList.Add(new GuardSquadLeader(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
                         //entityList.Add(new BroodLord(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X + 200, (currentRoomY) * GlobalGameConstants.TileSize.Y + 300)));
                     }
+                    else if (rooms[i, j].attributes.Contains("pickup"))
+                    {
+                        entityList.Add(new Pickup(this, new Vector2((currentRoomX + (GlobalGameConstants.TilesPerRoomWide / 2)) * GlobalGameConstants.TileSize.X, (currentRoomY + (GlobalGameConstants.TilesPerRoomHigh / 2)) * GlobalGameConstants.TileSize.Y), rand));
+                    }
                     else if (rooms[i, j].attributes.Contains("end"))
                     {
                         if (end_flag_placed == false)
@@ -381,11 +385,6 @@ namespace PattyPetitGiant
                 }
 
                 en.draw(sb);
-
-                if (en.Position.X < 0 || en.Position.Y < 0 || en.Position.X > map.SizeInPixels.X || en.Position.Y > map.SizeInPixels.Y)
-                {
-                    throw new Exception("Entity escaped map: " + en.Position.ToString());
-                }
             }
 
             sb.End();

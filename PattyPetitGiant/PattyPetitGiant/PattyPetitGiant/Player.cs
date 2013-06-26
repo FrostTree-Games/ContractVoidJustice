@@ -70,7 +70,7 @@ namespace PattyPetitGiant
             velocity = Vector2.Zero;
 
             player_item_1 = new Sword();
-            player_item_2 = new MachineGun();
+            player_item_2 = new DungeonMap();
             GameCampaign.Player_Item_1 = player_item_1.getEnumType();
             GameCampaign.Player_Item_2 = player_item_2.getEnumType();
 
