@@ -134,13 +134,38 @@ namespace PattyPetitGiant
 
                 placedMonsterCount++;
 
+                Vector2 spawnPos = new Vector2((roomTileX + randX) * GlobalGameConstants.TileSize.X, (roomTileY + randY) * GlobalGameConstants.TileSize.Y) - new Vector2(16);
+                double randomSpawnValue = rand.NextDouble();
+
                 if (faction == Entity.EnemyType.Prisoner)
                 {
-                    entityList.Add(new ChaseEnemy(this, new Vector2((roomTileX + randX) * GlobalGameConstants.TileSize.X, (roomTileY + randY) * GlobalGameConstants.TileSize.Y)));
+                    if (randomSpawnValue < 0.25)
+                    {
+                        entityList.Add(new MolotovEnemy(this, spawnPos));
+                    }
+                    else if (randomSpawnValue < 0.5)
+                    {
+                        entityList.Add(new ChargerMutantEnemy(this, spawnPos));
+                    }
+                    else
+                    {
+                        entityList.Add(new ChaseEnemy(this, spawnPos));
+                    }
                 }
                 else if (faction == Entity.EnemyType.Guard)
                 {
-                    //
+                    if (randomSpawnValue < 0.25)
+                    {
+                        entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
+                    }
+                    else if (randomSpawnValue < 0.5)
+                    {
+                        //entityList.Add(new ChargerMutantEnemy(this, spawnPos));
+                    }
+                    else
+                    {
+                        entityList.Add(new PatrolGuard(this, spawnPos));
+                    }
                 }
                 else if (faction == Entity.EnemyType.Alien)
                 {
@@ -247,7 +272,14 @@ namespace PattyPetitGiant
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                        placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Prisoner, intensityLevel, rand);
+                        if (rand.NextDouble() > 0.5)
+                        {
+                            placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
+                        }
+                        else
+                        {
+                            placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Prisoner, intensityLevel, rand);
+                        }
                     }
                 }
             }
@@ -322,8 +354,8 @@ namespace PattyPetitGiant
                 int pointX = (int)cameraFocus.CenterPoint.X;
                 int pointY = (int)cameraFocus.CenterPoint.Y;
 
-                camera = Matrix.Identity * Matrix.CreateTranslation(new Vector3((pointX * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (pointY * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
-                //camera = Matrix.Identity * Matrix.CreateScale(0.2f);
+                camera = Matrix.CreateTranslation(new Vector3((pointX * -1) + (GlobalGameConstants.GameResolutionWidth / 2), (pointY * -1) + (GlobalGameConstants.GameResolutionHeight / 2), 0.0f));
+                //camera = Matrix.CreateScale(0.1f);
             }
 
             gui.update(currentTime);
