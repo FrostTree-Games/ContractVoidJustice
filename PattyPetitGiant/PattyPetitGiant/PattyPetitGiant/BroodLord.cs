@@ -9,9 +9,22 @@ namespace PattyPetitGiant
 {
     class BroodLord : Enemy
     {
+        private enum BroodLordState
+        {
+            Idle,
+            Aggro,
+            Dying,
+            Dead,
+        }
+
         private const int minionCount = 3;
         private const float eggDistance = 96f;
         private BroodLing[] minions = null;
+
+        private BroodLordState broodState;
+
+        private float knockBackTimer = 999f;
+        private const float knockBackDuration = 500f;
 
         public BroodLord(LevelState parentWorld, Vector2 position)
         {
@@ -27,43 +40,112 @@ namespace PattyPetitGiant
                 parentWorld.EntityList.Add(minions[i]);
             }
 
+            broodState = BroodLordState.Idle;
+
             enemy_life = 25;
             enemy_type = EnemyType.Alien;
         }
 
         public override void update(GameTime currentTime)
         {
+            knockBackTimer += currentTime.ElapsedGameTime.Milliseconds;
+
             for (int i = 0; i < minionCount; i++)
             {
                 minions[i].update(currentTime);
             }
 
-            for (int i = 0; i < minionCount; i++)
+            if (broodState != BroodLordState.Dying && broodState != BroodLordState.Dead)
             {
-                if (minions[i].MinionState == BroodLing.BroodLingState.Dead)
+                for (int i = 0; i < minionCount; i++)
                 {
-                    float dir = (float)((Math.PI * 2 / minionCount) * i);
-                    minions[i].spawn(CenterPoint + (new Vector2((float)(Math.Cos(dir)), (float)(Math.Sin(dir))) * eggDistance));
+                    if (minions[i].MinionState == BroodLing.BroodLingState.Dead)
+                    {
+                        float dir = (float)((Math.PI * 2 / minionCount) * i);
+                        minions[i].spawn(CenterPoint + (new Vector2((float)(Math.Cos(dir)), (float)(Math.Sin(dir))) * eggDistance));
+                    }
                 }
             }
 
-            foreach (Entity en in parentWorld.EntityList)
+            if (broodState == BroodLordState.Idle)
             {
-                if (en is Player)
+                for (int i = 0; i < minionCount; i++)
+                {
+                    float dir = (float)((Math.PI * 2 / minionCount) * i);
+                    minions[i].setTarget(CenterPoint + (new Vector2((float)(Math.Cos(dir)), (float)(Math.Sin(dir))) * eggDistance));
+                }
+
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en is Player && Vector2.Distance(en.CenterPoint, CenterPoint) < 500)
+                    {
+                        broodState = BroodLordState.Aggro;
+                    }
+                }
+            }
+            else if (broodState == BroodLordState.Aggro)
+            {
+                foreach (Entity en in parentWorld.EntityList)
+                {
+                    if (en.Enemy_Type == EnemyType.Player || en.Enemy_Type == EnemyType.Prisoner || en.Enemy_Type == EnemyType.Guard)
+                    {
+                        if (Vector2.Distance(en.CenterPoint, CenterPoint) < 500)
+                        {
+                            if (hitTest(en))
+                            {
+                                en.knockBack(en.CenterPoint - CenterPoint, 3.0f, 4);
+                            }
+                        }
+                    }
+
+                    if (en is Player && Vector2.Distance(en.CenterPoint, CenterPoint) < 500)
+                    {
+                        for (int i = 0; i < minionCount; i++)
+                        {
+                            minions[i].setTarget(en.CenterPoint);
+                        }
+
+                        break;
+                    }
+                    else if (en is Player && Vector2.Distance(en.CenterPoint, CenterPoint) > 500)
+                    {
+                        broodState = BroodLordState.Idle;
+                    }
+                }
+            }
+            else if (broodState == BroodLordState.Dying)
+            {
+                broodState = BroodLordState.Dead;
+            }
+            else if (broodState == BroodLordState.Dead)
+            {
+                position = new Vector2(float.MinValue, float.MaxValue);
+                dimensions = Vector2.Zero;
+                bool removeCheck = true;
+
+                for (int i = 0; i < minionCount; i++)
+                {
+                    removeCheck = (minions[i].MinionState == BroodLing.BroodLingState.Dead) && removeCheck;
+                }
+
+                remove_from_list = removeCheck;
+                if (removeCheck)
                 {
                     for (int i = 0; i < minionCount; i++)
                     {
-                        minions[i].setTarget(en);
+                        minions[i].delete();
                     }
-
-                    break;
                 }
+            }
+            else
+            {
+                throw new Exception("Invalid Broodlord State");
             }
         }
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.LimeGreen, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, position, null, (knockBackTimer > knockBackDuration) ? Color.LimeGreen : Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
 
             for (int i = 0; i < minionCount; i++)
             {
@@ -73,7 +155,17 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            //throw new NotImplementedException();
+            if (knockBackTimer > knockBackDuration)
+            {
+                enemy_life -= damage;
+
+                if (enemy_life < 1)
+                {
+                    broodState = BroodLordState.Dying;
+                }
+
+                knockBackTimer = 0;
+            }
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
@@ -116,7 +208,7 @@ namespace PattyPetitGiant
         private float biteTimer;
         private const float biteDuration = 500f;
 
-        private Entity target;
+        private Vector2 target;
 
         public BroodLing(LevelState parentWorld, Vector2 position, BroodLord lord)
         {
@@ -137,15 +229,13 @@ namespace PattyPetitGiant
 
             if (minionState == BroodLingState.Idle)
             {
-                target = null;
-
                 direction += 0.05f;
 
                 velocity = new Vector2((float)(Math.Cos(direction) * minionSpeed), (float)(Math.Sin(direction) * minionSpeed));
             }
             else if (minionState == BroodLingState.Chase)
             {
-                double dir = Math.Atan2(target.CenterPoint.Y - CenterPoint.Y, target.CenterPoint.X - CenterPoint.X);
+                double dir = Math.Atan2(target.Y - CenterPoint.Y, target.X - CenterPoint.X);
 
                 if (Math.Abs(dir - direction) > Math.PI)
                 {
@@ -296,6 +386,8 @@ namespace PattyPetitGiant
             magnitude /= 2.5f;
             velocity = magnitude * direction;
 
+            velocity = Vector2.Clamp(velocity, Vector2.Zero, new Vector2(0.3f));
+
             enemy_life -= damage;
 
             minionState = BroodLingState.KnockBack;
@@ -318,7 +410,7 @@ namespace PattyPetitGiant
             direction = (float)(Game1.rand.NextDouble() * Math.PI);
         }
 
-        public void setTarget(Entity en)
+        public void setTarget(Vector2 en)
         {
             target = en;
 
@@ -330,6 +422,14 @@ namespace PattyPetitGiant
             {
                 minionState = BroodLingState.Idle;
             }
+        }
+
+        /// <summary>
+        /// NOTE: Only used with BroodLord. Do not use.
+        /// </summary>
+        public void delete()
+        {
+            remove_from_list = true;
         }
     }
 }

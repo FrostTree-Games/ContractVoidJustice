@@ -13,12 +13,23 @@ namespace PattyPetitGiant
     {
         GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Bomb;
 
-        public Pickup(LevelState parentWorld, float initial_x, float initial_y, GlobalGameConstants.itemType item_choice)
+        public Pickup(LevelState parentWorld, Vector2 position, GlobalGameConstants.itemType item_choice)
         {
-            position = new Vector2(initial_x, initial_y);
-            dimensions = new Vector2(48.0f, 48.0f);
+            this.position = position;
+            dimensions = GlobalGameConstants.TileSize;
 
             item_type = item_choice;
+        }
+
+        public Pickup(LevelState parentWorld, Vector2 position, Random rand)
+        {
+            this.position = position;
+            dimensions = GlobalGameConstants.TileSize;
+
+            int rValue = rand.Next() % 14;
+            if (rValue == 9) { rValue++; } // casting an int to item enum; no index for 9
+
+            item_type = (GlobalGameConstants.itemType)rValue;
         }
 
         public override void update(GameTime currentTime)
@@ -29,38 +40,37 @@ namespace PattyPetitGiant
         //after the item gets picked up, it gets replaced with the item the player dropped
         public Item assignItem(Item player_item, GameTime currentTime)
         {
-            switch (item_type)
+            GlobalGameConstants.itemType oldItem = item_type;
+            item_type = player_item.ItemType();
+
+            switch (oldItem)
             {
+                case GlobalGameConstants.itemType.Sword:
+                    return new Sword();
                 case GlobalGameConstants.itemType.Bomb:
-                    item_type = player_item.ItemType();
                     return new Bomb();
                 case GlobalGameConstants.itemType.Gun:
-                    item_type = player_item.ItemType();
                     return new Gun();
                 case GlobalGameConstants.itemType.Compass:
-                    item_type = player_item.ItemType();
                     return new Compass();
                 case GlobalGameConstants.itemType.DungeonMap:
-                    item_type = player_item.ItemType();
                     return new DungeonMap();
                 case GlobalGameConstants.itemType.WandOfGyges:
-                    item_type = player_item.ItemType();
                     return new WandOfGyges();
                 case GlobalGameConstants.itemType.ShotGun:
-                    item_type = player_item.ItemType();
                     return new ShotGun();
                 case GlobalGameConstants.itemType.WaveMotionGun:
-                    item_type = player_item.ItemType();
                     return new WaveMotionGun();
                 case GlobalGameConstants.itemType.HermesSandals:
-                    item_type = player_item.ItemType();
                     return new HermesSandals();
                 case GlobalGameConstants.itemType.RocketLauncher:
-                    item_type = player_item.ItemType();
                     return new RocketLauncher();
+                case GlobalGameConstants.itemType.FlameThrower:
+                    return new FlameThrower();
+                case GlobalGameConstants.itemType.LazerGun:
+                    return new LazerGun();
                 default:
-                    item_type = player_item.ItemType();
-                    return new Sword();
+                    throw new Exception("Pickup item type ambiguous");
             }
         }
 

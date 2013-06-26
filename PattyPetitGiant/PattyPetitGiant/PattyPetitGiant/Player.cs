@@ -51,7 +51,7 @@ namespace PattyPetitGiant
         private bool item1_switch_button_down = false;
         private bool item2_switch_button_down = false;
 
-        private const float playerMoveSpeed = 2.0f;
+        private const float playerMoveSpeed = 3.0f;
 
         private playerState state = playerState.Moving;
         public playerState State
@@ -69,8 +69,8 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new RocketLauncher();
-            player_item_2 = new MachineGun();
+            player_item_1 = new Sword();
+            player_item_2 = new DungeonMap();
             GameCampaign.Player_Item_1 = player_item_1.getEnumType();
             GameCampaign.Player_Item_2 = player_item_2.getEnumType();
 
@@ -377,6 +377,36 @@ namespace PattyPetitGiant
                 case GlobalGameConstants.itemType.MachineGun:
                     current_skeleton.Skeleton.SetAttachment("lWeapon", "lMGun");
                     break;
+                case GlobalGameConstants.itemType.DungeonMap:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lMap");
+                    break;
+                case GlobalGameConstants.itemType.WaveMotionGun:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lRayGun");
+                    break;
+                case GlobalGameConstants.itemType.ShotGun:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lShotgun");
+                    break;
+                case GlobalGameConstants.itemType.Compass:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lCompass");
+                    break;
+                case GlobalGameConstants.itemType.BushidoBlade:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lBushidoBlade");
+                    break;
+                case GlobalGameConstants.itemType.WandOfGyges:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lWand");
+                    break;
+                case GlobalGameConstants.itemType.HermesSandals:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lHermes");
+                    break;
+                case GlobalGameConstants.itemType.RocketLauncher:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lRocket");
+                    break;
+                case GlobalGameConstants.itemType.FlameThrower:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lFlamethrower");
+                    break;
+                case GlobalGameConstants.itemType.LazerGun:
+                    current_skeleton.Skeleton.SetAttachment("lWeapon", "lLaser");
+                    break;
                 default:
                     current_skeleton.Skeleton.SetAttachment("lWeapon", "lEmpty");
                     break;
@@ -395,6 +425,36 @@ namespace PattyPetitGiant
                     break;
                 case GlobalGameConstants.itemType.MachineGun:
                     current_skeleton.Skeleton.SetAttachment("rWeapon", "rMGun");
+                    break;
+                case GlobalGameConstants.itemType.DungeonMap:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rMap");
+                    break;
+                case GlobalGameConstants.itemType.WaveMotionGun:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rRayGun");
+                    break;
+                case GlobalGameConstants.itemType.ShotGun:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rShotgun");
+                    break;
+                case GlobalGameConstants.itemType.Compass:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rCompass");
+                    break;
+                case GlobalGameConstants.itemType.BushidoBlade:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rBushidoBlade");
+                    break;
+                case GlobalGameConstants.itemType.WandOfGyges:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rWand");
+                    break;
+                case GlobalGameConstants.itemType.HermesSandals:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rHermes");
+                    break;
+                case GlobalGameConstants.itemType.RocketLauncher:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rRocket");
+                    break;
+                case GlobalGameConstants.itemType.FlameThrower:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rFlamethrower");
+                    break;
+                case GlobalGameConstants.itemType.LazerGun:
+                    current_skeleton.Skeleton.SetAttachment("rWeapon", "rLaser");
                     break;
                 default:
                     current_skeleton.Skeleton.SetAttachment("rWeapon", "rEmpty");

@@ -117,9 +117,9 @@ namespace PattyPetitGiant
                 }
             }
 
-            items[0] = new Pickup(parentWorld, -500, -500, itemsForSale[0]);
-            items[1] = new Pickup(parentWorld, -500, -500, itemsForSale[1]);
-            items[2] = new Pickup(parentWorld, -500, -500, itemsForSale[2]);
+            items[0] = new Pickup(parentWorld, new Vector2(-500, -500), itemsForSale[0]);
+            items[1] = new Pickup(parentWorld, new Vector2(-500, -500), itemsForSale[1]);
+            items[2] = new Pickup(parentWorld, new Vector2(-500, -500), itemsForSale[2]);
             parentWorld.EntityList.AddRange(items);
 
         }

@@ -229,6 +229,11 @@ namespace PattyPetitGiant
                 {
                     foreach (Entity en in parentWorld.EntityList)
                     {
+                        if (en.Enemy_Type == Entity.EnemyType.Guard)
+                        {
+                            continue;
+                        }
+
                         if (Vector2.Distance(en.CenterPoint, chunkCenter) > 500)
                         {
                             continue;
@@ -507,7 +512,7 @@ namespace PattyPetitGiant
                 sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.Pink, 0.0f, Vector2.Zero, bullets[i].hitbox, SpriteEffects.None, 0.6f);
             }
 
-            sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.6f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.6f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

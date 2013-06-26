@@ -560,8 +560,92 @@
       <Name>keyRoomO</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\startNode.ftc">
-      <Name>startNode</Name>
+    <None Include="chunk\pickupA.ftc">
+      <Name>pickupA</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupB.ftc">
+      <Name>pickupB</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupC.ftc">
+      <Name>pickupC</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupD.ftc">
+      <Name>pickupD</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupE.ftc">
+      <Name>pickupE</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupF.ftc">
+      <Name>pickupF</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupG.ftc">
+      <Name>pickupG</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupH.ftc">
+      <Name>pickupH</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupI.ftc">
+      <Name>pickupI</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupJ.ftc">
+      <Name>pickupJ</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupK.ftc">
+      <Name>pickupK</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupL.ftc">
+      <Name>pickupL</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupM.ftc">
+      <Name>pickupM</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupN.ftc">
+      <Name>pickupN</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\pickupO.ftc">
+      <Name>pickupO</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneA.ftc">
+      <Name>startingZoneA</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneB.ftc">
+      <Name>startingZoneB</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneC.ftc">
+      <Name>startingZoneC</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneD.ftc">
+      <Name>startingZoneD</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneE.ftc">
+      <Name>startingZoneE</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneF.ftc">
+      <Name>startingZoneF</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\startingZoneG.ftc">
+      <Name>startingZoneG</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\testShop.ftc">
