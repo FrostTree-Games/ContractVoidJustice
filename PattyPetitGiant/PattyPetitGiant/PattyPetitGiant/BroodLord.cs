@@ -214,6 +214,7 @@ namespace PattyPetitGiant
         private Vector2 target;
 
         AnimationLib.SpineAnimationSet anim = null;
+        AnimationLib.FrameAnimationSet eggAnim = null;
 
         public BroodLing(LevelState parentWorld, Vector2 position, BroodLord lord)
         {
@@ -228,11 +229,12 @@ namespace PattyPetitGiant
             animation_time = 0;
 
             anim = AnimationLib.loadNewAnimationSet("broodling");
+            eggAnim = AnimationLib.getFrameAnimationSet("broodEgg");
         }
 
         public override void update(GameTime currentTime)
         {
-            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / ((minionState == BroodLingState.Egg) ? 1 : 1000f);
 
             if (direction < 0)
             {
@@ -376,16 +378,10 @@ namespace PattyPetitGiant
                 return;
             }
 
-            Color clr = Color.LightBlue;
-
-            switch (minionState)
+            if (minionState == BroodLingState.Egg)
             {
-                case BroodLingState.Egg:
-                    clr = Color.DarkBlue;
-                    break;
+                eggAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f);
             }
-
-            //sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.45f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
