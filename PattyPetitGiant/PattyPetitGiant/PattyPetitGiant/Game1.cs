@@ -1,6 +1,9 @@
+//#define PROFILE
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -31,11 +34,23 @@ namespace PattyPetitGiant
 
         private InputDeviceManager input_device = null;
 
+#if PROFILE
+        private int frameCounter = 0;
+        private int frameRate = 0;
+        TimeSpan elapsedTime = TimeSpan.Zero;
+#endif
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = GlobalGameConstants.GameResolutionWidth;
             graphics.PreferredBackBufferHeight = GlobalGameConstants.GameResolutionHeight;
+
+#if PROFILE
+            //this.IsFixedTimeStep = false;
+            //graphics.SynchronizeWithVerticalRetrace = false;
+            //graphics.ApplyChanges();
+#endif 
 
             Content.RootDirectory = "Content";
         }
@@ -102,6 +117,26 @@ namespace PattyPetitGiant
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+#if PROFILE
+            elapsedTime += gameTime.ElapsedGameTime;
+
+            if (elapsedTime > TimeSpan.FromMilliseconds(1))
+            {
+                elapsedTime -= TimeSpan.FromSeconds(1);
+                frameRate = frameCounter;
+                frameCounter = 0;
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
+            {
+                Thread.Sleep(100);
+            }
+
+            if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
+            {
+                return;
+            }
+#endif
             // Allows the game to exit
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
@@ -129,6 +164,19 @@ namespace PattyPetitGiant
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             currentGameScreen.render(spriteBatch);
+
+#if PROFILE
+            frameCounter++;
+
+            string fps = string.Format("fps: {0}", frameRate);
+
+            spriteBatch.Begin();
+
+            spriteBatch.DrawString(font, fps, new Vector2(33, 33), Color.Black);
+            spriteBatch.DrawString(font, fps, new Vector2(32, 32), Color.White);
+
+            spriteBatch.End();
+#endif
         }
     }
 }
