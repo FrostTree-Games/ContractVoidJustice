@@ -22,3 +22,5 @@ patrolUp
 squadLeaderDown
 squadLeaderRight
 squadLeaderUp
+broodling
+broodlord
