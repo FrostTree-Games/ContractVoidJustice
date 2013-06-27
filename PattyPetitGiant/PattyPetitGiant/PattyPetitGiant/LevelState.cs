@@ -270,13 +270,13 @@ namespace PattyPetitGiant
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                        if (rand.NextDouble() > 0.33)
+                        if (rand.NextDouble() < 0.33)
                         {
                             placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
                         }
-                        else if (rand.NextDouble() > 0.66)
+                        else if (rand.NextDouble() < 0.66)
                         {
-                            placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
+                            placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Alien, intensityLevel, rand);
                         }
                         else
                         {
