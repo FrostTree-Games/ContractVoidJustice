@@ -169,7 +169,7 @@ namespace PattyPetitGiant
                 }
                 else if (faction == Entity.EnemyType.Alien)
                 {
-                    //
+                    entityList.Add(new BroodLord(this, spawnPos));
                 }
             }
         }
@@ -270,7 +270,11 @@ namespace PattyPetitGiant
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                        if (rand.NextDouble() > 0.5)
+                        if (rand.NextDouble() > 0.33)
+                        {
+                            placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
+                        }
+                        else if (rand.NextDouble() > 0.66)
                         {
                             placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
                         }

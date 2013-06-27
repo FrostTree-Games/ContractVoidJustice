@@ -49,6 +49,8 @@ namespace PattyPetitGiant
                     return new Sword();
                 case GlobalGameConstants.itemType.Bomb:
                     return new Bomb();
+                case GlobalGameConstants.itemType.BushidoBlade:
+                    return new BushidoBlade(Vector2.Zero);
                 case GlobalGameConstants.itemType.Gun:
                     return new Gun();
                 case GlobalGameConstants.itemType.Compass:
