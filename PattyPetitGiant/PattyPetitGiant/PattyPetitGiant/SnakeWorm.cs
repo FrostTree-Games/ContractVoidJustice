@@ -32,8 +32,8 @@ namespace PattyPetitGiant
         private const float knockBackDuration = 750f;
         private const float knockBackMagnitude = 0.4f;
 
-        private const int positionsCount = 6;
-        private const int tailPiecesCount = 5;
+        private const int positionsCount = 2;
+        private const int tailPiecesCount = 100;
         private TailPosition[,] tailData = null; //using a 2d array over jagged; garbage collection should be simpler with the autoboxed value types
         int tailMostRecent;
 
@@ -129,7 +129,7 @@ namespace PattyPetitGiant
             {
                 knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
 
-                direction += turnAmount * 3;
+                //direction += turnAmount * 3;
 
                 if (knockBackTime > knockBackDuration)
                 {
@@ -146,12 +146,20 @@ namespace PattyPetitGiant
             {
                 if (i == tailPiecesCount - 1)
                 {
-                    tailData[i, tailMostRecent] = new TailPosition(position, direction);
+                    tailData[i, tailMostRecent] = new TailPosition(position, direction + (float)(Math.PI));
                 }
                 else
                 {
                     tailData[i, tailMostRecent] = tailData[(i - 1 + tailPiecesCount) % tailPiecesCount, (tailMostRecent + 1) % positionsCount];
                 }
+            }
+
+            for (int i = 0; i < tailPiecesCount - 1; i++)
+            {
+                Vector2 posDiff = tailData[i + 1, tailMostRecent].position - tailData[i, tailMostRecent].position;
+                Console.WriteLine("{0},{1} ::: {2}", i, i + 1, posDiff.Length());
+
+                tailData[i, tailMostRecent].rotation = (float)(Math.Atan2(posDiff.Y, posDiff.X));
             }
 
             tailMostRecent = (tailMostRecent + 1) % positionsCount;
@@ -164,9 +172,9 @@ namespace PattyPetitGiant
         {
             for (int i = 0; i < tailPiecesCount; i++)
             {
-                if (i == 3)
+                if (i == 8)
                 {
-                    tailAnimB.drawAnimationFrame(0.0f, sb, tailData[i, tailMostRecent].position + tailAnimB.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimB.FrameDimensions / 2);
+                    //tailAnimB.drawAnimationFrame(0.0f, sb, tailData[i, tailMostRecent].position + tailAnimB.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimB.FrameDimensions / 2);
                 }
                 else
                 {
@@ -190,6 +198,7 @@ namespace PattyPetitGiant
 
             knockBackTime = 0;
             direction.Normalize();
+            this.direction = (float)(Math.Atan2(direction.Y, direction.X));
             velocity = direction * knockBackMagnitude;
         }
 

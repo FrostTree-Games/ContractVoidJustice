@@ -3,11 +3,11 @@
   <name>snakeC</name>
   <sheetName>snakeBod.png</sheetName>
   <initalX>0</initalX>
-  <initalY>58</initalY>
+  <initalY>56</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>16</frameWidth>
-  <frameHeight>17</frameHeight>
+  <frameWidth>32</frameWidth>
+  <frameHeight>19</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>
   <loop>true</loop>

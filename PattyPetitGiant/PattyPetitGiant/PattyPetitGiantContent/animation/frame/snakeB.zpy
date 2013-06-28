@@ -2,12 +2,12 @@
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <name>snakeB</name>
   <sheetName>snakeBod.png</sheetName>
-  <initalX>0</initalX>
+  <initalX>13</initalX>
   <initalY>32</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>26</frameWidth>
-  <frameHeight>26</frameHeight>
+  <frameWidth>7</frameWidth>
+  <frameHeight>19</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>
   <loop>true</loop>
