@@ -10,3 +10,4 @@ molotov.png
 molotovFlame.png
 snakeBod.png
 broodEggSheet.png
+snakeHead.png

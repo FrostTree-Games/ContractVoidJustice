@@ -89,6 +89,8 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
+            animation_time += currentTime.ElapsedGameTime.Milliseconds;
+
             if (snakeState == SnakeWormState.Moving)
             {
                 switchTimer += currentTime.ElapsedGameTime.Milliseconds;
@@ -157,7 +159,6 @@ namespace PattyPetitGiant
             for (int i = 0; i < tailPiecesCount - 1; i++)
             {
                 Vector2 posDiff = tailData[i + 1, tailMostRecent].position - tailData[i, tailMostRecent].position;
-                Console.WriteLine("{0},{1} ::: {2}", i, i + 1, posDiff.Length());
 
                 tailData[i, tailMostRecent].rotation = (float)(Math.Atan2(posDiff.Y, posDiff.X));
             }
@@ -178,11 +179,11 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-                    tailAnimA.drawAnimationFrame(0.0f, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimA.FrameDimensions / 2);
+                    tailAnimA.drawAnimationFrame(animation_time, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimA.FrameDimensions / 2);
                 }
             }
 
-            testAnim.drawAnimationFrame(0.0f, sb, position + dimensions/2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
+            testAnim.drawAnimationFrame(animation_time, sb, position + dimensions / 2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
