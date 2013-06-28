@@ -53,6 +53,9 @@ namespace PattyPetitGiant
 
         private const float playerMoveSpeed = 3.0f;
 
+        private bool loopAnimation = false;
+        public bool LoopAnimation { get { return loopAnimation; } set { loopAnimation = value; } }
+
         private playerState state = playerState.Moving;
         public playerState State
         {
@@ -69,8 +72,8 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword();
-            player_item_2 = new DungeonMap();
+            player_item_1 = new WaveMotionGun();
+            player_item_2 = new WaveMotionGun();
             GameCampaign.Player_Item_1 = player_item_1.getEnumType();
             GameCampaign.Player_Item_2 = player_item_2.getEnumType();
 
@@ -161,7 +164,7 @@ namespace PattyPetitGiant
                 }
                 else if (state == playerState.Moving)
                 {
-
+                    loopAnimation = true;
 
                     if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                     {
@@ -306,7 +309,7 @@ namespace PattyPetitGiant
             position.Y = finalPos.Y;
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
-            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, loopAnimation);
         }
 
         public override void draw(SpriteBatch sb)
