@@ -66,6 +66,9 @@ namespace PattyPetitGiant
         protected bool remove_from_list = false;
         public bool Remove_From_List { get { return remove_from_list; } }
 
+        protected bool death = false;
+        public bool Death { get { return remove_from_list; } }
+
         public bool hitTest(Entity other)
         {
             if (position.X > other.position.X + other.dimensions.X || position.X + dimensions.X < other.position.X || position.Y > other.position.Y + other.dimensions.Y || position.Y + dimensions.Y < other.position.Y)
