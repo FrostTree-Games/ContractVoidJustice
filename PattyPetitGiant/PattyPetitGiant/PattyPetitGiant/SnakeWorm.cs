@@ -33,12 +33,21 @@ namespace PattyPetitGiant
         private const float knockBackMagnitude = 0.4f;
 
         private const int positionsCount = 6;
-        private Vector2[] tailAPositions = null;
-        private float[] tailARotations = null;
-        private Vector2[] tailBPositions = null;
-        private float[] tailBRotations = null;
+        private const int tailPiecesCount = 5;
+        private TailPosition[,] tailData = null; //using a 2d array over jagged; garbage collection should be simpler with the autoboxed value types
         int tailMostRecent;
-        //private Vector2 tailB;
+
+        private struct TailPosition
+        {
+            public Vector2 position;
+            public float rotation;
+
+            public TailPosition(Vector2 position, float rotation)
+            {
+                this.position = position;
+                this.rotation = rotation;
+            }
+        }
 
         private AnimationLib.FrameAnimationSet testAnim = null;
         private AnimationLib.FrameAnimationSet tailAnimA = null;
@@ -62,17 +71,14 @@ namespace PattyPetitGiant
             enemy_life = 16;
             enemy_type = EnemyType.Alien;
 
-            tailAPositions = new Vector2[positionsCount];
-            tailARotations = new float[positionsCount];
-            tailBPositions = new Vector2[positionsCount];
-            tailBRotations = new float[positionsCount];
+            tailData = new TailPosition[tailPiecesCount, positionsCount];
             tailMostRecent = 0;
-            for (int i = 0; i < positionsCount; i++)
+            for (int j = 0; j < tailPiecesCount; j++)
             {
-                tailAPositions[i] = position;
-                tailARotations[i] = direction;
-                tailBPositions[i] = position;
-                tailBRotations[i] = direction;
+                for (int i = 0; i < positionsCount; i++)
+                {
+                    tailData[j, i] = new TailPosition(position, direction);
+                }
             }
 
             testAnim = AnimationLib.getFrameAnimationSet("snakeA");
@@ -135,10 +141,19 @@ namespace PattyPetitGiant
                 remove_from_list = true;
             }
 
-            tailBPositions[tailMostRecent] = tailAPositions[(tailMostRecent + 2) % positionsCount];
-            tailBRotations[tailMostRecent] = tailARotations[tailMostRecent];
-            tailAPositions[tailMostRecent] = position;
-            tailARotations[tailMostRecent] = direction;
+
+            for (int i = 0; i < tailPiecesCount; i++)
+            {
+                if (i == tailPiecesCount - 1)
+                {
+                    tailData[i, tailMostRecent] = new TailPosition(position, direction);
+                }
+                else
+                {
+                    tailData[i, tailMostRecent] = tailData[(i - 1 + tailPiecesCount) % tailPiecesCount, (tailMostRecent + 1) % positionsCount];
+                }
+            }
+
             tailMostRecent = (tailMostRecent + 1) % positionsCount;
 
             Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
@@ -147,8 +162,18 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            tailAnimB.drawAnimationFrame(0.0f, sb, tailBPositions[((tailMostRecent + 1) + positionsCount) % positionsCount] + tailAnimB.FrameDimensions / 2, new Vector2(1), 0.49f, tailBRotations[((tailMostRecent + 1) + positionsCount) % positionsCount], tailAnimB.FrameDimensions / 2);
-            tailAnimA.drawAnimationFrame(0.0f, sb, tailAPositions[((tailMostRecent + 1) + positionsCount) % positionsCount] + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailARotations[((tailMostRecent + 1) + positionsCount) % positionsCount], tailAnimA.FrameDimensions / 2);
+            for (int i = 0; i < tailPiecesCount; i++)
+            {
+                if (i == 3)
+                {
+                    tailAnimB.drawAnimationFrame(0.0f, sb, tailData[i, tailMostRecent].position + tailAnimB.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimB.FrameDimensions / 2);
+                }
+                else
+                {
+                    tailAnimA.drawAnimationFrame(0.0f, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimA.FrameDimensions / 2);
+                }
+            }
+
             testAnim.drawAnimationFrame(0.0f, sb, position + dimensions/2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
         }
 
