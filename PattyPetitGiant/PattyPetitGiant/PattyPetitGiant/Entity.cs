@@ -13,6 +13,30 @@ namespace PattyPetitGiant
 {
     public abstract class Entity
     {
+        public struct SecondaryHitBox
+        {
+            private Vector2 position;
+            private Vector2 dimensions;
+            public Vector2 Position { get { return position; } set { position = value; } }
+            public Vector2 Dimensions { get { return dimensions; } set { dimensions = value; } }
+
+            public SecondaryHitBox(Vector2 position, Vector2 dimensions)
+            {
+                this.position = position;
+                this.dimensions = dimensions;
+            }
+
+            public static bool hitTestBoxEntity(SecondaryHitBox box, Entity other)
+            {
+                return !(box.Position.X > other.position.X + other.dimensions.X || box.Position.X + box.Dimensions.X < other.position.X || box.Position.Y > other.position.Y + other.dimensions.Y || box.Position.Y + box.Dimensions.Y < other.position.Y);
+            }
+
+            public static bool hitTestBoxWithBox(SecondaryHitBox boxA, SecondaryHitBox boxB)
+            {
+                return !(boxA.Position.X > boxB.Position.X + boxB.Dimensions.X || boxA.Position.X + boxA.Dimensions.X < boxB.Position.X || boxA.Position.Y > boxB.Position.Y + boxB.Dimensions.Y || boxA.Position.Y + boxA.Dimensions.Y < boxB.Position.Y);
+            }
+        }
+
         protected bool disable_movement = false;
         protected float disable_movement_time = 0.0f;
 
@@ -66,14 +90,41 @@ namespace PattyPetitGiant
         protected bool remove_from_list = false;
         public bool Remove_From_List { get { return remove_from_list; } }
 
+        protected SecondaryHitBox[] secondaryHitBoxes = null;
+        public SecondaryHitBox[] SecondaryHitBoxes { get { return secondaryHitBoxes; } }
+        public bool HasSecondaryHitBoxes { get { return !(secondaryHitBoxes == null); } }
+
         public bool hitTest(Entity other)
         {
-            if (position.X > other.position.X + other.dimensions.X || position.X + dimensions.X < other.position.X || position.Y > other.position.Y + other.dimensions.Y || position.Y + dimensions.Y < other.position.Y)
+            bool returnValue = false;
+
+            returnValue |= !(position.X > other.position.X + other.dimensions.X || position.X + dimensions.X < other.position.X || position.Y > other.position.Y + other.dimensions.Y || position.Y + dimensions.Y < other.position.Y);
+
+            if (HasSecondaryHitBoxes)
             {
-                return false;
+                for (int j = 0; j < secondaryHitBoxes.Length; j++)
+                {
+                    returnValue |= SecondaryHitBox.hitTestBoxEntity(secondaryHitBoxes[j], other);
+                }
             }
 
-            return true;
+            if (other.HasSecondaryHitBoxes)
+            {
+                for (int i = 0; i < other.SecondaryHitBoxes.Length; i++)
+                {
+                    returnValue |= SecondaryHitBox.hitTestBoxEntity(other.SecondaryHitBoxes[i], this);
+
+                    if (HasSecondaryHitBoxes)
+                    {
+                        for (int j = 0; j < secondaryHitBoxes.Length; j++)
+                        {
+                            returnValue |= SecondaryHitBox.hitTestBoxWithBox(secondaryHitBoxes[j], other.SecondaryHitBoxes[i]);
+                        }
+                    }
+                }
+            }
+
+            return returnValue;
         }
 
         //checks the position of the entity getting knocked back with the current position

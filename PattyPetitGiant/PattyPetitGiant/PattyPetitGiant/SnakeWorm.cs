@@ -37,6 +37,8 @@ namespace PattyPetitGiant
         private TailPosition[,] tailData = null; //using a 2d array over jagged; garbage collection should be simpler with the autoboxed value types
         int tailMostRecent;
 
+        private const int secondaryHitBoxCount = 8;
+
         private struct TailPosition
         {
             public Vector2 position;
@@ -79,6 +81,12 @@ namespace PattyPetitGiant
                 {
                     tailData[j, i] = new TailPosition(position, direction);
                 }
+            }
+
+            secondaryHitBoxes = new SecondaryHitBox[secondaryHitBoxCount];
+            for (int i = 0; i < secondaryHitBoxCount; i++)
+            {
+                secondaryHitBoxes[i] = new SecondaryHitBox(position, new Vector2(16));
             }
 
             testAnim = AnimationLib.getFrameAnimationSet("snakeA");
@@ -165,6 +173,11 @@ namespace PattyPetitGiant
 
             tailMostRecent = (tailMostRecent + 1) % positionsCount;
 
+            for (int i = 0; i < secondaryHitBoxCount; i++)
+            {
+                secondaryHitBoxes[i].Position = tailData[(int)(i * ((tailPiecesCount - 1.0f) / secondaryHitBoxCount)), tailMostRecent].position;
+            }
+
             Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
             position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
         }
@@ -184,6 +197,12 @@ namespace PattyPetitGiant
             }
 
             testAnim.drawAnimationFrame(animation_time, sb, position + dimensions / 2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
+
+            /*
+            for (int i = 0; i < secondaryHitBoxCount; i++)
+            {
+                sb.Draw(Game1.whitePixel, secondaryHitBoxes[i].Position, null, Color.Magenta, 0.0f, Vector2.Zero, secondaryHitBoxes[i].Dimensions, SpriteEffects.None, 0.7f);
+            }*/
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

@@ -147,12 +147,21 @@ namespace PattyPetitGiant
 
         public bool hitTest(Entity other)
         {
-            if (position.X > other.Position.X + other.Dimensions.X || position.X + hitbox.X < other.Position.X || position.Y > other.Position.Y + other.Dimensions.Y || position.Y + hitbox.Y < other.Position.Y)
+            bool returnValue = false;
+
+            returnValue |= !(position.X > other.Position.X + other.Dimensions.X || position.X + hitbox.X < other.Position.X || position.Y > other.Position.Y + other.Dimensions.Y || position.Y + hitbox.Y < other.Position.Y);
+
+            if (other.HasSecondaryHitBoxes)
             {
-                return false;
+                Entity.SecondaryHitBox s = new Entity.SecondaryHitBox(position, hitbox);
+
+                for (int i = 0; i < other.SecondaryHitBoxes.Length; i++)
+                {
+                    returnValue |= Entity.SecondaryHitBox.hitTestBoxWithBox(s, other.SecondaryHitBoxes[i]);
+                }
             }
 
-            return true;
+            return returnValue;
         }
     }
 }

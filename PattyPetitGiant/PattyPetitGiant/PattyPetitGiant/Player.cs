@@ -305,8 +305,7 @@ namespace PattyPetitGiant
             Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
 
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-            position.X = finalPos.X;
-            position.Y = finalPos.Y;
+            position = finalPos;
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, loopAnimation);
