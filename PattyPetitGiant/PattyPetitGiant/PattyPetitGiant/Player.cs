@@ -169,7 +169,6 @@ namespace PattyPetitGiant
                     if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                     {
                         state = playerState.Item1;
-
                     }
                     if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
                     {

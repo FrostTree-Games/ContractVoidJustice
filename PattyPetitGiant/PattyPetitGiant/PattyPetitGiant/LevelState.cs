@@ -58,6 +58,9 @@ namespace PattyPetitGiant
         private int currentSeed;
         public int CurrentSeed { get { return currentSeed; } }
 
+        private ParticleSet particleSet = null;
+        public ParticleSet Particles { get { return particleSet; } }
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -71,6 +74,8 @@ namespace PattyPetitGiant
 
             gui = new InGameGUI(this);
             keyModule = new LevelKeyModule();
+
+            particleSet = new ParticleSet();
 
             entityList = new List<Entity>();
 
@@ -345,6 +350,8 @@ namespace PattyPetitGiant
                 en.update(currentTime);
             }
 
+            particleSet.update(currentTime);
+
 #if WINDOWS
             entityList.RemoveAll(en => en.Remove_From_List == true);
 #elif XBOX
@@ -425,7 +432,10 @@ namespace PattyPetitGiant
 
             AnimationLib.renderSpineEntities(camera, entityList, cameraFocus);
 
+            sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
+            particleSet.draw(sb, cameraFocus.CenterPoint, 0.3f);
             gui.render(sb);
+            sb.End();
         }
 
         private void renderPauseOverlay(SpriteBatch sb)
