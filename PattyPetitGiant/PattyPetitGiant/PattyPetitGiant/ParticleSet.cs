@@ -7,6 +7,13 @@ namespace PattyPetitGiant
 {
     public class ParticleSet
     {
+        public enum ParticleType
+        {
+            Blood = 0,
+        }
+
+        private const float bloodInitialSpeed = 10f;
+
         public struct Particle
         {
             public bool active;
@@ -20,6 +27,23 @@ namespace PattyPetitGiant
             public float animationTime;
             public AnimationLib.FrameAnimationSet animation;
             public Color color;
+
+            public static void NewBloodParticle(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 500f + (float)Game1.rand.NextDouble() * 200f;
+                p.rotation = 0;
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("bloodSpray");
+                p.color = Color.White;
+
+                float direction = (float)((-Math.PI * 3 / 8) - (Game1.rand.NextDouble() * Math.PI / 4));
+                p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
+                p.acceleration = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction)) * -13) * 2.5f;
+            }
         }
 
         private const int particlePoolSize = 100;
@@ -85,6 +109,17 @@ namespace PattyPetitGiant
                 particlePool[i].animation = AnimationLib.getFrameAnimationSet("gamepadA");
                 particlePool[i].animationTime = 0;
                 particlePool[i].color = new Color((float)Game1.rand.NextDouble(), (float)Game1.rand.NextDouble(), (float)Game1.rand.NextDouble());
+            }
+        }
+
+        public void pushBloodParticle(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewBloodParticle(ref particlePool[i], position);
+                return;
             }
         }
     }
