@@ -416,8 +416,6 @@ namespace PattyPetitGiant
         {
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, camera);
 
-            map.render(sb, 0.0f);
-
             foreach (Entity en in entityList)
             {
                 if (Vector2.Distance(en.Position, cameraFocus.Position) > 1000)
@@ -430,7 +428,7 @@ namespace PattyPetitGiant
 
             sb.End();
 
-            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus);
+            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map);
 
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
             particleSet.draw(sb, cameraFocus.CenterPoint, 0.3f);

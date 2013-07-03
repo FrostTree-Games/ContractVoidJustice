@@ -347,10 +347,12 @@ namespace PattyPetitGiant
             return new SpineAnimationSet(folderName);
         }
 
-        public static void renderSpineEntities(Matrix camera, List<Entity> entList, Entity cameraEntity)
+        public static void renderSpineEntities(Matrix camera, List<Entity> entList, Entity cameraEntity, TileMap map)
         {
             skeletonRenderer.setCameraMatrix(camera);
             skeletonRenderer.Begin();
+
+            map.renderSPINEBATCHTEST(skeletonRenderer, 0.5f);
 
             foreach (Entity en in entList)
             {
