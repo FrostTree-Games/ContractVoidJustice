@@ -114,24 +114,24 @@ namespace PattyPetitGiant
                             break; 
                     }
 
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (en == this)
+                        if (parentWorld.EntityList[i] == this)
                         {
                             continue;
                         }
 
-                        if (en is Player || en is Enemy)
+                        if (parentWorld.EntityList[i] is Player || parentWorld.EntityList[i] is Enemy)
                         {
-                            if (en is Enemy)
+                            if (parentWorld.EntityList[i] is Enemy)
                             {
-                                if (((Enemy)en).Enemy_Type == Enemy.EnemyType.Prisoner)
+                                if (((Enemy)parentWorld.EntityList[i]).Enemy_Type == Enemy.EnemyType.Prisoner)
                                 {
                                     continue;
                                 }
                             }
 
-                            if (f.hitTestWithEntity(en))
+                            if (f.hitTestWithEntity(parentWorld.EntityList[i]))
                             {
                                 animation_time = 0.0f;
 
@@ -230,11 +230,11 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (en is Player)
+                        if (parentWorld.EntityList[i] is Player)
                         {
-                            if (flame.hitTestWithEntity(en))
+                            if (flame.hitTestWithEntity(parentWorld.EntityList[i]))
                             {
                                 throwingTimer = 999f;
                                 break;
@@ -431,16 +431,16 @@ namespace PattyPetitGiant
             {
                 timeAlive += currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en is MolotovEnemy)
+                    if (parentWorld.EntityList[i] is MolotovEnemy)
                     {
                         continue;
                     }
 
-                    if (hitTestWithEntity(en))
+                    if (hitTestWithEntity(parentWorld.EntityList[i]))
                     {
-                        en.knockBack(en.CenterPoint - CenterPoint, 5.0f, 10);
+                        parentWorld.EntityList[i].knockBack(parentWorld.EntityList[i].CenterPoint - CenterPoint, 5.0f, 10);
                     }
                 }
 

@@ -370,18 +370,18 @@ namespace PattyPetitGiant
 
             map.renderSPINEBATCHTEST(skeletonRenderer, 0.5f);
 
-            foreach (Entity en in entList)
+            for (int i = 0; i < entList.Count; i++)
             {
-                if (Vector2.Distance(cameraEntity.Position, en.Position) > (GlobalGameConstants.GameResolutionWidth * 0.75f))
+                if (Vector2.Distance(cameraEntity.Position, entList[i].Position) > (GlobalGameConstants.GameResolutionWidth * 0.75f))
                 {
                     continue;
                 }
 
-                en.draw(skeletonRenderer);
+                entList[i].draw(skeletonRenderer);
 
-                if (en is SpineEntity)
+                if (entList[i] is SpineEntity)
                 {
-                    ((SpineEntity)en).spinerender(skeletonRenderer);
+                    ((SpineEntity)entList[i]).spinerender(skeletonRenderer);
                 }
             }
 

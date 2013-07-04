@@ -244,14 +244,14 @@ namespace PattyPetitGiant
                     bool itemTouched = false;
 
                     //Check to see if player has encountered a pickup item
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (en == this)
+                        if (parentWorld.EntityList[i] == this)
                             continue;
 
-                        if (en is Pickup)
+                        if (parentWorld.EntityList[i] is Pickup)
                         {
-                            if (hitTest(en))
+                            if (hitTest(parentWorld.EntityList[i]))
                             {
                                 itemTouched = true;
 
@@ -263,7 +263,7 @@ namespace PattyPetitGiant
                                 {
                                     item1_switch_button_down = false;
 
-                                    player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
+                                    player_item_1 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_1, currentTime);
                                     GameCampaign.Player_Item_1 = player_item_1.getEnumType();
                                 }
 
@@ -275,7 +275,7 @@ namespace PattyPetitGiant
                                 {
                                     item2_switch_button_down = false;
 
-                                    player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
+                                    player_item_2 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_2, currentTime);
                                     GameCampaign.Player_Item_2 = player_item_2.getEnumType();
                                 }
                             }

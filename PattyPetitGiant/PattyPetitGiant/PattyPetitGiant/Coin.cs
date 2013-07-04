@@ -65,11 +65,11 @@ namespace PattyPetitGiant
             {
                 animationTime += currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en is Player)
+                    if (parentWorld.EntityList[i] is Player)
                     {
-                        if (hitTest(en))
+                        if (hitTest(parentWorld.EntityList[i]))
                         {
                             GameCampaign.Player_Coin_Amount = GameCampaign.Player_Coin_Amount + (int)value;
 

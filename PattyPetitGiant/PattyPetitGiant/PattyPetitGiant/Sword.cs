@@ -96,14 +96,14 @@ namespace PattyPetitGiant
             }
             else if (sword_state == Sword_State.slash)
             {
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en is Enemy || en is ShopKeeper || en is Key || en is Coin)
+                    if (parentWorld.EntityList[i] is Enemy || parentWorld.EntityList[i] is ShopKeeper || parentWorld.EntityList[i] is Key || parentWorld.EntityList[i] is Coin)
                     {
-                        if (hitTest(en))
+                        if (hitTest(parentWorld.EntityList[i]))
                         {
-                            Vector2 direction = en.CenterPoint - parent.CenterPoint;
-                            en.knockBack(direction, knockback_magnitude, sword_damage, parent);
+                            Vector2 direction = parentWorld.EntityList[i].CenterPoint - parent.CenterPoint;
+                            parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, sword_damage, parent);
                         }
                     }
                 }

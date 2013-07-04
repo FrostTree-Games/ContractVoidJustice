@@ -89,11 +89,11 @@ namespace PattyPetitGiant
 
             populateRooms(nodeMap, currentSeed);
 
-            foreach (Entity en in entityList)
+            for (int i = 0; i < entityList.Count; i++)
             {
-                if (en is Player)
+                if (entityList[i] is Player)
                 {
-                    cameraFocus = en;
+                    cameraFocus = entityList[i];
                 }
             }
 
@@ -146,35 +146,35 @@ namespace PattyPetitGiant
                 {
                     if (randomSpawnValue < 0.25)
                     {
-                        entityList.Add(new MolotovEnemy(this, spawnPos));
+                        //entityList.Add(new MolotovEnemy(this, spawnPos));
                     }
                     else if (randomSpawnValue < 0.5)
                     {
-                        entityList.Add(new ChargerMutantEnemy(this, spawnPos));
+                        //entityList.Add(new ChargerMutantEnemy(this, spawnPos));
                     }
                     else
                     {
-                        entityList.Add(new ChaseEnemy(this, spawnPos));
+                        //entityList.Add(new ChaseEnemy(this, spawnPos));
                     }
                 }
                 else if (faction == Entity.EnemyType.Guard)
                 {
                     if (randomSpawnValue < 0.25)
                     {
-                        entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
+                        //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                     }
                     else if (randomSpawnValue < 0.5)
                     {
-                        entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
+                        //entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }
                     else
                     {
-                        entityList.Add(new PatrolGuard(this, spawnPos));
+                        //entityList.Add(new PatrolGuard(this, spawnPos));
                     }
                 }
                 else if (faction == Entity.EnemyType.Alien)
                 {
-                    entityList.Add(new BroodLord(this, spawnPos));
+                    //entityList.Add(new BroodLord(this, spawnPos));
                 }
             }
         }
@@ -345,9 +345,10 @@ namespace PattyPetitGiant
                 GameCampaign.Player_Ammunition = 0;
             }
 
-            foreach (Entity en in entityList)
+
+            for (int i = 0; i < entityList.Count; i++)
             {
-                en.update(currentTime);
+                entityList[i].update(currentTime);
             }
 
             particleSet.update(currentTime);

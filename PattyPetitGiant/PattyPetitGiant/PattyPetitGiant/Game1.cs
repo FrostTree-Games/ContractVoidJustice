@@ -1,4 +1,4 @@
-//#define PROFILE
+#define PROFILE
 
 using System;
 using System.Collections.Generic;
@@ -129,7 +129,7 @@ namespace PattyPetitGiant
 
             if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
             {
-                Thread.Sleep(100);
+                Thread.Sleep(1);
             }
 
             if (Keyboard.GetState().IsKeyDown(Keys.PageDown))

@@ -95,13 +95,13 @@ namespace PattyPetitGiant
                 {
                     targetEntity = null;
 
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (en.Enemy_Type == EnemyType.Player || en.Enemy_Type == EnemyType.Guard || en.Enemy_Type == EnemyType.Prisoner)
+                        if (parentWorld.EntityList[i].Enemy_Type == EnemyType.Player || parentWorld.EntityList[i].Enemy_Type == EnemyType.Guard || parentWorld.EntityList[i].Enemy_Type == EnemyType.Prisoner)
                         {
-                            if (Vector2.Distance(en.Position, position) < attackRadius && (targetEntity == null || Vector2.Distance(en.Position, position) < Vector2.Distance(targetEntity.Position, position)))
+                            if (Vector2.Distance(parentWorld.EntityList[i].Position, position) < attackRadius && (targetEntity == null || Vector2.Distance(parentWorld.EntityList[i].Position, position) < Vector2.Distance(targetEntity.Position, position)))
                             {
-                                targetEntity = en;
+                                targetEntity = parentWorld.EntityList[i];
                             }
                         }
                     }
@@ -223,15 +223,15 @@ namespace PattyPetitGiant
                 throw new Exception("Invalid SlowChaser state");
             }
 
-            foreach (Entity en in parentWorld.EntityList)
+            for (int i = 0; i < parentWorld.EntityList.Count; i++)
             {
-                if (en.Enemy_Type != EnemyType.Alien)
+                if (parentWorld.EntityList[i].Enemy_Type != EnemyType.Alien)
                 {
-                    if (Vector2.Distance(en.Position, position) < 300)
+                    if (Vector2.Distance(parentWorld.EntityList[i].Position, position) < 300)
                     {
-                        if (hitTest(en))
+                        if (hitTest(parentWorld.EntityList[i]))
                         {
-                            en.knockBack(en.CenterPoint - CenterPoint, 6, 7);
+                            parentWorld.EntityList[i].knockBack(parentWorld.EntityList[i].CenterPoint - CenterPoint, 6, 7);
 
                             if (chaserState == SlowChaserState.Sprint && Vector2.Distance(position, targetEntity.Position) < GlobalGameConstants.TileSize.X)
                             {
