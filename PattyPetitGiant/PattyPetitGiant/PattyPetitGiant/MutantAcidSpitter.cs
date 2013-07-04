@@ -26,14 +26,13 @@ namespace PattyPetitGiant
         private EnemyComponents component = new MoveSearch();
 
         private float windup_timer = 0.0f;
-        private const float max_windup_timer = 1000f;
+        private const float max_windup_timer = 500f;
 
         private float angle = 0.0f;
 
-        private const int size_of_spit_array = 50;
+        private const int size_of_spit_array = 3;
         private int spitter_count = 0;
         private SpitProjectile[] projectile = new SpitProjectile[size_of_spit_array];
-        private bool spit_firing = false;
 
         private Entity entity_found = null;
 
@@ -58,29 +57,18 @@ namespace PattyPetitGiant
             enemy_type = EnemyType.Alien;
             entity_found = null;
 
+            for (int i = 0; i < size_of_spit_array; i++)
+            {
+                projectile[i] = new SpitProjectile(new Vector2(0,0), 0);
+                projectile[i].active = false;
+            }
+
             death = false;
         }
 
         public override void update(GameTime currentTime)
         {
             change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
-
-            if (spitter_count == size_of_spit_array)
-            {
-                int inactive_projectile_count = 0;
-                for (int i = 0; i < spitter_count; i++)
-                {
-                    if (projectile[i].active == false)
-                    {
-                        inactive_projectile_count++;
-                    }
-                }
-
-                if (inactive_projectile_count == size_of_spit_array)
-                {
-                    spitter_count = 0;
-                }
-            }
 
             switch (state)
             {
@@ -108,10 +96,10 @@ namespace PattyPetitGiant
                             velocity = Vector2.Zero;
                         }
                     }
-
                     break;
                 case SpitterState.WindUp:
                     windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+
                     if (windup_timer > max_windup_timer)
                     {
                         state = SpitterState.Fire;
@@ -120,10 +108,16 @@ namespace PattyPetitGiant
                     break;
                 case SpitterState.Fire:
                     angle = (float)(Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X));
-                    if (spitter_count < size_of_spit_array)
+
+                    for (int i = 0; i < size_of_spit_array; i++)
                     {
-                        projectile[spitter_count] = new SpitProjectile(CenterPoint, angle);
-                        spitter_count++;
+                        if (!projectile[i].active)
+                        {
+                            Console.WriteLine("creating new bullet " + i);
+                            projectile[i] = new SpitProjectile(CenterPoint, angle);
+                            state = SpitterState.WindUp;
+                            break;
+                        }
                     }
                     break;
                 case SpitterState.KnockBack:
@@ -132,6 +126,15 @@ namespace PattyPetitGiant
                     break;
                 default:
                     break;
+            }
+
+            for(int i = 0; i < size_of_spit_array; i++)
+            {
+                if (projectile[i].active)
+                {
+                    Console.WriteLine("active bullet " + i);
+                    projectile[i].update(parentWorld, currentTime, this);
+                }
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
@@ -144,14 +147,12 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
             sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
-            if (spitter_count < size_of_spit_array)
+
+            for (int i = 0; i < size_of_spit_array; i++)
             {
-                for (int i = 0; i < spitter_count; i++)
+                if (projectile[i].active)
                 {
-                    if (projectile[i].active)
-                    {
-                        sb.Draw(Game1.whitePixel, projectile[i].position, null, Color.Blue, 0.0f, Vector2.Zero, projectile[i].dimensions, SpriteEffects.None, 0.5f);
-                    }
+                    sb.Draw(Game1.whitePixel, projectile[i].position, null, Color.Pink, 0.0f, Vector2.Zero, projectile[i].dimensions, SpriteEffects.None, 0.5f);
                 }
             }
         }
@@ -171,38 +172,163 @@ namespace PattyPetitGiant
             private enum ProjectileState
             {
                 Travel,
+                GrowPool,
+                IdlePool,
+                DecreasePool,
                 Reset
             }
             public Vector2 position;
+            private Vector2 original_position;
             private Vector2 velocity;
             public Vector2 dimensions;
+            private const float max_dimensions = 100.0f;
             public bool active;
 
             private float alive_timer;
-            private const float max_alive_timer = 2000.0f;
+            private const float max_alive_timer = 800.0f;
+            private const float max_pool_alive_timer = 1000.0f;
             private ProjectileState projectile_state;
+            public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X / 2, position.Y + dimensions.Y / 2); } }
+     
+            private float damage_timer;
+            private const float damage_timer_threshold = 200.0f;
 
             public SpitProjectile(Vector2 launch_position, float angle)
             {
                 this.position = launch_position;
-                velocity = new Vector2((float)(8*Math.Cos(angle)), (float)(Math.Sin(angle)));
+                original_position = Vector2.Zero;
+                velocity = new Vector2((float)(8*Math.Cos(angle)), (float)(8*Math.Sin(angle)));
                 dimensions = new Vector2(10, 10);
 
                 projectile_state = ProjectileState.Travel;
                 alive_timer = 0.0f;
+                damage_timer = 0.0f;
 
                 active = true;
             }
 
             public void update(LevelState parentWorld, GameTime currentTime, Entity parent)
             {
-                switch(projectile_state)
+                switch(projectile_state) 
                 {
                     case ProjectileState.Travel:
                         alive_timer += currentTime.ElapsedGameTime.Milliseconds;
                         position += velocity;
+
                         if (alive_timer > max_alive_timer)
+                        {
+                            alive_timer = 0.0f;
+                            projectile_state = ProjectileState.GrowPool;
+                            original_position = position;
+                        }
+                        else
+                        {
+                            foreach(Entity en in parentWorld.EntityList)
+                            {
+                                if (en == parent)
+                                    continue;
+                                else if (spitHitTest(en))
+                                {
+                                    projectile_state = ProjectileState.GrowPool;
+                                    alive_timer = 0.0f;
+                                    original_position = position;
+                                }
+                            }
+                        }
+                        break;
+                    case ProjectileState.GrowPool:
+                        damage_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        if (dimensions.X < max_dimensions && dimensions.Y < max_dimensions)
+                        {
+                            dimensions += new Vector2(1, 1);
+                            position = original_position - (dimensions/2);
+                            alive_timer = 0.0f;
+                            if (damage_timer > damage_timer_threshold)
+                            {
+                                foreach (Entity en in parentWorld.EntityList)
+                                {
+                                    if (spitHitTest(en))
+                                    {
+                                        if (en is Enemy)
+                                        {
+                                            ((Enemy)en).Enemy_Life -= 1;
+                                        }
+                                        else if (en is Player)
+                                        {
+                                            GameCampaign.Player_Health -= 1;
+                                        }
+                                    }
+                                }
+                                damage_timer = 0.0f;
+                            }
+                        }
+                        else
+                        {
+                            projectile_state = ProjectileState.IdlePool;
+                            /*alive_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            if (alive_timer > max_pool_alive_timer)
+                            {
+                                alive_timer = 0.0f;
+                                projectile_state = ProjectileState.Reset;
+                            }*/
+                        }
+                        break;
+                    case ProjectileState.IdlePool:
+                        alive_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        damage_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        if (damage_timer > damage_timer_threshold)
+                        {
+                            foreach (Entity en in parentWorld.EntityList)
+                            {
+                                if (spitHitTest(en))
+                                {
+                                    if (en is Enemy)
+                                    {
+                                        ((Enemy)en).Enemy_Life -= 1;
+                                    }
+                                    else if (en is Player)
+                                    {
+                                        GameCampaign.Player_Health -= 1;
+                                    }
+                                }
+                            }
+                            damage_timer = 0.0f;
+                        }
+                        if (alive_timer > max_pool_alive_timer)
+                        {
+                            alive_timer = 0.0f;
+                            projectile_state = ProjectileState.DecreasePool;
+                        }
+                        break;
+                    case ProjectileState.DecreasePool:
+                        damage_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        if (dimensions.X > 0 && dimensions.Y > 0)
+                        {
+                            dimensions -= new Vector2(1, 1);
+                            position = original_position - (dimensions / 2);
+                            if (damage_timer > damage_timer_threshold)
+                            {
+                                foreach (Entity en in parentWorld.EntityList)
+                                {
+                                    if (spitHitTest(en))
+                                    {
+                                        if (en is Enemy)
+                                        {
+                                            ((Enemy)en).Enemy_Life -= 1;
+                                        }
+                                        else if (en is Player)
+                                        {
+                                            GameCampaign.Player_Health -= 1;
+                                        }
+                                    }
+                                }
+                                damage_timer = 0.0f;
+                            }
+                        }
+                        else
+                        {
                             active = false;
+                        }
                         break;
                     default:
                         break;
@@ -218,10 +344,6 @@ namespace PattyPetitGiant
 
                 return true;
             }
-        }
-
-        public struct SpitPool
-        {
         }
     }
 }

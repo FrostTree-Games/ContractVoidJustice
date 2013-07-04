@@ -22,3 +22,4 @@ patrolUp
 squadLeaderDown
 squadLeaderRight
 squadLeaderUp
+tankTurret
