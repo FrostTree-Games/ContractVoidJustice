@@ -40,11 +40,13 @@ namespace PattyPetitGiant
         private Vector2 melee_position;
         private float angle;
 
+        private AnimationLib.FrameAnimationSet tankAnim;
+
         public GuardMech(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
             melee_position = Vector2.Zero;
-            dimensions = new Vector2(72, 72);
+            dimensions = new Vector2(96, 120);
             velocity = new Vector2(0.8f, 0.0f);
 
             windup_timer = 0.0f;
@@ -70,13 +72,13 @@ namespace PattyPetitGiant
 
             grenade = new Grenades(Vector2.Zero, 0.0f);
 
-            walk_down = AnimationLib.loadNewAnimationSet("squadSoldierDown");
-            walk_right = AnimationLib.loadNewAnimationSet("squadSoldierRight");
-            walk_up = AnimationLib.loadNewAnimationSet("squadSoldierUp");
-            current_skeleton = walk_right;
-            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+            walk_down = AnimationLib.loadNewAnimationSet("tankTurret");
+            current_skeleton = walk_down;
+            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
             current_skeleton.Skeleton.FlipX = false;
             animation_time = 0.0f;
+
+            tankAnim = AnimationLib.getFrameAnimationSet("tank");
         }
 
         public override void update(GameTime currentTime)
@@ -98,7 +100,7 @@ namespace PattyPetitGiant
                 switch(mech_state)
                 {
                     case MechState.Moving:
-                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
                         if (enemy_found == false)
@@ -123,19 +125,23 @@ namespace PattyPetitGiant
                         {
                             case GlobalGameConstants.Direction.Right:
                                 velocity = new Vector2(0.5f, 0f);
-                                current_skeleton = walk_right;
+                                //current_skeleton = walk_right;
+                                dimensions = new Vector2(120, 96);
                                 break;
                             case GlobalGameConstants.Direction.Left:
                                 velocity = new Vector2(-0.5f, 0f);
-                                current_skeleton = walk_right;
+                                dimensions = new Vector2(120, 96);
+                                //current_skeleton = walk_right;
                                 break;
                             case GlobalGameConstants.Direction.Up:
                                 velocity = new Vector2(0f, -0.5f);
-                                current_skeleton = walk_up;
+                                dimensions = new Vector2(96, 120);
+                               // current_skeleton = walk_up;
                                 break;
                             default:
                                 velocity = new Vector2(0.0f, 0.5f);
-                                current_skeleton = walk_down;
+                                dimensions = new Vector2(96, 120);
+                                //current_skeleton = walk_down;
                                 break;
                         }
 
@@ -157,7 +163,7 @@ namespace PattyPetitGiant
                         }
                         break;
                     case MechState.Firing:
-                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
                         angle = (float)Math.Atan2(entity_found.CenterPoint.Y - position.Y, entity_found.CenterPoint.X - position.X);
 
@@ -194,48 +200,56 @@ namespace PattyPetitGiant
                                 if(angle < -1 * Math.PI/3.27)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Up;
-                                    current_skeleton = walk_up;
+                                    dimensions = new Vector2(96, 120);
+                                    //current_skeleton = walk_up;
                                 }
                                 else if (angle > Math.PI / 3.27)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Down;
-                                    current_skeleton = walk_down;
+                                    dimensions = new Vector2(96, 120);
+                                    //current_skeleton = walk_down;
                                 }
                                 break;
                             case GlobalGameConstants.Direction.Left:
                                 if (angle < Math.PI / 1.44 && angle > Math.PI/1.5)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Down;
-                                    current_skeleton = walk_down;
+                                    dimensions = new Vector2(96, 120);
+                                   // current_skeleton = walk_down;
                                 }
                                 else if (angle > -1*Math.PI / 1.44 && angle< -1*Math.PI/1.5)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Up;
-                                    current_skeleton = walk_up;
+                                    dimensions = new Vector2(96, 120);
+                                    //current_skeleton = walk_up;
                                 }
                                 break;
                             case GlobalGameConstants.Direction.Up:
                                 if (angle < -1 * Math.PI / 1.24)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Left;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 else if (angle > -1 * Math.PI / 5.14)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Right;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 break;
                             default:
                                 if (angle < Math.PI / 5.14)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Right;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 else if (angle > Math.PI / 1.24)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Left;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 break;
                         }
@@ -258,54 +272,62 @@ namespace PattyPetitGiant
                                 if (angle < -1 * Math.PI / 3.27)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Up;
-                                    current_skeleton = walk_up;
+                                    dimensions = new Vector2(96, 120);
+                                    //current_skeleton = walk_up;
                                 }
                                 else if (angle > Math.PI / 3.27)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Down;
-                                    current_skeleton = walk_down;
+                                    dimensions = new Vector2(96, 120);
+                                    //current_skeleton = walk_down;
                                 }
                                 break;
                             case GlobalGameConstants.Direction.Left:
                                 if (angle < Math.PI / 1.44 && angle > Math.PI / 1.5)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Down;
-                                    current_skeleton = walk_down;
+                                    dimensions = new Vector2(96, 120);
+                                    //current_skeleton = walk_down;
                                 }
                                 else if (angle > -1 * Math.PI / 1.44 && angle < -1 * Math.PI / 1.5)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Up;
-                                    current_skeleton = walk_up;
+                                    dimensions = new Vector2(96, 120);
+                                    //current_skeleton = walk_up;
                                 }
                                 break;
                             case GlobalGameConstants.Direction.Up:
                                 if (angle < -1 * Math.PI / 1.24)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Left;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 else if (angle > -1 * Math.PI / 5.14)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Right;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 break;
                             default:
                                 if (angle < Math.PI / 5.14)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Right;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 else if (angle > Math.PI / 1.24)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Left;
-                                    current_skeleton = walk_right;
+                                    dimensions = new Vector2(120, 96);
+                                    //current_skeleton = walk_right;
                                 }
                                 break;
                         }
                         break;
                     case MechState.Melee:
-                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
                         
                         switch(direction_facing)
@@ -392,6 +414,30 @@ namespace PattyPetitGiant
         public override void draw(SpriteBatch sb)
         {
             sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+
+            float draw_angle = 0.0f;
+
+            switch (direction_facing)
+            {
+                case GlobalGameConstants.Direction.Right:
+                    draw_angle = (float)(Math.PI / 2);
+                    break;
+                case GlobalGameConstants.Direction.Left:
+                    draw_angle = (float)(3 * Math.PI / 2);
+                    break;
+                case GlobalGameConstants.Direction.Up:
+                    draw_angle = 0.0f;
+                    break;
+                default:
+                    draw_angle = (float)Math.PI;
+                    break;
+            }
+
+            //tankAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1, 1), 0.5f);
+            //tankAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1, 1), 0.5f, Color.Blue);
+            //rotation rotates the entire tank around an origin (top right of the sprite)
+            tankAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1, 1), 0.5f, draw_angle, dimensions);
+
             if(grenade.active)
             {
                 sb.Draw(Game1.whitePixel, grenade.Position, null, Color.Blue, 0.0f, Vector2.Zero, grenade.Dimensions, SpriteEffects.None, 0.5f);
@@ -474,7 +520,7 @@ namespace PattyPetitGiant
             }
 
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
-            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y;
 
             current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
             current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
