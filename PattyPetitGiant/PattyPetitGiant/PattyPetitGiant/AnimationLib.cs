@@ -377,6 +377,8 @@ namespace PattyPetitGiant
                     continue;
                 }
 
+                en.draw(skeletonRenderer);
+
                 if (en is SpineEntity)
                 {
                     ((SpineEntity)en).spinerender(skeletonRenderer);

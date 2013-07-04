@@ -358,14 +358,16 @@ namespace PattyPetitGiant
             } 
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (bullet_count > 0)
             {
                 for (int i = 0; i < bullet_count; i++)
                 {
-                    if(bullets[i].active)
-                        sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.White, 0.0f, Vector2.Zero, new Vector2(10.0f, 10.0f), SpriteEffects.None, 0.5f);
+                    if (bullets[i].active)
+                    {
+                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].position, Color.White, 0.0f, new Vector2(10.0f, 10.0f));
+                    }
                 }
             }
         }

@@ -274,14 +274,14 @@ namespace PattyPetitGiant
             directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (chaserState == SlowChaserState.WindUp && chaseIteration == 0)
             {
-                konamiAlert.drawAnimationFrame(0, sb, position - new Vector2(0, konamiAlert.FrameHeight * 3), new Vector2(3), 0.7f);
+                konamiAlert.drawAnimationFrame(0.0f, sb, position - new Vector2(0, konamiAlert.FrameHeight * 3), new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
 
-            sb.Draw(Game1.whitePixel, position, null, Color.Lerp(Color.Blue, Color.Red, aggressionTime / maxAggressionTime), 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Lerp(Color.Blue, Color.Red, aggressionTime / maxAggressionTime), 0.0f, dimensions);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

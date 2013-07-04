@@ -143,7 +143,7 @@ namespace PattyPetitGiant
 
         public abstract void update(GameTime currentTime);
 
-        public abstract void draw(SpriteBatch sb);
+        public abstract void draw(Spine.SkeletonRenderer sb);
     }
 
     public interface SpineEntity

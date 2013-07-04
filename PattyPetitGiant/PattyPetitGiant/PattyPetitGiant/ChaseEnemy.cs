@@ -234,7 +234,7 @@ namespace PattyPetitGiant
 
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, sword_position, null, Color.Pink, 0.0f, Vector2.Zero, sword_hitbox, SpriteEffects.None, 0.5f);
             //chaseAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);

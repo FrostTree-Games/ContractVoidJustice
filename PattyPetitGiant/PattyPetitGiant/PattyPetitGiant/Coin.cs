@@ -105,11 +105,11 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (state == CoinState.Active)
             {
-                coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.51f, shadeColor);
+                coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
             }
         }
 

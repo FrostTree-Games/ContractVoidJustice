@@ -288,16 +288,16 @@ namespace PattyPetitGiant
             directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, molotovState == MolotovState.MoveWait ? true : false);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (molotovState == MolotovState.Throwing)
             {
-                templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(1, 1), 0.51f, animation_time / 100f, new Vector2(16, 16));
+                templateAnim.drawAnimationFrame(animation_time, sb, throwPosition, new Vector2(1, 1), 0.51f, animation_time / 100f, new Vector2(16, 16), Color.White);
             }
 
             if (flame.active)
             {
-                flameAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(1, 1), 0.4f, Color.White);
+                flameAnim.drawAnimationFrame(animation_time + 100f, sb, flame.position, new Vector2(1, 1), 0.51f, 0.0f, new Vector2(16, 16), Color.White);
             }
         }
 

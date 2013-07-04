@@ -173,10 +173,10 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Lerp(parentWorld.KeyModule.KeyColorSet[(int)color], new Color(0.0f, 0.0f, 1.0f, 0.25f), 0.5f), 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.45f);
-            keyGraphic.drawAnimationFrame(0.0f, sb, position, new Vector2(3.0f, 3.0f), 0.5f);
+            sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Lerp(parentWorld.KeyModule.KeyColorSet[(int)color], new Color(0.0f, 0.0f, 1.0f, 0.25f), 0.5f), 0.0f, dimensions);
+            //sb.Draw(Game1.whitePixel, position, null, Color.Lerp(parentWorld.KeyModule.KeyColorSet[(int)color], new Color(0.0f, 0.0f, 1.0f, 0.25f), 0.5f), 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.45f);
         }
     }
 
@@ -259,9 +259,9 @@ namespace PattyPetitGiant
             position = finalPos;
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            keyGraphic.drawAnimationFrame(0.0f, sb, position, new Vector2(3.0f, 3.0f), 0.5f, parentWorld.KeyModule.KeyColorSet[(int)color]);
+            keyGraphic.drawAnimationFrame(0.0f, sb, position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, parentWorld.KeyModule.KeyColorSet[(int)color]);
         }
     }
 }

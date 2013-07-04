@@ -414,20 +414,6 @@ namespace PattyPetitGiant
 
         private void renderGameStuff(SpriteBatch sb)
         {
-            sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, camera);
-
-            foreach (Entity en in entityList)
-            {
-                if (Vector2.Distance(en.Position, cameraFocus.Position) > 1000)
-                {
-                    continue;
-                }
-
-                en.draw(sb);
-            }
-
-            sb.End();
-
             AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
 
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);

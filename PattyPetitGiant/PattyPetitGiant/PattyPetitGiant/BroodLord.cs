@@ -147,7 +147,7 @@ namespace PattyPetitGiant
             anim.Animation.Apply(anim.Skeleton, animation_time, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             //
         }
@@ -371,7 +371,7 @@ namespace PattyPetitGiant
             anim.Animation.Apply(anim.Skeleton, animation_time, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (minionState == BroodLingState.Dead)
             {
@@ -380,7 +380,8 @@ namespace PattyPetitGiant
 
             if (minionState == BroodLingState.Egg)
             {
-                eggAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f);
+                eggAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                //eggAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f);
             }
         }
 

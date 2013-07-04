@@ -34,9 +34,9 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            anims.drawAnimationFrame(0.0f, sb, Position, new Vector2(3.0f, 3.0f), 0.5f);
+            anims.drawAnimationFrame(0.0f, sb, Position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.White);
         }
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {

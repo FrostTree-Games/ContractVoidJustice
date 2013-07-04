@@ -310,10 +310,12 @@ namespace PattyPetitGiant
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, loopAnimation);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
 
+            // UNCOMMENT THIS WHEN YOU PUT ITEM RENDERING ON THE SPINE CALL
+            /*
             if (player_item_1 != null)
             {
                 player_item_1.draw(sb);
@@ -322,6 +324,7 @@ namespace PattyPetitGiant
             {
                 player_item_2.draw(sb);
             }
+             * */
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

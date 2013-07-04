@@ -299,11 +299,11 @@ namespace PattyPetitGiant
             position = finalPos;
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (state == ShopKeeperState.Normal)
             {
-                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.White);
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -314,23 +314,23 @@ namespace PattyPetitGiant
 
                     Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
-                    itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f);
-                    sb.DrawString(Game1.font, itemPrices[i].ToString(), drawItemPos + new Vector2(0f, GlobalGameConstants.TileSize.Y), Color.Yellow, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    //sb.DrawString(Game1.font, itemPrices[i].ToString(), drawItemPos + new Vector2(0f, GlobalGameConstants.TileSize.Y), Color.Yellow, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                 }
 
                 if (playerOverlap)
                 {
-                    sb.DrawString(Game1.font, overlapMessage, buyLocation, Color.Red, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
+                    //sb.DrawString(Game1.font, overlapMessage, buyLocation, Color.Red, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
                 }
             }
             else if (state == ShopKeeperState.Enraged)
             {
-                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f, Color.Red);
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.Red);
             }
 
             if (projectile.active)
             {
-                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, projectile.position, new Vector2(3, 3), 0.51f, Color.Yellow);
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, projectile.position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.Yellow);
             }
         }
 

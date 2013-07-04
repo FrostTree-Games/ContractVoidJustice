@@ -182,7 +182,7 @@ namespace PattyPetitGiant
             position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             for (int i = 0; i < tailPiecesCount; i++)
             {
@@ -192,11 +192,13 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-                    tailAnimA.drawAnimationFrame(animation_time, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimA.FrameDimensions / 2);
+                    tailAnimA.drawAnimationFrame(animation_time, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, Vector2.Zero, Color.White);
+                    //tailAnimA.drawAnimationFrame(animation_time, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimA.FrameDimensions / 2);
                 }
             }
 
-            testAnim.drawAnimationFrame(animation_time, sb, position + dimensions / 2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
+            testAnim.drawAnimationFrame(animation_time, sb, position + dimensions / 2, new Vector2(0), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            //testAnim.drawAnimationFrame(animation_time, sb, position + dimensions / 2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
 
             /*
             for (int i = 0; i < secondaryHitBoxCount; i++)

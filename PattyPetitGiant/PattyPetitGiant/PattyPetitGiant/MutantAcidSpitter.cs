@@ -37,9 +37,9 @@ namespace PattyPetitGiant
             
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            base.draw(sb);
+            //base.draw(sb);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

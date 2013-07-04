@@ -214,7 +214,7 @@ namespace PattyPetitGiant
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
         }
 
