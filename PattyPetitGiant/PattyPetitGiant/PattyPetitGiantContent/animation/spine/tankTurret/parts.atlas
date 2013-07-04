@@ -1,0 +1,33 @@
+
+img.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+cannon
+  rotate: false
+  xy: 83, 93
+  size: 24, 75
+  orig: 24, 75
+  offset: 0, 0
+  index: -1
+muzzle
+  rotate: false
+  xy: 1, 7
+  size: 80, 245
+  orig: 80, 245
+  offset: 0, 0
+  index: -1
+null
+  rotate: false
+  xy: 1, 1
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+turret
+  rotate: false
+  xy: 83, 170
+  size: 80, 82
+  orig: 80, 82
+  offset: 0, 0
+  index: -1
