@@ -175,6 +175,22 @@ namespace PattyPetitGiant
 
                 sb.Draw(sheet, position + new Vector2((int)offsetX, (int)offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), color, rotation, centerPoint, scale, SpriteEffects.None, depth);
             }
+
+            public void drawAnimationFrame(float time, Spine.SkeletonRenderer sb, Vector2 position, Vector2 scale, float depth, float rotation, Vector2 centerPoint, Color color)
+            {
+                int frame = (int)(time / frameDuration);
+
+                if (loop)
+                {
+                    frame = frame % frameCount;
+                }
+                else
+                {
+                    frame = frameCount - 1;
+                }
+
+                sb.DrawSpriteToSpineVertexArray(sheet, new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), position + new Vector2((int)offsetX, (int)offsetY), color, rotation, scale);
+            }
         }
 
         public class SerializableAnimationData
@@ -347,7 +363,7 @@ namespace PattyPetitGiant
             return new SpineAnimationSet(folderName);
         }
 
-        public static void renderSpineEntities(Matrix camera, List<Entity> entList, Entity cameraEntity, TileMap map)
+        public static void renderSpineEntities(Matrix camera, List<Entity> entList, Entity cameraEntity, TileMap map, ParticleSet set)
         {
             skeletonRenderer.setCameraMatrix(camera);
             skeletonRenderer.Begin();
@@ -366,6 +382,8 @@ namespace PattyPetitGiant
                     ((SpineEntity)en).spinerender(skeletonRenderer);
                 }
             }
+
+            set.drawSpineSet(skeletonRenderer, cameraEntity.Position, 0.5f);
 
             skeletonRenderer.End();
         }

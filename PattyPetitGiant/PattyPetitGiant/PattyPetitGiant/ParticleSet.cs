@@ -92,6 +92,17 @@ namespace PattyPetitGiant
             }
         }
 
+        public void drawSpineSet(Spine.SkeletonRenderer sb, Vector2 cameraPosition, float depthOffset)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (!particlePool[i].active) { continue; }
+                if (Vector2.Distance(cameraPosition, particlePool[i].position) > 750f) { continue; }
+
+                particlePool[i].animation.drawAnimationFrame(particlePool[i].animationTime, sb, particlePool[i].position, new Vector2(1), depthOffset, particlePool[i].rotation, particlePool[i].animation.FrameDimensions / 2, particlePool[i].color);
+            }
+        }
+
         public void pushParticleTEST(Vector2 position)
         {
             for (int i = 0; i < particlePoolSize; i++)

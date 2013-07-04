@@ -428,10 +428,9 @@ namespace PattyPetitGiant
 
             sb.End();
 
-            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map);
+            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
 
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
-            particleSet.draw(sb, cameraFocus.CenterPoint, 0.3f);
             gui.render(sb);
             sb.End();
         }

@@ -51,7 +51,7 @@ namespace Spine {
 			rasterizerState = new RasterizerState();
 			rasterizerState.CullMode = CullMode.None;
 
-			BlendState = BlendState.AlphaBlend;
+			BlendState = BlendState.NonPremultiplied;
 
 			Bone.yDown = true;
 		}
