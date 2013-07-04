@@ -302,8 +302,6 @@ namespace PattyPetitGiant
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
-                enemy_found = true;
-                entity_found = attacker;
                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("hurt");
 
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
@@ -343,6 +341,7 @@ namespace PattyPetitGiant
             else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
             {
                 enemy_found = true;
+                entity_found = attacker;
 
                 switch (attacker.Direction_Facing)
                 {
