@@ -441,7 +441,7 @@ namespace PattyPetitGiant
                             break;
                         case TileType.WallUnidentified:
                         default:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X) , (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
                             break;
                     }
                 }
@@ -453,7 +453,6 @@ namespace PattyPetitGiant
             int focusTileX = (int)(parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X);
             int focusTileY = (int)(parent.CameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y);
 
-            /*
             for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
             {
                 for (int i = Math.Max(0, focusTileX - 27); i < Math.Min(size.x, focusTileX + 27); i++)
@@ -466,32 +465,32 @@ namespace PattyPetitGiant
                     switch (floorMap[i, j])
                     {
                         case FloorType.A:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                         case FloorType.B:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                         case FloorType.C:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                         case FloorType.D:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                         case FloorType.E:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                         case FloorType.F:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                         case FloorType.G:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 9), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X) - 1, (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                         case FloorType.H:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 10), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
                             break;
                     }
                 }
-            } */
+            }
 
             for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
             {
@@ -505,6 +504,8 @@ namespace PattyPetitGiant
                         case TileType.NoWall:
                             break;
                         case TileType.TestWall:
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));
+                            break;
                         case TileType.WallA:
                         case TileType.WallB:
                         case TileType.WallC:
@@ -535,7 +536,7 @@ namespace PattyPetitGiant
                             break;
                         case TileType.WallUnidentified:
                         default:
-                            //spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
+                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)), Color.White, 0.0f, new Vector2(1));    
                             break;
                     }
                 }
