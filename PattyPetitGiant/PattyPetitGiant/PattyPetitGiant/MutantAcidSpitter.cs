@@ -75,21 +75,24 @@ namespace PattyPetitGiant
                 case SpitterState.Search:
                     if (death == false)
                     {
-                        foreach (Entity en in parentWorld.EntityList)
+                        if (enemy_found == false)
                         {
-                            if (en == this)
-                                continue;
-                            else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType && en.Death == false)
+
+                            foreach (Entity en in parentWorld.EntityList)
                             {
-                                component.update(this, en, currentTime, parentWorld);
-                                if(enemy_found)
+                                if (en == this)
+                                    continue;
+                                else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType && en.Death == false)
                                 {
-                                    entity_found = en;
-                                    break;
+                                    component.update(this, en, currentTime, parentWorld);
+                                    if (enemy_found)
+                                    {
+                                        entity_found = en;
+                                        break;
+                                    }
                                 }
                             }
                         }
-
                         if (enemy_found)
                         {
                             state = SpitterState.WindUp;
@@ -105,6 +108,59 @@ namespace PattyPetitGiant
                         state = SpitterState.Fire;
                         windup_timer = 0.0f;
                     }
+
+                    switch (direction_facing)
+                    {
+                        case GlobalGameConstants.Direction.Right:
+                            if (angle < -1 * Math.PI / 3.27)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Up;
+                                current_skeleton = walk_up;
+                            }
+                            else if (angle > Math.PI / 3.27)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Down;
+                                current_skeleton = walk_down;
+                            }
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            if (angle < Math.PI / 1.44 && angle > Math.PI / 1.5)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Down;
+                                current_skeleton = walk_down;
+                            }
+                            else if (angle > -1 * Math.PI / 1.44 && angle < -1 * Math.PI / 1.5)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Up;
+                                current_skeleton = walk_up;
+                            }
+                            break;
+                        case GlobalGameConstants.Direction.Up:
+                            if (angle < -1 * Math.PI / 1.24)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Left;
+                                current_skeleton = walk_right;
+                            }
+                            else if (angle > -1 * Math.PI / 5.14)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Right;
+                                current_skeleton = walk_right;
+                            }
+                            break;
+                        default:
+                            if (angle < Math.PI / 5.14)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Right;
+                                current_skeleton = walk_right;
+                            }
+                            else if (angle > Math.PI / 1.24)
+                            {
+                                direction_facing = GlobalGameConstants.Direction.Left;
+                                current_skeleton = walk_right;
+                            }
+                            break;
+                    }
+                        
                     break;
                 case SpitterState.Fire:
                     angle = (float)(Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X));
@@ -113,14 +169,27 @@ namespace PattyPetitGiant
                     {
                         if (!projectile[i].active)
                         {
-                            Console.WriteLine("creating new bullet " + i);
                             projectile[i] = new SpitProjectile(CenterPoint, angle);
                             state = SpitterState.WindUp;
                             break;
                         }
                     }
+
+                    float distance = Vector2.Distance(CenterPoint, entity_found.CenterPoint);
+                    if (Math.Abs(distance) > 300)
+                    {
+                        state = SpitterState.Search;
+                        enemy_found = false;
+                        entity_found = null;
+                    }
                     break;
                 case SpitterState.KnockBack:
+                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                    if (disable_movement_time > 300)
+                    {
+                        state = SpitterState.Search;
+                        disable_movement_time = 0.0f;
+                    }
                     break;
                 case SpitterState.Death:
                     break;
@@ -132,7 +201,6 @@ namespace PattyPetitGiant
             {
                 if (projectile[i].active)
                 {
-                    Console.WriteLine("active bullet " + i);
                     projectile[i].update(parentWorld, currentTime, this);
                 }
             }
@@ -160,11 +228,83 @@ namespace PattyPetitGiant
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
             //base.knockBack(direction, magnitude, damage, attacker);
+            if (death == false)
+            {
+                if (disable_movement_time == 0.0)
+                {
+                    state = SpitterState.KnockBack;
+                    if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                    {
+                        if (direction.X < 0)
+                        {
+                            velocity = new Vector2(-2.0f * magnitude, direction.Y / 100 * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2(2.0f * magnitude, direction.Y / 100 * magnitude);
+                        }
+                    }
+                    else
+                    {
+                        if (direction.Y < 0)
+                        {
+                            velocity = new Vector2(direction.X / 100f * magnitude, -2.0f * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2((direction.X / 100f) * magnitude, 2.0f * magnitude);
+                        }
+                    }
+                    enemy_life = enemy_life - damage;
+                }
+
+                if (attacker == null)
+                {
+                    return;
+                }
+                else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+                {
+                    enemy_found = true;
+                    entity_found = attacker;
+
+                    switch (attacker.Direction_Facing)
+                    {
+                        case GlobalGameConstants.Direction.Right:
+                            direction_facing = GlobalGameConstants.Direction.Left;
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            direction_facing = GlobalGameConstants.Direction.Right;
+                            break;
+                        case GlobalGameConstants.Direction.Up:
+                            direction_facing = GlobalGameConstants.Direction.Down;
+                            break;
+                        default:
+                            direction_facing = GlobalGameConstants.Direction.Up;
+                            break;
+                    }
+                }
+            }
         }
 
         public override void spinerender(SkeletonRenderer renderer)
         {
-            //base.spinerender(renderer);
+            /*if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+            {
+                current_skeleton.Skeleton.FlipX = false;
+            }
+            if (direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                current_skeleton.Skeleton.FlipX = true;
+            }
+
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+
+            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+
+            current_skeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(current_skeleton.Skeleton);*/
         }
 
         public struct SpitProjectile
@@ -191,7 +331,8 @@ namespace PattyPetitGiant
             public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X / 2, position.Y + dimensions.Y / 2); } }
      
             private float damage_timer;
-            private const float damage_timer_threshold = 200.0f;
+            private const float damage_timer_threshold = 500.0f;
+            private const int acid_damage = 2;
 
             public SpitProjectile(Vector2 launch_position, float angle)
             {
@@ -251,11 +392,11 @@ namespace PattyPetitGiant
                                     {
                                         if (en is Enemy)
                                         {
-                                            ((Enemy)en).Enemy_Life -= 1;
+                                            ((Enemy)en).Enemy_Life -= acid_damage;
                                         }
                                         else if (en is Player)
                                         {
-                                            GameCampaign.Player_Health -= 1;
+                                            GameCampaign.Player_Health -= acid_damage;
                                         }
                                     }
                                 }
@@ -284,11 +425,11 @@ namespace PattyPetitGiant
                                 {
                                     if (en is Enemy)
                                     {
-                                        ((Enemy)en).Enemy_Life -= 1;
+                                        ((Enemy)en).Enemy_Life -= acid_damage;
                                     }
                                     else if (en is Player)
                                     {
-                                        GameCampaign.Player_Health -= 1;
+                                        GameCampaign.Player_Health -= acid_damage;
                                     }
                                 }
                             }
@@ -314,11 +455,11 @@ namespace PattyPetitGiant
                                     {
                                         if (en is Enemy)
                                         {
-                                            ((Enemy)en).Enemy_Life -= 1;
+                                            ((Enemy)en).Enemy_Life -= acid_damage;
                                         }
                                         else if (en is Player)
                                         {
-                                            GameCampaign.Player_Health -= 1;
+                                            GameCampaign.Player_Health -= acid_damage;
                                         }
                                     }
                                 }
