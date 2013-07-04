@@ -453,9 +453,9 @@ namespace PattyPetitGiant
             int focusTileX = (int)(parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X);
             int focusTileY = (int)(parent.CameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y);
 
-            for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
+            for (int j = Math.Max(0, focusTileY - 8); j < Math.Min(size.y, focusTileY + 9); j++)
             {
-                for (int i = Math.Max(0, focusTileX - 27); i < Math.Min(size.x, focusTileX + 27); i++)
+                for (int i = Math.Max(0, focusTileX - 14); i < Math.Min(size.x, focusTileX + 15); i++)
                 {
                     if (map[i, j] != TileType.NoWall)
                     {
@@ -492,9 +492,9 @@ namespace PattyPetitGiant
                 }
             }
 
-            for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
+            for (int j = Math.Max(0, focusTileY - 8); j < Math.Min(size.y, focusTileY + 9); j++)
             {
-                for (int i = Math.Max(0, focusTileX - 27); i < Math.Min(size.x, focusTileX + 27); i++)
+                for (int i = Math.Max(0, focusTileX - 14); i < Math.Min(size.x, focusTileX + 15); i++)
                 {
                     int tileX;
                     int tileY;
