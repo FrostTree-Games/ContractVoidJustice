@@ -69,8 +69,9 @@ namespace Spine {
 		}
 
 		public void End () {
-			foreach (EffectPass pass in effect.CurrentTechnique.Passes) {
-				pass.Apply();
+            for (int i = 0; i < effect.CurrentTechnique.Passes.Count; i++)
+            {
+				effect.CurrentTechnique.Passes[i].Apply();
 				batcher.Draw(device);
 			}
 		}
@@ -141,7 +142,7 @@ namespace Spine {
         /// <param name="texture">Source texture.</param>
         /// <param name="srcRectangle">Source rectangle.</param>
         /// <param name="dstPosition">Destination location</param>
-        /// <param name="color">NONFUNCTIONAL: Color tint.</param>
+        /// <param name="color">Color tint.</param>
         /// <param name="rotation">Rotation around center of graphic to draw.</param>
         /// <param name="scale">Scale from centerpoint of graphic to draw.</param>
         public void DrawSpriteToSpineVertexArray(Texture2D texture, Rectangle srcRectangle, Vector2 dstPosition, Color color, float rotation, Vector2 scale)

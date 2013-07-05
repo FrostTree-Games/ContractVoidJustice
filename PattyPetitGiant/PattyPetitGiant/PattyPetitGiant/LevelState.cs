@@ -142,19 +142,21 @@ namespace PattyPetitGiant
                 Vector2 spawnPos = new Vector2((roomTileX + randX) * GlobalGameConstants.TileSize.X, (roomTileY + randY) * GlobalGameConstants.TileSize.Y) - new Vector2(16);
                 double randomSpawnValue = rand.NextDouble();
 
+                faction = Entity.EnemyType.Prisoner;
+
                 if (faction == Entity.EnemyType.Prisoner)
                 {
                     if (randomSpawnValue < 0.25)
                     {
-                        //entityList.Add(new MolotovEnemy(this, spawnPos));
+                        entityList.Add(new MolotovEnemy(this, spawnPos));
                     }
                     else if (randomSpawnValue < 0.5)
                     {
-                        //entityList.Add(new ChargerMutantEnemy(this, spawnPos));
+                        entityList.Add(new ChargerMutantEnemy(this, spawnPos));
                     }
                     else
                     {
-                        //entityList.Add(new ChaseEnemy(this, spawnPos));
+                        entityList.Add(new ChaseEnemy(this, spawnPos));
                     }
                 }
                 else if (faction == Entity.EnemyType.Guard)

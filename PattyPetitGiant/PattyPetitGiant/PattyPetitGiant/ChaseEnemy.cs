@@ -30,6 +30,9 @@ namespace PattyPetitGiant
 
         private bool death = false;
 
+        private EnemyComponents chaseComponent = null;
+        private EnemyComponents searchComponent = null;
+
         public ChaseEnemy(LevelState parentWorld, Vector2 position)
         {
             this.position = position;
@@ -40,7 +43,9 @@ namespace PattyPetitGiant
             sword_position = position;
 
             state = EnemyState.Moving;
-            component = new MoveSearch();
+            chaseComponent = new Chase();
+            searchComponent = new MoveSearch();
+            component = searchComponent;
             direction_facing = GlobalGameConstants.Direction.Up;
             change_direction_time = 0.0f;
             this.parentWorld = parentWorld;
@@ -87,7 +92,7 @@ namespace PattyPetitGiant
 
                         if (enemy_found)
                         {
-                            component = new Chase();
+                            component = chaseComponent;
                             state = EnemyState.Chase;
                             animation_time = 0.0f;
                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("chase");
@@ -192,7 +197,7 @@ namespace PattyPetitGiant
                                 {
                                     state = EnemyState.Moving;
                                     current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
-                                    component = new MoveSearch();
+                                    component = searchComponent;
                                     enemy_found = false;
                                     wind_anim = 0.0f;
                                 }
