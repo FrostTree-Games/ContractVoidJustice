@@ -83,6 +83,7 @@
     <None Include="animation\frame\tank.zpy">
       <Name>tank</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="animation\frame\testCoin.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

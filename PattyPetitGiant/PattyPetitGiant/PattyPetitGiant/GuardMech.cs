@@ -163,7 +163,6 @@ namespace PattyPetitGiant
                         }
                         break;
                     case MechState.Firing:
-                        //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
                         angle = (float)Math.Atan2(entity_found.CenterPoint.Y - position.Y, entity_found.CenterPoint.X - position.X);
 
@@ -186,12 +185,18 @@ namespace PattyPetitGiant
 
                         if (windup_timer > 2000)
                         {
-                            windup_timer = 0.0f;
                             if (grenade.active == false)
                             {
-                                grenade = new Grenades(position, angle);
+                                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
+                                grenade = new Grenades(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), angle);
                                 grenade.active = true;
                             }
+                        }
+
+                        if (windup_timer > 2100)
+                        {
+                            windup_timer = 0.0f;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         }
 
                         switch(direction_facing)
@@ -201,13 +206,11 @@ namespace PattyPetitGiant
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Up;
                                     dimensions = new Vector2(96, 120);
-                                    //current_skeleton = walk_up;
                                 }
                                 else if (angle > Math.PI / 3.27)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Down;
                                     dimensions = new Vector2(96, 120);
-                                    //current_skeleton = walk_down;
                                 }
                                 break;
                             case GlobalGameConstants.Direction.Left:
@@ -215,13 +218,11 @@ namespace PattyPetitGiant
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Down;
                                     dimensions = new Vector2(96, 120);
-                                   // current_skeleton = walk_down;
                                 }
                                 else if (angle > -1*Math.PI / 1.44 && angle< -1*Math.PI/1.5)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Up;
                                     dimensions = new Vector2(96, 120);
-                                    //current_skeleton = walk_up;
                                 }
                                 break;
                             case GlobalGameConstants.Direction.Up:
@@ -229,13 +230,11 @@ namespace PattyPetitGiant
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Left;
                                     dimensions = new Vector2(120, 96);
-                                    //current_skeleton = walk_right;
                                 }
                                 else if (angle > -1 * Math.PI / 5.14)
                                 {
                                     direction_facing = GlobalGameConstants.Direction.Right;
                                     dimensions = new Vector2(120, 96);
-                                    //current_skeleton = walk_right;
                                 }
                                 break;
                             default:
@@ -433,10 +432,7 @@ namespace PattyPetitGiant
                     break;
             }
 
-            //tankAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1, 1), 0.5f);
-            //tankAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1, 1), 0.5f, Color.Blue);
-            //rotation rotates the entire tank around an origin (top right of the sprite)
-            tankAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1, 1), 0.5f, draw_angle, dimensions);
+            tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, draw_angle, new Vector2(48f,69.5f));
 
             if(grenade.active)
             {
@@ -519,8 +515,11 @@ namespace PattyPetitGiant
                 current_skeleton.Skeleton.FlipX = true;
             }
 
-            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
+            current_skeleton.Skeleton.RootBone.X = CenterPoint.X;
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y;
+            Console.WriteLine(angle * 180 / Math.PI);
+
+            current_skeleton.Skeleton.RootBone.Rotation = (float)(-1* angle * 180 / Math.PI ) - 90.0f;
 
             current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
             current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
