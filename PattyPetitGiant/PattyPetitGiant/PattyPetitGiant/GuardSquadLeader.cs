@@ -131,16 +131,16 @@ namespace PattyPetitGiant
 
                             if (enemy_found == false)
                             {
-                                foreach (Entity en in parentWorld.EntityList)
+                                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                                 {
-                                    if (en == this)
+                                    if (parentWorld.EntityList[i] == this)
                                         continue;
-                                    else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                    else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
                                     {
-                                        component.update(this, en, currentTime, parentWorld);
+                                        component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
                                         if(enemy_found)
                                         {
-                                            entity_found = en;
+                                            entity_found = parentWorld.EntityList[i];
                                             break;
                                         }
                                     }
@@ -438,14 +438,14 @@ namespace PattyPetitGiant
             {
                 time_alive += currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en == parent)
+                    if (parentWorld.EntityList[i] == parent)
                         continue;
-                    if (hitTestBullet(en))
+                    if (hitTestBullet(parentWorld.EntityList[i]))
                     {
-                        Vector2 direction = en.Position - position;
-                        en.knockBack(direction, knockback_magnitude, bullet_damage, parent);
+                        Vector2 direction = parentWorld.EntityList[i].Position - position;
+                        parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, bullet_damage, parent);
                         active = false;
                         return;
                     }

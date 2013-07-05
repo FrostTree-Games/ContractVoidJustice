@@ -311,16 +311,16 @@ namespace PattyPetitGiant
                         else
                         {
                             //checks where the player is
-                            foreach (Entity en in parentWorld.EntityList)
+                            for (int i = 0; i < parentWorld.EntityList.Count; i++)
                             {
-                                if (en == this)
+                                if (parentWorld.EntityList[i] == this)
                                 {
                                     continue;
                                 }
 
-                                if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
                                 {
-                                    component.update(this, en, currentTime, parentWorld);
+                                    component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
 
                                 }
                             }
@@ -498,14 +498,14 @@ namespace PattyPetitGiant
             {
                 time_alive += currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en == parent)
+                    if (parentWorld.EntityList[i] == parent)
                         continue;
-                    if (hitTestBullet(en))
+                    if (hitTestBullet(parentWorld.EntityList[i]))
                     {
-                        Vector2 direction = en.Position - position;
-                        en.knockBack(direction, knockback_magnitude, bullet_damage, parent);
+                        Vector2 direction = parentWorld.EntityList[i].Position - position;
+                        parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, bullet_damage, parent);
                         active = false;
                         return;
                     }
