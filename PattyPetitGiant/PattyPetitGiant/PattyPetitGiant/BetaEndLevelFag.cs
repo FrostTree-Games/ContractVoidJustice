@@ -22,11 +22,11 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            foreach (Entity en in parentWorld.EntityList)
+            for (int it = 0; it < parentWorld.EntityList.Count; it++)
             {
-                if (en is Player)
+                if (parentWorld.EntityList[it] is Player)
                 {
-                    if (hitTest(en))
+                    if (hitTest(parentWorld.EntityList[it]))
                     {
                         parentWorld.EndFlagReached = true;
                     }
