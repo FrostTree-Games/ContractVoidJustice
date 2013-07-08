@@ -28,7 +28,9 @@ namespace PattyPetitGiant
         private const float knockback_magnitude = 2.0f;
 
         private float windup_timer = 0.0f;
-        private float firing_timer = 0.0f;
+        private float turret_angle = 0.0f;
+        private float tank_hull_angle = 0.0f;
+        private const float tank_hull_turn_magnitude = 0.02f;
         private bool melee_active = false;
         private bool death = false;
 
@@ -50,8 +52,8 @@ namespace PattyPetitGiant
             velocity = new Vector2(0.8f, 0.0f);
 
             windup_timer = 0.0f;
-            firing_timer = 0.0f;
             angle = 0.0f;
+            turret_angle = angle;
 
             enemy_life = 50;
             disable_movement = false;
@@ -125,23 +127,23 @@ namespace PattyPetitGiant
                         {
                             case GlobalGameConstants.Direction.Right:
                                 velocity = new Vector2(0.5f, 0f);
-                                //current_skeleton = walk_right;
                                 dimensions = new Vector2(120, 96);
+                                angle = 0.0f;
                                 break;
                             case GlobalGameConstants.Direction.Left:
                                 velocity = new Vector2(-0.5f, 0f);
                                 dimensions = new Vector2(120, 96);
-                                //current_skeleton = walk_right;
+                                angle = (float)(Math.PI);
                                 break;
                             case GlobalGameConstants.Direction.Up:
                                 velocity = new Vector2(0f, -0.5f);
                                 dimensions = new Vector2(96, 120);
-                               // current_skeleton = walk_up;
+                                angle = (float)(-1*Math.PI/2);
                                 break;
                             default:
                                 velocity = new Vector2(0.0f, 0.5f);
                                 dimensions = new Vector2(96, 120);
-                                //current_skeleton = walk_down;
+                                angle = (float)(Math.PI/2);
                                 break;
                         }
 
@@ -151,7 +153,7 @@ namespace PattyPetitGiant
 
                             if (Math.Abs(distance) < 300)
                             {
-                                if (Math.Abs(distance) > 192 && Math.Abs(distance) < 300)
+                                if (Math.Abs(distance) > 192 && Math.Abs(distance) < 600)
                                 {
                                     mech_state = MechState.Firing;
                                 }
@@ -164,13 +166,13 @@ namespace PattyPetitGiant
                         break;
                     case MechState.Firing:
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
-                        angle = (float)Math.Atan2(entity_found.CenterPoint.Y - position.Y, entity_found.CenterPoint.X - position.X);
+                        angle = (float)Math.Atan2(entity_found.CenterPoint.Y - current_skeleton.Skeleton.FindBone("muzzle").WorldY, entity_found.CenterPoint.X - current_skeleton.Skeleton.FindBone("muzzle").WorldX);
 
                         distance = Vector2.Distance(position, entity_found.Position);
 
                         velocity = Vector2.Zero;
 
-                        if (Math.Abs(distance) > 300 || entity_found.Remove_From_List == true)
+                        if (Math.Abs(distance) > 600 || entity_found.Remove_From_List == true)
                         {
                             mech_state = MechState.Moving;
                             windup_timer = 0.0f;
@@ -412,27 +414,53 @@ namespace PattyPetitGiant
 
         public override void draw(SpriteBatch sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
-
-            float draw_angle = 0.0f;
+            //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
 
             switch (direction_facing)
             {
                 case GlobalGameConstants.Direction.Right:
-                    draw_angle = (float)(Math.PI / 2);
+                    if ((float)(tank_hull_angle) < (float)((Math.PI / 2) -0.02f))
+                    {
+                        tank_hull_angle += tank_hull_turn_magnitude;
+                    }
+                    else if ((float)(tank_hull_angle) > ((float)((Math.PI / 2)+0.02f)))
+                    {
+                        tank_hull_angle -= tank_hull_turn_magnitude;
+                    }
                     break;
                 case GlobalGameConstants.Direction.Left:
-                    draw_angle = (float)(3 * Math.PI / 2);
+                    if ((float)(tank_hull_angle) < (float)(3 * Math.PI / 2) - 0.02f)
+                    {
+                        tank_hull_angle += tank_hull_turn_magnitude;
+                    }
+                    else if ((float)(tank_hull_angle) > ((float)(3 * Math.PI / 2) + 0.02f))
+                    {
+                        tank_hull_angle -= tank_hull_turn_magnitude;
+                    }
                     break;
                 case GlobalGameConstants.Direction.Up:
-                    draw_angle = 0.0f;
+                    if ((float)(tank_hull_angle) < (float)(0.0) - 0.02f)
+                    {
+                        tank_hull_angle += tank_hull_turn_magnitude;
+                    }
+                    else if ((float)(tank_hull_angle) > ((float)(0.0)+0.02))
+                    {
+                        tank_hull_angle -= tank_hull_turn_magnitude;
+                    }
                     break;
                 default:
-                    draw_angle = (float)Math.PI;
+                    if ((float)(tank_hull_angle) < (float)(Math.PI) -0.02)
+                    {
+                        tank_hull_angle += tank_hull_turn_magnitude;
+                    }
+                    else if ((float)(tank_hull_angle) > ((float)(Math.PI)+0.02))
+                    {
+                        tank_hull_angle -= tank_hull_turn_magnitude;
+                    }
                     break;
             }
 
-            tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, draw_angle, new Vector2(48f,69.5f));
+            tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, tank_hull_angle, new Vector2(48f,69.5f));
 
             if(grenade.active)
             {
@@ -506,20 +534,19 @@ namespace PattyPetitGiant
 
         public override void spinerender(SkeletonRenderer renderer)
         {
-            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
-            {
-                current_skeleton.Skeleton.FlipX = false;
-            }
-            if (direction_facing == GlobalGameConstants.Direction.Left)
-            {
-                current_skeleton.Skeleton.FlipX = true;
-            }
-
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X;
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y;
-            Console.WriteLine(angle * 180 / Math.PI);
 
-            current_skeleton.Skeleton.RootBone.Rotation = (float)(-1* angle * 180 / Math.PI ) - 90.0f;
+            if ((int)turret_angle < (int)(angle * 180 / Math.PI))
+            {
+                turret_angle++;
+            }
+            else if ((int)turret_angle > (int)(angle * 180 / Math.PI))
+            {
+                turret_angle--;
+            }
+
+            current_skeleton.Skeleton.RootBone.Rotation = (float)(-1* turret_angle) - 90.0f;
 
             current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
             current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
