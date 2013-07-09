@@ -159,6 +159,38 @@ namespace PattyPetitGiant
 
                 sb.Draw(sheet, position + new Vector2((int)offsetX, (int)offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), Color.White, rotation, centerPoint, scale, SpriteEffects.None, depth);
             }
+
+            public void drawAnimationFrame(float time, SpriteBatch sb, Vector2 position, Vector2 scale, float depth, float rotation, Vector2 centerPoint, Color color)
+            {
+                int frame = (int)(time / frameDuration);
+
+                if (loop)
+                {
+                    frame = frame % frameCount;
+                }
+                else
+                {
+                    frame = frameCount - 1;
+                }
+
+                sb.Draw(sheet, position + new Vector2((int)offsetX, (int)offsetY), new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), color, rotation, centerPoint, scale, SpriteEffects.None, depth);
+            }
+
+            public void drawAnimationFrame(float time, Spine.SkeletonRenderer sb, Vector2 position, Vector2 scale, float depth, float rotation, Vector2 centerPoint, Color color)
+            {
+                int frame = (int)(time / frameDuration);
+
+                if (loop)
+                {
+                    frame = frame % frameCount;
+                }
+                else
+                {
+                    frame = frameCount - 1;
+                }
+
+                sb.DrawSpriteToSpineVertexArray(sheet, new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), position + new Vector2((int)offsetX, (int)offsetY), color, rotation, scale);
+            }
         }
 
         public class SerializableAnimationData
@@ -331,23 +363,29 @@ namespace PattyPetitGiant
             return new SpineAnimationSet(folderName);
         }
 
-        public static void renderSpineEntities(Matrix camera, List<Entity> entList, Entity cameraEntity)
+        public static void renderSpineEntities(Matrix camera, List<Entity> entList, Entity cameraEntity, TileMap map, ParticleSet set)
         {
             skeletonRenderer.setCameraMatrix(camera);
             skeletonRenderer.Begin();
 
-            foreach (Entity en in entList)
+            map.renderSPINEBATCHTEST(skeletonRenderer, 0.5f);
+
+            for (int i = 0; i < entList.Count; i++)
             {
-                if (Vector2.Distance(cameraEntity.Position, en.Position) > (GlobalGameConstants.GameResolutionWidth * 0.75f))
+                if (Vector2.Distance(cameraEntity.Position, entList[i].Position) > (GlobalGameConstants.GameResolutionWidth * 0.75f))
                 {
                     continue;
                 }
 
-                if (en is SpineEntity)
+                entList[i].draw(skeletonRenderer);
+
+                if (entList[i] is SpineEntity)
                 {
-                    ((SpineEntity)en).spinerender(skeletonRenderer);
+                    ((SpineEntity)entList[i]).spinerender(skeletonRenderer);
                 }
             }
+
+            set.drawSpineSet(skeletonRenderer, cameraEntity.Position, 0.5f);
 
             skeletonRenderer.End();
         }

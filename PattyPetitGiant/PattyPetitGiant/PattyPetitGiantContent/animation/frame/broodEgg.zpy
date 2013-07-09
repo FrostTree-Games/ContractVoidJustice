@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <name>snakeC</name>
-  <sheetName>snakeBod.png</sheetName>
+  <name>broodEgg</name>
+  <sheetName>broodEggSheet.png</sheetName>
   <initalX>0</initalX>
-  <initalY>56</initalY>
+  <initalY>0</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>32</frameWidth>
-  <frameHeight>19</frameHeight>
-  <frameCount>1</frameCount>
-  <frameSpeed>100</frameSpeed>
+  <frameWidth>64</frameWidth>
+  <frameHeight>59</frameHeight>
+  <frameCount>20</frameCount>
+  <frameSpeed>30</frameSpeed>
   <loop>true</loop>
 </SerializableAnimationData>

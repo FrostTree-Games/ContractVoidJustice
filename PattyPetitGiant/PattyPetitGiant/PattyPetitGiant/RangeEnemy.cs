@@ -384,17 +384,19 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             /*sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle1, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle2, Vector2.Zero, new Vector2(600.0f, 10.0f), SpriteEffects.None, 0.5f);*/
             
+            /*
             sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
             if (bullet_alive)
             {
                 sb.Draw(Game1.whitePixel, bullet.position, null, Color.Pink, 0.0f, Vector2.Zero, bullet.hitbox, SpriteEffects.None, 0.5f);
             }
+             * */
         }
 
         public bool hitTestBullet(Entity other)

@@ -87,18 +87,18 @@ namespace PattyPetitGiant
                         return;
                     }
 
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int it = 0; it < parentWorld.EntityList.Count; it++)
                     {
-                        if (en == parent)
+                        if (parentWorld.EntityList[it] == parent)
                         {
                             continue;
                         }
 
-                        if (en is Player || en is Enemy || en is ShopKeeper)
+                        if (parentWorld.EntityList[it] is Player || parentWorld.EntityList[it] is Enemy || parentWorld.EntityList[it] is ShopKeeper)
                         {
-                            if (hitTestBullet(en))
+                            if (hitTestBullet(parentWorld.EntityList[it]))
                             {
-                                en.knockBack(Vector2.Normalize(en.CenterPoint - center), 2.0f, 5);
+                                parentWorld.EntityList[it].knockBack(Vector2.Normalize(parentWorld.EntityList[it].CenterPoint - center), 2.0f, 5);
                                 active = false;
                                 return;
                             }
@@ -227,25 +227,25 @@ namespace PattyPetitGiant
 
                 if (target == null)
                 {
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int it = 0; it < parentWorld.EntityList.Count; it++)
                     {
-                        if (en.Enemy_Type == Entity.EnemyType.Guard)
+                        if (parentWorld.EntityList[it].Enemy_Type == Entity.EnemyType.Guard)
                         {
                             continue;
                         }
 
-                        if (Vector2.Distance(en.CenterPoint, chunkCenter) > 500)
+                        if (Vector2.Distance(parentWorld.EntityList[it].CenterPoint, chunkCenter) > 500)
                         {
                             continue;
                         }
 
-                        if (Vector2.Distance(en.CenterPoint, CenterPoint) > GlobalGameConstants.TileSize.X * 6)
+                        if (Vector2.Distance(parentWorld.EntityList[it].CenterPoint, CenterPoint) > GlobalGameConstants.TileSize.X * 6)
                         {
                             continue;
                         }
 
                         // very cruel angle checking at the moment. May refine later
-                        double theta = Math.Atan2(CenterPoint.Y - en.Position.Y, CenterPoint.X - en.Position.X);
+                        double theta = Math.Atan2(CenterPoint.Y - parentWorld.EntityList[it].Position.Y, CenterPoint.X - parentWorld.EntityList[it].Position.X);
                         switch (direction_facing)
                         {
                             case GlobalGameConstants.Direction.Right:
@@ -262,15 +262,15 @@ namespace PattyPetitGiant
                                 break;
                         }
 
-                     
-                        if (en.Enemy_Type != enemy_type || en.Enemy_Type != EnemyType.NoType)
+
+                        if (parentWorld.EntityList[it].Enemy_Type != enemy_type || parentWorld.EntityList[it].Enemy_Type != EnemyType.NoType)
                         {
-                            target = en;
+                            target = parentWorld.EntityList[it];
                         }
-                        
-                        else if (en is ShopKeeper)
+
+                        else if (parentWorld.EntityList[it] is ShopKeeper)
                         {
-                            target = en;
+                            target = parentWorld.EntityList[it];
                         }
                     }
 
@@ -500,7 +500,7 @@ namespace PattyPetitGiant
             directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, (guardState == PatrolGuardState.MoveWait || guardState == PatrolGuardState.Chase || guardState == PatrolGuardState.RetreatToCenter) ? true : false);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             for (int i = 0; i < bulletSupply; i++)
             {
@@ -509,7 +509,8 @@ namespace PattyPetitGiant
                     continue;
                 }
 
-                sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.Pink, 0.0f, Vector2.Zero, bullets[i].hitbox, SpriteEffects.None, 0.6f);
+                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].position, Color.Pink, 0.0f, bullets[i].hitbox / 4);
+                //sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.Pink, 0.0f, Vector2.Zero, bullets[i].hitbox, SpriteEffects.None, 0.6f);
             }
 
             //sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.6f);

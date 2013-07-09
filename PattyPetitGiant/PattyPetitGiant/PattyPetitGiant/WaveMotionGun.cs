@@ -23,7 +23,7 @@ namespace PattyPetitGiant
         private WaveMotionBullet bullet3;
 
         private float shotTime = 0.0f;
-        private const float shotWaitTime = 300f;
+        private const float shotWaitTime = 0;
 
         private float timeBetweenShots = 0.0f;
         private const float timeBetweenShotsDelay = 1000f;
@@ -76,20 +76,36 @@ namespace PattyPetitGiant
                         break;
                 }
 
+                Vector2 bulletPos = Vector2.Zero;
+
+                if (GameCampaign.Player_Item_1 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+                {
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ?"rRayGun" : "lRayGun");
+                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY);
+                }
+                else if (GameCampaign.Player_Item_2 == getEnumType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+                {
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lRayGun" : "rRayGun");
+                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                }
+
                 if (!bullet1.active)
                 {
-                    bullet1 = new WaveMotionBullet(parent.CenterPoint, shotDirection);
+                    bullet1 = new WaveMotionBullet(bulletPos, shotDirection);
                 }
                 else if (!bullet2.active)
                 {
-                    bullet2 = new WaveMotionBullet(parent.CenterPoint, shotDirection);
+                    bullet2 = new WaveMotionBullet(bulletPos, shotDirection);
                 }
                 else if (!bullet3.active)
                 {
-                    bullet3 = new WaveMotionBullet(parent.CenterPoint, shotDirection);
+                    bullet3 = new WaveMotionBullet(bulletPos, shotDirection);
                 }
 
                 state = WaveMotionState.Shooting;
+                parent.Animation_Time = 0.0f;
+
+                parent.LoopAnimation = false;
             }
             else if (state == WaveMotionState.Shooting)
             {
@@ -100,17 +116,6 @@ namespace PattyPetitGiant
                     parent.Disable_Movement = false;
                     parent.State = Player.playerState.Moving;
 
-                    timeBetweenShots = 0.0f;
-
-                    state = WaveMotionState.Cooldown;
-                }
-            }
-            else if (state == WaveMotionState.Cooldown)
-            {
-                timeBetweenShots += currentTime.ElapsedGameTime.Milliseconds;
-
-                if (timeBetweenShots > timeBetweenShotsDelay)
-                {
                     state = WaveMotionState.Wait;
                 }
             }

@@ -26,6 +26,8 @@ namespace PattyPetitGiant
         private float knockBackTimer = 999f;
         private const float knockBackDuration = 500f;
 
+        private AnimationLib.SpineAnimationSet anim = null;
+
         public BroodLord(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -44,16 +46,16 @@ namespace PattyPetitGiant
 
             enemy_life = 25;
             enemy_type = EnemyType.Alien;
+
+            anim = AnimationLib.loadNewAnimationSet("broodlord");
+            anim.Animation = anim.Skeleton.Data.FindAnimation("idle");
+            animation_time = 0;
         }
 
         public override void update(GameTime currentTime)
         {
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
             knockBackTimer += currentTime.ElapsedGameTime.Milliseconds;
-
-            for (int i = 0; i < minionCount; i++)
-            {
-                minions[i].update(currentTime);
-            }
 
             if (broodState != BroodLordState.Dying && broodState != BroodLordState.Dead)
             {
@@ -102,7 +104,7 @@ namespace PattyPetitGiant
                     {
                         for (int i = 0; i < minionCount; i++)
                         {
-                            minions[i].setTarget(en.CenterPoint);
+                            minions[i].setTarget(en.CenterPoint - (i * en.Dimensions / 2));
                         }
 
                         break;
@@ -141,16 +143,13 @@ namespace PattyPetitGiant
             {
                 throw new Exception("Invalid Broodlord State");
             }
+
+            anim.Animation.Apply(anim.Skeleton, animation_time, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, (knockBackTimer > knockBackDuration) ? Color.LimeGreen : Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
-
-            for (int i = 0; i < minionCount; i++)
-            {
-                minions[i].draw(sb);
-            }
+            //
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -170,7 +169,11 @@ namespace PattyPetitGiant
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
         {
-           // throw new NotImplementedException();
+            anim.Skeleton.RootBone.X = position.X + (dimensions.X / 2);
+            anim.Skeleton.RootBone.Y = position.Y + (dimensions.Y);
+
+            anim.Skeleton.UpdateWorldTransform();
+            renderer.Draw(anim.Skeleton);
         }
     }
 
@@ -194,10 +197,10 @@ namespace PattyPetitGiant
         private BroodLord lord = null;
 
         private float direction;
-        private const float minionSpeed = 0.05f;
+        private const float minionSpeed = 0.1f;
 
         private float eggTimer = 0.0f;
-        private const float eggDuration = 1750f;
+        private const float eggDuration = 4000f;
 
         private float knockBackTimer;
         private const float knockBackDuration = 700f;
@@ -210,22 +213,33 @@ namespace PattyPetitGiant
 
         private Vector2 target;
 
+        AnimationLib.SpineAnimationSet anim = null;
+        AnimationLib.FrameAnimationSet eggAnim = null;
+
         public BroodLing(LevelState parentWorld, Vector2 position, BroodLord lord)
         {
             minionState = BroodLingState.Dead;
             this.parentWorld = parentWorld;
-            this.dimensions = GlobalGameConstants.TileSize;
+            this.dimensions = GlobalGameConstants.TileSize * 0.6f;
             this.lord = lord;
 
             enemy_life = 0;
             enemy_type = EnemyType.Alien;
 
             animation_time = 0;
+
+            anim = AnimationLib.loadNewAnimationSet("broodling");
+            eggAnim = AnimationLib.getFrameAnimationSet("broodEgg");
         }
 
         public override void update(GameTime currentTime)
         {
-            animation_time += currentTime.ElapsedGameTime.Milliseconds;
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / ((minionState == BroodLingState.Egg) ? 1 : 1000f);
+
+            if (direction < 0)
+            {
+                direction += (float)(Math.PI * 2);
+            }
 
             if (minionState == BroodLingState.Idle)
             {
@@ -353,25 +367,22 @@ namespace PattyPetitGiant
 
             Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
             position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
+
+            anim.Animation.Apply(anim.Skeleton, animation_time, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (minionState == BroodLingState.Dead)
             {
                 return;
             }
 
-            Color clr = Color.LightBlue;
-
-            switch (minionState)
+            if (minionState == BroodLingState.Egg)
             {
-                case BroodLingState.Egg:
-                    clr = Color.DarkBlue;
-                    break;
+                eggAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                //eggAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f);
             }
-
-            sb.Draw(Game1.testArrow, position, null, clr, direction, new Vector2(24, 24), new Vector2(1), SpriteEffects.None, 0.49f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -396,7 +407,16 @@ namespace PattyPetitGiant
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
         {
-            // throw new NotImplementedException();
+            if (minionState == BroodLingState.Chase || minionState == BroodLingState.Biting || minionState == BroodLingState.Idle || minionState == BroodLingState.KnockBack)
+            {
+                anim.Skeleton.RootBone.X = position.X + (dimensions.X / 2);
+                anim.Skeleton.RootBone.Y = position.Y + (dimensions.Y / 2);
+
+                anim.Skeleton.RootBone.Rotation = direction * (float)(180 / -Math.PI) + 90;
+
+                anim.Skeleton.UpdateWorldTransform();
+                renderer.Draw(anim.Skeleton);
+            }
         }
 
         public void spawn(Vector2 position)

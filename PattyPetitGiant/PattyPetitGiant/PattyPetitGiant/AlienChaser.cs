@@ -95,13 +95,13 @@ namespace PattyPetitGiant
                 {
                     targetEntity = null;
 
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (en.Enemy_Type == EnemyType.Player || en.Enemy_Type == EnemyType.Guard || en.Enemy_Type == EnemyType.Prisoner)
+                        if (parentWorld.EntityList[i].Enemy_Type == EnemyType.Player || parentWorld.EntityList[i].Enemy_Type == EnemyType.Guard || parentWorld.EntityList[i].Enemy_Type == EnemyType.Prisoner)
                         {
-                            if (Vector2.Distance(en.Position, position) < attackRadius && (targetEntity == null || Vector2.Distance(en.Position, position) < Vector2.Distance(targetEntity.Position, position)))
+                            if (Vector2.Distance(parentWorld.EntityList[i].Position, position) < attackRadius && (targetEntity == null || Vector2.Distance(parentWorld.EntityList[i].Position, position) < Vector2.Distance(targetEntity.Position, position)))
                             {
-                                targetEntity = en;
+                                targetEntity = parentWorld.EntityList[i];
                             }
                         }
                     }
@@ -223,15 +223,15 @@ namespace PattyPetitGiant
                 throw new Exception("Invalid SlowChaser state");
             }
 
-            foreach (Entity en in parentWorld.EntityList)
+            for (int i = 0; i < parentWorld.EntityList.Count; i++)
             {
-                if (en.Enemy_Type != EnemyType.Alien)
+                if (parentWorld.EntityList[i].Enemy_Type != EnemyType.Alien)
                 {
-                    if (Vector2.Distance(en.Position, position) < 300)
+                    if (Vector2.Distance(parentWorld.EntityList[i].Position, position) < 300)
                     {
-                        if (hitTest(en))
+                        if (hitTest(parentWorld.EntityList[i]))
                         {
-                            en.knockBack(en.CenterPoint - CenterPoint, 6, 7);
+                            parentWorld.EntityList[i].knockBack(parentWorld.EntityList[i].CenterPoint - CenterPoint, 6, 7);
 
                             if (chaserState == SlowChaserState.Sprint && Vector2.Distance(position, targetEntity.Position) < GlobalGameConstants.TileSize.X)
                             {
@@ -274,14 +274,14 @@ namespace PattyPetitGiant
             directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (chaserState == SlowChaserState.WindUp && chaseIteration == 0)
             {
-                konamiAlert.drawAnimationFrame(0, sb, position - new Vector2(0, konamiAlert.FrameHeight * 3), new Vector2(3), 0.7f);
+                konamiAlert.drawAnimationFrame(0.0f, sb, position - new Vector2(0, konamiAlert.FrameHeight * 3), new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
 
-            sb.Draw(Game1.whitePixel, position, null, Color.Lerp(Color.Blue, Color.Red, aggressionTime / maxAggressionTime), 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Lerp(Color.Blue, Color.Red, aggressionTime / maxAggressionTime), 0.0f, dimensions);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

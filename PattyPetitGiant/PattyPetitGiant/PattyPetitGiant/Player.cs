@@ -53,6 +53,9 @@ namespace PattyPetitGiant
 
         private const float playerMoveSpeed = 3.0f;
 
+        private bool loopAnimation = false;
+        public bool LoopAnimation { get { return loopAnimation; } set { loopAnimation = value; } }
+
         private playerState state = playerState.Moving;
         public playerState State
         {
@@ -161,12 +164,11 @@ namespace PattyPetitGiant
                 }
                 else if (state == playerState.Moving)
                 {
-
+                    loopAnimation = true;
 
                     if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                     {
                         state = playerState.Item1;
-
                     }
                     if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
                     {
@@ -242,14 +244,14 @@ namespace PattyPetitGiant
                     bool itemTouched = false;
 
                     //Check to see if player has encountered a pickup item
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (en == this)
+                        if (parentWorld.EntityList[i] == this)
                             continue;
 
-                        if (en is Pickup)
+                        if (parentWorld.EntityList[i] is Pickup)
                         {
-                            if (hitTest(en))
+                            if (hitTest(parentWorld.EntityList[i]))
                             {
                                 itemTouched = true;
 
@@ -261,7 +263,7 @@ namespace PattyPetitGiant
                                 {
                                     item1_switch_button_down = false;
 
-                                    player_item_1 = ((Pickup)en).assignItem(player_item_1, currentTime);
+                                    player_item_1 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_1, currentTime);
                                     GameCampaign.Player_Item_1 = player_item_1.getEnumType();
                                 }
 
@@ -273,7 +275,7 @@ namespace PattyPetitGiant
                                 {
                                     item2_switch_button_down = false;
 
-                                    player_item_2 = ((Pickup)en).assignItem(player_item_2, currentTime);
+                                    player_item_2 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_2, currentTime);
                                     GameCampaign.Player_Item_2 = player_item_2.getEnumType();
                                 }
                             }
@@ -302,17 +304,18 @@ namespace PattyPetitGiant
             Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
 
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-            position.X = finalPos.X;
-            position.Y = finalPos.Y;
+            position = finalPos;
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
-            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, loopAnimation);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
 
+            // UNCOMMENT THIS WHEN YOU PUT ITEM RENDERING ON THE SPINE CALL
+            /*
             if (player_item_1 != null)
             {
                 player_item_1.draw(sb);
@@ -321,6 +324,7 @@ namespace PattyPetitGiant
             {
                 player_item_2.draw(sb);
             }
+             * */
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -333,6 +337,10 @@ namespace PattyPetitGiant
             if (disable_movement_time == 0.0)
             {
                 disable_movement = true;
+
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
                 
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {

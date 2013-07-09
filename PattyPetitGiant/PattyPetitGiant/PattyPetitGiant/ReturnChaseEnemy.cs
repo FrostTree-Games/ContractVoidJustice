@@ -209,9 +209,9 @@ namespace PattyPetitGiant
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

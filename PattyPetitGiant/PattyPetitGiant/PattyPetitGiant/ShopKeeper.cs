@@ -172,16 +172,16 @@ namespace PattyPetitGiant
                         attackPoint = new Vector2(-1, -1);
                     }
 
-                    foreach (Entity en in parentWorld.EntityList)
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (en == this)
+                        if (parentWorld.EntityList[i] == this)
                         {
                             continue;
                         }
 
-                        if (Vector2.Distance(projectile.center, en.CenterPoint) < GlobalGameConstants.TileSize.X)
+                        if (Vector2.Distance(projectile.center, parentWorld.EntityList[i].CenterPoint) < GlobalGameConstants.TileSize.X)
                         {
-                            en.knockBack(new Vector2((float)Math.Cos(projectile.direction), (float)Math.Sin(projectile.direction)), 4.0f, 10);
+                            parentWorld.EntityList[i].knockBack(new Vector2((float)Math.Cos(projectile.direction), (float)Math.Sin(projectile.direction)), 4.0f, 10);
                             projectile.active = false;
                             fireballDelayPassed = -200f;
                             attackPoint = new Vector2(-1, -1);
@@ -207,11 +207,11 @@ namespace PattyPetitGiant
             }
             else if (state == ShopKeeperState.Normal)
             {
-                foreach (Entity en in parentWorld.EntityList)
+                for (int it = 0; it < parentWorld.EntityList.Count; it++)
                 {
-                    if (en is Player)
+                    if (parentWorld.EntityList[it] is Player)
                     {
-                        if (distance(en.Position, position) < GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomHigh / 2)
+                        if (distance(parentWorld.EntityList[it].Position, position) < GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomHigh / 2)
                         {
                             playerOverlap = false;
 
@@ -219,10 +219,10 @@ namespace PattyPetitGiant
                             {
                                 Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
-                                if (distance(drawItemPos + GlobalGameConstants.TileSize / 2, en.CenterPoint) < 32 && itemsForSale[i] != GlobalGameConstants.itemType.NoItem)
+                                if (distance(drawItemPos + GlobalGameConstants.TileSize / 2, parentWorld.EntityList[it].CenterPoint) < 32 && itemsForSale[i] != GlobalGameConstants.itemType.NoItem)
                                 {
                                     playerOverlap = true;
-                                    buyLocation = en.Position - new Vector2(0, 32);
+                                    buyLocation = parentWorld.EntityList[it].Position - new Vector2(0, 32);
                                     overlapIndex = i;
                                     if (!parentWorld.GUI.peekBox("shopkeeperMessage"))
                                     {
@@ -299,11 +299,11 @@ namespace PattyPetitGiant
             position = finalPos;
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (state == ShopKeeperState.Normal)
             {
-                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.White);
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -314,23 +314,23 @@ namespace PattyPetitGiant
 
                     Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
-                    itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f);
-                    sb.DrawString(Game1.font, itemPrices[i].ToString(), drawItemPos + new Vector2(0f, GlobalGameConstants.TileSize.Y), Color.Yellow, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    //sb.DrawString(Game1.font, itemPrices[i].ToString(), drawItemPos + new Vector2(0f, GlobalGameConstants.TileSize.Y), Color.Yellow, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                 }
 
                 if (playerOverlap)
                 {
-                    sb.DrawString(Game1.font, overlapMessage, buyLocation, Color.Red, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
+                    //sb.DrawString(Game1.font, overlapMessage, buyLocation, Color.Red, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
                 }
             }
             else if (state == ShopKeeperState.Enraged)
             {
-                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f, Color.Red);
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.Red);
             }
 
             if (projectile.active)
             {
-                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, projectile.position, new Vector2(3, 3), 0.51f, Color.Yellow);
+                shopKeeperFrameAnimation.drawAnimationFrame(0.0f, sb, projectile.position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.Yellow);
             }
         }
 
@@ -388,22 +388,22 @@ namespace PattyPetitGiant
                 items[i].Position = drawItemPos;
             }
 
-            foreach (Entity en in parentWorld.EntityList)
+            for (int it = 0; it < parentWorld.EntityList.Count; it++)
             {
-                if (!(en is Player || en is Enemy))
+                if (!(parentWorld.EntityList[it] is Player || parentWorld.EntityList[it] is Enemy))
                 {
                     continue;
                 }
 
                 if (attackerTarget == null)
                 {
-                    attackerTarget = en;
+                    attackerTarget = parentWorld.EntityList[it];
                     continue;
                 }
 
-                if (Vector2.Distance(CenterPoint, en.CenterPoint) < Vector2.Distance(CenterPoint, attackerTarget.CenterPoint))
+                if (Vector2.Distance(CenterPoint, parentWorld.EntityList[it].CenterPoint) < Vector2.Distance(CenterPoint, attackerTarget.CenterPoint))
                 {
-                    attackerTarget = en;
+                    attackerTarget = parentWorld.EntityList[it];
                 }
             }
 

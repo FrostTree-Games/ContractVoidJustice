@@ -34,3 +34,5 @@ snakeB
 snakeC
 konamiPic
 tank
+broodEgg
+bloodSpray

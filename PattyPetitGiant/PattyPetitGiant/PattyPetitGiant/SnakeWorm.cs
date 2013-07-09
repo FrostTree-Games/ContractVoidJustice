@@ -32,13 +32,24 @@ namespace PattyPetitGiant
         private const float knockBackDuration = 750f;
         private const float knockBackMagnitude = 0.4f;
 
-        private const int positionsCount = 6;
-        private Vector2[] tailAPositions = null;
-        private float[] tailARotations = null;
-        private Vector2[] tailBPositions = null;
-        private float[] tailBRotations = null;
+        private const int positionsCount = 2;
+        private const int tailPiecesCount = 100;
+        private TailPosition[,] tailData = null; //using a 2d array over jagged; garbage collection should be simpler with the autoboxed value types
         int tailMostRecent;
-        //private Vector2 tailB;
+
+        private const int secondaryHitBoxCount = 8;
+
+        private struct TailPosition
+        {
+            public Vector2 position;
+            public float rotation;
+
+            public TailPosition(Vector2 position, float rotation)
+            {
+                this.position = position;
+                this.rotation = rotation;
+            }
+        }
 
         private AnimationLib.FrameAnimationSet testAnim = null;
         private AnimationLib.FrameAnimationSet tailAnimA = null;
@@ -62,17 +73,20 @@ namespace PattyPetitGiant
             enemy_life = 16;
             enemy_type = EnemyType.Alien;
 
-            tailAPositions = new Vector2[positionsCount];
-            tailARotations = new float[positionsCount];
-            tailBPositions = new Vector2[positionsCount];
-            tailBRotations = new float[positionsCount];
+            tailData = new TailPosition[tailPiecesCount, positionsCount];
             tailMostRecent = 0;
-            for (int i = 0; i < positionsCount; i++)
+            for (int j = 0; j < tailPiecesCount; j++)
             {
-                tailAPositions[i] = position;
-                tailARotations[i] = direction;
-                tailBPositions[i] = position;
-                tailBRotations[i] = direction;
+                for (int i = 0; i < positionsCount; i++)
+                {
+                    tailData[j, i] = new TailPosition(position, direction);
+                }
+            }
+
+            secondaryHitBoxes = new SecondaryHitBox[secondaryHitBoxCount];
+            for (int i = 0; i < secondaryHitBoxCount; i++)
+            {
+                secondaryHitBoxes[i] = new SecondaryHitBox(position, new Vector2(16));
             }
 
             testAnim = AnimationLib.getFrameAnimationSet("snakeA");
@@ -83,6 +97,8 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
+            animation_time += currentTime.ElapsedGameTime.Milliseconds;
+
             if (snakeState == SnakeWormState.Moving)
             {
                 switchTimer += currentTime.ElapsedGameTime.Milliseconds;
@@ -123,7 +139,7 @@ namespace PattyPetitGiant
             {
                 knockBackTime += currentTime.ElapsedGameTime.Milliseconds;
 
-                direction += turnAmount * 3;
+                //direction += turnAmount * 3;
 
                 if (knockBackTime > knockBackDuration)
                 {
@@ -135,21 +151,60 @@ namespace PattyPetitGiant
                 remove_from_list = true;
             }
 
-            tailBPositions[tailMostRecent] = tailAPositions[(tailMostRecent + 2) % positionsCount];
-            tailBRotations[tailMostRecent] = tailARotations[tailMostRecent];
-            tailAPositions[tailMostRecent] = position;
-            tailARotations[tailMostRecent] = direction;
+
+            for (int i = 0; i < tailPiecesCount; i++)
+            {
+                if (i == tailPiecesCount - 1)
+                {
+                    tailData[i, tailMostRecent] = new TailPosition(position, direction + (float)(Math.PI));
+                }
+                else
+                {
+                    tailData[i, tailMostRecent] = tailData[(i - 1 + tailPiecesCount) % tailPiecesCount, (tailMostRecent + 1) % positionsCount];
+                }
+            }
+
+            for (int i = 0; i < tailPiecesCount - 1; i++)
+            {
+                Vector2 posDiff = tailData[i + 1, tailMostRecent].position - tailData[i, tailMostRecent].position;
+
+                tailData[i, tailMostRecent].rotation = (float)(Math.Atan2(posDiff.Y, posDiff.X));
+            }
+
             tailMostRecent = (tailMostRecent + 1) % positionsCount;
+
+            for (int i = 0; i < secondaryHitBoxCount; i++)
+            {
+                secondaryHitBoxes[i].Position = tailData[(int)(i * ((tailPiecesCount - 1.0f) / secondaryHitBoxCount)), tailMostRecent].position;
+            }
 
             Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
             position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            tailAnimB.drawAnimationFrame(0.0f, sb, tailBPositions[((tailMostRecent + 1) + positionsCount) % positionsCount] + tailAnimB.FrameDimensions / 2, new Vector2(1), 0.49f, tailBRotations[((tailMostRecent + 1) + positionsCount) % positionsCount], tailAnimB.FrameDimensions / 2);
-            tailAnimA.drawAnimationFrame(0.0f, sb, tailAPositions[((tailMostRecent + 1) + positionsCount) % positionsCount] + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailARotations[((tailMostRecent + 1) + positionsCount) % positionsCount], tailAnimA.FrameDimensions / 2);
-            testAnim.drawAnimationFrame(0.0f, sb, position + dimensions/2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
+            for (int i = 0; i < tailPiecesCount; i++)
+            {
+                if (i == 8)
+                {
+                    //tailAnimB.drawAnimationFrame(0.0f, sb, tailData[i, tailMostRecent].position + tailAnimB.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimB.FrameDimensions / 2);
+                }
+                else
+                {
+                    tailAnimA.drawAnimationFrame(animation_time, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, Vector2.Zero, Color.White);
+                    //tailAnimA.drawAnimationFrame(animation_time, sb, tailData[i, tailMostRecent].position + tailAnimA.FrameDimensions / 2, new Vector2(1), 0.5f, tailData[i, tailMostRecent].rotation, tailAnimA.FrameDimensions / 2);
+                }
+            }
+
+            testAnim.drawAnimationFrame(animation_time, sb, position + dimensions / 2, new Vector2(0), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            //testAnim.drawAnimationFrame(animation_time, sb, position + dimensions / 2, new Vector2(1), 0.6f, direction, testAnim.FrameDimensions / 2);
+
+            /*
+            for (int i = 0; i < secondaryHitBoxCount; i++)
+            {
+                sb.Draw(Game1.whitePixel, secondaryHitBoxes[i].Position, null, Color.Magenta, 0.0f, Vector2.Zero, secondaryHitBoxes[i].Dimensions, SpriteEffects.None, 0.7f);
+            }*/
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -165,6 +220,7 @@ namespace PattyPetitGiant
 
             knockBackTime = 0;
             direction.Normalize();
+            this.direction = (float)(Math.Atan2(direction.Y, direction.X));
             velocity = direction * knockBackMagnitude;
         }
 

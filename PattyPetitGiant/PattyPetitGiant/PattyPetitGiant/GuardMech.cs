@@ -412,7 +412,7 @@ namespace PattyPetitGiant
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, true);
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
 
@@ -460,15 +460,18 @@ namespace PattyPetitGiant
                     break;
             }
 
-            tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, tank_hull_angle, new Vector2(48f,69.5f));
+            tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
+            //tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, tank_hull_angle, new Vector2(48f,69.5f));
 
             if(grenade.active)
             {
-                sb.Draw(Game1.whitePixel, grenade.Position, null, Color.Blue, 0.0f, Vector2.Zero, grenade.Dimensions, SpriteEffects.None, 0.5f);
+                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), grenade.Position, Color.Blue, 0.0f, grenade.Dimensions);
+                //sb.Draw(Game1.whitePixel, grenade.Position, null, Color.Blue, 0.0f, Vector2.Zero, grenade.Dimensions, SpriteEffects.None, 0.5f);
             }
             if (melee_active)
             {
-                sb.Draw(Game1.whitePixel, melee_position, null, Color.Blue, 0.0f, Vector2.Zero, melee_hitbox, SpriteEffects.None, 0.5f);
+                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), melee_position, Color.Blue, 0.0f, melee_hitbox);
+                //sb.Draw(Game1.whitePixel, melee_position, null, Color.Blue, 0.0f, Vector2.Zero, melee_hitbox, SpriteEffects.None, 0.5f);
             }
         }
 

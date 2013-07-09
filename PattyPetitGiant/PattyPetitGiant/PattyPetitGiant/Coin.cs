@@ -65,11 +65,11 @@ namespace PattyPetitGiant
             {
                 animationTime += currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en is Player)
+                    if (parentWorld.EntityList[i] is Player)
                     {
-                        if (hitTest(en))
+                        if (hitTest(parentWorld.EntityList[i]))
                         {
                             GameCampaign.Player_Coin_Amount = GameCampaign.Player_Coin_Amount + (int)value;
 
@@ -105,11 +105,11 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             if (state == CoinState.Active)
             {
-                coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.51f, shadeColor);
+                coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
             }
         }
 

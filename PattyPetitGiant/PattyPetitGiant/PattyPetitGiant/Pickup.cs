@@ -49,6 +49,8 @@ namespace PattyPetitGiant
                     return new Sword();
                 case GlobalGameConstants.itemType.Bomb:
                     return new Bomb();
+                case GlobalGameConstants.itemType.BushidoBlade:
+                    return new BushidoBlade(Vector2.Zero);
                 case GlobalGameConstants.itemType.Gun:
                     return new Gun();
                 case GlobalGameConstants.itemType.Compass:
@@ -74,7 +76,7 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             AnimationLib.FrameAnimationSet dropAnim = null;
 
@@ -82,11 +84,11 @@ namespace PattyPetitGiant
 
             if (dropAnim != null)
             {
-                dropAnim.drawAnimationFrame(0.0f, sb, Position, new Vector2(1.0f, 1.0f), 0.5f);
+                dropAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
             else
             {
-                sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+                //sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
             }
         }
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

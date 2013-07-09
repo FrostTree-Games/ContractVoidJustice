@@ -70,31 +70,31 @@ namespace PattyPetitGiant
             }
             else
             {
-                foreach (Entity en in parentWorld.EntityList)
+                for (int it = 0; it < parentWorld.EntityList.Count; it++)
                 {
-                    if (en is Player)
+                    if (parentWorld.EntityList[it] is Player)
                     {
                         continue;
                     }
 
-                    if (en is Enemy || en is ShopKeeper || en is Pickup || en is Key)
+                    if (parentWorld.EntityList[it] is Enemy || parentWorld.EntityList[it] is ShopKeeper || parentWorld.EntityList[it] is Pickup || parentWorld.EntityList[it] is Key)
                     {
-                        if (shot.hitTestEntity(en))
+                        if (shot.hitTestEntity(parentWorld.EntityList[it]))
                         {
-                            if (en is ShopKeeper)
+                            if (parentWorld.EntityList[it] is ShopKeeper)
                             {
-                                ((ShopKeeper)en).poke();
+                                ((ShopKeeper)parentWorld.EntityList[it]).poke();
                             }
 
                             Vector2 swap = parent.Position;
-                            parent.Position = en.Position;
-                            en.Position = swap;
+                            parent.Position = parentWorld.EntityList[it].Position;
+                            parentWorld.EntityList[it].Position = swap;
 
                             shot.active = false;
 
-                            if (en is AntiFairy)
+                            if (parentWorld.EntityList[it] is AntiFairy)
                             {
-                                ((AntiFairy)en).duplicate();
+                                ((AntiFairy)parentWorld.EntityList[it]).duplicate();
                             }
                         }
                     }

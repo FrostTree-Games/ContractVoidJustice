@@ -58,6 +58,9 @@ namespace PattyPetitGiant
         private int currentSeed;
         public int CurrentSeed { get { return currentSeed; } }
 
+        private ParticleSet particleSet = null;
+        public ParticleSet Particles { get { return particleSet; } }
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -72,6 +75,8 @@ namespace PattyPetitGiant
             gui = new InGameGUI(this);
             keyModule = new LevelKeyModule();
 
+            particleSet = new ParticleSet();
+
             entityList = new List<Entity>();
 
             coinPool = new Coin[coinPoolSize];
@@ -84,11 +89,11 @@ namespace PattyPetitGiant
 
             populateRooms(nodeMap, currentSeed);
 
-            foreach (Entity en in entityList)
+            for (int i = 0; i < entityList.Count; i++)
             {
-                if (en is Player)
+                if (entityList[i] is Player)
                 {
-                    cameraFocus = en;
+                    cameraFocus = entityList[i];
                 }
             }
 
@@ -137,6 +142,11 @@ namespace PattyPetitGiant
                 Vector2 spawnPos = new Vector2((roomTileX + randX) * GlobalGameConstants.TileSize.X, (roomTileY + randY) * GlobalGameConstants.TileSize.Y) - new Vector2(16);
                 double randomSpawnValue = rand.NextDouble();
 
+                //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
+                //placedMonsterCount++;
+                //placedMonsterCount++;
+                //faction = Entity.EnemyType.Prisoner;
+
                 if (faction == Entity.EnemyType.Prisoner)
                 {
                     if (randomSpawnValue < 0.25)
@@ -156,20 +166,20 @@ namespace PattyPetitGiant
                 {
                     if (randomSpawnValue < 0.25)
                     {
-                        entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
+                        //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                     }
                     else if (randomSpawnValue < 0.5)
                     {
-                        entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
+                        //entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }
                     else
                     {
-                        entityList.Add(new PatrolGuard(this, spawnPos));
+                        //entityList.Add(new PatrolGuard(this, spawnPos));
                     }
                 }
                 else if (faction == Entity.EnemyType.Alien)
                 {
-                    //
+                    //entityList.Add(new BroodLord(this, spawnPos));
                 }
             }
         }
@@ -272,9 +282,13 @@ namespace PattyPetitGiant
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                        if (rand.NextDouble() > 0.5)
+                        if (rand.NextDouble() < 0.33)
                         {
                             placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
+                        }
+                        else if (rand.NextDouble() < 0.66)
+                        {
+                            placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Alien, intensityLevel, rand);
                         }
                         else
                         {
@@ -338,10 +352,13 @@ namespace PattyPetitGiant
                 GameCampaign.Player_Ammunition = 0;
             }
 
-            foreach (Entity en in entityList)
+
+            for (int i = 0; i < entityList.Count; i++)
             {
-                en.update(currentTime);
+                entityList[i].update(currentTime);
             }
+
+            particleSet.update(currentTime);
 
 #if WINDOWS
             entityList.RemoveAll(en => en.Remove_From_List == true);
@@ -405,25 +422,11 @@ namespace PattyPetitGiant
 
         private void renderGameStuff(SpriteBatch sb)
         {
-            sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, camera);
+            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
 
-            map.render(sb, 0.0f);
-
-            foreach (Entity en in entityList)
-            {
-                if (Vector2.Distance(en.Position, cameraFocus.Position) > 1000)
-                {
-                    continue;
-                }
-
-                en.draw(sb);
-            }
-
-            sb.End();
-
-            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus);
-
+            sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
             gui.render(sb);
+            sb.End();
         }
 
         private void renderPauseOverlay(SpriteBatch sb)

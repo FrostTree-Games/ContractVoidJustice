@@ -91,13 +91,13 @@ namespace PattyPetitGiant
                         //first if state is if enemy was knocked back by a enemy of a different type
                         if (enemy_found == false)
                         {
-                            foreach (Entity en in parentWorld.EntityList)
+                            for (int i = 0; i < parentWorld.EntityList.Count; i++)
                             {
-                                if (en == this)
+                                if (parentWorld.EntityList[i] == this)
                                     continue;
-                                else if (en is Player)
+                                else if (parentWorld.EntityList[i] is Player)
                                 {
-                                    component.update(this, en, currentTime, parentWorld);
+                                    component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
                                 }
                             }
                         }
@@ -161,14 +161,14 @@ namespace PattyPetitGiant
                             case ChargerState.charge:
                                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("charge");
                                 charge_timer += currentTime.ElapsedGameTime.Milliseconds;
-                                foreach (Entity en in parentWorld.EntityList)
+                                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                                 {
-                                    if (en == this)
+                                    if (parentWorld.EntityList[i] == this)
                                         continue;
-                                    if (hitTest(en))
+                                    if (hitTest(parentWorld.EntityList[i]))
                                     {
-                                        Vector2 direction = en.CenterPoint - CenterPoint;
-                                        en.knockBack(direction, knockback_magnitude, enemy_damage);
+                                        Vector2 direction = parentWorld.EntityList[i].CenterPoint - CenterPoint;
+                                        parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, enemy_damage);
                                     }
                                 }
 
@@ -208,7 +208,7 @@ namespace PattyPetitGiant
                 remove_from_list = true;
             }
         }
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
         }

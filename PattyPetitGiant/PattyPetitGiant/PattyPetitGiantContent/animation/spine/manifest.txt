@@ -23,3 +23,5 @@ squadLeaderDown
 squadLeaderRight
 squadLeaderUp
 tankTurret
+broodling
+broodlord

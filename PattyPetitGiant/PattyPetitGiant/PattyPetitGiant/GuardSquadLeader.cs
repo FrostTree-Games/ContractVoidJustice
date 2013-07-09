@@ -131,16 +131,18 @@ namespace PattyPetitGiant
 
                             if (enemy_found == false)
                             {
-                                foreach (Entity en in parentWorld.EntityList)
+                                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                                 {
-                                    if (en == this)
-                                        continue;
-                                    else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType && en.Death == false)
+                                    if (parentWorld.EntityList[i] == this)
                                     {
-                                        component.update(this, en, currentTime, parentWorld);
-                                        if(enemy_found)
+                                        continue;
+                                    }
+                                    else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
+                                    {
+                                        component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
+                                        if (enemy_found)
                                         {
-                                            entity_found = en;
+                                            entity_found = parentWorld.EntityList[i];
                                             break;
                                         }
                                     }
@@ -290,11 +292,13 @@ namespace PattyPetitGiant
 
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
+            /*
             sb.Draw(Game1.whitePixel, position, null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
             sb.Draw(Game1.whitePixel, follow_point_1, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2(16, 16), SpriteEffects.None, 1.0f);
             sb.Draw(Game1.whitePixel, follow_point_2, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(16, 16), SpriteEffects.None, 1.0f);
+             */
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -435,14 +439,14 @@ namespace PattyPetitGiant
             {
                 time_alive += currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en == parent)
+                    if (parentWorld.EntityList[i] == parent)
                         continue;
-                    if (hitTestBullet(en))
+                    if (hitTestBullet(parentWorld.EntityList[i]))
                     {
-                        Vector2 direction = en.Position - position;
-                        en.knockBack(direction, knockback_magnitude, bullet_damage, parent);
+                        Vector2 direction = parentWorld.EntityList[i].Position - position;
+                        parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, bullet_damage, parent);
                         active = false;
                         return;
                     }

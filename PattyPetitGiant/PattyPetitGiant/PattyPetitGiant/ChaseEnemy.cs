@@ -30,6 +30,9 @@ namespace PattyPetitGiant
 
         private bool death = false;
 
+        private EnemyComponents chaseComponent = null;
+        private EnemyComponents searchComponent = null;
+
         public ChaseEnemy(LevelState parentWorld, Vector2 position)
         {
             this.position = position;
@@ -40,7 +43,9 @@ namespace PattyPetitGiant
             sword_position = position;
 
             state = EnemyState.Moving;
-            component = new MoveSearch();
+            chaseComponent = new Chase();
+            searchComponent = new MoveSearch();
+            component = searchComponent;
             direction_facing = GlobalGameConstants.Direction.Up;
             change_direction_time = 0.0f;
             this.parentWorld = parentWorld;
@@ -87,24 +92,24 @@ namespace PattyPetitGiant
 
                         if (enemy_found)
                         {
-                            component = new Chase();
+                            component = chaseComponent;
                             state = EnemyState.Chase;
                             animation_time = 0.0f;
                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("chase");
                         }
                         else
                         {
-                            foreach (Entity en in parentWorld.EntityList)
+                            for (int i = 0; i < parentWorld.EntityList.Count; i++)
                             {
-                                if (en == this)
+                                if (parentWorld.EntityList[i] == this)
                                 {
                                     continue;
                                 }
 
-                                if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                                if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
                                 {
-                                    float distance = (float)Math.Sqrt(Math.Pow((double)(en.Position.X - position.X), 2.0) + Math.Pow((double)(en.Position.Y - position.Y), 2.0));
-                                    component.update(this, en, currentTime, parentWorld);
+                                    float distance = (float)Math.Sqrt(Math.Pow((double)(parentWorld.EntityList[i].Position.X - position.X), 2.0) + Math.Pow((double)(parentWorld.EntityList[i].Position.Y - position.Y), 2.0));
+                                    component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
                                 }
                             }
                         }
@@ -113,15 +118,15 @@ namespace PattyPetitGiant
                         //checks to see if player was hit
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
                         //wind up
-                        foreach (Entity en in parentWorld.EntityList)
+                        for (int i = 0; i < parentWorld.EntityList.Count; i++)
                         {
-                            if (en == this)
+                            if (parentWorld.EntityList[i] == this)
                                 continue;
 
-                            if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
+                            if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
                             {
                                 //component won't update when the swing is in effect
-                                float distance = Vector2.Distance(en.CenterPoint, CenterPoint);
+                                float distance = Vector2.Distance(parentWorld.EntityList[i].CenterPoint, CenterPoint);
                                 switch(chase_stage)
                                 {
                                     case ChaseAttackStage.windUp:
@@ -159,11 +164,11 @@ namespace PattyPetitGiant
                                     case ChaseAttackStage.attack:
                                         wind_anim += currentTime.ElapsedGameTime.Milliseconds;    
                                         //animation_time = 0.0f;
-                                        if (swordSlashHitTest(en))
+                                        if (swordSlashHitTest(parentWorld.EntityList[i]))
                                         {
-                                            Vector2 direction = en.CenterPoint - CenterPoint;
-                                            
-                                            en.knockBack(direction, knockback_magnitude, enemy_damage);
+                                            Vector2 direction = parentWorld.EntityList[i].CenterPoint - CenterPoint;
+
+                                            parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, enemy_damage);
                                         }
                                         if (wind_anim > 500)
                                         {
@@ -176,7 +181,7 @@ namespace PattyPetitGiant
                                         }
                                         break;
                                     default:
-                                        component.update(this, en, currentTime, parentWorld);
+                                        component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
                                         if (distance < 64.0f)
                                         {
                                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("windUp");
@@ -188,11 +193,11 @@ namespace PattyPetitGiant
                                         break;
                                 }
 
-                                if (distance > 300.0f || en.Remove_From_List)
+                                if (distance > 300.0f || parentWorld.EntityList[i].Remove_From_List)
                                 {
                                     state = EnemyState.Moving;
                                     current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
-                                    component = new MoveSearch();
+                                    component = searchComponent;
                                     enemy_found = false;
                                     wind_anim = 0.0f;
                                 }
@@ -234,7 +239,7 @@ namespace PattyPetitGiant
 
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, sword_position, null, Color.Pink, 0.0f, Vector2.Zero, sword_hitbox, SpriteEffects.None, 0.5f);
             //chaseAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(3, 3), 0.5f);

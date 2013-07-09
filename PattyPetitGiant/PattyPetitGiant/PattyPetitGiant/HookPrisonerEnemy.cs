@@ -184,11 +184,14 @@ namespace PattyPetitGiant
             }
         }
 
-        public override void draw(SpriteBatch sb)
+        public override void draw(Spine.SkeletonRenderer sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
+            sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Green, 0.0f, new Vector2(48));
+            //sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
             //sb.Draw(Game1.whitePixel, chain_position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48.0f, 48.0f), SpriteEffects.None, 0.5f);
 
+            //We need sprite animations figured out for this
+            /*
             if (state != ChainState.Neutral || state != ChainState.Moving)
             {
                 switch (direction_facing)
@@ -206,7 +209,7 @@ namespace PattyPetitGiant
                         sb.Draw(Game1.whitePixel, CenterPoint + new Vector2(0.0f, dimensions.Y / 2), null, Color.Black, angle, Vector2.Zero, new Vector2(chain_distance, 10.0f), SpriteEffects.None, 0.5f);
                         break;
                 }
-            }
+            } */
         }
         
         public bool hitTestChain(Entity other, float x, float y)
