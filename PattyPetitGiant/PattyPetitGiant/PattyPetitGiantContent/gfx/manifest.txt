@@ -13,3 +13,4 @@ tankHullSheet.png
 broodEggSheet.png
 snakeHead.png
 bloodSpraySheet.png
+buy.png
