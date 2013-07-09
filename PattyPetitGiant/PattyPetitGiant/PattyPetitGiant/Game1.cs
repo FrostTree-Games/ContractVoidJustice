@@ -98,7 +98,7 @@ namespace PattyPetitGiant
 
             GameCampaign.ResetPlayerValues();
 
-            currentGameScreen = new LevelSelectState();
+            currentGameScreen = new TitleScreen();
         }
 
         /// <summary>
