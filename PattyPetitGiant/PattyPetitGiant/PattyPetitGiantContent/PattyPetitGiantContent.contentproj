@@ -72,6 +72,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>antiFairy</Name>
     </None>
+    <None Include="animation\frame\buyPic.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>buyPic</Name>
+    </None>
     <None Include="animation\frame\konamiPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>konamiPic</Name>
@@ -310,6 +314,30 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="animation\spine\patrolUp\parts.atlas">
+      <Name>parts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopDown\anims.json">
+      <Name>anims</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopDown\parts.atlas">
+      <Name>parts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopRight\anims.json">
+      <Name>anims</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopRight\parts.atlas">
+      <Name>parts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopUp\anims.json">
+      <Name>anims</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopUp\parts.atlas">
       <Name>parts</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -713,6 +741,11 @@
       <Name>tunnel_N</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="BloomShader.fx">
+      <Name>BloomShader</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <None Include="gfx\tileTemplate.png">
       <Name>tileTemplate</Name>
       <Importer>TextureImporter</Importer>
@@ -1134,13 +1167,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-      <None Include="animation\spine\broodling\img.png">
-        <Name>img</Name>
-        <Importer>TextureImporter</Importer>
-        <Processor>TextureProcessor</Processor>
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
+    <None Include="animation\spine\broodling\img.png">
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <ItemGroup>
     <None Include="animation\spine\tankTurret\img.png">
       <Name>img</Name>
@@ -1195,6 +1228,34 @@
       <Name>scifiTemplate</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\buy.png">
+      <Name>buy</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\shopDown\img.png">
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopRight\img.png">
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\shopUp\img.png">
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

@@ -25,3 +25,6 @@ squadLeaderUp
 tankTurret
 broodling
 broodlord
+shopDown
+shopRight
+shopUp

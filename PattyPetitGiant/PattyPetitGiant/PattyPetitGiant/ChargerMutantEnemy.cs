@@ -16,7 +16,8 @@ namespace PattyPetitGiant
         {
             windUp,
             charge,
-            none
+            none,
+            dying
         }
         private EnemyComponents component;
         private ChargerState charger_state;
@@ -66,6 +67,16 @@ namespace PattyPetitGiant
         public override void update(GameTime currentTime)
         {
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+
+            if (charger_state == ChargerState.dying)
+            {
+                velocity = Vector2.Zero;
+
+                death = true;
+
+                // may the programming gods have mercy on me hacking over this complicated state machine
+                goto DeadSkipStates;
+            }
 
             if (disable_movement == true)
             {
@@ -195,17 +206,21 @@ namespace PattyPetitGiant
                 }
             }
 
+            DeadSkipStates:
             Vector2 pos = new Vector2(position.X, position.Y);
             Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
             position.Y = finalPos.Y;
 
-            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time, true);
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time, charger_state == ChargerState.dying ? false : true);
 
-            if (enemy_life <= 0)
+            if (enemy_life <= 0 && charger_state != ChargerState.dying)
             {
-                remove_from_list = true;
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(Game1.rand.Next() % 3 == 0 ? "die" : Game1.rand.Next() % 2 == 0 ? "die2" : "die3");
+
+                charger_state = ChargerState.dying;
+                animation_time = 0;
             }
         }
         public override void draw(Spine.SkeletonRenderer sb)
@@ -220,6 +235,10 @@ namespace PattyPetitGiant
                 {
                     disable_movement = true;
                     animation_time = 0;
+
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
                     
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {

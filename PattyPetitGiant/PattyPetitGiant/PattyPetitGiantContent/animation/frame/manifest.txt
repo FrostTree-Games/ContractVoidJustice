@@ -36,3 +36,4 @@ konamiPic
 tank
 broodEgg
 bloodSpray
+buyPic

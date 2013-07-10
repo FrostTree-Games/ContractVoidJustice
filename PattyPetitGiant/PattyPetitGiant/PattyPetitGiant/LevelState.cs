@@ -61,9 +61,21 @@ namespace PattyPetitGiant
         private ParticleSet particleSet = null;
         public ParticleSet Particles { get { return particleSet; } }
 
+        private RenderTarget2D textureScreen = null;
+        private RenderTarget2D halfTextureScreen = null;
+        private RenderTarget2D quarterTextureScreen = null;
+        private Texture2D screenResult = null;
+        private Texture2D halfSizeTexture = null;
+        private Texture2D quarterSizeTexture = null;
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
+
+            PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
+            textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            halfTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 2, pp.BackBufferHeight / 2, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            quarterTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
@@ -145,7 +157,7 @@ namespace PattyPetitGiant
                 //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                 //placedMonsterCount++;
                 //placedMonsterCount++;
-                //faction = Entity.EnemyType.Prisoner;
+                faction = Entity.EnemyType.Prisoner;
 
                 if (faction == Entity.EnemyType.Prisoner)
                 {
@@ -166,15 +178,15 @@ namespace PattyPetitGiant
                 {
                     if (randomSpawnValue < 0.25)
                     {
-                        //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
+                        entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                     }
                     else if (randomSpawnValue < 0.5)
                     {
-                        //entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
+                        entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }
                     else
                     {
-                        //entityList.Add(new PatrolGuard(this, spawnPos));
+                        entityList.Add(new PatrolGuard(this, spawnPos));
                     }
                 }
                 else if (faction == Entity.EnemyType.Alien)
@@ -263,8 +275,6 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new GuardMech(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
-
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
@@ -422,9 +432,31 @@ namespace PattyPetitGiant
 
         private void renderGameStuff(SpriteBatch sb)
         {
+            AnimationLib.GraphicsDevice.SetRenderTarget(textureScreen);
             AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
+            AnimationLib.GraphicsDevice.SetRenderTarget(null);
+            screenResult = (Texture2D)textureScreen;
 
-            sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
+            AnimationLib.GraphicsDevice.SetRenderTarget(halfTextureScreen);
+            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.5f), entityList, cameraFocus, map, particleSet);
+            AnimationLib.GraphicsDevice.SetRenderTarget(null);
+            halfSizeTexture = (Texture2D)halfTextureScreen;
+
+            AnimationLib.GraphicsDevice.SetRenderTarget(quarterTextureScreen);
+            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.25f), entityList, cameraFocus, map, particleSet);
+            AnimationLib.GraphicsDevice.SetRenderTarget(null);
+            quarterSizeTexture = (Texture2D)quarterTextureScreen;
+
+            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+
+            Game1.BloomFilter.Parameters["halfResMap"].SetValue(halfSizeTexture);
+            Game1.BloomFilter.Parameters["quarterResMap"].SetValue(quarterSizeTexture);
+
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, Game1.BloomFilter, Matrix.Identity);
+            sb.Draw(screenResult, new Vector2(0), Color.White);
+            sb.End();
+
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
             gui.render(sb);
             sb.End();
         }

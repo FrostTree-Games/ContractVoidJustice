@@ -324,6 +324,10 @@ namespace PattyPetitGiant
 
             animation_time = 0;
 
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+
             if (health > 0)
             {
                 molotovState = MolotovState.KnockedBack;
