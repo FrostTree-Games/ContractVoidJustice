@@ -36,7 +36,7 @@ namespace PattyPetitGiant
                 {
                     if (z_distance < max_z_distance)
                     {
-                        z_distance += z_text_speed;
+                        z_distance += z_text_speed * currentTime.ElapsedGameTime.Milliseconds;
                     }
 
                     if (z_distance > max_z_distance)
@@ -48,7 +48,7 @@ namespace PattyPetitGiant
                 {
                     if(z_distance > min_z_distance)
                     {
-                        z_distance -= z_text_speed;
+                        z_distance -= z_text_speed * currentTime.ElapsedGameTime.Milliseconds;
                     }
 
                     if (z_distance < min_z_distance)
@@ -61,6 +61,13 @@ namespace PattyPetitGiant
 
         private List<TitleMenuOptions> menu_list;
         private Vector2 text_position = new Vector2(960, 420);
+
+        private bool down_pressed = false;
+        private bool up_pressed = false;
+        private bool confirm_pressed = false;
+
+        private float button_pressed_timer = 0.0f;
+        private const float max_button_pressed_timer = 200.0f;
 
         private int menu_item_selected = 0;
 
@@ -78,8 +85,22 @@ namespace PattyPetitGiant
         private const int width = 32;
         protected override void doUpdate(GameTime currentTime)
         {
+            button_pressed_timer += currentTime.ElapsedGameTime.Milliseconds;
+
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
             {
+                if(!down_pressed)
+                    button_pressed_timer = 0.0f;
+                
+                down_pressed = true;
+            }
+
+            if ((down_pressed && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection)) || (down_pressed && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection) && button_pressed_timer > max_button_pressed_timer))
+            {
+                down_pressed = false;
+                button_pressed_timer = 0.0f;
+
+                menu_item_selected++;
                 if (menu_item_selected >= menu_list.Count())
                 {
                     menu_item_selected = menu_item_selected % menu_list.Count();
@@ -88,9 +109,48 @@ namespace PattyPetitGiant
                 {
                     menu_item_selected += menu_list.Count();
                 }
-                else
+            }
+
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection))
+            {
+                if (!up_pressed)
+                    button_pressed_timer = 0.0f;
+                up_pressed = true;
+            }
+            
+            if ((up_pressed && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection)) || (up_pressed && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection) && button_pressed_timer > max_button_pressed_timer))
+            {
+                up_pressed = false;
+                button_pressed_timer = 0.0f;
+
+                menu_item_selected--;
+                if (menu_item_selected >= menu_list.Count())
                 {
-                    menu_item_selected++;
+                    menu_item_selected = menu_item_selected % menu_list.Count();
+                }
+                else if (menu_item_selected < 0)
+                {
+                    menu_item_selected += menu_list.Count();
+                }
+            }
+
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm))
+            {
+                confirm_pressed = true;
+            }
+            else if (confirm_pressed)
+            {
+                confirm_pressed = false;
+
+                switch(menu_list[menu_item_selected].text)
+                {
+                    case "START":
+                        isComplete = true;
+                        break;
+                    case "OPTIONS":
+                        break;
+                    case "QUIT":
+                        break;
                 }
             }
 
@@ -104,6 +164,7 @@ namespace PattyPetitGiant
                 {
                     menu_list[i].selected = false;
                 }
+                menu_list[i].update(currentTime);
             }
         }
 
@@ -112,6 +173,7 @@ namespace PattyPetitGiant
             sb.Begin();
 
             //sb.Draw(Game1.whitePixel,new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+            
             sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, Color.White, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
 
             for (int i = 0; i < menu_list.Count(); i++)
@@ -123,7 +185,7 @@ namespace PattyPetitGiant
 
         public override ScreenStateType nextLevelState()
         {
-            throw new NotImplementedException();
+            return ScreenStateType.LevelSelectState;
         }
     }
 }

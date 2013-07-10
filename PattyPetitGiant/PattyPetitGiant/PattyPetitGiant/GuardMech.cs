@@ -414,7 +414,9 @@ namespace PattyPetitGiant
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
-            // sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+
+            Vector2 offset = new Vector2(19, 0);
 
             switch (direction_facing)
             {
@@ -427,6 +429,7 @@ namespace PattyPetitGiant
                     {
                         tank_hull_angle -= tank_hull_turn_magnitude;
                     }
+                    offset = new Vector2(-19, 0);
                     break;
                 case GlobalGameConstants.Direction.Left:
                     if ((float)(tank_hull_angle) < (float)(3 * Math.PI / 2) - 0.02f)
@@ -437,6 +440,7 @@ namespace PattyPetitGiant
                     {
                         tank_hull_angle -= tank_hull_turn_magnitude;
                     }
+                    offset = new Vector2(-19, 0);
                     break;
                 case GlobalGameConstants.Direction.Up:
                     if ((float)(tank_hull_angle) < (float)(0.0) - 0.02f)
@@ -447,6 +451,7 @@ namespace PattyPetitGiant
                     {
                         tank_hull_angle -= tank_hull_turn_magnitude;
                     }
+                    offset = new Vector2(0, 19);
                     break;
                 default:
                     if ((float)(tank_hull_angle) < (float)(Math.PI) -0.02)
@@ -457,10 +462,14 @@ namespace PattyPetitGiant
                     {
                         tank_hull_angle -= tank_hull_turn_magnitude;
                     }
+                    offset = new Vector2(0, 19);
                     break;
             }
 
-            tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
+            tankAnim.drawAnimationFrame(0.0f, sb, position - offset/2, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
+
+            //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0,0,1,1),position, Color.Green, 0.0f, dimensions);
+
             //tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, tank_hull_angle, new Vector2(48f,69.5f));
 
             if(grenade.active)
