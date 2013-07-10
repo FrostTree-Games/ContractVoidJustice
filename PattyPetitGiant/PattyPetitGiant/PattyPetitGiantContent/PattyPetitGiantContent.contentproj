@@ -741,6 +741,11 @@
       <Name>tunnel_N</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Compile Include="BloomShader.fx">
+      <Name>BloomShader</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <None Include="gfx\tileTemplate.png">
       <Name>tileTemplate</Name>
       <Importer>TextureImporter</Importer>

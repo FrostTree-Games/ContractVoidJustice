@@ -61,9 +61,15 @@ namespace PattyPetitGiant
         private ParticleSet particleSet = null;
         public ParticleSet Particles { get { return particleSet; } }
 
+        private RenderTarget2D textureScreen = null;
+        private Texture2D screenResult = null;
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
+
+            PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
+            textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
@@ -145,7 +151,7 @@ namespace PattyPetitGiant
                 //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                 //placedMonsterCount++;
                 //placedMonsterCount++;
-                //faction = Entity.EnemyType.Prisoner;
+                faction = Entity.EnemyType.Prisoner;
 
                 if (faction == Entity.EnemyType.Prisoner)
                 {
@@ -420,9 +426,20 @@ namespace PattyPetitGiant
 
         private void renderGameStuff(SpriteBatch sb)
         {
+            AnimationLib.GraphicsDevice.SetRenderTarget(textureScreen);
+
             AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
 
-            sb.Begin(SpriteSortMode.FrontToBack, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
+            AnimationLib.GraphicsDevice.SetRenderTarget(null);
+            screenResult = (Texture2D)textureScreen;
+
+            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, Game1.BloomFilter, Matrix.Identity);
+            sb.Draw(screenResult, new Vector2(0), Color.White);
+            sb.End();
+
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
             gui.render(sb);
             sb.End();
         }

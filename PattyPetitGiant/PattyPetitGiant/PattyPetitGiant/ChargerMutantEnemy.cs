@@ -235,6 +235,10 @@ namespace PattyPetitGiant
                 {
                     disable_movement = true;
                     animation_time = 0;
+
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
                     
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {

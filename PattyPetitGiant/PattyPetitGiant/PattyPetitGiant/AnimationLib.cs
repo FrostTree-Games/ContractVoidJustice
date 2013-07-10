@@ -17,6 +17,9 @@ namespace PattyPetitGiant
         private static string frameAnimationDirectory = "Content/animation/frame/";
         private static string frameManifestFile = "Content/animation/frame/manifest.txt";
 
+        private static GraphicsDevice gd = null;
+        public static GraphicsDevice GraphicsDevice { get { return gd; } }
+
         private static XnaTextureLoader textureLoader = null;
         private static SkeletonRenderer skeletonRenderer = null;
 
@@ -209,6 +212,11 @@ namespace PattyPetitGiant
 
         public AnimationLib(GraphicsDevice gd, SpriteBatch spriteBatch)
         {
+            if (AnimationLib.gd == null)
+            {
+                AnimationLib.gd = gd;
+            }
+
             if (AnimationLib.spriteBatch == null)
             {
                 AnimationLib.spriteBatch = spriteBatch;
