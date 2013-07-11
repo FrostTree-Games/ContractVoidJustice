@@ -292,11 +292,14 @@ namespace PattyPetitGiant
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                        if (rand.NextDouble() < 0.33)
+                        double enemyValuesSum = GameCampaign.CurrentAlienRate + GameCampaign.CurrentGuardRate + GameCampaign.CurrentPrisonerRate;
+                        double rollRoomValue = rand.NextDouble();
+
+                        if (rollRoomValue < GameCampaign.CurrentGuardRate / enemyValuesSum)
                         {
                             placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
                         }
-                        else if (rand.NextDouble() < 0.66)
+                        else if (rollRoomValue < (GameCampaign.CurrentGuardRate + GameCampaign.CurrentAlienRate) / enemyValuesSum)
                         {
                             placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Alien, intensityLevel, rand);
                         }

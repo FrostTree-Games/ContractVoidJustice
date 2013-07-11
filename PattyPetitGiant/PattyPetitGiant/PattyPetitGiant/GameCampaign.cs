@@ -49,6 +49,13 @@ namespace PattyPetitGiant
         }
         private static int playerFloorHeight = 1;
 
+        private static double currentGuardRate = 1;
+        private static double currentPrisonerRate = 1;
+        private static double currentAlienRate = 1;
+        public static double CurrentGuardRate { get { return currentGuardRate; } set { currentGuardRate = value; } }
+        public static double CurrentPrisonerRate { get { return currentPrisonerRate; } set { currentPrisonerRate = value; } }
+        public static double CurrentAlienRate { get { return currentAlienRate; } set { currentAlienRate = value; } }
+
         public static void ResetPlayerValues()
         {
             PlayerLevelProgress = 0;
@@ -57,6 +64,10 @@ namespace PattyPetitGiant
             player_health = 100;
             player_ammunition = 100;
             player_coin_amount = 200;
+
+            currentGuardRate = 1;
+            currentPrisonerRate = 1;
+            currentAlienRate = 1;
         }
     }
 }

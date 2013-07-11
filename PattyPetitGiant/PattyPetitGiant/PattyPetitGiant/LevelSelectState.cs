@@ -102,32 +102,15 @@ namespace PattyPetitGiant
             {
                 confirmPressed = false;
 
+                GameCampaign.CurrentAlienRate = levelMap[selectedLevelX, selectedLevelY].alienRates;
+                GameCampaign.CurrentGuardRate = levelMap[selectedLevelX, selectedLevelY].guardRates;
+                GameCampaign.CurrentPrisonerRate = levelMap[selectedLevelX, selectedLevelY].prisonerRates;
+
                 GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
                 GameCampaign.PlayerFloorHeight = selectedLevelY;
 
                 isComplete = true;
             }
-
-            /*
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection) && !rightPressed)
-            {
-                rightPressed = true;
-            }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection) && rightPressed)
-            {
-                rightPressed = false;
-
-                if (GameCampaign.PlayerLevelProgress < levelMap.GetLength(0) - 2)
-                {
-                    GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
-                    GameCampaign.PlayerFloorHeight = selectedLevelY;
-
-                    if (levelMap[GameCampaign.PlayerLevelProgress + 1, selectedLevelY].visible == false)
-                    {
-                        selectedLevelY = 1;
-                    }
-                }
-            }*/
         }
 
         private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color)
@@ -176,7 +159,15 @@ namespace PattyPetitGiant
                 }
             }
 
-            sb.DrawString(Game1.font, "Prisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates + "\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates + "\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates + "\nLoot Rates: " + levelMap[selectedLevelX, selectedLevelY].lootRates, 2 * drawMapTestOffset, Color.Black);
+            sb.DrawString(Game1.font, "\nPrisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates, 2 * drawMapTestOffset, Color.Orange);
+            sb.DrawString(Game1.font, "\n\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates, 2 * drawMapTestOffset, Color.Red);
+            sb.DrawString(Game1.font, "\n\n\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates, 2 * drawMapTestOffset, Color.LightBlue);
+            sb.DrawString(Game1.font, "\n\n\n\nLoot Rates: " + levelMap[selectedLevelX, selectedLevelY].lootRates, 2 * drawMapTestOffset, Color.Black);
+
+            sb.Draw(Game1.whitePixel, 2 * drawMapTestOffset - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(52, 16), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, 2 * drawMapTestOffset, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, 2 * drawMapTestOffset + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.Red, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, 2 * drawMapTestOffset + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0) + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].guardRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
 
             sb.End();
         }
