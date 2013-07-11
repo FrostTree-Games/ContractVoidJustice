@@ -81,6 +81,7 @@ namespace PattyPetitGiant
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("scifiTemplate.png");
+            map.ShopTileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
 
             endFlagReached = false;
 
