@@ -74,8 +74,8 @@ namespace PattyPetitGiant
 
             player_item_1 = new Sword();
             player_item_2 = new DungeonMap();
-            GameCampaign.Player_Item_1 = player_item_1.getEnumType();
-            GameCampaign.Player_Item_2 = player_item_2.getEnumType();
+            GameCampaign.Player_Item_1 = player_item_1.ItemType();;
+            GameCampaign.Player_Item_2 = player_item_2.ItemType();
 
             state = playerState.Moving;
 
@@ -264,7 +264,7 @@ namespace PattyPetitGiant
                                     item1_switch_button_down = false;
 
                                     player_item_1 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_1, currentTime);
-                                    GameCampaign.Player_Item_1 = player_item_1.getEnumType();
+                                    GameCampaign.Player_Item_1 = player_item_1.ItemType();
                                 }
 
                                 if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && !item2_switch_button_down)
@@ -276,7 +276,7 @@ namespace PattyPetitGiant
                                     item2_switch_button_down = false;
 
                                     player_item_2 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_2, currentTime);
-                                    GameCampaign.Player_Item_2 = player_item_2.getEnumType();
+                                    GameCampaign.Player_Item_2 = player_item_2.ItemType();
                                 }
                             }
                         }

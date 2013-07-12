@@ -26,8 +26,8 @@ namespace PattyPetitGiant
             get { return player_coin_amount; }
         }
 
-        public static string Player_Item_1 = null;
-        public static string Player_Item_2 = null;
+        public static GlobalGameConstants.itemType Player_Item_1;
+        public static GlobalGameConstants.itemType Player_Item_2;
 
         /// <summary>
         /// Indicates how many levels the player has completed so far in the campaign.
