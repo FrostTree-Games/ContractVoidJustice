@@ -48,6 +48,8 @@ namespace PattyPetitGiant
 
         private Texture2D wireframe = null;
 
+        private const string menuBlipSound = "menuSelect";
+
         public LevelSelectState()
         {
             levelMap = new LevelData[6, 3];
@@ -70,7 +72,7 @@ namespace PattyPetitGiant
             selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
             selectedLevelY = GameCampaign.PlayerFloorHeight;
 
-            cursorPosition = new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2);
+            cursorPosition = new Vector2(((GameCampaign.PlayerLevelProgress * 128) + drawMapTestOffset.X), ((GameCampaign.PlayerFloorHeight * 96) + drawMapTestOffset.Y));
             cursorAnimationTime = 0;
         }
 
@@ -87,6 +89,7 @@ namespace PattyPetitGiant
                 if (selectedLevelY < levelMap.GetLength(1) - 1 && levelMap[selectedLevelX, selectedLevelY + 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight < 1)
                 {
                     selectedLevelY++;
+                    AudioLib.playSoundEffect(menuBlipSound);
                 }
             }
 
@@ -101,6 +104,7 @@ namespace PattyPetitGiant
                 if (selectedLevelY > 0 && levelMap[selectedLevelX, selectedLevelY - 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight > -1)
                 {
                     selectedLevelY--;
+                    AudioLib.playSoundEffect(menuBlipSound);
                 }
             }
 
@@ -144,6 +148,8 @@ namespace PattyPetitGiant
         {
             drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
             drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X - lineWidth, rect.Y + rect.Height), rect.Width + lineWidth, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
         }
 
         public override void render(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
@@ -154,7 +160,7 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) /2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
 
-            sb.Draw(wireframe, Vector2.Zero, null, Color.DarkOrange, 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
+            sb.Draw(wireframe, Vector2.Zero, null, Color.Lerp(Color.DarkOrange, Color.Black, 0.375f + (0.025f * (float)Math.Sin(cursorAnimationTime / 10))), 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
 
             for (int i = 0; i < levelMap.GetLength(0); i++)
             {
@@ -184,16 +190,19 @@ namespace PattyPetitGiant
 
             sb.Draw(tex, cursorPosition + new Vector2(24), new Rectangle(0, 0, 48, 48), Color.Red, 0.0f, new Vector2(24), 1 + (0.2f * (float)Math.Sin(cursorAnimationTime / 250f)), SpriteEffects.None, 0.5f);
 
-            /*
             Rectangle rx = XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f);
             rx.X += 575;
             rx.Y += 100;
-            drawBox(sb, rx, Color.Orange, 2); */
+            drawBox(sb, rx, Color.Orange, 2);
+            rx.X -= 3;
+            rx.Y -= 3;
+            rx.Width += 6;
+            rx.Height += 6;
+            drawBox(sb, rx, Color.Orange, 2);
 
             sb.DrawString(Game1.font, "\nPrisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates, testDetailStuff, Color.Orange);
             sb.DrawString(Game1.font, "\n\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates, testDetailStuff, Color.Red);
             sb.DrawString(Game1.font, "\n\n\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates, testDetailStuff, Color.LightBlue);
-            sb.DrawString(Game1.font, "\n\n\n\nLoot Rates: " + levelMap[selectedLevelX, selectedLevelY].lootRates, testDetailStuff, Color.Black);
 
             sb.Draw(Game1.whitePixel, testDetailStuff - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(52, 16), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, testDetailStuff, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);

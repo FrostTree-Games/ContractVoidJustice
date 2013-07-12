@@ -3,3 +3,4 @@ unlockDoor
 testCoin
 testRocket
 testExplosion
+menuSelect
