@@ -22,17 +22,30 @@ namespace PattyPetitGiant
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        
+        
+        private static Model myModel;
+        public static Model MyModel
+        {
+            get
+            {
+                return myModel;
+            }
+        }
+
         public static SpriteFont font;
         private static Effect bloomFilter = null;
         public static Effect BloomFilter { get { return bloomFilter; } }
         public static Texture2D whitePixel = null;
         public static Texture2D frostTreeLogo = null;
         public static Texture2D testArrow = null;
+        public static Texture2D shipTexture = null;
         public static Random rand = new Random();
 
         private static bool gameIsRunningSlowly;
         public static bool GameIsRunningSlowly { get { return gameIsRunningSlowly; } }
 
+        public static float aspectRatio;
         private ScreenState currentGameScreen = null;
 
         private InputDeviceManager input_device = null;
@@ -84,6 +97,10 @@ namespace PattyPetitGiant
             whitePixel = Content.Load<Texture2D>("whitePixel");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
+            //shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
+
+            myModel = Content.Load<Model>("model3D/PPG");
+            aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
             bloomFilter = Content.Load<Effect>("BloomShader");
 
@@ -108,7 +125,7 @@ namespace PattyPetitGiant
 
             GameCampaign.ResetPlayerValues();
 
-            currentGameScreen = new TitleScreen();
+            currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
         }
 
         /// <summary>
