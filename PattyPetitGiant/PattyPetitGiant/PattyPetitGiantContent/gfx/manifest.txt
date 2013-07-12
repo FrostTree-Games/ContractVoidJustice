@@ -14,3 +14,5 @@ broodEggSheet.png
 snakeHead.png
 bloodSpraySheet.png
 buy.png
+shipWireframe.png
+wireFramePieces.png
