@@ -158,7 +158,6 @@ namespace PattyPetitGiant
                 //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                 //placedMonsterCount++;
                 //placedMonsterCount++;
-                faction = Entity.EnemyType.Prisoner;
 
                 if (faction == Entity.EnemyType.Prisoner)
                 {
@@ -390,9 +389,6 @@ namespace PattyPetitGiant
             }
 
             gui.update(currentTime);
-
-            if (GameCampaign.PlayerAllegiance < 0.0f) { GameCampaign.PlayerAllegiance = 0.0f; }
-            if (GameCampaign.PlayerAllegiance > 1.0f) { GameCampaign.PlayerAllegiance = 1.0f; }
 
             if (endFlagReached)
             {

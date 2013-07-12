@@ -293,8 +293,8 @@ namespace PattyPetitGiant
             sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
 
             sb.Draw(Game1.whitePixel, new Vector2(499, 31), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(66, 26), SpriteEffects.None, 0.0f);
-            sb.Draw(Game1.whitePixel, new Vector2(500, 32), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2(64 * GameCampaign.PlayerAllegiance, 24), SpriteEffects.None, 0.0f);
-            sb.Draw(Game1.whitePixel, new Vector2(500 + (64 * GameCampaign.PlayerAllegiance), 32), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2(64 * (1 - GameCampaign.PlayerAllegiance), 24), SpriteEffects.None, 0.0f);
+            sb.Draw(Game1.whitePixel, new Vector2(500, 32), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2(64 * (1 - GameCampaign.PlayerAllegiance), 24), SpriteEffects.None, 0.0f);
+            sb.Draw(Game1.whitePixel, new Vector2(500 + (64 * (1 - GameCampaign.PlayerAllegiance)), 32), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2(64 * GameCampaign.PlayerAllegiance, 24), SpriteEffects.None, 0.0f);
 
             for (int i = 0; i < windowIsActive.Length; i++)
             {

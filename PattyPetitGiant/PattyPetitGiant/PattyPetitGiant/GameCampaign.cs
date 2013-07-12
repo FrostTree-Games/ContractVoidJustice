@@ -31,7 +31,19 @@ namespace PattyPetitGiant
         /// Used to determine where the player stands with the guards and/or prisoners.
         /// </summary>
         /// <remarks>Ranged between 0.0f and 1.0f. 0.0f represents the player siding with the prisoners. 1.0f represents the player siding with the guards.</remarks>
-        public static float PlayerAllegiance { get { return allegiance; } set { allegiance = value; } }
+        public static float PlayerAllegiance { get { return allegiance; } }
+
+        /// <summary>
+        /// Increment or decrement the player's standing between the prisoners and guards.
+        /// </summary>
+        /// <param name="value">Value to alter PlayerAllegiance by.</param>
+        public static void AlterAllegiance(float value)
+        {
+            allegiance += value;
+
+            if (allegiance < 0.0f) { allegiance = 0.0f; }
+            if (allegiance > 1.0f) { allegiance = 1.0f; }
+        }
 
         public static GlobalGameConstants.itemType Player_Item_1;
         public static GlobalGameConstants.itemType Player_Item_2;

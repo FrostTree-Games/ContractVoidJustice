@@ -233,6 +233,11 @@ namespace PattyPetitGiant
             {
                 if (state != EnemyState.Agressive)
                 {
+                    if (attacker != null & attacker is Player)
+                    {
+                        GameCampaign.AlterAllegiance(0.005f);
+                    }
+
                     disable_movement = true;
                     animation_time = 0;
 
