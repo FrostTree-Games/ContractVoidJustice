@@ -40,7 +40,7 @@ namespace PattyPetitGiant
         private float cursorAnimationTime;
 
         private Vector2 drawMapTestOffset = new Vector2(1000, 225);
-        private Vector2 testDetailStuff = new Vector2(600, 550);
+        private Vector2 testDetailStuff = new Vector2(750, 550);
 
         private bool upPressed = false;
         private bool downPressed = false;
@@ -135,16 +135,22 @@ namespace PattyPetitGiant
             cursorAnimationTime += currentTime.ElapsedGameTime.Milliseconds;
         }
 
-        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color)
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
         {
-            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, 3), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, width), SpriteEffects.None, 0.5f);
+        }
+
+        private void drawBox(SpriteBatch sb, Rectangle rect, Color clr, float lineWidth)
+        {
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
         }
 
         public override void render(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
         {
             Texture2D tex = TextureLib.getLoadedTexture("wireFramePieces.png");
 
-            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-500, 0, 0));
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-575, -100, 0));
 
             sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) /2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
 
@@ -174,9 +180,15 @@ namespace PattyPetitGiant
                 }
             }
 
-            drawLine(sb, drawMapTestOffset + new Vector2(24) + new Vector2(GameCampaign.PlayerLevelProgress * 128, GameCampaign.PlayerFloorHeight * 96), GameCampaign.PlayerFloorHeight == selectedLevelY ? 128f : 155f, 0.85f * (float)((-Math.PI / 2) + Math.Atan2(selectedLevelX - GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight - selectedLevelY)), Color.White);
+            drawLine(sb, drawMapTestOffset + new Vector2(24) + new Vector2(GameCampaign.PlayerLevelProgress * 128, GameCampaign.PlayerFloorHeight * 96), GameCampaign.PlayerFloorHeight == selectedLevelY ? 128f : 155f, 0.85f * (float)((-Math.PI / 2) + Math.Atan2(selectedLevelX - GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight - selectedLevelY)), Color.Gray, 3.5f);
 
             sb.Draw(tex, cursorPosition + new Vector2(24), new Rectangle(0, 0, 48, 48), Color.Red, 0.0f, new Vector2(24), 1 + (0.2f * (float)Math.Sin(cursorAnimationTime / 250f)), SpriteEffects.None, 0.5f);
+
+            /*
+            Rectangle rx = XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f);
+            rx.X += 575;
+            rx.Y += 100;
+            drawBox(sb, rx, Color.Orange, 2); */
 
             sb.DrawString(Game1.font, "\nPrisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates, testDetailStuff, Color.Orange);
             sb.DrawString(Game1.font, "\n\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates, testDetailStuff, Color.Red);

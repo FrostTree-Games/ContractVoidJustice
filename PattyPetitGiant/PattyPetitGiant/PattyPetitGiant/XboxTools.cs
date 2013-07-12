@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace PattyPetitGiant
 {
@@ -10,6 +12,8 @@ namespace PattyPetitGiant
     /// </summary>
     public static class XboxTools
     {
+        static readonly Dictionary<float, Rectangle> prevValues = new Dictionary<float, Rectangle>();
+
         /// <summary> 
         /// Removes all elements from the List that match the conditions defined by the specified predicate. 
         /// </summary> 
@@ -114,6 +118,31 @@ namespace PattyPetitGiant
         public static float LerpRadians(float start, float end, float amount)
         {
             return LerpDegrees(start * (float)(Math.PI / 180), end * (float)(Math.PI / 180), amount);
+        }
+
+        public static Rectangle GetTitleSafeArea(GraphicsDevice device, float percent)
+        {
+            Rectangle retval;
+
+            if (prevValues.TryGetValue(percent, out retval))
+                return retval;
+
+            retval = new Rectangle(
+                device.Viewport.X,
+                device.Viewport.Y,
+                device.Viewport.Width,
+                device.Viewport.Height);
+
+            float border = (1 - percent) / 2;
+
+            retval.X = (int)(border * retval.Width);
+            retval.Y = (int)(border * retval.Height);
+            retval.Width = (int)(percent * retval.Width);
+            retval.Height = (int)(percent * retval.Height);
+
+            prevValues.Add(percent, retval);
+
+            return retval;
         }
     }
 }
