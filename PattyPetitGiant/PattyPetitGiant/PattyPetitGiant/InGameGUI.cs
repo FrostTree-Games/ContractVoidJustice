@@ -292,6 +292,10 @@ namespace PattyPetitGiant
             sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
             sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
 
+            sb.Draw(Game1.whitePixel, new Vector2(499, 31), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(66, 26), SpriteEffects.None, 0.0f);
+            sb.Draw(Game1.whitePixel, new Vector2(500, 32), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2(64 * GameCampaign.PlayerAllegiance, 24), SpriteEffects.None, 0.0f);
+            sb.Draw(Game1.whitePixel, new Vector2(500 + (64 * GameCampaign.PlayerAllegiance), 32), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2(64 * (1 - GameCampaign.PlayerAllegiance), 24), SpriteEffects.None, 0.0f);
+
             for (int i = 0; i < windowIsActive.Length; i++)
             {
                 if (!windowIsActive[i])
@@ -306,11 +310,11 @@ namespace PattyPetitGiant
             {
                 if (parent.KeyModule.isKeyFound((LevelKeyModule.KeyColor)i))
                 {
-                    keyFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(550 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
+                    keyFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(600 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
                 }
                 else
                 {
-                    keyNotFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(550 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
+                    keyNotFoundPic.drawAnimationFrame(0.0f, sb, new Vector2(600 + (i * 49), 10), new Vector2(3.0f, 3.0f), 0.5f, parent.KeyModule.KeyColorSet[i]);
                 }
             }
 

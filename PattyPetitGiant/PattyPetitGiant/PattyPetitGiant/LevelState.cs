@@ -391,6 +391,9 @@ namespace PattyPetitGiant
 
             gui.update(currentTime);
 
+            if (GameCampaign.PlayerAllegiance < 0.0f) { GameCampaign.PlayerAllegiance = 0.0f; }
+            if (GameCampaign.PlayerAllegiance > 1.0f) { GameCampaign.PlayerAllegiance = 1.0f; }
+
             if (endFlagReached)
             {
                 //maybe have some nicer animation here later

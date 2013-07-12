@@ -26,6 +26,13 @@ namespace PattyPetitGiant
             get { return player_coin_amount; }
         }
 
+        private static float allegiance = 0.5f;
+        /// <summary>
+        /// Used to determine where the player stands with the guards and/or prisoners.
+        /// </summary>
+        /// <remarks>Ranged between 0.0f and 1.0f. 0.0f represents the player siding with the prisoners. 1.0f represents the player siding with the guards.</remarks>
+        public static float PlayerAllegiance { get { return allegiance; } set { allegiance = value; } }
+
         public static GlobalGameConstants.itemType Player_Item_1;
         public static GlobalGameConstants.itemType Player_Item_2;
 
@@ -62,7 +69,9 @@ namespace PattyPetitGiant
             PlayerFloorHeight = 1;
 
             Player_Item_1 = GlobalGameConstants.itemType.Sword;
-            Player_Item_2 = GlobalGameConstants.itemType.Sword;
+            Player_Item_2 = GlobalGameConstants.itemType.Gun;
+
+            allegiance = 0.5f;
 
             player_health = 100;
             player_ammunition = 100;
