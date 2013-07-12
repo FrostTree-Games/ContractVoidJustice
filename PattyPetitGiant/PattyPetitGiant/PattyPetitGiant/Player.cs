@@ -63,6 +63,41 @@ namespace PattyPetitGiant
             get { return state;  }
 
         }
+
+        private Item getItemWhenLoading(GlobalGameConstants.itemType type)
+        {
+            switch (type)
+            {
+                case GlobalGameConstants.itemType.Sword:
+                    return new Sword();
+                case GlobalGameConstants.itemType.Bomb:
+                    return new Bomb();
+                case GlobalGameConstants.itemType.BushidoBlade:
+                    return new BushidoBlade(Vector2.Zero);
+                case GlobalGameConstants.itemType.Gun:
+                    return new Gun();
+                case GlobalGameConstants.itemType.Compass:
+                    return new Compass();
+                case GlobalGameConstants.itemType.DungeonMap:
+                    return new DungeonMap();
+                case GlobalGameConstants.itemType.WandOfGyges:
+                    return new WandOfGyges();
+                case GlobalGameConstants.itemType.ShotGun:
+                    return new ShotGun();
+                case GlobalGameConstants.itemType.WaveMotionGun:
+                    return new WaveMotionGun();
+                case GlobalGameConstants.itemType.HermesSandals:
+                    return new HermesSandals();
+                case GlobalGameConstants.itemType.RocketLauncher:
+                    return new RocketLauncher();
+                case GlobalGameConstants.itemType.FlameThrower:
+                    return new FlameThrower();
+                case GlobalGameConstants.itemType.LazerGun:
+                    return new LazerGun();
+                default:
+                    throw new Exception("Pickup item type ambiguous");
+            }
+        }
         
         public Player(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -72,10 +107,8 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword();
-            player_item_2 = new DungeonMap();
-            GameCampaign.Player_Item_1 = player_item_1.ItemType();;
-            GameCampaign.Player_Item_2 = player_item_2.ItemType();
+            player_item_1 = getItemWhenLoading(GameCampaign.Player_Item_1);
+            player_item_2 = getItemWhenLoading(GameCampaign.Player_Item_2);
 
             state = playerState.Moving;
 
