@@ -67,6 +67,7 @@
     <Compile Include="AnimationLib.cs" />
     <Compile Include="AntiFairy.cs" />
     <Compile Include="AudioLib.cs" />
+    <Compile Include="BackGroundAudio.cs" />
     <Compile Include="BallMutant.cs" />
     <Compile Include="BetaEndLevelFag.cs" />
     <Compile Include="Bomb.cs" />
