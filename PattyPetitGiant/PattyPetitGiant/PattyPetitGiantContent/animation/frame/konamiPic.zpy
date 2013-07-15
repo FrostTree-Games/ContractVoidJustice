@@ -2,11 +2,11 @@
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <name>flagPic</name>
   <sheetName>derek.png</sheetName>
-  <initalX>64</initalX>
+  <initalX>65</initalX>
   <initalY>0</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>16</frameWidth>
+  <frameWidth>15</frameWidth>
   <frameHeight>16</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>

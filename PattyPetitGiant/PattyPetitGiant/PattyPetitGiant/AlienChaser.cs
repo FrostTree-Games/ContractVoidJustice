@@ -99,7 +99,7 @@ namespace PattyPetitGiant
                     {
                         if (parentWorld.EntityList[i].Enemy_Type == EnemyType.Player || parentWorld.EntityList[i].Enemy_Type == EnemyType.Guard || parentWorld.EntityList[i].Enemy_Type == EnemyType.Prisoner)
                         {
-                            if (Vector2.Distance(parentWorld.EntityList[i].Position, position) < attackRadius && (targetEntity == null || Vector2.Distance(parentWorld.EntityList[i].Position, position) < Vector2.Distance(targetEntity.Position, position)))
+                            if (Vector2.Distance(parentWorld.EntityList[i].Position, position) < attackRadius && (targetEntity == null || Vector2.Distance(parentWorld.EntityList[i].Position, position) < Vector2.Distance(targetEntity.Position, position)) && !parentWorld.EntityList[i].Death)
                             {
                                 targetEntity = parentWorld.EntityList[i];
                             }
@@ -201,6 +201,9 @@ namespace PattyPetitGiant
                 if (enemy_life < 1)
                 {
                     chaserState = SlowChaserState.Dying;
+                    animation_time = 0;
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(Game1.rand.Next() % 2 == 0 ? "die" : Game1.rand.Next() % 2 == 0 ? "die2" : "die3");
+
                     return;
                 }
 
@@ -215,8 +218,8 @@ namespace PattyPetitGiant
             }
             else if (chaserState == SlowChaserState.Dying)
             {
-                remove_from_list = true;
-                return;
+                this.velocity = Vector2.Zero;
+                this.death = true;
             }
             else
             {
@@ -225,7 +228,7 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < parentWorld.EntityList.Count; i++)
             {
-                if (parentWorld.EntityList[i].Enemy_Type != EnemyType.Alien)
+                if (parentWorld.EntityList[i].Enemy_Type != EnemyType.Alien && chaserState != SlowChaserState.Dying)
                 {
                     if (Vector2.Distance(parentWorld.EntityList[i].Position, position) < 300)
                     {
@@ -271,7 +274,7 @@ namespace PattyPetitGiant
             Vector2 newPos = position + (this.velocity * currentTime.ElapsedGameTime.Milliseconds);
             position = parentWorld.Map.reloactePosition(position, newPos, dimensions);
 
-            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, true);
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, chaserState == SlowChaserState.Dying ? false : true);
         }
 
         public override void draw(Spine.SkeletonRenderer sb)
@@ -281,17 +284,21 @@ namespace PattyPetitGiant
                 konamiAlert.drawAnimationFrame(0.0f, sb, position - new Vector2(0, konamiAlert.FrameHeight * 3), new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
 
-            sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Lerp(Color.Blue, Color.Red, aggressionTime / maxAggressionTime), 0.0f, dimensions);
+            //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Lerp(Color.Blue, Color.Red, aggressionTime / maxAggressionTime), 0.0f, dimensions);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (chaserState == SlowChaserState.KnockedBack)
+            if (chaserState == SlowChaserState.KnockedBack || chaserState == SlowChaserState.Dying)
             {
                 return;
             }
 
             enemy_life -= damage;
+
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
 
             direction.Normalize();
             velocity = direction * (magnitude / 2);
