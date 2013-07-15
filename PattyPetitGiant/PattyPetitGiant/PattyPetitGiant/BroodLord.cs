@@ -156,6 +156,16 @@ namespace PattyPetitGiant
         {
             if (knockBackTimer > knockBackDuration)
             {
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+
                 enemy_life -= damage;
 
                 if (enemy_life < 1)
@@ -391,6 +401,10 @@ namespace PattyPetitGiant
             {
                 return;
             }
+
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
 
             direction.Normalize();
 

@@ -5,42 +5,42 @@ filter: Nearest,Nearest
 repeat: none
 ballsack
   rotate: false
-  xy: 1, 36
+  xy: 1, 30
   size: 128, 81
   orig: 128, 81
   offset: 0, 0
   index: -1
 torso
   rotate: false
-  xy: 131, 1
-  size: 64, 116
-  orig: 64, 116
+  xy: 131, 26
+  size: 52, 85
+  orig: 52, 85
   offset: 0, 0
   index: -1
 lArm
   rotate: false
-  xy: 197, 15
-  size: 40, 102
-  orig: 40, 102
+  xy: 185, 9
+  size: 34, 102
+  orig: 34, 102
   offset: 0, 0
   index: -1
 rArm
   rotate: false
-  xy: 239, 14
-  size: 37, 103
-  orig: 37, 103
+  xy: 221, 8
+  size: 34, 103
+  orig: 34, 103
   offset: 0, 0
   index: -1
 headtop
   rotate: false
-  xy: 1, 7
+  xy: 1, 1
   size: 43, 27
   orig: 43, 27
   offset: 0, 0
   index: -1
 headbottom
   rotate: false
-  xy: 278, 101
+  xy: 46, 12
   size: 38, 16
   orig: 38, 16
   offset: 0, 0
