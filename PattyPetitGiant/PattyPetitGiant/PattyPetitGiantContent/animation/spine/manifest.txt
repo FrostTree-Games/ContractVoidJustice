@@ -28,3 +28,6 @@ broodlord
 shopDown
 shopRight
 shopUp
+alienChaserDown
+alienChaserRight
+alienChaserUp

@@ -64,11 +64,11 @@ namespace PattyPetitGiant
             konamiAlert = AnimationLib.getFrameAnimationSet("konamiPic");
 
             directionAnims = new AnimationLib.SpineAnimationSet[4];
-            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("patrolUp");
-            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("patrolDown");
-            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("patrolRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("alienChaserUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("alienChaserDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("alienChaserRight");
             directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
-            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("patrolRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("alienChaserRight");
             for (int i = 0; i < 4; i++)
             {
                 directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("run");
@@ -134,7 +134,7 @@ namespace PattyPetitGiant
 
                 velocity = Vector2.Zero;
 
-                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chaseWindUp");
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
 
                 timer += currentTime.ElapsedGameTime.Milliseconds;
 
@@ -153,7 +153,7 @@ namespace PattyPetitGiant
 
                 timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("chase");
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("charge");
 
                 if (timer > chaseTime)
                 {
