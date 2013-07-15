@@ -181,7 +181,7 @@ namespace PattyPetitGiant
 
                 timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("coolDown");
 
                 if (timer > coolDownTime)
                 {
