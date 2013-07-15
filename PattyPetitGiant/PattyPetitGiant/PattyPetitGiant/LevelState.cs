@@ -450,7 +450,7 @@ namespace PattyPetitGiant
             AnimationLib.GraphicsDevice.SetRenderTarget(null);
             quarterSizeTexture = (Texture2D)quarterTextureScreen;
 
-            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Transparent, 1.0f, 0);
 
             Game1.BloomFilter.Parameters["halfResMap"].SetValue(halfSizeTexture);
             Game1.BloomFilter.Parameters["quarterResMap"].SetValue(quarterSizeTexture);
