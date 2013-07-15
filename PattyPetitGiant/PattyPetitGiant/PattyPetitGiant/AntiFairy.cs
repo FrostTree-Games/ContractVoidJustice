@@ -25,7 +25,6 @@ namespace PattyPetitGiant
         private AntiFairyState fairyState;
 
         private AnimationLib.FrameAnimationSet anim = null;
-        private float animationTime;
 
         private AntiFairy other = null;
         private bool doubled;
@@ -43,7 +42,7 @@ namespace PattyPetitGiant
             this.dimensions = GlobalGameConstants.TileSize;
 
             anim = AnimationLib.getFrameAnimationSet("antiFairy");
-            animationTime = 0.0f;
+            animation_time = 0.0f;
 
             enemy_type = EnemyType.Guard;
             enemy_life = 70;
@@ -68,7 +67,7 @@ namespace PattyPetitGiant
                 other.update(currentTime);
             }
 
-            animationTime += currentTime.ElapsedGameTime.Milliseconds;
+            animation_time += currentTime.ElapsedGameTime.Milliseconds;
 
             if (fairyState == AntiFairyState.MomentaryStall)
             {
@@ -190,7 +189,7 @@ namespace PattyPetitGiant
                 other.draw(sb);
             }
 
-            anim.drawAnimationFrame(animation_time, sb, position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            anim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

@@ -171,7 +171,7 @@ namespace PattyPetitGiant
                 {
                     frame = frame % frameCount;
                 }
-                else
+                else if (frame >= frameCount)
                 {
                     frame = frameCount - 1;
                 }
@@ -187,7 +187,7 @@ namespace PattyPetitGiant
                 {
                     frame = frame % frameCount;
                 }
-                else
+                else if (frame >= frameCount)
                 {
                     frame = frameCount - 1;
                 }

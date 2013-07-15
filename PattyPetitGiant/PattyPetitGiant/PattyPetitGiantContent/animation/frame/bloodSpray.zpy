@@ -9,6 +9,6 @@
   <frameWidth>48</frameWidth>
   <frameHeight>48</frameHeight>
   <frameCount>7</frameCount>
-  <frameSpeed>50</frameSpeed>
+  <frameSpeed>100</frameSpeed>
   <loop>false</loop>
 </SerializableAnimationData>
