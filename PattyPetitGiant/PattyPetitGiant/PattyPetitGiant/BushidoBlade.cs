@@ -155,15 +155,15 @@ namespace PattyPetitGiant
             return item_type.ToString();
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             if (bushido_state == BushidoState.bushido)
             {
-                bushidoAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(2.25f, 2.25f), 0.5f);
+                //bushidoAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(2.25f, 2.25f), 0.5f);
             }
             else if (enemy_explode == true)
             {
-                bushidoAnim.drawAnimationFrame(animation_time, sb, enemy_explode_position, new Vector2(2.25f, 2.25f), 0.5f);
+                //bushidoAnim.drawAnimationFrame(animation_time, sb, enemy_explode_position, new Vector2(2.25f, 2.25f), 0.5f);
             }
         }
 

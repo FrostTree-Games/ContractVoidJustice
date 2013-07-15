@@ -51,7 +51,7 @@ namespace PattyPetitGiant
             return GlobalGameConstants.itemType.DungeonMap.ToString();
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             //
         }

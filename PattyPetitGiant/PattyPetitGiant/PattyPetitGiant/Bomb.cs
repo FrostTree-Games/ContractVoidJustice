@@ -142,15 +142,15 @@ namespace PattyPetitGiant
             return item_type.ToString();
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             switch(bomb_state)
             {
                 case Bomb_State.placed:
-                    bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1.0f, 1.0f), 0.5f);
+                    //bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1.0f, 1.0f), 0.5f);
                     break;
                 case Bomb_State.exploded:
-                    bombAnim.drawAnimationFrame(animation_time, sb, position , new Vector2(2.25f, 2.25f), 0.5f);
+                //bombAnim.drawAnimationFrame(animation_time, sb, position , new Vector2(2.25f, 2.25f), 0.5f);
                     //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
                     break;
                 default:

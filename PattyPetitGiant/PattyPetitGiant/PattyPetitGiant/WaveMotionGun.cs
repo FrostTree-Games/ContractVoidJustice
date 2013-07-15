@@ -128,7 +128,7 @@ namespace PattyPetitGiant
             updateBullets(parentWorld, currentTime);
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             bullet1.draw(sb);
             bullet2.draw(sb);
@@ -205,11 +205,11 @@ namespace PattyPetitGiant
                 }
             }
 
-            public void draw(SpriteBatch sb)
+            public void draw(Spine.SkeletonRenderer sb)
             {
                 if (active)
                 {
-                    sb.Draw(Game1.whitePixel, position - new Vector2(radius / 2), null, Color.Green, 0, Vector2.Zero, radius, SpriteEffects.None, 0.69f);
+                    //sb.Draw(Game1.whitePixel, position - new Vector2(radius / 2), null, Color.Green, 0, Vector2.Zero, radius, SpriteEffects.None, 0.69f);
                 }
             }
         }

@@ -143,14 +143,14 @@ namespace PattyPetitGiant
         public string getEnumType()
         { return item_type.ToString(); }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             if (pellet_count > 0)
             {
                 for (int i = 0; i < pellet_count; i++)
                 {
-                    if (shotgun_pellets[i].active)
-                        sb.Draw(Game1.whitePixel, shotgun_pellets[i].position, null, Color.White, 0.0f, Vector2.Zero, new Vector2(10.0f, 10.0f), SpriteEffects.None, 0.5f);
+                    //if (shotgun_pellets[i].active)
+                        //sb.Draw(Game1.whitePixel, shotgun_pellets[i].position, null, Color.White, 0.0f, Vector2.Zero, new Vector2(10.0f, 10.0f), SpriteEffects.None, 0.5f);
                 }
             }
         }

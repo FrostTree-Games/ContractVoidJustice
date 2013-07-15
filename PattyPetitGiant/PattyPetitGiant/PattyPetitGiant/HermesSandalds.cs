@@ -114,14 +114,14 @@ namespace PattyPetitGiant
             windUpDrawPosition = parent.Position - new Vector2(0.0f, GlobalGameConstants.TileSize.Y);
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             if (state == HermesSandalsState.WindUp)
             {
                 //building strings every frame like this is going to allocate a lot of garbage. don't do it on the Xbox 360
                 //later implementations will use some particle or sprite
 #if WINDOWS
-                sb.DrawString(Game1.font, "charging", windUpDrawPosition, Color.HotPink, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.65f);
+                //sb.DrawString(Game1.font, "charging", windUpDrawPosition, Color.HotPink, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.65f);
 #endif
             }
         }

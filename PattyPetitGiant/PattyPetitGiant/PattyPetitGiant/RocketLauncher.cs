@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Spine;
 
 namespace PattyPetitGiant
 {
@@ -87,7 +88,7 @@ namespace PattyPetitGiant
                     state = RocketLauncherState.Shooting;
 
                     AudioLib.playSoundEffect(rocketSound);
-                    rocket = new Rocket(parent.CenterPoint - (rocket.dimensions / 2), parent.Direction_Facing);
+                    rocket = new Rocket(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), parent.Direction_Facing);
                 }
             }
             else if (state == RocketLauncherState.Shooting)
@@ -135,18 +136,16 @@ namespace PattyPetitGiant
             }
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(SkeletonRenderer sb)
         {
             if (rocket.active)
             {
-                sb.Draw(Game1.whitePixel, rocket.position, null, Color.Pink, 0.0f, Vector2.Zero, rocket.dimensions, SpriteEffects.None, 0.6f);
+                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), rocket.position, Color.Pink, 0.0f, rocket.dimensions / 4);
             }
 
             if (explosion.active)
             {
-                //sb.Draw(Game1.whitePixel, explosion.position, null, Color.Red, 0.0f, Vector2.Zero, explosion.dimensions, SpriteEffects.None, 0.6f);
-
-                explosionAnim.drawAnimationFrame(explosion.animationTime, sb, explosion.position, explosion.dimensions / explosionAnim.FrameDimensions, 0.7f);
+                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), explosion.position, Color.Red, 0.0f, explosion.dimensions / 4);
             }
         }
 

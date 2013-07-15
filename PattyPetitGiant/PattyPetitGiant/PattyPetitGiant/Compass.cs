@@ -82,11 +82,11 @@ namespace PattyPetitGiant
             return GlobalGameConstants.itemType.Compass.ToString();
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             if (drawPointer)
             {
-                img.drawAnimationFrame(0.0f, sb, drawPos, new Vector2(3.0f, 3.0f), 0.5f, theta, GlobalGameConstants.TileSize / 2);
+                //img.drawAnimationFrame(0.0f, sb, drawPos, new Vector2(3.0f, 3.0f), 0.5f, theta, GlobalGameConstants.TileSize / 2);
             }
         }
     }

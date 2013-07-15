@@ -113,10 +113,10 @@ namespace PattyPetitGiant
             return item_type.ToString();
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.White, angle1, Vector2.Zero, new Vector2(96.0f, 10.0f), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.whitePixel, position, null, Color.White, angle2, Vector2.Zero, new Vector2(96.0f, 10.0f), SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.White, angle1, Vector2.Zero, new Vector2(96.0f, 10.0f), SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.White, angle2, Vector2.Zero, new Vector2(96.0f, 10.0f), SpriteEffects.None, 0.5f);
         }
 
         public bool hitTest(Entity other)

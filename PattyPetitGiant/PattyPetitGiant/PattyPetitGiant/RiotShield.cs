@@ -31,7 +31,7 @@ namespace PattyPetitGiant
             //
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             //
         }

@@ -152,9 +152,9 @@ namespace PattyPetitGiant
         {
             return item_type.ToString();
         }
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
-            sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
         }
 
         public bool hitTest(Entity other)

@@ -136,7 +136,7 @@ namespace PattyPetitGiant
             return item_type.ToString(); 
         }
          
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             /*if (sword_swing)
             {

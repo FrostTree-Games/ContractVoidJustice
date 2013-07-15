@@ -80,11 +80,11 @@ namespace PattyPetitGiant
                 }
             }
 
-            public void draw(SpriteBatch sb)
+            public void draw(Spine.SkeletonRenderer sb)
             {
                 if (active)
                 {
-                    sb.Draw(Game1.whitePixel, position, null, Color.Green, 0, Vector2.Zero, dimensions, SpriteEffects.None, 0.69f);
+                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Green, 0.0f, dimensions);
                 }
             }
         }
@@ -173,7 +173,7 @@ namespace PattyPetitGiant
             updateBullets(parent, currentTime, parentWorld);
         }
 
-        public void draw(SpriteBatch sb)
+        public void draw(Spine.SkeletonRenderer sb)
         {
             for (int i = 0; i < bulletCount; i++)
             {

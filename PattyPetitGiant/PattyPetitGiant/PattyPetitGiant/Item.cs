@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Spine;
 
 namespace PattyPetitGiant
 {
@@ -15,6 +16,6 @@ namespace PattyPetitGiant
         void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld);
         GlobalGameConstants.itemType ItemType();
         string getEnumType();
-        void draw(SpriteBatch sb);
+        void draw(SkeletonRenderer sb);
     }
 }
