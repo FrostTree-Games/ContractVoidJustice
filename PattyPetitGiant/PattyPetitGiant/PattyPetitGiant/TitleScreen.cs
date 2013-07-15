@@ -316,35 +316,35 @@ namespace PattyPetitGiant
                         sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
                     }
 
-                    Matrix[] transforms = new Matrix[myModel.Bones.Count];
-                myModel.CopyAbsoluteBoneTransformsTo(transforms);
+                    /*Matrix[] transforms = new Matrix[myModel.Bones.Count];
+                    myModel.CopyAbsoluteBoneTransformsTo(transforms);
 
-                AnimationLib.GraphicsDevice.BlendState = BlendState.Opaque;
-                AnimationLib.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
-                AnimationLib.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
+                    AnimationLib.GraphicsDevice.BlendState = BlendState.Opaque;
+                    AnimationLib.GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+                    AnimationLib.GraphicsDevice.SamplerStates[0] = SamplerState.PointWrap;
 
-                foreach (ModelMesh mesh in myModel.Meshes)
-                {
-                    foreach (BasicEffect effect in mesh.Effects)
+                    foreach (ModelMesh mesh in myModel.Meshes)
                     {
-                        effect.EnableDefaultLighting();
-                        effect.AmbientLightColor = new Vector3(0.2f,0.2f,0.2f);
-                        effect.DirectionalLight0.Enabled = true;
-                        effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(100, 0, 0));
-                        effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.0f, 0.0f);
-                        effect.DirectionalLight1.Enabled = false;
-                        effect.DirectionalLight2.Enabled = false;
-                        effect.TextureEnabled = true;
-                        effect.World = transforms[mesh.ParentBone.Index] * Matrix.CreateRotationY(model_rotation_y) * Matrix.CreateRotationX(model_rotation_x) * Matrix.CreateTranslation(model_position);
-                        effect.View = Matrix.CreateLookAt(camera_Position, Vector3.Zero, Vector3.Up);
-                        effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 1.0f, 10000.0f);
-                        //effect.Parameters["ColorMap"].SetValue(ship_texture);
-                        //effect.Alpha = 1.0f;
+                        foreach (BasicEffect effect in mesh.Effects)
+                        {
+                            effect.EnableDefaultLighting();
+                            effect.AmbientLightColor = new Vector3(0.2f,0.2f,0.2f);
+                            effect.DirectionalLight0.Enabled = true;
+                            effect.DirectionalLight0.Direction = Vector3.Normalize(new Vector3(100, 0, 0));
+                            effect.DirectionalLight0.DiffuseColor = new Vector3(0.5f, 0.0f, 0.0f);
+                            effect.DirectionalLight1.Enabled = false;
+                            effect.DirectionalLight2.Enabled = false;
+                            effect.TextureEnabled = true;
+                            effect.World = transforms[mesh.ParentBone.Index] * Matrix.CreateRotationY(model_rotation_y) * Matrix.CreateRotationX(model_rotation_x) * Matrix.CreateTranslation(model_position);
+                            effect.View = Matrix.CreateLookAt(camera_Position, Vector3.Zero, Vector3.Up);
+                            effect.Projection = Matrix.CreatePerspectiveFieldOfView(MathHelper.ToRadians(45.0f), aspectRatio, 1.0f, 10000.0f);
+                            //effect.Parameters["ColorMap"].SetValue(ship_texture);
+                            //effect.Alpha = 1.0f;
                         
-                        //effect.Texture = ship_texture;
-                    }
-                    mesh.Draw();
-                }
+                            //effect.Texture = ship_texture;
+                        }
+                        mesh.Draw();
+                    }*/
                     break;
                 default:
                     break;
