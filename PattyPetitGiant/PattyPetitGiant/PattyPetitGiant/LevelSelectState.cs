@@ -35,15 +35,26 @@ namespace PattyPetitGiant
         private LevelData[,] levelMap = null;
         int selectedLevelX, selectedLevelY;
 
-        private Vector2 drawMapTestOffset = new Vector2(100, 100);
+        private Vector2 cursorPosition;
+        private const float cursorVelocity = 0.5f;
+        private float cursorAnimationTime;
+
+        private Vector2 drawMapTestOffset = new Vector2(1000, 225);
+        private Vector2 testDetailStuff = new Vector2(750, 550);
 
         private bool upPressed = false;
         private bool downPressed = false;
         private bool confirmPressed = false;
 
+        private Texture2D wireframe = null;
+
+        private const string menuBlipSound = "menuSelect";
+
         public LevelSelectState()
         {
             levelMap = new LevelData[6, 3];
+
+            wireframe = TextureLib.getLoadedTexture("shipWireframe.png");
 
             for (int i = 0; i < levelMap.GetLength(0); i++)
             {
@@ -60,6 +71,9 @@ namespace PattyPetitGiant
 
             selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
             selectedLevelY = GameCampaign.PlayerFloorHeight;
+
+            cursorPosition = new Vector2(((GameCampaign.PlayerLevelProgress * 128) + drawMapTestOffset.X), ((GameCampaign.PlayerFloorHeight * 96) + drawMapTestOffset.Y));
+            cursorAnimationTime = 0;
         }
 
         protected override void doUpdate(Microsoft.Xna.Framework.GameTime currentTime)
@@ -75,6 +89,7 @@ namespace PattyPetitGiant
                 if (selectedLevelY < levelMap.GetLength(1) - 1 && levelMap[selectedLevelX, selectedLevelY + 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight < 1)
                 {
                     selectedLevelY++;
+                    AudioLib.playSoundEffect(menuBlipSound);
                 }
             }
 
@@ -89,6 +104,7 @@ namespace PattyPetitGiant
                 if (selectedLevelY > 0 && levelMap[selectedLevelX, selectedLevelY - 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight > -1)
                 {
                     selectedLevelY--;
+                    AudioLib.playSoundEffect(menuBlipSound);
                 }
             }
 
@@ -102,44 +118,49 @@ namespace PattyPetitGiant
             {
                 confirmPressed = false;
 
+                GameCampaign.CurrentAlienRate = levelMap[selectedLevelX, selectedLevelY].alienRates;
+                GameCampaign.CurrentGuardRate = levelMap[selectedLevelX, selectedLevelY].guardRates;
+                GameCampaign.CurrentPrisonerRate = levelMap[selectedLevelX, selectedLevelY].prisonerRates;
+
                 GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
                 GameCampaign.PlayerFloorHeight = selectedLevelY;
 
                 isComplete = true;
             }
 
-            /*
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection) && !rightPressed)
+            double cursorDir = Math.Atan2(((selectedLevelY * 96) + drawMapTestOffset.Y) - cursorPosition.Y, ((selectedLevelX * 128) + drawMapTestOffset.X) - cursorPosition.X);
+            cursorPosition += currentTime.ElapsedGameTime.Milliseconds * cursorVelocity * new Vector2((float)(Math.Cos(cursorDir)), (float)(Math.Sin(cursorDir)));
+
+            if (Vector2.Distance(cursorPosition, new Vector2(((selectedLevelX * 128) + drawMapTestOffset.X), ((selectedLevelY * 96) + drawMapTestOffset.Y))) < 10f)
             {
-                rightPressed = true;
+                cursorPosition = new Vector2(((selectedLevelX * 128) + drawMapTestOffset.X), ((selectedLevelY * 96) + drawMapTestOffset.Y));
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection) && rightPressed)
-            {
-                rightPressed = false;
 
-                if (GameCampaign.PlayerLevelProgress < levelMap.GetLength(0) - 2)
-                {
-                    GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
-                    GameCampaign.PlayerFloorHeight = selectedLevelY;
-
-                    if (levelMap[GameCampaign.PlayerLevelProgress + 1, selectedLevelY].visible == false)
-                    {
-                        selectedLevelY = 1;
-                    }
-                }
-            }*/
+            cursorAnimationTime += currentTime.ElapsedGameTime.Milliseconds;
         }
 
-        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color)
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
         {
-            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, width), SpriteEffects.None, 0.5f);
+        }
+
+        private void drawBox(SpriteBatch sb, Rectangle rect, Color clr, float lineWidth)
+        {
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X - lineWidth, rect.Y + rect.Height), rect.Width + lineWidth, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
         }
 
         public override void render(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
         {
-            Texture2D tex = TextureLib.getLoadedTexture("derek.png");
+            Texture2D tex = TextureLib.getLoadedTexture("wireFramePieces.png");
 
-            sb.Begin();
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-575, -100, 0));
+
+            sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) /2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
+
+            sb.Draw(wireframe, Vector2.Zero, null, Color.Lerp(Color.DarkOrange, Color.Black, 0.375f + (0.025f * (float)Math.Sin(cursorAnimationTime / 10))), 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
 
             for (int i = 0; i < levelMap.GetLength(0); i++)
             {
@@ -150,33 +171,43 @@ namespace PattyPetitGiant
                         continue;
                     }
 
-                    sb.Draw(tex, new Vector2(i * 32, j * 32) + drawMapTestOffset, new Rectangle(16, 0, 16, 16), Color.White);
-
                     if (i == GameCampaign.PlayerLevelProgress && j == GameCampaign.PlayerFloorHeight)
                     {
-                        sb.Draw(Game1.whitePixel, new Vector2(i * 32 + 4, j * 32 + 4) + drawMapTestOffset, null, Color.Red, 0.0f, Vector2.Zero, 8.0f, SpriteEffects.None, 0.5f);
-
-                        if (levelMap[GameCampaign.PlayerLevelProgress + 1, GameCampaign.PlayerFloorHeight].visible)
-                        {
-                            drawLine(sb, new Vector2(i * 32 + 8, j * 32 + 8) + drawMapTestOffset, 32, 0.0f, Color.White);
-                        }
-                        if (GameCampaign.PlayerFloorHeight < 2 && levelMap[GameCampaign.PlayerLevelProgress + 1, GameCampaign.PlayerFloorHeight + 1].visible)
-                        {
-                            drawLine(sb, new Vector2(i * 32 + 8, j * 32 + 8) + drawMapTestOffset, 32, (float)(Math.PI / 4), Color.White);
-                        }
-                        if (GameCampaign.PlayerFloorHeight > 0 && levelMap[GameCampaign.PlayerLevelProgress + 1, GameCampaign.PlayerFloorHeight - 1].visible)
-                        {
-                            drawLine(sb, new Vector2(i * 32 + 8, j * 32 + 8) + drawMapTestOffset, 32, (float)(Math.PI / -4), Color.White);
-                        }
+                        sb.Draw(tex, new Vector2(i * 128, j * 96) + drawMapTestOffset, new Rectangle(48, 0, 48, 48), Color.Blue);
                     }
-                    if (i == selectedLevelX && j == selectedLevelY)
+                    else if (i == selectedLevelX && j == selectedLevelY)
                     {
-                        sb.Draw(Game1.whitePixel, new Vector2(i * 32 + 4, j * 32 + 4) + drawMapTestOffset, null, Color.Green, 0.0f, Vector2.Zero, 8.0f, SpriteEffects.None, 0.5f);
+                        sb.Draw(tex, new Vector2(i * 128, j * 96) + drawMapTestOffset, new Rectangle(0, 48, 48, 48), Color.Green);
+                    }
+                    else
+                    {
+                        sb.Draw(tex, new Vector2(i * 128, j * 96) + drawMapTestOffset, new Rectangle(0, 48, 48, 48), Color.Orange);
                     }
                 }
             }
 
-            sb.DrawString(Game1.font, "Prisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates + "\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates + "\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates + "\nLoot Rates: " + levelMap[selectedLevelX, selectedLevelY].lootRates, 2 * drawMapTestOffset, Color.Black);
+            drawLine(sb, drawMapTestOffset + new Vector2(24) + new Vector2(GameCampaign.PlayerLevelProgress * 128, GameCampaign.PlayerFloorHeight * 96), GameCampaign.PlayerFloorHeight == selectedLevelY ? 128f : 155f, 0.85f * (float)((-Math.PI / 2) + Math.Atan2(selectedLevelX - GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight - selectedLevelY)), Color.Gray, 3.5f);
+
+            sb.Draw(tex, cursorPosition + new Vector2(24), new Rectangle(0, 0, 48, 48), Color.Red, 0.0f, new Vector2(24), 1 + (0.2f * (float)Math.Sin(cursorAnimationTime / 250f)), SpriteEffects.None, 0.5f);
+
+            Rectangle rx = XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f);
+            rx.X += 575;
+            rx.Y += 100;
+            drawBox(sb, rx, Color.Orange, 2);
+            rx.X -= 3;
+            rx.Y -= 3;
+            rx.Width += 6;
+            rx.Height += 6;
+            drawBox(sb, rx, Color.Orange, 2);
+
+            sb.DrawString(Game1.font, "\nPrisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates, testDetailStuff, Color.Orange);
+            sb.DrawString(Game1.font, "\n\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates, testDetailStuff, Color.Red);
+            sb.DrawString(Game1.font, "\n\n\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates, testDetailStuff, Color.LightBlue);
+
+            sb.Draw(Game1.whitePixel, testDetailStuff - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(52, 16), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, testDetailStuff, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.Red, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0) + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].guardRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
 
             sb.End();
         }

@@ -310,9 +310,16 @@ namespace PattyPetitGiant
 
             if (molotovState == MolotovState.Dying)
             {
-                //pop some blood later
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
 
                 return;
+            }
+
+            if (attacker != null & attacker is Player)
+            {
+                GameCampaign.AlterAllegiance(0.005f);
             }
 
             direction.Normalize();

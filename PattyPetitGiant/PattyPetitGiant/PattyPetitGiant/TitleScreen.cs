@@ -261,6 +261,7 @@ namespace PattyPetitGiant
                         {
                             case "START":
                                 isComplete = true;
+                                BackGroundAudio.stopAllSongs();
                                 break;
                             case "OPTIONS":
                                 break;

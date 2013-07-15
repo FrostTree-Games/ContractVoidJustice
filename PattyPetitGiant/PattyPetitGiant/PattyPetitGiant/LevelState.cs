@@ -81,6 +81,7 @@ namespace PattyPetitGiant
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("scifiTemplate.png");
+            map.ShopTileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
 
             endFlagReached = false;
 
@@ -157,7 +158,6 @@ namespace PattyPetitGiant
                 //entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                 //placedMonsterCount++;
                 //placedMonsterCount++;
-                faction = Entity.EnemyType.Prisoner;
 
                 if (faction == Entity.EnemyType.Prisoner)
                 {
@@ -292,11 +292,14 @@ namespace PattyPetitGiant
                     {
                         int intensityLevel = (int)(rooms[i, j].intensity / 0.2f);
 
-                        if (rand.NextDouble() < 0.33)
+                        double enemyValuesSum = GameCampaign.CurrentAlienRate + GameCampaign.CurrentGuardRate + GameCampaign.CurrentPrisonerRate;
+                        double rollRoomValue = rand.NextDouble();
+
+                        if (rollRoomValue < GameCampaign.CurrentGuardRate / enemyValuesSum)
                         {
                             placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Guard, intensityLevel, rand);
                         }
-                        else if (rand.NextDouble() < 0.66)
+                        else if (rollRoomValue < (GameCampaign.CurrentGuardRate + GameCampaign.CurrentAlienRate) / enemyValuesSum)
                         {
                             placeMonstersInRoom(currentRoomX, currentRoomY, Entity.EnemyType.Alien, intensityLevel, rand);
                         }

@@ -282,6 +282,11 @@ namespace PattyPetitGiant
             {
                 if (disable_movement_time == 0.0)
                 {
+                    if (attacker != null & attacker is Player)
+                    {
+                        GameCampaign.AlterAllegiance(0.005f);
+                    }
+
                     chase_stage = ChaseAttackStage.none;
                     state = EnemyState.Moving;
 

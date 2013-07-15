@@ -26,8 +26,27 @@ namespace PattyPetitGiant
             get { return player_coin_amount; }
         }
 
-        public static string Player_Item_1 = null;
-        public static string Player_Item_2 = null;
+        private static float allegiance = 0.5f;
+        /// <summary>
+        /// Used to determine where the player stands with the guards and/or prisoners.
+        /// </summary>
+        /// <remarks>Ranged between 0.0f and 1.0f. 0.0f represents the player siding with the prisoners. 1.0f represents the player siding with the guards.</remarks>
+        public static float PlayerAllegiance { get { return allegiance; } }
+
+        /// <summary>
+        /// Increment or decrement the player's standing between the prisoners and guards.
+        /// </summary>
+        /// <param name="value">Value to alter PlayerAllegiance by.</param>
+        public static void AlterAllegiance(float value)
+        {
+            allegiance += value;
+
+            if (allegiance < 0.0f) { allegiance = 0.0f; }
+            if (allegiance > 1.0f) { allegiance = 1.0f; }
+        }
+
+        public static GlobalGameConstants.itemType Player_Item_1;
+        public static GlobalGameConstants.itemType Player_Item_2;
 
         /// <summary>
         /// Indicates how many levels the player has completed so far in the campaign.
@@ -49,14 +68,30 @@ namespace PattyPetitGiant
         }
         private static int playerFloorHeight = 1;
 
+        private static double currentGuardRate = 1;
+        private static double currentPrisonerRate = 1;
+        private static double currentAlienRate = 1;
+        public static double CurrentGuardRate { get { return currentGuardRate; } set { currentGuardRate = value; } }
+        public static double CurrentPrisonerRate { get { return currentPrisonerRate; } set { currentPrisonerRate = value; } }
+        public static double CurrentAlienRate { get { return currentAlienRate; } set { currentAlienRate = value; } }
+
         public static void ResetPlayerValues()
         {
             PlayerLevelProgress = 0;
             PlayerFloorHeight = 1;
 
+            Player_Item_1 = GlobalGameConstants.itemType.Sword;
+            Player_Item_2 = GlobalGameConstants.itemType.Gun;
+
+            allegiance = 0.5f;
+
             player_health = 100;
             player_ammunition = 100;
             player_coin_amount = 200;
+
+            currentGuardRate = 1;
+            currentPrisonerRate = 1;
+            currentAlienRate = 1;
         }
     }
 }

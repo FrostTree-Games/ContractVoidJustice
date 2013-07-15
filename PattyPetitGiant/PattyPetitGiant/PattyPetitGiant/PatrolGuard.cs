@@ -553,6 +553,11 @@ namespace PattyPetitGiant
             guardState = PatrolGuardState.KnockBack;
             animation_time = 0;
 
+            if (attacker != null & attacker is Player)
+            {
+                GameCampaign.AlterAllegiance(-0.005f);
+            }
+
             //where you look in the entity's direction and start chasing them
             if (attacker != null && (attacker.Enemy_Type != EnemyType.NoType && attacker.Enemy_Type!= enemy_type))
             {

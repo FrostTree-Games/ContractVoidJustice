@@ -62,14 +62,7 @@ float4 PixelShaderFunction(float2 coords: TEXCOORD0) : COLOR0
 	float4 halfColor = blur5Cutoff(tex2D(halfSampler, coords), tex2D(halfSampler, coords + float2(BlurDistanceX, 0)), tex2D(halfSampler, coords + float2(-BlurDistanceX, 0)), tex2D(halfSampler, coords + float2(0, BlurDistanceY)), tex2D(halfSampler, coords + float2(0, -BlurDistanceY)));
 	float4 quarterColor = blur5Cutoff(tex2D(quarterSampler, coords), tex2D(quarterSampler, coords + float2(BlurDistanceX, 0)), tex2D(quarterSampler, coords + float2(-BlurDistanceX, 0)), tex2D(quarterSampler, coords + float2(0, BlurDistanceY)), tex2D(quarterSampler, coords + float2(0, -BlurDistanceY)));
 
-	if (coords.x < 0.5)
-	{
 	return color + halfColor + quarterColor;
-	}
-	else
-	{
-	return color;
-	}
 
 }
 

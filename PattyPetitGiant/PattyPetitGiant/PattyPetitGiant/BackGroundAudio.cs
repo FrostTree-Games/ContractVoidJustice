@@ -42,5 +42,13 @@ namespace PattyPetitGiant
             MediaPlayer.Play(song);
             MediaPlayer.IsRepeating = repeat;
         }
+
+        public static void stopAllSongs()
+        {
+            if (MediaPlayer.State == MediaState.Playing || MediaPlayer.State == MediaState.Paused)
+            {
+                MediaPlayer.Stop();
+            }
+        }
     }
 }

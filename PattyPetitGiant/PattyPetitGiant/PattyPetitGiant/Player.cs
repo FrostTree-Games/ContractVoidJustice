@@ -63,6 +63,41 @@ namespace PattyPetitGiant
             get { return state;  }
 
         }
+
+        private Item getItemWhenLoading(GlobalGameConstants.itemType type)
+        {
+            switch (type)
+            {
+                case GlobalGameConstants.itemType.Sword:
+                    return new Sword();
+                case GlobalGameConstants.itemType.Bomb:
+                    return new Bomb();
+                case GlobalGameConstants.itemType.BushidoBlade:
+                    return new BushidoBlade(Vector2.Zero);
+                case GlobalGameConstants.itemType.Gun:
+                    return new Gun();
+                case GlobalGameConstants.itemType.Compass:
+                    return new Compass();
+                case GlobalGameConstants.itemType.DungeonMap:
+                    return new DungeonMap();
+                case GlobalGameConstants.itemType.WandOfGyges:
+                    return new WandOfGyges();
+                case GlobalGameConstants.itemType.ShotGun:
+                    return new ShotGun();
+                case GlobalGameConstants.itemType.WaveMotionGun:
+                    return new WaveMotionGun();
+                case GlobalGameConstants.itemType.HermesSandals:
+                    return new HermesSandals();
+                case GlobalGameConstants.itemType.RocketLauncher:
+                    return new RocketLauncher();
+                case GlobalGameConstants.itemType.FlameThrower:
+                    return new FlameThrower();
+                case GlobalGameConstants.itemType.LazerGun:
+                    return new LazerGun();
+                default:
+                    throw new Exception("Pickup item type ambiguous");
+            }
+        }
         
         public Player(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -72,10 +107,8 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = new Sword();
-            player_item_2 = new WaveMotionGun();
-            GameCampaign.Player_Item_1 = player_item_1.getEnumType();
-            GameCampaign.Player_Item_2 = player_item_2.getEnumType();
+            player_item_1 = getItemWhenLoading(GameCampaign.Player_Item_1);
+            player_item_2 = getItemWhenLoading(GameCampaign.Player_Item_2);
 
             state = playerState.Moving;
 
@@ -264,7 +297,7 @@ namespace PattyPetitGiant
                                     item1_switch_button_down = false;
 
                                     player_item_1 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_1, currentTime);
-                                    GameCampaign.Player_Item_1 = player_item_1.getEnumType();
+                                    GameCampaign.Player_Item_1 = player_item_1.ItemType();
                                 }
 
                                 if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && !item2_switch_button_down)
@@ -276,7 +309,7 @@ namespace PattyPetitGiant
                                     item2_switch_button_down = false;
 
                                     player_item_2 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_2, currentTime);
-                                    GameCampaign.Player_Item_2 = player_item_2.getEnumType();
+                                    GameCampaign.Player_Item_2 = player_item_2.ItemType();
                                 }
                             }
                         }

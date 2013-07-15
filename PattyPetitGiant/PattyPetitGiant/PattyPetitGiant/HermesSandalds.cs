@@ -52,14 +52,14 @@ namespace PattyPetitGiant
                         break;
                 }
 
-                if (GameCampaign.Player_Item_1 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+                if (GameCampaign.Player_Item_1 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                 {
                     state = HermesSandalsState.Idle;
 
                     parent.Disable_Movement = false;
                     parent.State = Player.playerState.Moving;
                 }
-                else if (GameCampaign.Player_Item_2 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+                else if (GameCampaign.Player_Item_2 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
                 {
                     state = HermesSandalsState.Idle;
 

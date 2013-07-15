@@ -354,7 +354,7 @@ namespace PattyPetitGiant
                             else if(meleeHitTest(en))
                             {
                                 Vector2 direction = en.CenterPoint - CenterPoint;
-                                en.knockBack(direction, 3.5f, 10);
+                                en.knockBack(direction, 3.5f, 10, this);
                             }
                         }
 
@@ -514,6 +514,11 @@ namespace PattyPetitGiant
                         }
                     }
                     enemy_life = enemy_life - damage;
+
+                    if (attacker != null & attacker is Player)
+                    {
+                        GameCampaign.AlterAllegiance(-0.005f);
+                    }
                 }
 
                 if (attacker == null)

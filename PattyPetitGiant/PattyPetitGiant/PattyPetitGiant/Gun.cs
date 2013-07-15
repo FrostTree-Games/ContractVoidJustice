@@ -126,7 +126,7 @@ namespace PattyPetitGiant
         {
             updateBullets(parent, currentTime, parentWorld);
 
-            if (GameCampaign.Player_Item_1 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+            if (GameCampaign.Player_Item_1 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
             {
                 fireTimer = float.MaxValue;
 
@@ -135,7 +135,7 @@ namespace PattyPetitGiant
 
                 parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
             }
-            else if (GameCampaign.Player_Item_2 == getEnumType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+            else if (GameCampaign.Player_Item_2 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
             {
                 fireTimer = float.MaxValue;
 
@@ -155,11 +155,11 @@ namespace PattyPetitGiant
                     pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
                 }
 
-                if (GameCampaign.Player_Item_1 == getEnumType())
+                if (GameCampaign.Player_Item_1 == ItemType())
                 {
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lPistol" : "rPistol");
                 }
-                else if (GameCampaign.Player_Item_2 == getEnumType())
+                else if (GameCampaign.Player_Item_2 == ItemType())
                 {
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rPistol" : "lPistol");
                 }

@@ -100,6 +100,9 @@ namespace PattyPetitGiant
         private Texture2D tileSkin = null;
         public Texture2D TileSkin { get { return tileSkin; } set { tileSkin = value; } }
 
+        private Texture2D shopTileSkin = null;
+        public Texture2D ShopTileSkin { get { return shopTileSkin; } set { shopTileSkin = value; } }
+
         public TileMap(LevelState parent, DungeonGenerator.DungeonRoom[,] room, Vector2 tileSize)
         {
             this.size = new TileDimensions(room.GetLength(0) * GlobalGameConstants.TilesPerRoomWide, room.GetLength(1)  * GlobalGameConstants.TilesPerRoomHigh);
