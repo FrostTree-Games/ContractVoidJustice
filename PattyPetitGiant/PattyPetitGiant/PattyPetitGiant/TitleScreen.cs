@@ -97,6 +97,8 @@ namespace PattyPetitGiant
 
         private RasterizerState rasterizer_state = new RasterizerState();
 
+        private const string menuBlipSound = "menuSelect";
+
         private enum FadeState
         {
             fadeIn = 0,
@@ -216,6 +218,7 @@ namespace PattyPetitGiant
                         button_pressed_timer = 0.0f;
 
                         menu_item_selected++;
+                        AudioLib.playSoundEffect(menuBlipSound);
                         if (menu_item_selected >= menu_list.Count())
                         {
                             menu_item_selected = menu_item_selected % menu_list.Count();
@@ -239,6 +242,7 @@ namespace PattyPetitGiant
                         button_pressed_timer = 0.0f;
 
                         menu_item_selected--;
+                        AudioLib.playSoundEffect(menuBlipSound);
                         if (menu_item_selected >= menu_list.Count())
                         {
                             menu_item_selected = menu_item_selected % menu_list.Count();
@@ -307,7 +311,7 @@ namespace PattyPetitGiant
                     sb.DrawString(Game1.font, "Press Any Key to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2 + 32), fadeColour);
                     break;
                 case titleScreens.logoScreen:
-                    sb.Draw(Game1.frostTreeLogo, new Vector2(GlobalGameConstants.GameResolutionWidth / 2.0f, GlobalGameConstants.GameResolutionHeight / 2), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     break;
                 case titleScreens.menuScreen:
                     sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
