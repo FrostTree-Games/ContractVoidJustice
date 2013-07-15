@@ -34,6 +34,7 @@ namespace PattyPetitGiant
         }
 
         public static SpriteFont font;
+        public static SpriteFont testComputerFont;
         private static Effect bloomFilter = null;
         public static Effect BloomFilter { get { return bloomFilter; } }
         public static Texture2D whitePixel = null;
@@ -112,6 +113,7 @@ namespace PattyPetitGiant
             TextureLib.loadFromManifest();
 
             font = Content.Load<SpriteFont>("testFont");
+            testComputerFont = Content.Load<SpriteFont>("TestComputerFont");
 
             ChunkLib cs = new ChunkLib();
 

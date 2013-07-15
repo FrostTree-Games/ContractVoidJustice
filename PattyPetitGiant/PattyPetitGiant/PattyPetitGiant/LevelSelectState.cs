@@ -9,6 +9,15 @@ namespace PattyPetitGiant
 {
     public class LevelSelectState : ScreenState
     {
+        /// <summary>
+        /// Don't make fun of the name.
+        /// </summary>
+        private enum LevelSelectStateState
+        {
+            AnimateIn = 0,
+            Idle = 1,
+        }
+
         private struct LevelData
         {
             /// <summary>
@@ -50,11 +59,27 @@ namespace PattyPetitGiant
 
         private const string menuBlipSound = "menuSelect";
 
+        private RenderTarget2D textureScreen = null;
+        private RenderTarget2D halfTextureScreen = null;
+        private RenderTarget2D quarterTextureScreen = null;
+        private Texture2D screenResult = null;
+        private Texture2D halfSizeTexture = null;
+        private Texture2D quarterSizeTexture = null;
+        SpriteBatch sb2 = null;
+
+        private bool openingSoundMade;
+
         public LevelSelectState()
         {
             levelMap = new LevelData[6, 3];
 
             wireframe = TextureLib.getLoadedTexture("shipWireframe.png");
+
+            PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
+            textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            halfTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 2, pp.BackBufferHeight / 2, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            quarterTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            sb2 = new SpriteBatch(AnimationLib.GraphicsDevice);
 
             for (int i = 0; i < levelMap.GetLength(0); i++)
             {
@@ -74,10 +99,18 @@ namespace PattyPetitGiant
 
             cursorPosition = new Vector2(((GameCampaign.PlayerLevelProgress * 128) + drawMapTestOffset.X), ((GameCampaign.PlayerFloorHeight * 96) + drawMapTestOffset.Y));
             cursorAnimationTime = 0;
+
+            openingSoundMade = false;
         }
 
         protected override void doUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
+            if (!openingSoundMade)
+            {
+                AudioLib.playSoundEffect("monitorOpening");
+                openingSoundMade = true;
+            }
+
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection) && !downPressed)
             {
                 downPressed = true;
@@ -152,13 +185,13 @@ namespace PattyPetitGiant
             drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
         }
 
-        public override void render(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
+        private void renderGUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, float scale)
         {
             Texture2D tex = TextureLib.getLoadedTexture("wireFramePieces.png");
 
-            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-575, -100, 0));
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-575, -100, 0) * Matrix.CreateScale(1.0f, cursorAnimationTime > 500f ? 1.0f : (cursorAnimationTime / 500f), 1.0f) * Matrix.CreateScale(scale));
 
-            sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) /2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
+            sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) / 2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
 
             sb.Draw(wireframe, Vector2.Zero, null, Color.Lerp(Color.DarkOrange, Color.Black, 0.375f + (0.025f * (float)Math.Sin(cursorAnimationTime / 10))), 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
 
@@ -200,15 +233,45 @@ namespace PattyPetitGiant
             rx.Height += 6;
             drawBox(sb, rx, Color.Orange, 2);
 
-            sb.DrawString(Game1.font, "\nPrisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates, testDetailStuff, Color.Orange);
-            sb.DrawString(Game1.font, "\n\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates, testDetailStuff, Color.Red);
-            sb.DrawString(Game1.font, "\n\n\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates, testDetailStuff, Color.LightBlue);
+            sb.DrawString(Game1.testComputerFont, "\nPrisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates, testDetailStuff, Color.Orange);
+            sb.DrawString(Game1.testComputerFont, "\n\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates, testDetailStuff, Color.Red);
+            sb.DrawString(Game1.testComputerFont, "\n\n\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates, testDetailStuff, Color.LightBlue);
 
             sb.Draw(Game1.whitePixel, testDetailStuff - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(52, 16), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, testDetailStuff, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.Red, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0) + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].guardRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
 
+            sb.End();
+        }
+
+        public override void render(Microsoft.Xna.Framework.Graphics.SpriteBatch sb)
+        {
+            AnimationLib.GraphicsDevice.SetRenderTarget(textureScreen);
+            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Transparent, 1.0f, 0);
+            renderGUI(sb2, 1.0f);
+            AnimationLib.GraphicsDevice.SetRenderTarget(null);
+            screenResult = (Texture2D)textureScreen;
+
+            AnimationLib.GraphicsDevice.SetRenderTarget(halfTextureScreen);
+            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Transparent, 1.0f, 0);
+            renderGUI(sb2, 0.5f);
+            AnimationLib.GraphicsDevice.SetRenderTarget(null);
+            halfSizeTexture = (Texture2D)halfTextureScreen;
+
+            AnimationLib.GraphicsDevice.SetRenderTarget(quarterTextureScreen);
+            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Transparent, 1.0f, 0);
+            renderGUI(sb2, 0.25f);
+            AnimationLib.GraphicsDevice.SetRenderTarget(null);
+            quarterSizeTexture = (Texture2D)quarterTextureScreen;
+
+            AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Transparent, 1.0f, 0);
+
+            Game1.BloomFilter.Parameters["halfResMap"].SetValue(halfSizeTexture);
+            Game1.BloomFilter.Parameters["quarterResMap"].SetValue(quarterSizeTexture);
+
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, Game1.BloomFilter, Matrix.Identity);
+            sb.Draw(screenResult, new Vector2(0), Color.White);
             sb.End();
         }
 
