@@ -35,8 +35,15 @@ namespace PattyPetitGiant
         private const string rocketSound = "testRocket";
         private const string explosionSound = "testExplosion";
 
+        private static AnimationLib.FrameAnimationSet rocketSprite = null;
+
         public RocketLauncher()
         {
+            if (rocketSprite == null)
+            {
+                rocketSprite = AnimationLib.getFrameAnimationSet("rocketProjectile");
+            }
+
             rocket.active = false;
 
             state = RocketLauncherState.IdleWait;
@@ -88,7 +95,7 @@ namespace PattyPetitGiant
                     state = RocketLauncherState.Shooting;
 
                     AudioLib.playSoundEffect(rocketSound);
-                    rocket = new Rocket(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), parent.Direction_Facing);
+                    rocket = new Rocket(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), parent.Direction_Facing);
                 }
             }
             else if (state == RocketLauncherState.Shooting)
@@ -141,6 +148,7 @@ namespace PattyPetitGiant
             if (rocket.active)
             {
                 sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), rocket.position, Color.Pink, 0.0f, rocket.dimensions / 4);
+                rocketSprite.drawAnimationFrame(rocket.timeAlive, sb, rocket.position - rocketSprite.FrameDimensions / 2, new Vector2(1), 0.5f, rocket.direction, Vector2.Zero, Color.White);
             }
 
             if (explosion.active)
@@ -249,6 +257,7 @@ namespace PattyPetitGiant
             public Vector2 dimensions;
             public Vector2 centerPoint { get { return position + (dimensions / 2); } }
             public Vector2 velocity;
+            public float direction;
             private const float rocketSpeed = 0.75f;
 
             public float timeAlive;
@@ -261,6 +270,7 @@ namespace PattyPetitGiant
                 active = true;
 
                 this.position = position;
+                this.direction = 0;
                 dimensions = GlobalGameConstants.TileSize;
 
                 timeAlive = 0;
@@ -271,15 +281,19 @@ namespace PattyPetitGiant
                 {
                     case GlobalGameConstants.Direction.Down:
                         velocity = new Vector2(0, rocketSpeed);
+                        this.direction = (float)(Math.PI / 2);
                         break;
                     case GlobalGameConstants.Direction.Up:
                         velocity = new Vector2(0, -rocketSpeed);
+                        this.direction = (float)(Math.PI / -2);
                         break;
                     case GlobalGameConstants.Direction.Left:
                         velocity = new Vector2(-rocketSpeed, 0);
+                        this.direction = (float)(Math.PI);
                         break;
                     case GlobalGameConstants.Direction.Right:
                         velocity = new Vector2(rocketSpeed, 0);
+                        this.direction = 0;
                         break;
                     default:
                         velocity = Vector2.Zero;
