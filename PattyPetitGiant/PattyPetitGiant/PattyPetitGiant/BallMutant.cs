@@ -20,6 +20,17 @@ namespace PattyPetitGiant
         private float distance;
         private Vector2 ball_coordinate;
 
+        private AnimationLib.FrameAnimationSet chain_ball;
+
+        private enum mutantBallState
+        {
+            Search,
+            Agressive,
+            KnockBack,
+            Reset
+        }
+        private mutantBallState state;
+
         public BallMutant(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
@@ -27,7 +38,7 @@ namespace PattyPetitGiant
             velocity = Vector2.Zero;
             ball_coordinate = Vector2.Zero;
 
-            state = EnemyState.Moving;
+            state = mutantBallState.Search;
             component = new IdleSearch();
             direction_facing = GlobalGameConstants.Direction.Right;
 
@@ -37,12 +48,13 @@ namespace PattyPetitGiant
             change_direction_time = 0.0f;
             agressive_timer = 0.0f;
             distance = 0.0f;
-            knockback_magnitude = 3.0f;
+            knockback_magnitude = 5.0f;
 
             this.parentWorld = parentWorld;
 
             enemy_damage = 5;
             enemy_life = 25;
+            enemy_type = EnemyType.Prisoner;
 
             walk_down = AnimationLib.getSkeleton("chaseDown");
             walk_right = AnimationLib.getSkeleton("chaseRight");
@@ -52,20 +64,22 @@ namespace PattyPetitGiant
             current_skeleton.Skeleton.FlipX = false;
             //chaseAnim = AnimationLib.getFrameAnimationSet("chasePic");
             animation_time = 0.0f;
+
+            chain_ball = AnimationLib.getFrameAnimationSet("hook");
         }
 
         public override void update(GameTime currentTime)
         {
             switch (state)
             {
-                case EnemyState.Moving:
+                case mutantBallState.Search:
                     change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
                     foreach (Entity en in parentWorld.EntityList)
                     {
                         if (en == this)
                             continue;
-                        else if (en is Player)
+                        else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
                         {
                             component.update(this, en, currentTime, parentWorld);
                         }
@@ -73,8 +87,7 @@ namespace PattyPetitGiant
 
                     if (enemy_found)
                     {
-                        state = EnemyState.Agressive;
-                        component = new Chase();
+                        state = mutantBallState.Agressive;
                         velocity = Vector2.Zero;
                     }
                     else
@@ -99,13 +112,8 @@ namespace PattyPetitGiant
                             change_direction_time = 0.0f;
                         }
                     }
-                    Vector2 pos = new Vector2(position.X, position.Y);
-                    Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
-                    Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
-                    position.X = finalPos.X;
-                    position.Y = finalPos.Y;
                     break;
-                case EnemyState.Agressive:
+                case mutantBallState.Agressive:
                     agressive_timer += currentTime.ElapsedGameTime.Milliseconds;
                     
                     angle += 0.1f;
@@ -115,46 +123,53 @@ namespace PattyPetitGiant
                     }
 
                     float temp_radius = 0.0f;
-                    foreach (Entity en in parentWorld.EntityList)
+                        
+                    while (temp_radius <= radius)
                     {
-                        if (en == this)
-                            continue;
-                        else if (en is Player)
+                        ball_coordinate.X = CenterPoint.X + temp_radius * (float)(Math.Cos(angle));
+                        ball_coordinate.Y = CenterPoint.Y + temp_radius * (float)(Math.Sin(angle));
+
+                        foreach (Entity en in parentWorld.EntityList)
                         {
-                            distance = Vector2.Distance(en.CenterPoint, CenterPoint);
-                            if (distance > 300)
+                            if (en == this)
+                                continue;
+                            else if (hitTestBall(en, ball_coordinate.X, ball_coordinate.Y))
                             {
-                                state = EnemyState.Moving;
-                                component = new IdleSearch();
-                                velocity = Vector2.Zero;
-                                animation_time = 0.0f;
-                                enemy_found = false;
+                                float distance = Vector2.Distance(ball_coordinate, CenterPoint);
+                                Vector2 direction = new Vector2(distance * (float)(Math.Cos(angle)), distance * (float)(Math.Sin(angle)));
+
+                                float temp_knockback_magnitude = knockback_magnitude / (radius / temp_radius);
+                                en.knockBack(direction, temp_knockback_magnitude, enemy_damage, this);
                             }
                         }
+                        temp_radius++;
 
-                        while (temp_radius <= radius)
+                        if (agressive_timer > 4000)
                         {
-                            ball_coordinate.X = CenterPoint.X + temp_radius * (float)(Math.Cos(angle));
-                            ball_coordinate.Y = CenterPoint.Y + temp_radius * (float)(Math.Sin(angle));
-
-                            if (hitTestBall(en, ball_coordinate.X, ball_coordinate.Y))
-                            {
-                                Vector2 direction = en.CenterPoint - CenterPoint;
-                                knockback_magnitude = knockback_magnitude / (radius / temp_radius);
-                                en.knockBack(direction, knockback_magnitude, enemy_damage);
-                                temp_radius = 0.0f;
-                                break;
-                            }
-                            else
-                            {
-                                temp_radius++;
-                            }
+                            state = mutantBallState.Search;
+                            agressive_timer = 0.0f;
+                            enemy_found = false;
                         }
+                    }
+                    break;
+                case mutantBallState.KnockBack:
+                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (disable_movement_time > 300)
+                    {
+                        state = mutantBallState.Search;
+                        disable_movement_time = 0.0f;
+                        velocity = Vector2.Zero;
                     }
                     break;
                 default:
                     break;
             }
+            Vector2 pos = new Vector2(position.X, position.Y);
+            Vector2 nextStep = new Vector2(position.X + velocity.X, position.Y + velocity.Y);
+            Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
+            position.X = finalPos.X;
+            position.Y = finalPos.Y;
         }
         public override void draw(Spine.SkeletonRenderer sb)
         {
@@ -162,7 +177,16 @@ namespace PattyPetitGiant
                 //sb.Draw(Game1.whitePixel, position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 0.5f);
             //sb.Draw(Game1.whitePixel, CenterPoint, null, Color.White, angle, Vector2.Zero, new Vector2(radius, 10.0f), SpriteEffects.None, 0.5f);
 
-            if (state == EnemyState.Agressive)
+            if (state == mutantBallState.Agressive)
+            {
+                float interpolate = Vector2.Distance(ball_coordinate, CenterPoint);
+
+                for (int i = 0; i <= (int)(interpolate); i += 16)
+                {
+                    chain_ball.drawAnimationFrame(0.0f, sb, CenterPoint + new Vector2(i * (float)(Math.Cos(angle)), i * (float)(Math.Sin(angle))), new Vector2(1.0f), 0.5f, angle, CenterPoint, Color.White);
+                }
+            }
+            if (state == mutantBallState.Agressive)
             {
                 if (radius < radius_max)
                     radius += 2.0f;
@@ -179,9 +203,9 @@ namespace PattyPetitGiant
         
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (disable_movement_time == 0.0)
+            if (disable_movement == false)
             {
-                disable_movement = true;
+                state = mutantBallState.KnockBack;
                 if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                 {
                     if (direction.X < 0)
@@ -206,6 +230,29 @@ namespace PattyPetitGiant
                 }
 
                 enemy_life = enemy_life - damage;
+            }
+
+            if (attacker == null)
+            {
+                return;
+            }
+            else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+            {
+                switch (attacker.Direction_Facing)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        direction_facing = GlobalGameConstants.Direction.Left;
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        direction_facing = GlobalGameConstants.Direction.Right;
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        direction_facing = GlobalGameConstants.Direction.Down;
+                        break;
+                    default:
+                        direction_facing = GlobalGameConstants.Direction.Up;
+                        break;
+                }
             }
         }
 

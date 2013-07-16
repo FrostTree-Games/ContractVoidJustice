@@ -32,6 +32,7 @@ namespace PattyPetitGiant
         private Entity en_chained;
         private Entity target;
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
+        private AnimationLib.FrameAnimationSet hook;
 
         public HookPrisonerEnemy(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -64,6 +65,8 @@ namespace PattyPetitGiant
             directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("chargerRight");
             directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
             directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("chargerRight");
+
+            hook = AnimationLib.getFrameAnimationSet("hook");
 
             this.parentWorld = parentWorld;
         }
@@ -132,84 +135,72 @@ namespace PattyPetitGiant
                     position.X = finalPos.X;
                     position.Y = finalPos.Y;
                     break;
-                    case ChainState.Throw:
+                case ChainState.Throw:
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
-                        chain_distance += chain_speed;
-                        chain_position += chain_velocity;
-                        if (chain_distance >= max_chain_distance || parentWorld.Map.hitTestWall(chain_position))
-                        {
-                            state = ChainState.Pull;
-                            chain_velocity = -1 * chain_velocity;
-                        }
+                    chain_distance += chain_speed;
+                    chain_position += chain_velocity;
+                    if (chain_distance >= max_chain_distance || parentWorld.Map.hitTestWall(chain_position))
+                    {
+                        state = ChainState.Pull;
+                        chain_velocity = -1 * chain_velocity;
+                    }
 
-                        //checks to see if chain hits the player
-                        if (hitTestChain(target, chain_position.X, chain_position.Y))
+                    //checks to see if chain hits the player
+                    if (hitTestChain(target, chain_position.X, chain_position.Y))
+                    {
+                        en_chained = target;
+                        target.Disable_Movement = true;
+                        target.Disable_Movement_Time = 0.0f;
+                        target.Velocity = Vector2.Zero;
+                        state = ChainState.Pull;
+                        chain_velocity = -1 * chain_velocity;
+                    }
+                    break;
+                //need to work on pull
+                case ChainState.Pull:
+                    if (chain_distance > 0)
+                    {
+                        chain_position += chain_velocity;
+                        chain_distance -= chain_speed;
+                        if (en_chained != null)
                         {
-                            en_chained = target;
-                            target.Disable_Movement = true;
-                            target.Disable_Movement_Time = 0.0f;
-                            target.Velocity = Vector2.Zero;
-                            state = ChainState.Pull;
-                            chain_velocity = -1 * chain_velocity;
+                            en_chained.Position += chain_velocity;
+                            en_chained.Disable_Movement = true;
                         }
-                        break;
-                    //need to work on pull
-                    case ChainState.Pull:
-                        if (chain_distance > 0)
+                    }
+                    else
+                    {
+                        if (en_chained != null)
                         {
-                            chain_position += chain_velocity;
-                            chain_distance -= chain_speed;
-                            if (en_chained != null)
-                            {
-                                en_chained.Position += chain_velocity;
-                                en_chained.Disable_Movement = true;
-                            }
+                            Vector2 direction = en_chained.CenterPoint - CenterPoint;
+                            en_chained.Disable_Movement_Time = 0.0f;
+                            en_chained.knockBack(direction, knockback_magnitude, enemy_damage, this);
                         }
-                        else
-                        {
-                            if (en_chained != null)
-                            {
-                                Vector2 direction = en_chained.CenterPoint - CenterPoint;
-                                en_chained.Disable_Movement_Time = 0.0f;
-                                en_chained.knockBack(direction, knockback_magnitude, enemy_damage, this);
-                            }
-                            state = ChainState.Neutral;
-                            en_chained = null;
-                            enemy_found = false;
-                        }
-                        break;
-                    default:
-                        state = ChainState.Moving;
-                        break;
+                        state = ChainState.Neutral;
+                        en_chained = null;
+                        enemy_found = false;
+                    }
+                    break;
+                default:
+                    state = ChainState.Moving;
+                    break;
             }
         }
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
-            sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Green, 0.0f, new Vector2(48));
-            //sb.Draw(Game1.whitePixel, position, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
-            //sb.Draw(Game1.whitePixel, chain_position, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(48.0f, 48.0f), SpriteEffects.None, 0.5f);
+            //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Green, 0.0f, new Vector2(48));
 
-            //We need sprite animations figured out for this
-            /*
-            if (state != ChainState.Neutral || state != ChainState.Moving)
+            if (state != ChainState.Neutral && state != ChainState.Moving)
             {
-                switch (direction_facing)
+
+                float interpolate = Vector2.Distance(chain_position, CenterPoint);
+
+                for (int i = 0; i <= (int)(interpolate); i += 16)
                 {
-                    case GlobalGameConstants.Direction.Right:
-                        sb.Draw(Game1.whitePixel, CenterPoint + new Vector2(dimensions.X/2, 0), null, Color.Black, angle, Vector2.Zero, new Vector2(chain_distance, 10.0f), SpriteEffects.None, 0.5f);
-                        break;
-                    case GlobalGameConstants.Direction.Left:
-                        sb.Draw(Game1.whitePixel, CenterPoint + new Vector2(dimensions.X/2, 0), null, Color.Black, angle, Vector2.Zero, new Vector2(chain_distance, 10.0f), SpriteEffects.None, 0.5f);
-                        break;
-                    case GlobalGameConstants.Direction.Up:
-                        sb.Draw(Game1.whitePixel, CenterPoint + new Vector2(0, dimensions.Y/2), null, Color.Black, angle, Vector2.Zero, new Vector2(chain_distance, 10.0f), SpriteEffects.None, 0.5f);
-                        break;
-                    default:
-                        sb.Draw(Game1.whitePixel, CenterPoint + new Vector2(0.0f, dimensions.Y / 2), null, Color.Black, angle, Vector2.Zero, new Vector2(chain_distance, 10.0f), SpriteEffects.None, 0.5f);
-                        break;
+                    hook.drawAnimationFrame(0.0f, sb, CenterPoint + new Vector2(i * (float)(Math.Cos(angle)), i * (float)(Math.Sin(angle))), new Vector2(1.0f), 0.5f, angle, CenterPoint, Color.White);
                 }
-            } */
+            } 
         }
         
         public bool hitTestChain(Entity other, float x, float y)
@@ -223,10 +214,6 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (attacker == null)
-            {
-                return;
-            }
             if (disable_movement_time == 0.0)
             {
                 if(state == ChainState.Neutral || state == ChainState.Neutral)
@@ -264,6 +251,7 @@ namespace PattyPetitGiant
             else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
             {
                 enemy_found = true;
+                target = attacker;
 
                 switch (attacker.Direction_Facing)
                 {
