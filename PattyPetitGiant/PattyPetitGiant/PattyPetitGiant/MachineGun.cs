@@ -144,25 +144,7 @@ namespace PattyPetitGiant
         {
             updateBullets(parent, currentTime, parentWorld);
 
-            if (GameCampaign.Player_Item_1 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
-            {
-                fireTimer = float.MaxValue;
-
-                parent.Disable_Movement = false;
-                parent.State = Player.playerState.Moving;
-
-                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
-            }
-            else if (GameCampaign.Player_Item_2 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
-            {
-                fireTimer = float.MaxValue;
-
-                parent.Disable_Movement = false;
-                parent.State = Player.playerState.Moving;
-
-                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
-            }
-            else
+            if (GameCampaign.Player_Item_1 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
             {
                 fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
@@ -170,19 +152,32 @@ namespace PattyPetitGiant
                 {
                     fireTimer = 0;
                     parent.Animation_Time = 0;
-                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
-                }
-
-                if (GameCampaign.Player_Item_1 == ItemType())
-                {
+                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lMGun" : "rMGun");
+                    parent.Velocity = Vector2.Zero;
                 }
-                else if (GameCampaign.Player_Item_2 == ItemType())
-                {
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rMGun" : "lMGun");
-                }
+            }
+            else if (GameCampaign.Player_Item_2 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+            {
+                fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
-                parent.Velocity = Vector2.Zero;
+                if (fireTimer > durationBetweenShots)
+                {
+                    fireTimer = 0;
+                    parent.Animation_Time = 0;
+                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rMGun" : "lMGun");
+                    parent.Velocity = Vector2.Zero;
+                }
+            }
+            else
+            {
+                fireTimer = float.MaxValue;
+
+                parent.Disable_Movement = false;
+                parent.State = Player.playerState.Moving;
+
+                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
             }
         }
 
