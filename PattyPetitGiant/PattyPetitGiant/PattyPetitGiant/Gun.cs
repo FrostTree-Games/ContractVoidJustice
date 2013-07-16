@@ -142,25 +142,21 @@ namespace PattyPetitGiant
         {
             updateBullets(parent, currentTime, parentWorld);
 
-            if (GameCampaign.Player_Item_1 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+            if (GameCampaign.Player_Item_1 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
             {
-                fireTimer = float.MaxValue;
+                fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
-                parent.Disable_Movement = false;
-                parent.State = Player.playerState.Moving;
-
-                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
+                if (fireTimer > durationBetweenShots)
+                {
+                    fireTimer = 0;
+                    parent.Animation_Time = 0;
+                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
+                    AudioLib.playSoundEffect("pistolTEST");
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lPistol" : "rPistol");
+                    parent.Velocity = Vector2.Zero;
+                }
             }
-            else if (GameCampaign.Player_Item_2 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
-            {
-                fireTimer = float.MaxValue;
-
-                parent.Disable_Movement = false;
-                parent.State = Player.playerState.Moving;
-
-                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
-            }
-            else
+            else if (GameCampaign.Player_Item_2 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
             {
                 fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
@@ -170,19 +166,21 @@ namespace PattyPetitGiant
                     parent.Animation_Time = 0;
                     pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
                     AudioLib.playSoundEffect("pistolTEST");
-                }
-
-                if (GameCampaign.Player_Item_1 == ItemType())
-                {
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lPistol" : "rPistol");
-                }
-                else if (GameCampaign.Player_Item_2 == ItemType())
-                {
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rPistol" : "lPistol");
+                    parent.Velocity = Vector2.Zero;
                 }
-
-                parent.Velocity = Vector2.Zero;
             }
+            else
+            {
+                fireTimer = float.MaxValue;
+
+                parent.Disable_Movement = false;
+                parent.State = Player.playerState.Moving;
+
+                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
+            }
+
+          
         }
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
