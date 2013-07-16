@@ -47,6 +47,10 @@
       <Name>bloodSpray</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\frame\rocketExplode.zpy">
+      <Name>rocketExplode</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="animation\frame\bombPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>bombPic</Name>
@@ -64,7 +68,7 @@
       <Name>chasePic</Name>
     </None>
     <None Include="animation\frame\bombExplosion.zpy">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <Name>bombExplosion</Name>
       <SubType>Designer</SubType>
     </None>
@@ -83,6 +87,10 @@
     <None Include="animation\frame\konamiPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>konamiPic</Name>
+    </None>
+    <None Include="animation\frame\plasmaExplode.zpy">
+      <Name>plasmaExplode</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="animation\frame\rocketProjectile.zpy">
       <Name>rocketProjectile</Name>
@@ -1440,6 +1448,22 @@
   <ItemGroup>
     <None Include="gfx\rocketProjectile.png">
       <Name>rocketProjectile</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\bombExplodeSheet.png">
+      <Name>bombExplodeSheet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\plasmaExplodeSheet.png">
+      <Name>plasmaExplodeSheet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

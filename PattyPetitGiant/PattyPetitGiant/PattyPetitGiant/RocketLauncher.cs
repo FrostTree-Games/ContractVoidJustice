@@ -28,14 +28,19 @@ namespace PattyPetitGiant
         private float timer;
         private const float windUpDuration = 100f;
         private const float shootDuration = 500f;
-        private const float coolDownDuration = 100f;
+        private const float coolDownDuration = 0;
 
-        private AnimationLib.FrameAnimationSet explosionAnim = null;
+        private static AnimationLib.FrameAnimationSet explosionAnim = null;
 
         private const string rocketSound = "testRocket";
         private const string explosionSound = "testExplosion";
 
         private static AnimationLib.FrameAnimationSet rocketSprite = null;
+
+        /// <summary>
+        /// Quick boolean hack to determine which hand to fire from.
+        /// </summary>
+        private bool slot1 = false;
 
         public RocketLauncher()
         {
@@ -43,12 +48,14 @@ namespace PattyPetitGiant
             {
                 rocketSprite = AnimationLib.getFrameAnimationSet("rocketProjectile");
             }
+            if (explosionAnim == null)
+            {
+                explosionAnim = AnimationLib.getFrameAnimationSet("rocketExplode");
+            }
 
             rocket.active = false;
 
             state = RocketLauncherState.IdleWait;
-
-            explosionAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
         }
 
         private void updateRocketAndExplosion(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -78,6 +85,20 @@ namespace PattyPetitGiant
 
                     timer = 0;
                     state = RocketLauncherState.WindUp;
+
+                    if (GameCampaign.Player_Item_1 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+                    {
+                        slot1 = true;
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lRocket" : "rRocket");
+                    }
+                    else if (GameCampaign.Player_Item_2 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+                    {
+                        slot1 = false;
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rRocket" : "lRocket");
+                    }
+
+                    parent.Animation_Time = 0;
+                    parent.LoopAnimation = false;
                 }
                 else
                 {
@@ -95,7 +116,15 @@ namespace PattyPetitGiant
                     state = RocketLauncherState.Shooting;
 
                     AudioLib.playSoundEffect(rocketSound);
-                    rocket = new Rocket(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), parent.Direction_Facing);
+
+                    if (slot1)
+                    {
+                        rocket = new Rocket(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), parent.Direction_Facing);
+                    }
+                    else
+                    {
+                        rocket = new Rocket(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), parent.Direction_Facing);
+                    }
                 }
             }
             else if (state == RocketLauncherState.Shooting)
@@ -147,13 +176,12 @@ namespace PattyPetitGiant
         {
             if (rocket.active)
             {
-                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), rocket.position, Color.Pink, 0.0f, rocket.dimensions / 4);
                 rocketSprite.drawAnimationFrame(rocket.timeAlive, sb, rocket.position - rocketSprite.FrameDimensions / 2, new Vector2(1), 0.5f, rocket.direction, Vector2.Zero, Color.White);
             }
 
             if (explosion.active)
             {
-                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), explosion.position, Color.Red, 0.0f, explosion.dimensions / 4);
+                explosionAnim.drawAnimationFrame(explosion.timeAlive, sb, explosion.centerPoint - explosionAnim.FrameDimensions * 0.75f, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.LightGoldenrodYellow);
             }
         }
 
@@ -258,7 +286,7 @@ namespace PattyPetitGiant
             public Vector2 centerPoint { get { return position + (dimensions / 2); } }
             public Vector2 velocity;
             public float direction;
-            private const float rocketSpeed = 0.75f;
+            private const float rocketSpeed = 1.0f;
 
             public float timeAlive;
             public const float maxTimeAlive = 2000;

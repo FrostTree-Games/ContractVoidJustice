@@ -20,3 +20,5 @@ sawGuySheet.png
 testBullet.png
 bulletImpactSheet.png
 rocketProjectile.png
+bombExplodeSheet.png
+plasmaExplodeSheet.png

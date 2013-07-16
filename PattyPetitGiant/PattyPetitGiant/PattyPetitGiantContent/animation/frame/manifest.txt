@@ -40,3 +40,5 @@ buyPic
 testBullet
 bulletImpact
 rocketProjectile
+rocketExplode
+plasmaExplode
