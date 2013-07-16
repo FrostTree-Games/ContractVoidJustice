@@ -22,3 +22,4 @@ bulletImpactSheet.png
 rocketProjectile.png
 bombExplodeSheet.png
 plasmaExplodeSheet.png
+hook.png

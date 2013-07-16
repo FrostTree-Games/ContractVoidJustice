@@ -84,6 +84,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>buyPic</Name>
     </None>
+    <None Include="animation\frame\hook.zpy">
+      <Name>hook</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="animation\frame\konamiPic.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>konamiPic</Name>
@@ -1349,6 +1353,14 @@
   <ItemGroup>
     <None Include="gfx\sawGuySheet.png">
       <Name>sawGuySheet</Name>
+	  <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\hook.png">
+      <Name>hook</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

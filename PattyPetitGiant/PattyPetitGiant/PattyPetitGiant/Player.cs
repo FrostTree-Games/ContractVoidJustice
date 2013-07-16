@@ -364,7 +364,7 @@ namespace PattyPetitGiant
                 state = playerState.Moving;
             }
 
-            if (disable_movement_time == 0.0)
+            if (disable_movement_time == 0.0 && disable_movement == false)
             {
                 disable_movement = true;
 
@@ -394,7 +394,6 @@ namespace PattyPetitGiant
                         velocity = new Vector2(direction.Y / 100f * magnitude, 1.51f * magnitude);
                     }
                 }
-
                 GameCampaign.Player_Health = GameCampaign.Player_Health - damage;
             }
         }
