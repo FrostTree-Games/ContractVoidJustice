@@ -71,6 +71,8 @@ namespace PattyPetitGiant
                     return new FlameThrower();
                 case GlobalGameConstants.itemType.LazerGun:
                     return new LazerGun();
+                case GlobalGameConstants.itemType.MachineGun:
+                    return new MachineGun();
                 default:
                     throw new Exception("Pickup item type ambiguous");
             }

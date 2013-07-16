@@ -81,7 +81,7 @@ namespace PattyPetitGiant
             PlayerFloorHeight = 1;
 
             Player_Item_1 = GlobalGameConstants.itemType.Sword;
-            Player_Item_2 = GlobalGameConstants.itemType.Gun;
+            Player_Item_2 = GlobalGameConstants.itemType.MachineGun;
 
             allegiance = 0.5f;
 
