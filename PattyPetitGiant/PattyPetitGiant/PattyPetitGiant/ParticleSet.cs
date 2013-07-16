@@ -31,18 +31,33 @@ namespace PattyPetitGiant
             public static void NewBloodParticle(ref Particle p, Vector2 position)
             {
                 p.active = true;
-                p.position = position;
                 p.timeAlive = 0;
                 p.maxTimeAlive = 500f + (float)Game1.rand.NextDouble() * 200f;
                 p.rotation = 0;
                 p.rotationSpeed = 0;
                 p.animationTime = 0;
                 p.animation = AnimationLib.getFrameAnimationSet("bloodSpray");
+                p.position = position;
                 p.color = Color.White;
 
                 float direction = (float)((-Math.PI * 3 / 8) - (Game1.rand.NextDouble() * Math.PI / 4));
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
                 p.acceleration = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction)) * -13) * 2.5f;
+            }
+
+            public static void NewImpactEffect(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 500f + (float)Game1.rand.NextDouble() * 200f;
+                p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("bulletImpact");
+                p.color = Color.White;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
             }
         }
 
@@ -130,6 +145,17 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewBloodParticle(ref particlePool[i], position);
+                return;
+            }
+        }
+
+        public void pushImpactEffect(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewImpactEffect(ref particlePool[i], position);
                 return;
             }
         }

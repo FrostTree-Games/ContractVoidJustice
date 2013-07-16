@@ -55,8 +55,14 @@ namespace PattyPetitGiant
 
                 timePassed += currentTime.ElapsedGameTime.Milliseconds;
 
-                if (timePassed > maxBulletTime || parentWorld.Map.hitTestWall(position))
+                bool hitWall = false;
+                if (timePassed > maxBulletTime || (hitWall = parentWorld.Map.hitTestWall(position)))
                 {
+                    if (hitWall)
+                    {
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24));
+                    }
+
                     active = false;
                     timePassed = 0;
                     return;
@@ -66,16 +72,17 @@ namespace PattyPetitGiant
 
                 position += velocity * currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en is Player)
+                    if (parentWorld.EntityList[i] is Player)
                     {
                         continue;
                     }
 
-                    if (hitTestEntity(en))
+                    if (hitTestEntity(parentWorld.EntityList[i]))
                     {
-                        en.knockBack(Vector2.Normalize(velocity), 0.3f, 1, parent);
+                        parentWorld.EntityList[i].knockBack(Vector2.Normalize(velocity), 0.3f, 1, parent);
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24));
                         this.active = false;
                         timePassed = 0;
                     }
