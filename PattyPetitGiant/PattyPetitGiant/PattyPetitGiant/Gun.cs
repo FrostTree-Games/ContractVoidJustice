@@ -9,6 +9,8 @@ namespace PattyPetitGiant
 {
     class Gun : Item
     {
+        public static AnimationLib.FrameAnimationSet bulletPic = null;
+
         private struct GunBullet
         {
             public bool active;
@@ -21,7 +23,7 @@ namespace PattyPetitGiant
             public float timePassed;
             private const float maxBulletTime = 700;
 
-            private const float motionBulletSpeed = 0.80f;
+            private const float motionBulletSpeed = 1.20f;
 
             public GunBullet(Vector2 position, float direction)
             {
@@ -84,6 +86,8 @@ namespace PattyPetitGiant
             {
                 if (active)
                 {
+                    //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Red, 0.0f, dimensions);
+                    Gun.bulletPic.drawAnimationFrame(0.0f, sb, position - (Gun.bulletPic.FrameDimensions / 2), new Vector2(1.0f), 0.5f, direction, Vector2.Zero, Color.White);
                     //sb.Draw(Game1.whitePixel, position, null, Color.Green, 0, Vector2.Zero, dimensions, SpriteEffects.None, 0.69f);
                 }
             }
@@ -93,10 +97,15 @@ namespace PattyPetitGiant
         private GunBullet[] bullets = null;
 
         private float fireTimer;
-        private const float durationBetweenShots = 800;
+        private const float durationBetweenShots = 200;
 
         public Gun()
         {
+            if (bulletPic == null)
+            {
+                bulletPic = AnimationLib.getFrameAnimationSet("testBullet");
+            }
+
             bullets = new GunBullet[bulletCount];
 
             fireTimer = float.MaxValue;
@@ -152,7 +161,8 @@ namespace PattyPetitGiant
                 {
                     fireTimer = 0;
                     parent.Animation_Time = 0;
-                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
+                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
+                    AudioLib.playSoundEffect("pistolTEST");
                 }
 
                 if (GameCampaign.Player_Item_1 == ItemType())
@@ -177,7 +187,7 @@ namespace PattyPetitGiant
         {
             for (int i = 0; i < bulletCount; i++)
             {
-                //bullets[i].draw(sb);
+                bullets[i].draw(sb);
             }
         }
 

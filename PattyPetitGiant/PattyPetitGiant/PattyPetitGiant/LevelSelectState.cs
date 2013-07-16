@@ -269,6 +269,9 @@ namespace PattyPetitGiant
 
             Game1.BloomFilter.Parameters["halfResMap"].SetValue(halfSizeTexture);
             Game1.BloomFilter.Parameters["quarterResMap"].SetValue(quarterSizeTexture);
+            Game1.BloomFilter.Parameters["Threshold"].SetValue(0.3f);
+            Game1.BloomFilter.Parameters["BlurDistanceX"].SetValue(0.00175f);
+            Game1.BloomFilter.Parameters["BlurDistanceY"].SetValue(0.00175f);
 
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, Game1.BloomFilter, Matrix.Identity);
             sb.Draw(screenResult, new Vector2(0), Color.White);

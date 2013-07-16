@@ -6,8 +6,8 @@ Texture quarterResMap;
 sampler halfSampler = sampler_state
 {
 	Texture = <halfResMap>;
-	MinFilter = Anisotropic;
-	MagFilter = Anisotropic;
+	MinFilter = Linear;
+	MagFilter = Linear;
 	MipFilter = Linear;
 	AddressU = Clamp;
 	AddressV = Clamp;
@@ -16,8 +16,8 @@ sampler halfSampler = sampler_state
 sampler quarterSampler = sampler_state
 {
 	Texture = <quarterResMap>;
-	MinFilter = Anisotropic;
-	MagFilter = Anisotropic;
+	MinFilter = Linear;
+	MagFilter = Linear;
 	MipFilter = Linear;
 	AddressU = Clamp;
 	AddressV = Clamp;

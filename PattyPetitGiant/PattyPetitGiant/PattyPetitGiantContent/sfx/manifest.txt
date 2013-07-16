@@ -5,3 +5,4 @@ testRocket
 testExplosion
 menuSelect
 monitorOpening
+pistolTEST
