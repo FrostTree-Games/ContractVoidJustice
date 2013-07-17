@@ -80,8 +80,8 @@ namespace PattyPetitGiant
             PlayerLevelProgress = 0;
             PlayerFloorHeight = 1;
 
-            Player_Item_1 = GlobalGameConstants.itemType.Bomb;
-            Player_Item_2 = GlobalGameConstants.itemType.Compass;
+            Player_Item_1 = GlobalGameConstants.itemType.WaveMotionGun;
+            Player_Item_2 = GlobalGameConstants.itemType.WaveMotionGun;
 
             allegiance = 0.5f;
 

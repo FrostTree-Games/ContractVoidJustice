@@ -47,6 +47,10 @@
       <Name>bloodSpray</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\frame\waveMotionBullet.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>waveMotionBullet</Name>
+    </None>
     <None Include="animation\frame\rocketExplode.zpy">
       <Name>rocketExplode</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -141,6 +145,10 @@
       <Name>molotovFlame</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
+    </None>
+    <None Include="animation\frame\testParticles.zpy">
+      <Name>testParticles</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="animation\frame\wandPic.zpy">
       <SubType>Designer</SubType>
@@ -1490,6 +1498,30 @@
     </None>
     <None Include="sfx\swordHit.wav">
       <Name>swordHit</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\testParticles.png">
+      <Name>testParticles</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sfx\waveShot.wav">
+      <Name>waveShot</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sfx\waveHit.wav">
+      <Name>waveHit</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

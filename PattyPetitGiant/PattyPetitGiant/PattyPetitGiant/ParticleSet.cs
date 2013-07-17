@@ -45,7 +45,7 @@ namespace PattyPetitGiant
                 p.acceleration = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction)) * -13) * 2.5f;
             }
 
-            public static void NewImpactEffect(ref Particle p, Vector2 position)
+            public static void NewImpactEffect(ref Particle p, Vector2 position, Color c)
             {
                 p.active = true;
                 p.position = position;
@@ -55,7 +55,7 @@ namespace PattyPetitGiant
                 p.rotationSpeed = 0;
                 p.animationTime = 0;
                 p.animation = AnimationLib.getFrameAnimationSet("bulletImpact");
-                p.color = Color.White;
+                p.color = c;
                 p.velocity = Vector2.Zero;
                 p.acceleration = Vector2.Zero;
             }
@@ -149,13 +149,13 @@ namespace PattyPetitGiant
             }
         }
 
-        public void pushImpactEffect(Vector2 position)
+        public void pushImpactEffect(Vector2 position, Color color)
         {
             for (int i = 0; i < particlePoolSize; i++)
             {
                 if (particlePool[i].active) { continue; }
 
-                Particle.NewImpactEffect(ref particlePool[i], position);
+                Particle.NewImpactEffect(ref particlePool[i], position, color);
                 return;
             }
         }

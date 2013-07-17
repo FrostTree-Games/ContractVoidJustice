@@ -58,7 +58,7 @@ namespace PattyPetitGiant
                 {
                     if (hitWall)
                     {
-                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24));
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
                     }
 
                     active = false;
@@ -80,7 +80,7 @@ namespace PattyPetitGiant
                     if (hitTestEntity(parentWorld.EntityList[i]))
                     {
                         parentWorld.EntityList[i].knockBack(Vector2.Normalize(velocity), 0.3f, 1, parent);
-                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24));
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
                         this.active = false;
                         timePassed = 0;
                     }

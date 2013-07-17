@@ -43,3 +43,5 @@ rocketProjectile
 rocketExplode
 plasmaExplode
 hook
+testParticles
+waveMotionBullet

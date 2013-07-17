@@ -30,8 +30,15 @@ namespace PattyPetitGiant
 
         private WaveMotionState state;
 
+        public static AnimationLib.FrameAnimationSet bulletAnimation = null;
+
         public WaveMotionGun()
         {
+            if (bulletAnimation == null)
+            {
+                bulletAnimation = AnimationLib.getFrameAnimationSet("waveMotionBullet");
+            }
+
             bullet1.active = false;
             bullet2.active = false;
             bullet3.active = false;
@@ -80,13 +87,13 @@ namespace PattyPetitGiant
 
                 if (GameCampaign.Player_Item_1 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
                 {
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ?"rRayGun" : "lRayGun");
-                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY);
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ?"lRayGun" : "rRayGun");
+                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
                 }
                 else if (GameCampaign.Player_Item_2 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
                 {
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lRayGun" : "rRayGun");
-                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rRayGun" : "lRayGun");
+                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY);
                 }
 
                 if (!bullet1.active)
@@ -101,6 +108,8 @@ namespace PattyPetitGiant
                 {
                     bullet3 = new WaveMotionBullet(bulletPos, shotDirection);
                 }
+
+                AudioLib.playSoundEffect("waveShot");
 
                 state = WaveMotionState.Shooting;
                 parent.Animation_Time = 0.0f;
@@ -157,12 +166,21 @@ namespace PattyPetitGiant
 
             private const float motionBulletSpeed = 0.5f;
 
+            private float colorSpinOffset;
+
+            private Vector2 prevPosition1;
+            private Vector2 prevPosition2;
+
             public WaveMotionBullet(Vector2 position, float direction)
             {
                 this.position = position;
+                this.prevPosition1 = position;
+                this.prevPosition2 = position;
                 this.direction = direction;
                 this.active = true;
                 timePassed = 0.0f;
+
+                colorSpinOffset = (float)(Game1.rand.NextDouble() * 500);
             }
 
             public bool hitTestEntity(Entity en)
@@ -179,8 +197,15 @@ namespace PattyPetitGiant
 
                 timePassed += currentTime.ElapsedGameTime.Milliseconds;
 
-                if (timePassed > maxWaveMotionBulletTime || parentWorld.Map.hitTestWall(position))
+                bool hitWall = false;
+                if (timePassed > maxWaveMotionBulletTime || (hitWall = parentWorld.Map.hitTestWall(position)))
                 {
+                    if (hitWall)
+                    {
+                        AudioLib.playSoundEffect("waveHit");
+                        parentWorld.Particles.pushImpactEffect(position, Color.Lerp(new Color(224, 255, 255, 127), new Color(0.0f, 0.0f, 1.0f, 0.5f), (float)(Math.Sin(timePassed / 1000f + colorSpinOffset))));
+                    }
+
                     active = false;
                     return;
                 }
@@ -200,16 +225,24 @@ namespace PattyPetitGiant
                     if (hitTestEntity(en))
                     {
                         en.knockBack(Vector2.Normalize(velocity), 1.5f, 4);
+                        AudioLib.playSoundEffect("waveHit");
+                        parentWorld.Particles.pushImpactEffect(position, Color.Lerp(new Color(224, 255, 255, 127), new Color(0.0f, 0.0f, 1.0f, 0.5f), (float)(Math.Sin(timePassed / 1000f + colorSpinOffset))));
                         this.active = false;
                     }
                 }
+
+                prevPosition2 = prevPosition1;
+                prevPosition1 = position;
             }
 
             public void draw(Spine.SkeletonRenderer sb)
             {
                 if (active)
                 {
-                    //sb.Draw(Game1.whitePixel, position - new Vector2(radius / 2), null, Color.Green, 0, Vector2.Zero, radius, SpriteEffects.None, 0.69f);
+                    //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position - new Vector2(radius), Color.Red, 0.0f, new Vector2(radius / 2));
+                    WaveMotionGun.bulletAnimation.drawAnimationFrame(timePassed, sb, prevPosition2 - new Vector2(radius), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Lerp(Color.LightCyan, Color.Blue, (float)(Math.Sin(timePassed / 1000f + colorSpinOffset))));
+                    WaveMotionGun.bulletAnimation.drawAnimationFrame(timePassed, sb, prevPosition1 - new Vector2(radius), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Lerp(Color.LightCyan, Color.Blue, (float)(Math.Sin(timePassed / 1000f + colorSpinOffset))));
+                    WaveMotionGun.bulletAnimation.drawAnimationFrame(timePassed, sb, position - new Vector2(radius), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Lerp(Color.LightCyan, Color.Blue, (float)(Math.Sin(timePassed / 1000f + colorSpinOffset))));
                 }
             }
         }

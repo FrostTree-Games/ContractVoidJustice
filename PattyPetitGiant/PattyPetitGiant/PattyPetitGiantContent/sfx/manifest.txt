@@ -9,3 +9,5 @@ pistolTEST
 machineGun
 fleshyKnockBack
 swordHit
+waveShot
+waveHit
