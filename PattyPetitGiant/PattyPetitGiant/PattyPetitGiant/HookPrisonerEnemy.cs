@@ -15,17 +15,20 @@ namespace PattyPetitGiant
         private enum ChainState
         {
             Moving,
+            WindUp,
             Throw,
             Pull,
-            Neutral
+            Neutral,
+            knockBack,
         }
         private ChainState state;
         private EnemyComponents component;
         private float angle;
         private float distance;
-        private float max_chain_distance = 300.0f;
+        private const float max_chain_distance = 300.0f;
         private float chain_distance = 0.0f;
         private float chain_speed = 0.0f;
+        private float windup_timer = 0.0f;
         private Vector2 chain_velocity;
         private Vector2 chain_position;
         private Vector2 chain_dimensions;
@@ -60,11 +63,11 @@ namespace PattyPetitGiant
             en_chained = null;
 
             directionAnims = new AnimationLib.SpineAnimationSet[4];
-            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("chargerUp");
-            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("chargerDown");
-            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("chargerRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("hookUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("hookDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("hookRight");
             directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
-            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("chargerRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("hookRight");
 
             hook = AnimationLib.getFrameAnimationSet("hook");
 
@@ -98,35 +101,10 @@ namespace PattyPetitGiant
 
                     if (enemy_found)
                     {
-                        state = ChainState.Throw;
+                        state = ChainState.WindUp;
+                        windup_timer = 0.0f;
                         velocity = Vector2.Zero;
-
-                        angle = (float)Math.Atan2(target.CenterPoint.Y - CenterPoint.Y, target.CenterPoint.X - CenterPoint.X);
-                        distance = Vector2.Distance(CenterPoint, target.CenterPoint);
-
-                        switch (direction_facing)
-                        {
-                            case GlobalGameConstants.Direction.Right:
-                                chain_velocity = new Vector2(8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
-                                chain_position = CenterPoint + new Vector2(dimensions.X / 2, 0);
-                                chain_speed = chain_velocity.X;
-                                break;
-                            case GlobalGameConstants.Direction.Left:
-                                chain_velocity = new Vector2(-8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
-                                chain_position = CenterPoint - new Vector2(dimensions.X / 2, 0);
-                                chain_speed = Math.Abs(chain_velocity.Y);
-                                break;
-                            case GlobalGameConstants.Direction.Up:
-                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), -8.0f);
-                                chain_position = CenterPoint - new Vector2(0, dimensions.X / 2);
-                                chain_speed = Math.Abs(chain_velocity.Y);
-                                break;
-                            default:
-                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), 8.0f);
-                                chain_position = CenterPoint + new Vector2(0, dimensions.X / 2);
-                                chain_speed = Math.Abs(chain_velocity.Y);
-                                break;
-                        }
+                        animation_time = 0.0f;
                     }
 
                     Vector2 pos = new Vector2(position.X, position.Y);
@@ -135,8 +113,44 @@ namespace PattyPetitGiant
                     position.X = finalPos.X;
                     position.Y = finalPos.Y;
                     break;
+                case ChainState.WindUp:
+                    windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
+                    if (windup_timer > 650)
+                    {
+                        state = ChainState.Throw;
+                        angle = (float)Math.Atan2(target.CenterPoint.Y - CenterPoint.Y, target.CenterPoint.X - CenterPoint.X);
+                        distance = Vector2.Distance(CenterPoint, target.CenterPoint);
+
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Right:
+                                chain_velocity = new Vector2(8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
+                                chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
+                                chain_speed = chain_velocity.X;
+                                break;
+                            case GlobalGameConstants.Direction.Left:
+                                chain_velocity = new Vector2(-8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
+                                chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
+                                chain_speed = Math.Abs(chain_velocity.Y);
+                                break;
+                            case GlobalGameConstants.Direction.Up:
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), -8.0f);
+                                chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
+                                chain_speed = Math.Abs(chain_velocity.Y);
+                                break;
+                            default:
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), 8.0f);
+                                chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
+                                chain_speed = Math.Abs(chain_velocity.Y);
+                                break;
+                        }
+                        windup_timer = 0.0f;
+                        animation_time = 0.0f;
+                    }
+                    break;
                 case ChainState.Throw:
-                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("throw");
                     chain_distance += chain_speed;
                     chain_position += chain_velocity;
                     if (chain_distance >= max_chain_distance || parentWorld.Map.hitTestWall(chain_position))
@@ -154,12 +168,14 @@ namespace PattyPetitGiant
                         target.Velocity = Vector2.Zero;
                         state = ChainState.Pull;
                         chain_velocity = -1 * chain_velocity;
+                        animation_time = 0.0f;
                     }
                     break;
                 //need to work on pull
                 case ChainState.Pull:
                     if (chain_distance > 0)
                     {
+                        directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("pull");
                         chain_position += chain_velocity;
                         chain_distance -= chain_speed;
                         if (en_chained != null)
@@ -170,10 +186,13 @@ namespace PattyPetitGiant
                     }
                     else
                     {
+                        Console.WriteLine("Knocked Back");
+                        directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
                         if (en_chained != null)
                         {
                             Vector2 direction = en_chained.CenterPoint - CenterPoint;
                             en_chained.Disable_Movement_Time = 0.0f;
+                            en_chained.Disable_Movement = false;
                             en_chained.knockBack(direction, knockback_magnitude, enemy_damage, this);
                         }
                         state = ChainState.Neutral;
@@ -181,24 +200,36 @@ namespace PattyPetitGiant
                         enemy_found = false;
                     }
                     break;
+                case ChainState.knockBack:
+                    disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
+                    if (disable_movement_time > 300)
+                    {
+                        disable_movement = false;
+                        state = ChainState.Moving;
+                        chain_distance = 0.0f;
+                    }
+                    break;
                 default:
                     state = ChainState.Moving;
                     break;
             }
+            animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time, true);
         }
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
             //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Green, 0.0f, new Vector2(48));
 
-            if (state != ChainState.Neutral && state != ChainState.Moving)
+            if (state == ChainState.Throw || state == ChainState.Pull)
             {
 
-                float interpolate = Vector2.Distance(chain_position, CenterPoint);
+                float interpolate = Vector2.Distance(chain_position, new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY));
 
                 for (int i = 0; i <= (int)(interpolate); i += 16)
                 {
-                    hook.drawAnimationFrame(0.0f, sb, CenterPoint + new Vector2(i * (float)(Math.Cos(angle)), i * (float)(Math.Sin(angle))), new Vector2(1.0f), 0.5f, angle, CenterPoint, Color.White);
+                    hook.drawAnimationFrame(0.0f, sb, new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY) + new Vector2(i * (float)(Math.Cos(angle)), i * (float)(Math.Sin(angle))), new Vector2(1.0f), 0.5f, angle, Vector2.Zero, Color.White);
                 }
             } 
         }
@@ -214,10 +245,10 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (disable_movement_time == 0.0)
+            if (disable_movement == false)
             {
                 if(state == ChainState.Neutral || state == ChainState.Neutral)
-                    disable_movement = true;
+                    
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
                         if (direction.X < 0)
@@ -242,6 +273,9 @@ namespace PattyPetitGiant
                     }
 
                 enemy_life = enemy_life - damage;
+                disable_movement_time = 0.0f;
+                disable_movement = true;
+                state = ChainState.knockBack;
             }
 
             if (attacker == null)

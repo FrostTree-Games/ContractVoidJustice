@@ -197,6 +197,7 @@ namespace PattyPetitGiant
                         }
                         break;
                     case EnemyState.Death:
+                        velocity = Vector2.Zero;
                         break;
                     default:
                         break;
