@@ -244,6 +244,8 @@ namespace PattyPetitGiant
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
+
+                    AudioLib.playSoundEffect("fleshyKnockBack");
                     
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {

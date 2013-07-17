@@ -7,3 +7,5 @@ menuSelect
 monitorOpening
 pistolTEST
 machineGun
+fleshyKnockBack
+swordHit

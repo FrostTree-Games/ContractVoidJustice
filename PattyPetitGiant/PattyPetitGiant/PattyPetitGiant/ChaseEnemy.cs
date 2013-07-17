@@ -282,6 +282,8 @@ namespace PattyPetitGiant
                     chase_stage = ChaseAttackStage.none;
                     state = EnemyState.Moving;
 
+                    AudioLib.playSoundEffect("fleshyKnockBack");
+
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
                     parentWorld.Particles.pushBloodParticle(CenterPoint);

@@ -335,6 +335,8 @@ namespace PattyPetitGiant
             parentWorld.Particles.pushBloodParticle(CenterPoint);
             parentWorld.Particles.pushBloodParticle(CenterPoint);
 
+            AudioLib.playSoundEffect("fleshyKnockBack");
+
             if (health > 0)
             {
                 molotovState = MolotovState.KnockedBack;

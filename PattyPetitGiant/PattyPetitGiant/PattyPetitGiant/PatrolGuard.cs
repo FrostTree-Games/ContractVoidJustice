@@ -541,7 +541,12 @@ namespace PattyPetitGiant
             }
             else if (guardState == PatrolGuardState.Dying)
             {
-                //push blood animations here
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+                parentWorld.Particles.pushBloodParticle(CenterPoint);
+
+                AudioLib.playSoundEffect("fleshyKnockBack");
+
                 return;
             }
 
@@ -552,6 +557,12 @@ namespace PattyPetitGiant
 
             guardState = PatrolGuardState.KnockBack;
             animation_time = 0;
+
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+
+            AudioLib.playSoundEffect("fleshyKnockBack");
 
             if (attacker != null & attacker is Player)
             {
