@@ -69,18 +69,41 @@ namespace PattyPetitGiant
 
                 parent.Animation_Time += (currentTime.ElapsedGameTime.Milliseconds / 400f);
 
-                GameCampaign.Player_Ammunition -= (currentTime.ElapsedGameTime.Milliseconds / 1000f) * ammoCostPerSecond;
+                if (Game1.rand.Next() % 2 == 0)
+                {
+                    parentWorld.Particles.pushDirectedParticle(parent.CenterPoint + new Vector2(-4, parent.Dimensions.Y / 2 - 12), Color.LightCyan, (float)(((int)(parent.Direction_Facing) * (Math.PI / 2)) + (Game1.rand.NextDouble() * (Math.PI / 4)) - (Math.PI / 8)));
+                }
             }
             else if (state == HermesSandalsState.WindUp)
             {
+                if (GameCampaign.Player_Item_1 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+                {
+                    state = HermesSandalsState.Idle;
+
+                    parent.Disable_Movement = false;
+                    parent.State = Player.playerState.Moving;
+
+                    return;
+                }
+                else if (GameCampaign.Player_Item_2 == ItemType() && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+                {
+                    state = HermesSandalsState.Idle;
+
+                    parent.Disable_Movement = false;
+                    parent.State = Player.playerState.Moving;
+
+                    return;
+                }
+
                 windUpTime += currentTime.ElapsedGameTime.Milliseconds;
 
                 parent.Animation_Time += (currentTime.ElapsedGameTime.Milliseconds / 400f);
 
                 if (windUpTime > windUpDuration)
                 {
-                    if (GameCampaign.Player_Ammunition > 0.01f)
+                    if (GameCampaign.Player_Ammunition >= 10.0f)
                     {
+                        GameCampaign.Player_Ammunition -= 10.0f;
                         state = HermesSandalsState.Running;
                     }
                     else
@@ -92,6 +115,11 @@ namespace PattyPetitGiant
                         parent.Disable_Movement = false;
                         parent.State = Player.playerState.Moving;
                     }
+                }
+
+                if (GameCampaign.Player_Ammunition >= 10.0f)
+                {
+                    parentWorld.Particles.pushDirectedParticle(parent.CenterPoint + new Vector2(0, parent.Dimensions.Y / 2 - 12), Color.LightCyan, (float)(Game1.rand.NextDouble() * Math.PI * 2));
                 }
             }
             else if (state == HermesSandalsState.Idle)
@@ -112,6 +140,11 @@ namespace PattyPetitGiant
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             windUpDrawPosition = parent.Position - new Vector2(0.0f, GlobalGameConstants.TileSize.Y);
+
+            if (state == HermesSandalsState.Running || state == HermesSandalsState.WindUp)
+            {
+                state = HermesSandalsState.Idle;
+            }
         }
 
         public void draw(Spine.SkeletonRenderer sb)

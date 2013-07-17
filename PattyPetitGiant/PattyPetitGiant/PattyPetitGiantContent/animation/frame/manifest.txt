@@ -45,3 +45,4 @@ plasmaExplode
 hook
 testParticles
 waveMotionBullet
+directedParticle

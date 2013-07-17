@@ -13,6 +13,7 @@ namespace PattyPetitGiant
         }
 
         private const float bloodInitialSpeed = 10f;
+        private const float directedInitialSpeed = 10f;
 
         public struct Particle
         {
@@ -57,6 +58,24 @@ namespace PattyPetitGiant
                 p.animation = AnimationLib.getFrameAnimationSet("bulletImpact");
                 p.color = c;
                 p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+            }
+
+            public static void NewDirectedParticle(ref Particle p, Vector2 position, Color c, float direction)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 500f + (float)Game1.rand.NextDouble() * 200f;
+                p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("directedParticle");
+                p.color = c;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+
+                p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
                 p.acceleration = Vector2.Zero;
             }
         }
@@ -129,7 +148,7 @@ namespace PattyPetitGiant
                 particlePool[i].maxTimeAlive = 1500f + (float)Game1.rand.NextDouble() * 200;
                 particlePool[i].position = position;
                 particlePool[i].rotation = (float)Game1.rand.NextDouble();
-                particlePool[i].rotationSpeed = (float)Game1.rand.NextDouble() / 100;
+                particlePool[i].rotationSpeed = (float)Game1.rand.NextDouble() / 100 - 50f;
                 particlePool[i].velocity = new Vector2((float)Game1.rand.NextDouble() - 0.5f, (float)Game1.rand.NextDouble() - 0.5f) * 9;
                 particlePool[i].acceleration = new Vector2((float)Game1.rand.NextDouble() - 0.5f, (float)Game1.rand.NextDouble() - 0.5f) * 9;
                 particlePool[i].animation = AnimationLib.getFrameAnimationSet("gamepadA");
@@ -156,6 +175,17 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewImpactEffect(ref particlePool[i], position, color);
+                return;
+            }
+        }
+
+        public void pushDirectedParticle(Vector2 position, Color color, float direction)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewDirectedParticle(ref particlePool[i], position, color, direction);
                 return;
             }
         }

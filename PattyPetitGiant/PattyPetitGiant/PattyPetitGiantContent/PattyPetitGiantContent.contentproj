@@ -47,6 +47,10 @@
       <Name>bloodSpray</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\frame\directedParticle.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>directedParticle</Name>
+    </None>
     <None Include="animation\frame\waveMotionBullet.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>waveMotionBullet</Name>
