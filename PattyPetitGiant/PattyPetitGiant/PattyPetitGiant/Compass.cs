@@ -43,7 +43,7 @@ namespace PattyPetitGiant
             }
             else
             {
-                theta = (float)(Math.Atan2(parent.CenterPoint.Y - exit.CenterPoint.Y, parent.CenterPoint.X - exit.CenterPoint.X) - Math.PI / 2);
+                theta = (float)(Math.Atan2(parent.CenterPoint.Y - exit.CenterPoint.Y, parent.CenterPoint.X - exit.CenterPoint.X) - Math.PI);
 
                 drawPos = parent.CenterPoint + new Vector2((float)(GlobalGameConstants.TileSize.X * Math.Cos(theta)), (float)(GlobalGameConstants.TileSize.Y * Math.Sin(theta)));
             }
@@ -86,7 +86,7 @@ namespace PattyPetitGiant
         {
             if (drawPointer)
             {
-                //img.drawAnimationFrame(0.0f, sb, drawPos, new Vector2(3.0f, 3.0f), 0.5f, theta, GlobalGameConstants.TileSize / 2);
+                img.drawAnimationFrame(0.0f, sb, drawPos, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
         }
     }
