@@ -29,6 +29,7 @@ namespace PattyPetitGiant
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Bomb;
         Bomb_State bomb_state = Bomb_State.reset;
         private AnimationLib.FrameAnimationSet bombAnim;
+        private AnimationLib.FrameAnimationSet explosionAnim;
         private float animation_time;
         private float knockback_magnitude;
 
@@ -39,6 +40,7 @@ namespace PattyPetitGiant
             bomb_state = Bomb_State.reset;
             bomb_damage = 5;
             bombAnim = AnimationLib.getFrameAnimationSet("bombPic");
+            explosionAnim = AnimationLib.getFrameAnimationSet("rocketExplode");
             knockback_magnitude = 5.0f;
         }
 
@@ -147,11 +149,12 @@ namespace PattyPetitGiant
             switch(bomb_state)
             {
                 case Bomb_State.placed:
-                    //bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1.0f, 1.0f), 0.5f);
+                    //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Red, 0.0f, hitbox);
+                    bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
                     break;
                 case Bomb_State.exploded:
-                //bombAnim.drawAnimationFrame(animation_time, sb, position , new Vector2(2.25f, 2.25f), 0.5f);
-                    //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, hitbox, SpriteEffects.None, 0.5f);
+                    //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Red, 0.0f, hitbox);
+                    explosionAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
                     break;
                 default:
                     break;
