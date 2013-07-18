@@ -186,7 +186,6 @@ namespace PattyPetitGiant
                     }
                     else
                     {
-                        Console.WriteLine("Knocked Back");
                         directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
                         if (en_chained != null)
                         {
