@@ -399,7 +399,7 @@ namespace PattyPetitGiant
                 state = playerState.Moving;
             }
 
-            if (disable_movement_time == 0.0 && disable_movement == false)
+            if (disable_movement == false)
             {
                 disable_movement = true;
 

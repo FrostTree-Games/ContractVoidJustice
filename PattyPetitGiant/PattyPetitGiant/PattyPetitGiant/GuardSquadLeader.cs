@@ -18,6 +18,7 @@ namespace PattyPetitGiant
             Direct,
             Fight,
             Reset,
+            WindUp,
             Dying,
         }
 
@@ -35,11 +36,15 @@ namespace PattyPetitGiant
         private EnemyComponents component = new MoveSearch();
         private int bullet_number = 0;
         private float time_between_shots = 0.0f;
+        private float reset_timer = 0.0f;
         private int bullet_inactive_number = 0;
+        private float windup_timer;
 
         private bool loop = true;
         private bool death = false;
         private string[] deathAnims = { "die", "die2", "die3" };
+
+        public static AnimationLib.FrameAnimationSet bulletPic = AnimationLib.getFrameAnimationSet("testBullet");
 
         public GuardSquadLeader(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -71,10 +76,11 @@ namespace PattyPetitGiant
             disable_movement_time = 0.0f;
             enemy_found = false;
             change_direction_time = 0.0f;
-            range_distance = 300.0f;
+            range_distance = 500.0f;
             change_direction_time_threshold = 5000.0f;
             enemy_type = EnemyType.Guard;
             death = false;
+            windup_timer = 0.0f;
 
             walk_down = AnimationLib.loadNewAnimationSet("squadLeaderDown");
             walk_right = AnimationLib.loadNewAnimationSet("squadLeaderRight");
@@ -128,6 +134,7 @@ namespace PattyPetitGiant
                         case SquadLeaderState.Patrol:
                             change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                            loop = true;
 
                             if (enemy_found == false)
                             {
@@ -182,32 +189,42 @@ namespace PattyPetitGiant
 
                             if (enemy_found)
                             {
-                                state = SquadLeaderState.Direct;
-
-                                switch (direction_facing)
+                                if (squad_mates[0] != null && squad_mates[1] != null)
                                 {
-                                    case GlobalGameConstants.Direction.Right:
-                                        follow_point_1.X = 128 + follow_point_1.X;
-                                        follow_point_2.X = 128 + follow_point_2.X;
-                                        break;
-                                    case GlobalGameConstants.Direction.Left:
-                                        follow_point_1.X = follow_point_1.X - 128;
-                                        follow_point_2.X = follow_point_2.X - 128;
-                                        break;
-                                    case GlobalGameConstants.Direction.Up:
-                                        follow_point_1.Y = follow_point_1.Y - 128;
-                                        follow_point_2.Y = follow_point_2.Y - 128;
-                                        break;
-                                    default:
-                                        follow_point_1.Y = follow_point_1.Y + 128;
-                                        follow_point_2.Y = follow_point_2.Y + 128;
-                                        break;
+                                    state = SquadLeaderState.Direct;
+
+                                    switch (direction_facing)
+                                    {
+                                        case GlobalGameConstants.Direction.Right:
+                                            follow_point_1.X = 128 + follow_point_1.X;
+                                            follow_point_2.X = 128 + follow_point_2.X;
+                                            break;
+                                        case GlobalGameConstants.Direction.Left:
+                                            follow_point_1.X = follow_point_1.X - 128;
+                                            follow_point_2.X = follow_point_2.X - 128;
+                                            break;
+                                        case GlobalGameConstants.Direction.Up:
+                                            follow_point_1.Y = follow_point_1.Y - 128;
+                                            follow_point_2.Y = follow_point_2.Y - 128;
+                                            break;
+                                        default:
+                                            follow_point_1.Y = follow_point_1.Y + 128;
+                                            follow_point_2.Y = follow_point_2.Y + 128;
+                                            break;
+                                    }
+
+                                    squad_mates[0].Enemy_Found = true;
+                                    squad_mates[1].Enemy_Found = true;
+
+                                    velocity = Vector2.Zero;
                                 }
-
-                                squad_mates[0].Enemy_Found = true;
-                                squad_mates[1].Enemy_Found = true;
-
-                                velocity = Vector2.Zero;
+                                else
+                                {
+                                    state = SquadLeaderState.WindUp;
+                                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                                    animation_time = 0.0f;
+                                    velocity = Vector2.Zero;
+                                }
                             }
                             break;
                         case SquadLeaderState.Direct:
@@ -230,23 +247,59 @@ namespace PattyPetitGiant
                             }
 
                             float distance_from_enemy = Vector2.Distance(position, entity_found.Position);
-                            /*if (distance_from_enemy > 96)
+                            break;
+                        case SquadLeaderState.WindUp:
+                            windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("windUp");
+
+                            if (windup_timer > 400)
                             {
                                 state = SquadLeaderState.Fight;
-                            }*/
+                                animation_time = 0.0f;
+                            }
                             break;
                         case SquadLeaderState.Fight:
                             //firing bullet
                             time_between_shots += currentTime.ElapsedGameTime.Milliseconds;
+                            reset_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
+                            loop = false;
 
                             if (bullet_number < max_number_bullets && time_between_shots > time_between_shots_threshold)
                             {
-                                bullets[bullet_number] = new Bullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY)); 
+                                Vector2 bullet_velocity;
+                                switch (direction_facing)
+                                {
+                                    case GlobalGameConstants.Direction.Right:
+                                        bullet_velocity = new Vector2(10, 0);
+                                        break;
+                                    case GlobalGameConstants.Direction.Left:
+                                        bullet_velocity = new Vector2(-10, 0);
+                                        break;
+                                    case GlobalGameConstants.Direction.Down:
+                                        bullet_velocity = new Vector2(0, 10);
+                                        break;
+                                    default:
+                                        bullet_velocity = new Vector2(0, -10);
+                                        break;
+                                }
+                                bullets[bullet_number] = new Bullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), bullet_velocity);
                                 bullet_number++;
                                 time_between_shots = 0.0f;
+                                animation_time = 0.0f;
+                            }
+
+                            if (reset_timer > 1000)
+                            {
+                                reset_timer = 0.0f;
+                                state = SquadLeaderState.Patrol;
+                                time_between_shots = 0.0f;
+                                loop = true;
+                                enemy_found = false;
                             }
                             break;
                         case SquadLeaderState.Dying:
+                            velocity = Vector2.Zero;
                             break;
                         default:
                             break;
@@ -299,6 +352,15 @@ namespace PattyPetitGiant
             sb.Draw(Game1.whitePixel, follow_point_1, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2(16, 16), SpriteEffects.None, 1.0f);
             sb.Draw(Game1.whitePixel, follow_point_2, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(16, 16), SpriteEffects.None, 1.0f);
              */
+
+            for (int i = 0; i < bullet_number; i++)
+            {
+                if (bullets[i].active)
+                {
+                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].Position, Color.White, 0.0f, new Vector2(2.0f));
+                    //bulletPic.drawAnimationFrame(0.0f, sb, bullets[i].Position);
+                }
+            }
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
@@ -372,7 +434,7 @@ namespace PattyPetitGiant
 
         public void populateSquadMates()
         {
-            GuardSquadSoldiers en = new GuardSquadSoldiers(parentWorld, position.X, position.Y);
+            /*GuardSquadSoldiers en = new GuardSquadSoldiers(parentWorld, position.X, position.Y);
             parentWorld.EntityList.Add(en);
             squad_mates[0] = en;
             squad_mates[0].Leader = this;
@@ -380,7 +442,7 @@ namespace PattyPetitGiant
             en = new GuardSquadSoldiers(parentWorld, position.X, position.Y);
             parentWorld.EntityList.Add(en);
             squad_mates[1] = en;
-            squad_mates[1].Leader = this;
+            squad_mates[1].Leader = this;*/
         }
 
         public override void spinerender(SkeletonRenderer renderer)
@@ -412,22 +474,23 @@ namespace PattyPetitGiant
             private Vector2 dimensions;
             private Vector2 nextStep_temp;
 
+            public Vector2 Position { get { return position; } }
+
             private const float max_time_alive = 2000.0f;
 
             private float knockback_magnitude;
             private float time_alive;
             private int bullet_damage;
 
-            public Bullet(Vector2 position)
+            public Bullet(Vector2 position, Vector2 bullet_velocity)
             {
                 this.position = position;
                 nextStep_temp = Vector2.Zero;
-                velocity = Vector2.Zero;
-                position = Vector2.Zero;
+                velocity = bullet_velocity;
                 dimensions = new Vector2(10, 10);
-                knockback_magnitude = 3.0f;
+                knockback_magnitude = 5.0f;
                 time_alive = 0.0f;
-                bullet_damage = 3;
+                bullet_damage = 15;
                 active = true;
             }
 
@@ -452,6 +515,7 @@ namespace PattyPetitGiant
                     {
                         Vector2 direction = parentWorld.EntityList[i].Position - position;
                         parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, bullet_damage, parent);
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
                         active = false;
                         return;
                     }

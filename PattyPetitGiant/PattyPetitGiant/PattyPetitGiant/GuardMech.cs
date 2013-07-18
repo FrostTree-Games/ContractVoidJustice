@@ -79,6 +79,7 @@ namespace PattyPetitGiant
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
             current_skeleton.Skeleton.FlipX = false;
             animation_time = 0.0f;
+            range_distance = 600.0f;
 
             tankAnim = AnimationLib.getFrameAnimationSet("tank");
         }
@@ -172,7 +173,9 @@ namespace PattyPetitGiant
 
                         velocity = Vector2.Zero;
 
-                        if (Math.Abs(distance) > 600 || entity_found.Remove_From_List == true)
+                        bool enemy_in_sight = parentWorld.Map.playerInSight(angle, distance, this, entity_found);
+
+                        if (Math.Abs(distance) > 600 || entity_found.Remove_From_List == true || enemy_in_sight)
                         {
                             mech_state = MechState.Moving;
                             windup_timer = 0.0f;
@@ -605,6 +608,8 @@ namespace PattyPetitGiant
             private float explosion_timer;
             private const float max_explosion_timer = 1000.0f;
             public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X / 2, position.Y + dimensions.Y / 2); } }
+            private Vector2 nextStep_temp;
+            private bool on_wall;
 
             public Grenades(Vector2 parent_position, float angle)
             {
@@ -616,6 +621,8 @@ namespace PattyPetitGiant
                 active = false;
                 active_timer = 0.0f;
                 explosion_timer = 0.0f;
+                nextStep_temp = Vector2.Zero;
+                on_wall = false;
             }
 
             public void update(LevelState parentWorld, GameTime currentTime, Entity parent)
@@ -635,6 +642,46 @@ namespace PattyPetitGiant
                         }
                         else
                         {
+                            nextStep_temp = new Vector2(position.X - (dimensions.X / 2) + velocity.X, (position.Y + velocity.X));
+
+                            on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                            int check_corners = 0;
+                            while (check_corners != 4)
+                            {
+                                if (on_wall == false)
+                                {
+                                    if (check_corners == 0)
+                                    {
+                                        nextStep_temp = new Vector2(position.X + (dimensions.X / 2) + velocity.X, position.Y + velocity.Y);
+                                    }
+                                    else if (check_corners == 1)
+                                    {
+                                        nextStep_temp = new Vector2(position.X + velocity.X, position.Y - (dimensions.Y / 2) + velocity.Y);
+                                    }
+                                    else if (check_corners == 2)
+                                    {
+                                        nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                                    }
+                                    else
+                                    {
+                                        position += velocity;
+                                    }
+                                    on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                                }
+                                else
+                                {
+                                    state = GrenadeState.Explosion;
+                                    active_timer = 0.0f;
+                                    dimensions = new Vector2(96, 96);
+                                    position = position - (dimensions / 2);
+                                    break;
+                                }
+                                check_corners++;
+                            }
+                        }
+
+                        if (on_wall == false)
+                        {
                             foreach (Entity en in parentWorld.EntityList)
                             {
                                 if (en == parent)
@@ -648,17 +695,15 @@ namespace PattyPetitGiant
                                     break;
                                 }
                             }
-                            position += velocity;
                         }
+                        position += velocity;
                         break;
                         case GrenadeState.Explosion:
                         explosion_timer += currentTime.ElapsedGameTime.Milliseconds;
 
                         foreach (Entity en in parentWorld.EntityList)
                         {
-                            if (en == parent)
-                                continue;
-                            else if (grenadeHitTest(en))
+                            if (grenadeHitTest(en))
                             {
                                 Vector2 direction = en.CenterPoint - CenterPoint;
                                 en.knockBack(direction, 3.0f, 10);

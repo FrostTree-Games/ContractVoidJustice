@@ -31,3 +31,6 @@ shopUp
 alienChaserDown
 alienChaserRight
 alienChaserUp
+hookUp
+hookDown
+hookRight
