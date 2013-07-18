@@ -32,7 +32,7 @@ namespace PattyPetitGiant
 
             public PatrolGuard parent;
 
-            private const float bulletSpeed = 0.6f;
+            private const float bulletSpeed = 0.9f;
 
             public Vector2 center { get { return position + (hitbox / 2.0f); } }
 
@@ -96,7 +96,7 @@ namespace PattyPetitGiant
 
                         if (parentWorld.EntityList[it] is Player || parentWorld.EntityList[it] is Enemy || parentWorld.EntityList[it] is ShopKeeper)
                         {
-                            if (hitTestBullet(parentWorld.EntityList[it]))
+                            if (hitTestBullet(parentWorld.EntityList[it]) && parentWorld.EntityList[it].Enemy_Type != EnemyType.Guard)
                             {
                                 parentWorld.EntityList[it].knockBack(Vector2.Normalize(parentWorld.EntityList[it].CenterPoint - center), 2.0f, 5);
                                 active = false;
@@ -125,7 +125,7 @@ namespace PattyPetitGiant
         private const float moveStepWaitTime = 500f;
 
         private const float patrolMoveSpeed = 0.125f;
-        private const float patrolChaseSpeed = 0.095f;
+        private const float patrolChaseSpeed = 0.254f;
 
         private float chaseWaitTime;
         private const float chaseWaitDuration = 400f;
@@ -143,11 +143,20 @@ namespace PattyPetitGiant
 
         private int health;
 
+        private GunBullet sightBox;
+
+        private float retreatTimer;
+        private const float retreatMaxTime = 3000f;
+
+        private float deadCushySoundTimer;
+
         public PatrolGuard(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
             this.position = position;
             this.dimensions = GlobalGameConstants.TileSize;
+
+            deadCushySoundTimer = 0;
 
             bullets = new GunBullet[bulletSupply];
             for (int i = 0; i < bulletSupply; i++ ) { bullets[i].active = false; }
@@ -173,11 +182,13 @@ namespace PattyPetitGiant
             chunkCenter.X = (((int)((position.X / (GlobalGameConstants.TileSize.X)) / GlobalGameConstants.TilesPerRoomWide)) * GlobalGameConstants.TilesPerRoomWide * GlobalGameConstants.TileSize.X) + ((GlobalGameConstants.TilesPerRoomWide / 2) * GlobalGameConstants.TileSize.X);
             chunkCenter.Y = (((int)((position.Y / (GlobalGameConstants.TileSize.Y)) / GlobalGameConstants.TilesPerRoomHigh)) * GlobalGameConstants.TilesPerRoomHigh * GlobalGameConstants.TileSize.Y) + ((GlobalGameConstants.TilesPerRoomHigh / 2) * GlobalGameConstants.TileSize.Y);
 
+            retreatTimer = 0;
         }
 
         public override void update(GameTime currentTime)
         {
             animation_time += currentTime.ElapsedGameTime.Milliseconds;
+            deadCushySoundTimer += currentTime.ElapsedGameTime.Milliseconds;
 
             if (guardState == PatrolGuardState.InvalidState)
             {
@@ -227,6 +238,32 @@ namespace PattyPetitGiant
 
                 if (target == null)
                 {
+                    sightBox = new GunBullet();
+                    sightBox.hitbox = new Vector2(100, 100);
+                    switch (direction_facing)
+                    {
+                        case GlobalGameConstants.Direction.Down:
+                            sightBox.position.X = CenterPoint.X - 50;
+                            sightBox.position.Y = position.Y + dimensions.Y;
+                            sightBox.hitbox.Y = 150;
+                            break;
+                        case GlobalGameConstants.Direction.Up:
+                            sightBox.position.X = CenterPoint.X - 50;
+                            sightBox.position.Y = position.Y - 120;
+                            sightBox.hitbox.Y = 150;
+                            break;
+                        case GlobalGameConstants.Direction.Right:
+                            sightBox.position.X = position.X + dimensions.X;
+                            sightBox.position.Y = CenterPoint.Y - 50;
+                            sightBox.hitbox.X = 120;
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            sightBox.position.X = position.X - 120;
+                            sightBox.position.Y = CenterPoint.Y - 50;
+                            sightBox.hitbox.X = 120;
+                            break;
+                    }
+
                     for (int it = 0; it < parentWorld.EntityList.Count; it++)
                     {
                         if (parentWorld.EntityList[it].Enemy_Type == Entity.EnemyType.Guard)
@@ -234,34 +271,20 @@ namespace PattyPetitGiant
                             continue;
                         }
 
-                        if (Vector2.Distance(parentWorld.EntityList[it].CenterPoint, chunkCenter) > 500)
+                        if (Vector2.Distance(parentWorld.EntityList[it].CenterPoint, chunkCenter) > 1000)
                         {
                             continue;
                         }
 
-                        if (Vector2.Distance(parentWorld.EntityList[it].CenterPoint, CenterPoint) > GlobalGameConstants.TileSize.X * 6)
+                        if (Vector2.Distance(parentWorld.EntityList[it].CenterPoint, CenterPoint) > GlobalGameConstants.TileSize.X * 10)
                         {
                             continue;
                         }
 
-                        // very cruel angle checking at the moment. May refine later
-                        double theta = Math.Atan2(CenterPoint.Y - parentWorld.EntityList[it].Position.Y, CenterPoint.X - parentWorld.EntityList[it].Position.X);
-                        switch (direction_facing)
+                        if (!sightBox.hitTestBullet(parentWorld.EntityList[it]))
                         {
-                            case GlobalGameConstants.Direction.Right:
-                                if ( !(theta < Math.PI / 4 && theta > (Math.PI / -4)) ) { continue; }
-                                break;
-                            case GlobalGameConstants.Direction.Up:
-                                if (!(theta < 3 * Math.PI / 4 && theta > Math.PI / 4)) { continue; }
-                                break;
-                            case GlobalGameConstants.Direction.Down:
-                                if (!(theta > -3 * Math.PI / 4 && theta < Math.PI / -4)) { continue; }
-                                break;
-                            case GlobalGameConstants.Direction.Left:
-                                if (!(theta > 3 * Math.PI / 4 || theta < 3 * Math.PI / -4)) { continue; }
-                                break;
+                            continue;
                         }
-
 
                         if (parentWorld.EntityList[it].Enemy_Type != enemy_type || parentWorld.EntityList[it].Enemy_Type != EnemyType.NoType)
                         {
@@ -282,19 +305,22 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-                    throw new Exception("Garbage target; clean before you change states Dan");
+                    target = null;
                 }
 
-                if (Vector2.Distance(CenterPoint, chunkCenter) > 500)
+                if (Vector2.Distance(CenterPoint, chunkCenter) > 1000)
                 {
                     guardState = PatrolGuardState.RetreatToCenter;
                 }
             }
             else if (guardState == PatrolGuardState.RetreatToCenter)
             {
-                if (Vector2.Distance(CenterPoint, chunkCenter) < GlobalGameConstants.TileSize.X * 3)
+                retreatTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (Vector2.Distance(CenterPoint, chunkCenter) < 350 || retreatTimer > retreatMaxTime)
                 {
                     guardState = PatrolGuardState.MoveWait;
+                    retreatTimer = 0;
                     return;
                 }
 
@@ -324,7 +350,7 @@ namespace PattyPetitGiant
             else if (guardState == PatrolGuardState.Chase)
             {
                 //this employs short-circut evaluation for safe code, which I'm not sure if is a good idea
-                if (target == null || target.Remove_From_List == true)
+                if (target == null || target.Remove_From_List == true || target.Death == true)
                 {
                     guardState = PatrolGuardState.MoveWait;
 
@@ -333,9 +359,9 @@ namespace PattyPetitGiant
                     return;
                 }
 
-                if (Vector2.Distance(target.CenterPoint, chunkCenter) > 500)
+                if (Vector2.Distance(target.CenterPoint, chunkCenter) > 1000)
                 {
-                    guardState = PatrolGuardState.MoveWait;
+                    guardState = PatrolGuardState.RetreatToCenter;
                     target = null;
                     return;
                 }
@@ -369,45 +395,81 @@ namespace PattyPetitGiant
                 float dist = Vector2.Distance(CenterPoint, target.CenterPoint);
                 if (dist < GlobalGameConstants.TileSize.X * 3)
                 {
-                    chaseWaitTime -= currentTime.ElapsedGameTime.Milliseconds;
+                    //chaseWaitTime -= currentTime.ElapsedGameTime.Milliseconds;
 
                     velocity = -patrolChaseSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+
+                    if (direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+                    {
+                        if (Math.Abs(CenterPoint.X - target.CenterPoint.X) > 10.0f)
+                        {
+                            if (CenterPoint.X < target.CenterPoint.X)
+                            {
+                                velocity.X += patrolChaseSpeed / 8;
+                            }
+                            else if (CenterPoint.X > target.CenterPoint.X)
+                            {
+                                velocity.X -= patrolChaseSpeed / 8;
+                            }
+                        }
+                    }
+
+                    if (direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Right)
+                    {
+                        if (Math.Abs(CenterPoint.Y - target.CenterPoint.Y) > 10.0f)
+                        {
+                            if (CenterPoint.Y < target.CenterPoint.Y)
+                            {
+                                velocity.Y += patrolChaseSpeed / 8;
+                            }
+                            else if (CenterPoint.Y > target.CenterPoint.Y)
+                            {
+                                velocity.Y -= patrolChaseSpeed / 8;
+                            }
+                        }
+                    }
                 }
                 else if (dist > GlobalGameConstants.TileSize.X * 4)
                 {
-                    chaseWaitTime -= currentTime.ElapsedGameTime.Milliseconds;
+                    //chaseWaitTime -= currentTime.ElapsedGameTime.Milliseconds;
 
                     velocity = patrolChaseSpeed * new Vector2((float)Math.Cos(theta), (float)Math.Sin(theta));
+
+                    if (direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
+                    {
+                        if (Math.Abs(CenterPoint.X - target.CenterPoint.X) > 10.0f)
+                        {
+                            if (CenterPoint.X < target.CenterPoint.X)
+                            {
+                                velocity.X += patrolChaseSpeed / 8;
+                            }
+                            else if (CenterPoint.X > target.CenterPoint.X)
+                            {
+                                velocity.X -= patrolChaseSpeed / 8;
+                            }
+                        }
+                    }
+
+                    if (direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Right)
+                    {
+                        if (Math.Abs(CenterPoint.Y - target.CenterPoint.Y) > 10.0f)
+                        {
+                            if (CenterPoint.Y < target.CenterPoint.Y)
+                            {
+                                velocity.Y += patrolChaseSpeed / 8;
+                            }
+                            else if (CenterPoint.Y > target.CenterPoint.Y)
+                            {
+                                velocity.Y -= patrolChaseSpeed / 8;
+                            }
+                        }
+                    }
                 }
                 else
                 {
                     chaseWaitTime += currentTime.ElapsedGameTime.Milliseconds;
 
                     velocity = Vector2.Zero;
-
-                    if (direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
-                    {
-                        if (CenterPoint.X < target.CenterPoint.X)
-                        {
-                            velocity.X += patrolChaseSpeed;
-                        }
-                        else if (CenterPoint.X > target.CenterPoint.X)
-                        {
-                            velocity.X -= patrolChaseSpeed;
-                        }
-                    }
-
-                    if (direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Right)
-                    {
-                        if (CenterPoint.Y < target.CenterPoint.Y)
-                        {
-                            velocity.Y += patrolChaseSpeed;
-                        }
-                        else if (CenterPoint.Y > target.CenterPoint.Y)
-                        {
-                            velocity.Y -= patrolChaseSpeed;
-                        }
-                    }
 
                     if (chaseWaitTime > chaseWaitDuration)
                     {
@@ -437,7 +499,8 @@ namespace PattyPetitGiant
                     {
                         if (!(bullets[i].active))
                         {
-                            bullets[i] = new GunBullet(CenterPoint - (bullets[i].hitbox / 2), direction_facing, this);
+                            Vector2 muzzleLocation = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("muzzle").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("muzzle").WorldY);
+                            bullets[i] = new GunBullet(muzzleLocation, direction_facing, this);
                             break;
                         }
                     }
@@ -504,6 +567,8 @@ namespace PattyPetitGiant
         {
             for (int i = 0; i < bulletSupply; i++)
             {
+                //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), sightBox.position, Color.Wheat, 0.0f, sightBox.hitbox / 2);
+
                 if (bullets[i].active == false)
                 {
                     continue;
@@ -545,7 +610,12 @@ namespace PattyPetitGiant
                 parentWorld.Particles.pushBloodParticle(CenterPoint);
                 parentWorld.Particles.pushBloodParticle(CenterPoint);
 
-                AudioLib.playSoundEffect("fleshyKnockBack");
+                if (deadCushySoundTimer > 500f)
+                {
+                    AudioLib.playSoundEffect("fleshyKnockBack");
+
+                    deadCushySoundTimer = 0;
+                }
 
                 return;
             }

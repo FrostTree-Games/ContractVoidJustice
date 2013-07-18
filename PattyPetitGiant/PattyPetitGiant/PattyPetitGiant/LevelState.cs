@@ -176,11 +176,11 @@ namespace PattyPetitGiant
                 }
                 else if (faction == Entity.EnemyType.Guard)
                 {
-                    if (randomSpawnValue < 0.25)
+                    if (randomSpawnValue < 0.1)
                     {
                         entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.5)
+                    else if (randomSpawnValue < 0.2)
                     {
                         entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }

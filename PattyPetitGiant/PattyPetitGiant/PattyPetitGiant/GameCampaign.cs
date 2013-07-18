@@ -81,7 +81,7 @@ namespace PattyPetitGiant
             PlayerFloorHeight = 1;
 
             Player_Item_1 = GlobalGameConstants.itemType.HermesSandals;
-            Player_Item_2 = GlobalGameConstants.itemType.WaveMotionGun;
+            Player_Item_2 = GlobalGameConstants.itemType.Sword;
 
             allegiance = 0.5f;
 
