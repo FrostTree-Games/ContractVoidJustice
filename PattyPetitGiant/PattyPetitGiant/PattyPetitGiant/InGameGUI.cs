@@ -28,6 +28,11 @@ namespace PattyPetitGiant
 
         private BoxWindow testWin;
 
+        private string deathMessage = "FISSION MAILED";
+
+        private float blackFadeOverlay;
+        public float BlackFadeOverlay { get { return blackFadeOverlay; } set { blackFadeOverlay = value; } }
+
         /// <summary>
         /// Data representing a simple text box.
         /// </summary>
@@ -112,6 +117,8 @@ namespace PattyPetitGiant
             {
                 windowIsActive[i] = false;
             }
+
+            blackFadeOverlay = 0.0f;
 
             keyFoundPic = AnimationLib.getFrameAnimationSet("keyPic");
             keyNotFoundPic = AnimationLib.getFrameAnimationSet("keyEmptyPic");
@@ -318,7 +325,7 @@ namespace PattyPetitGiant
                 }
             }
 
-            if (parent.RenderNodeMap)
+            if (parent.RenderNodeMap && !parent.Player1Dead)
             {
                 Vector2 renderMapPosition = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - (parent.NodeMap.GetLength(0) * 64 / 2), GlobalGameConstants.GameResolutionHeight / 4);
                 int renderFocusX = (int)((parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide);
@@ -364,6 +371,13 @@ namespace PattyPetitGiant
                         }
                     }
                 }
+            }
+
+            sb.Draw(Game1.whitePixel, Vector2.Zero, null, Color.Lerp(Color.Transparent, Color.Black, blackFadeOverlay), 0.0f, Vector2.Zero, new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), SpriteEffects.None, 0.5f);
+
+            if (parent.Player1Dead)
+            {
+                sb.DrawString(Game1.testComputerFont, deathMessage, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - Game1.testComputerFont.MeasureString(deathMessage)) / 2, Color.LightGray);
             }
         }
     }

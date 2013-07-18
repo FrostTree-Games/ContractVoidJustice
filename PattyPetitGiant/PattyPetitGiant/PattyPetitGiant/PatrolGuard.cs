@@ -67,6 +67,11 @@ namespace PattyPetitGiant
 
             public bool hitTestBullet(Entity other)
             {
+                if (other.Death)
+                {
+                    return false;
+                }
+
                 if ((position.X - (hitbox.X / 2)) > other.Position.X + other.Dimensions.X || (position.X + (hitbox.X / 2)) < other.Position.X || (position.Y - (hitbox.Y / 2)) > other.Position.Y + other.Dimensions.Y || (position.Y + (hitbox.Y / 2)) < other.Position.Y)
                 {
                     return false;
@@ -266,7 +271,7 @@ namespace PattyPetitGiant
 
                     for (int it = 0; it < parentWorld.EntityList.Count; it++)
                     {
-                        if (parentWorld.EntityList[it].Enemy_Type == Entity.EnemyType.Guard)
+                        if (parentWorld.EntityList[it].Enemy_Type == Entity.EnemyType.Guard || parentWorld.EntityList[it] is Coin || parentWorld.EntityList[it] is Pickup || parentWorld.EntityList[it] is BetaEndLevelFag)
                         {
                             continue;
                         }

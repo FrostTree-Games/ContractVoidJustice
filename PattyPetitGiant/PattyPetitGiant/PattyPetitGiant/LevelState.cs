@@ -53,6 +53,9 @@ namespace PattyPetitGiant
         private bool endFlagReached;
         public bool EndFlagReached { get { return endFlagReached; } set { endFlagReached = value; } }
 
+        private bool player1Dead;
+        public bool Player1Dead { get { return player1Dead; } set { player1Dead = value; } }
+
         private bool end_flag_placed;
 
         private int currentSeed;
@@ -67,6 +70,9 @@ namespace PattyPetitGiant
         private Texture2D screenResult = null;
         private Texture2D halfSizeTexture = null;
         private Texture2D quarterSizeTexture = null;
+
+        private float fadeOutTime;
+        private const float fadeOutDuration = 5000f;
 
         public LevelState()
         {
@@ -110,6 +116,9 @@ namespace PattyPetitGiant
                 }
             }
 
+            fadeOutTime = 0.0f;
+
+            player1Dead = false;
             end_flag_placed = false;
             state = LoadingState.LevelRunning;
         }
@@ -392,10 +401,21 @@ namespace PattyPetitGiant
 
             gui.update(currentTime);
 
+            if (player1Dead)
+            {
+                fadeOutTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                gui.BlackFadeOverlay = fadeOutTime / fadeOutDuration;
+
+                if (fadeOutTime >= fadeOutDuration)
+                {
+                    GameCampaign.ResetPlayerValues();
+                    isComplete = true;
+                }
+            }
+
             if (endFlagReached)
             {
-                //maybe have some nicer animation here later
-
                 isComplete = true;
             }
         }
@@ -496,7 +516,7 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            if (endFlagReached)
+            if (endFlagReached || player1Dead)
             {
                 return ScreenStateType.LevelSelectState;
             }

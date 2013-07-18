@@ -134,6 +134,41 @@ namespace PattyPetitGiant
         {
             double delta = currentTime.ElapsedGameTime.Milliseconds;
 
+            if (GameCampaign.Player_Health <= 0.0f)
+            {
+                if (!parentWorld.Player1Dead)
+                {
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(CenterPoint);
+
+                    animation_time = 0;
+                    switch (Game1.rand.Next() % 3)
+                    {
+                        case 0:
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("die");
+                            break;
+                        case 1:
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("die2");
+                            break;
+                        default:
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("die3");
+                            break;
+                    }
+                }
+
+                animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+                current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, false);
+
+                death = true;
+                parentWorld.Player1Dead = true;
+                velocity = Vector2.Zero;
+                return;
+            }
+
             //update the world map if you've visited a new room
             int currentNodeX = (int)((CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide);
             int currentNodeY = (int)((CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh);
