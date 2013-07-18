@@ -17,6 +17,7 @@ namespace PattyPetitGiant
             OptionsMenu = 2,
             GameSetupMenu = 3,
             LevelSelectState = 4,
+            HighScoresState = 5,
         }
 
         protected bool pause = false;
@@ -54,6 +55,12 @@ namespace PattyPetitGiant
                     return new LevelState();
                 case ScreenStateType.LevelSelectState:
                     return new LevelSelectState();
+                case ScreenStateType.TitleScreen:
+                    //return new TitleScreen();
+                case ScreenStateType.HighScoresState:
+                    return new HighScoresState();
+                case ScreenStateType.OptionsMenu:
+                    return null;
                 default:
                     return null;
             }

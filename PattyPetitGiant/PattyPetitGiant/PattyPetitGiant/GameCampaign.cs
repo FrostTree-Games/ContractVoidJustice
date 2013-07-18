@@ -75,6 +75,9 @@ namespace PattyPetitGiant
         public static double CurrentPrisonerRate { get { return currentPrisonerRate; } set { currentPrisonerRate = value; } }
         public static double CurrentAlienRate { get { return currentAlienRate; } set { currentAlienRate = value; } }
 
+        private static string playerName = null;
+        public static string PlayerName { get { return playerName; } }
+
         public static void ResetPlayerValues()
         {
             PlayerLevelProgress = 0;
@@ -84,6 +87,8 @@ namespace PattyPetitGiant
             Player_Item_2 = GlobalGameConstants.itemType.Sword;
 
             allegiance = 0.5f;
+
+            playerName = "Jensen";
 
             player_health = 100;
             player_ammunition = 100;

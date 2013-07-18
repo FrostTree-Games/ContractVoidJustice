@@ -120,6 +120,7 @@
     <Compile Include="GuardSquadSoldiers.cs" />
     <Compile Include="Gun.cs" />
     <Compile Include="HermesSandalds.cs" />
+    <Compile Include="HighScoresState.cs" />
     <Compile Include="IdleChaseEnemy.cs" />
     <Compile Include="IdleSearch.cs" />
     <Compile Include="InGameGUI.cs" />
