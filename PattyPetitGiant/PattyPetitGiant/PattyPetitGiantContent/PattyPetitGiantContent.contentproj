@@ -585,20 +585,64 @@
       <Name>altH</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\endLevel1.ftc">
-      <Name>endLevel1</Name>
+    <None Include="chunk\crossRoads.ftc">
+      <Name>crossRoads</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\endLevel2.ftc">
-      <Name>endLevel2</Name>
+    <None Include="chunk\endLevelA.ftc">
+      <Name>endLevelA</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\endLevel3.ftc">
-      <Name>endLevel3</Name>
+    <None Include="chunk\endLevelB.ftc">
+      <Name>endLevelB</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\endLevel4.ftc">
-      <Name>endLevel4</Name>
+    <None Include="chunk\endLevelC.ftc">
+      <Name>endLevelC</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelD.ftc">
+      <Name>endLevelD</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelE.ftc">
+      <Name>endLevelE</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelF.ftc">
+      <Name>endLevelF</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelG.ftc">
+      <Name>endLevelG</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelH.ftc">
+      <Name>endLevelH</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelI.ftc">
+      <Name>endLevelI</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelK.ftc">
+      <Name>endLevelK</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelL.ftc">
+      <Name>endLevelL</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelN.ftc">
+      <Name>endLevelN</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelO.ftc">
+      <Name>endLevelO</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\endLevelM.ftc">
+      <Name>endLevelM</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\Isaac0A.ftc">
@@ -745,8 +789,8 @@
       <Name>crossroads9</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\endLevel1.ftc">
-      <Name>endLevel1</Name>
+    <None Include="chunk\endLevelJ.ftc">
+      <Name>endLevelJ</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\keyRoomM.ftc">
@@ -909,20 +953,72 @@
       <Name>startingZoneG</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\testShop.ftc">
-      <Name>testShop</Name>
+    <None Include="chunk\startNode.ftc">
+      <Name>startNode</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\testShop2.ftc">
-      <Name>testShop2</Name>
+    <None Include="chunk\testLevelG.ftc">
+      <Name>testLevelG</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\testShop3.ftc">
-      <Name>testShop3</Name>
+    <None Include="chunk\testShopA.ftc">
+      <Name>testShopA</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="chunk\testShop4.ftc">
-      <Name>testShop4</Name>
+    <None Include="chunk\testShopB.ftc">
+      <Name>testShopB</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopC.ftc">
+      <Name>testShopC</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopD.ftc">
+      <Name>testShopD</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopE.ftc">
+      <Name>testShopE</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopF.ftc">
+      <Name>testShopF</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopG.ftc">
+      <Name>testShopG</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopH.ftc">
+      <Name>testShopH</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopI.ftc">
+      <Name>testShopI</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopJ.ftc">
+      <Name>testShopJ</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopK.ftc">
+      <Name>testShopK</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopL.ftc">
+      <Name>testShopL</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopN.ftc">
+      <Name>testShopN</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopO.ftc">
+      <Name>testShopO</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\testShopM.ftc">
+      <Name>testShopM</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\tunnel_I.ftc">

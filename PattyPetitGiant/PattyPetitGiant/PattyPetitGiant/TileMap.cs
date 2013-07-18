@@ -149,6 +149,11 @@ namespace PattyPetitGiant
                     {
                         ChunkManager.Chunk c = ChunkLib.getRandomChunkByValues(room[i, j].attributes.ToArray(), rand);
 
+                        if (c == null)
+                        {
+                            throw new Exception("NO CHUNK FOR VALUES");
+                        }
+
                         if (c != null)
                         {
                             foreach (ChunkManager.Chunk.ChunkAttribute attr in c.Attributes)
