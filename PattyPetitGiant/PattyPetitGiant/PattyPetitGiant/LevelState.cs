@@ -74,6 +74,9 @@ namespace PattyPetitGiant
         private float fadeOutTime;
         private const float fadeOutDuration = 5000f;
 
+        private static float elapsedLevelTime;
+        public static float ElapsedLevelTime { get { return elapsedLevelTime; } }
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -117,6 +120,8 @@ namespace PattyPetitGiant
             }
 
             fadeOutTime = 0.0f;
+
+            elapsedLevelTime = 0.0f;
 
             player1Dead = false;
             end_flag_placed = false;
@@ -382,6 +387,8 @@ namespace PattyPetitGiant
                 entityList[i].update(currentTime);
             }
 
+            elapsedLevelTime += currentTime.ElapsedGameTime.Milliseconds;
+
             particleSet.update(currentTime);
 
 #if WINDOWS
@@ -516,7 +523,11 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            if (endFlagReached || player1Dead)
+            if (endFlagReached)
+            {
+                return ScreenStateType.LevelReviewState;
+            }
+            else if (player1Dead)
             {
                 return ScreenStateType.LevelSelectState;
             }
