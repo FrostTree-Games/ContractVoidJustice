@@ -126,6 +126,7 @@
     <Compile Include="IdleChaseEnemy.cs" />
     <Compile Include="IdleSearch.cs" />
     <Compile Include="InGameGUI.cs" />
+    <Compile Include="InputDevice2.cs" />
     <Compile Include="InputDeviceManager.cs" />
     <Compile Include="KeySystem.cs" />
     <Compile Include="LazerGun.cs" />
