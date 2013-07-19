@@ -49,6 +49,9 @@ namespace PattyPetitGiant
         public static float aspectRatio;
         private ScreenState currentGameScreen = null;
 
+        public static VideoPlayer videoPlayer = null;
+        public static Video testVideo = null;
+
         private InputDeviceManager input_device = null;
 
 #if PROFILE
@@ -114,6 +117,9 @@ namespace PattyPetitGiant
 
             font = Content.Load<SpriteFont>("testFont");
             testComputerFont = Content.Load<SpriteFont>("TestComputerFont");
+
+            testVideo = Content.Load<Video>("fmv/WilsonTestVideo");
+            videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
 
