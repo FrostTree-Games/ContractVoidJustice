@@ -233,9 +233,9 @@ namespace PattyPetitGiant
             rx.Height += 6;
             drawBox(sb, rx, Color.Orange, 2);
 
-            sb.DrawString(Game1.testComputerFont, "\nPrisoner Rates: " + levelMap[selectedLevelX, selectedLevelY].prisonerRates, testDetailStuff, Color.Orange);
-            sb.DrawString(Game1.testComputerFont, "\n\nAlien Rates: " + levelMap[selectedLevelX, selectedLevelY].alienRates, testDetailStuff, Color.Red);
-            sb.DrawString(Game1.testComputerFont, "\n\n\nGuard Rates: " + levelMap[selectedLevelX, selectedLevelY].guardRates, testDetailStuff, Color.LightBlue);
+            sb.DrawString(Game1.testComputerFont, "\nPrisoner Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Orange);
+            sb.DrawString(Game1.testComputerFont, "\n\nAlien Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Red);
+            sb.DrawString(Game1.testComputerFont, "\n\n\nGuard Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].guardRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.LightBlue);
 
             sb.Draw(Game1.whitePixel, testDetailStuff - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(52, 16), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, testDetailStuff, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
