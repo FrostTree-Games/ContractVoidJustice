@@ -592,8 +592,6 @@ namespace PattyPetitGiant
 
                 bulletAnim.drawAnimationFrame(0, sb, bullets[i].position - (bulletAnim.FrameDimensions / 2), new Vector2(1), 0.5f, (float)Math.Atan2(bullets[i].velocity.Y, bullets[i].velocity.X), Vector2.Zero, Color.White);
             }
-
-            //sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.6f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
