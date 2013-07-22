@@ -32,7 +32,7 @@ namespace PattyPetitGiant
             /// <summary>
             /// Fourth ingame player.
             /// </summary>
-            Player_4 = 4,
+            Player_4 = 3,
         }
 
         /// <summary>
@@ -90,7 +90,12 @@ namespace PattyPetitGiant
         private static KeyboardState keyboardController = new KeyboardState();
 
         private static KeyboardControllerConfiguration keyConfig = null;
+        /// <summary>
+        /// The current key configuration for the Keyboard.
+        /// </summary>
         public static KeyboardControllerConfiguration KeyConfig { get { return keyConfig; } set { keyConfig = value; } }
+
+        private static PlayerPad[] bindings = null;
 
         /// <summary>
         /// Initalizes input device variables.
@@ -106,6 +111,12 @@ namespace PattyPetitGiant
             {
                 keyConfig = KeyboardControllerConfiguration.DefaultKeyConfig();
             }
+
+            if (bindings == null)
+            {
+                bindings = new PlayerPad[4];
+                for (int i = 0; i < 4; i++) { bindings[i] = PlayerPad.NoPad; }
+            }
         }
 
         private static PlayerPad GamePadIndexToPlayerPad(PlayerIndex index)
@@ -113,7 +124,13 @@ namespace PattyPetitGiant
             return (PlayerPad)((int)index);
         }
 
-        public static PlayerPad isAnyControllerButtonDown(PlayerButton button)
+        /// <summary>
+        /// Polls the hardware for any input press. Useful for getting the player's controller index.
+        /// </summary>
+        /// <param name="button">The button you would like to poll.</param>
+        /// <returns>The PlayerPad corresponding with a connected input device that pressed the specified button. Will return PlayerPad.NoPad if no devices are pressing the specified button.</returns>
+        /// <remarks>If two input devices are pressing the same button simeltaneously, this method will return the device with the higher index. The keyboard's index is considered to be in between 1 and 2.</remarks>
+        public static PlayerPad IsAnyControllerButtonDown(PlayerButton button)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -176,10 +193,134 @@ namespace PattyPetitGiant
         }
 
         /// <summary>
+        /// Assigns a specified player to a certain pad.
+        /// </summary>
+        /// <param name="player">The player to assign to a device.</param>
+        /// <param name="pad">The input device to be assigned a player.</param>
+        /// <remarks>Allows the programmer to check input on a device without knowing what it's type/index is.</remarks>
+        public static void LockController(PPG_Player player, PlayerPad pad)
+        {
+            bindings[(int)player] = pad;
+        }
+
+        /// <summary>
+        /// If a player is assigned to a certain input device, its assignment is removed. Otherwise does nothing.
+        /// </summary>
+        /// <param name="player">The player to unassign.</param>
+        public static void UnlockController(PPG_Player player)
+        {
+            bindings[(int)player] = PlayerPad.NoPad;
+        }
+
+        /// <summary>
+        /// Removes assignment for all players tied to input devices.
+        /// </summary>
+        /// <remarks>This would be good to use for restarting the game's state.</remarks>
+        public static void UnlockAllControllers()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                bindings[i] = PlayerPad.NoPad;
+            }
+        }
+
+        public static bool IsPlayerButtonDown(PPG_Player player, PlayerButton button)
+        {
+            if (bindings[(int)player] == PlayerPad.Keyboard)
+            {
+                switch (button)
+                {
+                    case PlayerButton.Confirm:
+                        if (keyboardController.IsKeyDown(keyConfig.Confirm)) { return true; }
+                        break;
+                    case PlayerButton.Cancel:
+                        if (keyboardController.IsKeyDown(keyConfig.Cancel)) { return true; }
+                        break;
+                    case PlayerButton.PauseButton:
+                        if (keyboardController.IsKeyDown(keyConfig.PauseButton)) { return true; }
+                        break;
+                    case PlayerButton.BackButton:
+                        if (keyboardController.IsKeyDown(keyConfig.BackButton)) { return true; }
+                        break;
+                    case PlayerButton.UseItem1:
+                        if (keyboardController.IsKeyDown(keyConfig.UseItem1)) { return true; }
+                        break;
+                    case PlayerButton.UseItem2:
+                        if (keyboardController.IsKeyDown(keyConfig.UseItem2)) { return true; }
+                        break;
+                    case PlayerButton.SwitchItem1:
+                        if (keyboardController.IsKeyDown(keyConfig.SwitchItem1)) { return true; }
+                        break;
+                    case PlayerButton.SwitchItem2:
+                        if (keyboardController.IsKeyDown(keyConfig.SwitchItem2)) { return true; }
+                        break;
+                    case PlayerButton.DownDirection:
+                        if (keyboardController.IsKeyDown(keyConfig.DownDirection)) { return true; }
+                        break;
+                    case PlayerButton.UpDirection:
+                        if (keyboardController.IsKeyDown(keyConfig.UpDirection)) { return true; }
+                        break;
+                    case PlayerButton.LeftDirection:
+                        if (keyboardController.IsKeyDown(keyConfig.LeftDirection)) { return true; }
+                        break;
+                    case PlayerButton.RightDirection:
+                        if (keyboardController.IsKeyDown(keyConfig.RightDirection)) { return true; }
+                        break;
+                }
+            }
+            else if ((int)bindings[(int)player] > -1)
+            {
+                GamePadState state = xInputControllers[(int)bindings[(int)player]];
+
+                switch (button)
+                {
+                    case PlayerButton.Confirm:
+                        if (state.Buttons.A == ButtonState.Pressed) { return true; }
+                        break;
+                    case PlayerButton.Cancel:
+                        if (state.Buttons.B == ButtonState.Pressed) { return true; }
+                        break;
+                    case PlayerButton.PauseButton:
+                        if (state.Buttons.Start == ButtonState.Pressed) { return true; }
+                        break;
+                    case PlayerButton.BackButton:
+                        if (state.Buttons.Back == ButtonState.Pressed) { return true; }
+                        break;
+                    case PlayerButton.UseItem1:
+                        if (state.Buttons.A == ButtonState.Pressed || state.Triggers.Left > 0.01f) { return true; }
+                        break;
+                    case PlayerButton.UseItem2:
+                        if (state.Buttons.B == ButtonState.Pressed || state.Triggers.Right > 0.01f) { return true; }
+                        break;
+                    case PlayerButton.SwitchItem1:
+                        if (state.Buttons.X == ButtonState.Pressed || state.Buttons.LeftShoulder == ButtonState.Pressed) { return true; }
+                        break;
+                    case PlayerButton.SwitchItem2:
+                        if (state.Buttons.Y == ButtonState.Pressed || state.Buttons.RightShoulder == ButtonState.Pressed) { return true; }
+                        break;
+                    case PlayerButton.DownDirection:
+                        if (state.DPad.Down == ButtonState.Pressed || state.ThumbSticks.Left.Y < 0) { return true; }
+                        break;
+                    case PlayerButton.UpDirection:
+                        if (state.DPad.Down == ButtonState.Pressed || state.ThumbSticks.Left.Y > 0) { return true; }
+                        break;
+                    case PlayerButton.LeftDirection:
+                        if (state.DPad.Left == ButtonState.Pressed || state.ThumbSticks.Left.X < 0) { return true; }
+                        break;
+                    case PlayerButton.RightDirection:
+                        if (state.DPad.Right == ButtonState.Pressed || state.ThumbSticks.Left.X > 0) { return true; }
+                        break;
+                }
+            }
+
+            return false;
+        }
+
+        /// <summary>
         /// Update the current input devices.
         /// </summary>
-        /// <param name="currentTime">Current GameTime. Not used.</param>
-        public static void update(GameTime currentTime)
+        /// <param name="currentTime">Current GameTime. Not used at the moment.</param>
+        public static void Update(GameTime currentTime)
         {
             keyboardController = Keyboard.GetState();
 
@@ -190,6 +331,9 @@ namespace PattyPetitGiant
         }
     }
 
+    /// <summary>
+    /// Used to configure desired keys in Keyboad input.
+    /// </summary>
     public class KeyboardControllerConfiguration
     {
         public Keys Confirm;
@@ -205,6 +349,10 @@ namespace PattyPetitGiant
         public Keys BackButton;
         public Keys PauseButton;
 
+        /// <summary>
+        /// Creates a default configuration we thought up at the beginning of development.
+        /// </summary>
+        /// <returns></returns>
         public static KeyboardControllerConfiguration DefaultKeyConfig()
         {
             KeyboardControllerConfiguration def = new KeyboardControllerConfiguration();
