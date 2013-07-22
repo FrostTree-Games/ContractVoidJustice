@@ -18,12 +18,12 @@ namespace PattyPetitGiant
         {
             Player.PlayerItems items = parent.CurrentItemTypes;
 
-            if (items.item1 == GlobalGameConstants.itemType.DungeonMap && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+            if (items.item1 == GlobalGameConstants.itemType.DungeonMap && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
             {
                 parent.Velocity = Vector2.Zero;
                 parentWorld.RenderNodeMap = true;
             }
-            else if (items.item2 == GlobalGameConstants.itemType.DungeonMap && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+            else if (items.item2 == GlobalGameConstants.itemType.DungeonMap && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
             {
                 parent.Velocity = Vector2.Zero;
                 parentWorld.RenderNodeMap = true;

@@ -95,6 +95,14 @@ namespace PattyPetitGiant
             // Create a new SpriteBatch, which can be used to draw textures.
 
             input_device = new InputDeviceManager(graphics.GraphicsDevice);
+            InputDevice2.Initalize();
+            
+            //replace this with a join screen later
+#if XBOX
+            InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerPad.GamePad1);
+#elif WINDOWS
+            InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerPad.Keyboard);
+#endif
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -184,6 +192,7 @@ namespace PattyPetitGiant
             }
 
             input_device.update();
+            InputDevice2.Update(gameTime);
 
             currentGameScreen.update(gameTime);
 

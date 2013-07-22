@@ -86,8 +86,8 @@ namespace PattyPetitGiant
             PlayerLevelProgress = 0;
             PlayerFloorHeight = 1;
 
-            Player_Item_1 = GlobalGameConstants.itemType.HermesSandals;
-            Player_Item_2 = GlobalGameConstants.itemType.DungeonMap;
+            Player_Item_1 = GlobalGameConstants.itemType.Gun;
+            Player_Item_2 = GlobalGameConstants.itemType.MachineGun;
 
             allegiance = 0.5f;
 

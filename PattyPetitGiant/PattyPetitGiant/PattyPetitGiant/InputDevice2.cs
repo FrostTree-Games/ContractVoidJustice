@@ -224,6 +224,12 @@ namespace PattyPetitGiant
             }
         }
 
+        /// <summary>
+        /// Checks if a button is pressed for a specified Player.
+        /// </summary>
+        /// <param name="player">The assigned player index to check.</param>
+        /// <param name="button">The button to poll.</param>
+        /// <returns>True if the button for the player's device is pressed.</returns>
         public static bool IsPlayerButtonDown(PPG_Player player, PlayerButton button)
         {
             if (bindings[(int)player] == PlayerPad.Keyboard)
@@ -302,7 +308,7 @@ namespace PattyPetitGiant
                         if (state.DPad.Down == ButtonState.Pressed || state.ThumbSticks.Left.Y < 0) { return true; }
                         break;
                     case PlayerButton.UpDirection:
-                        if (state.DPad.Down == ButtonState.Pressed || state.ThumbSticks.Left.Y > 0) { return true; }
+                        if (state.DPad.Up == ButtonState.Pressed || state.ThumbSticks.Left.Y > 0) { return true; }
                         break;
                     case PlayerButton.LeftDirection:
                         if (state.DPad.Left == ButtonState.Pressed || state.ThumbSticks.Left.X < 0) { return true; }
@@ -314,6 +320,54 @@ namespace PattyPetitGiant
             }
 
             return false;
+        }
+
+        public static GlobalGameConstants.Direction PlayerAnalogStickDirection(PPG_Player player)
+        {
+            if (bindings[(int)player] == PlayerPad.Keyboard)
+            {
+                return GlobalGameConstants.Direction.NoDirection;
+            }
+            else if ((int)bindings[(int)player] > -1)
+            {
+                GamePadState state = xInputControllers[(int)bindings[(int)player]];
+
+                // some third-party gamepads don't help with this
+                if (float.IsNaN(state.ThumbSticks.Left.X) || float.IsNaN(state.ThumbSticks.Left.Y))
+                {
+                    return GlobalGameConstants.Direction.NoDirection;
+                }
+
+                if (state.ThumbSticks.Left.Length() < 0.05f)
+                {
+                    return GlobalGameConstants.Direction.NoDirection;
+                }
+
+                if (Math.Abs(state.ThumbSticks.Left.X) > Math.Abs(state.ThumbSticks.Left.Y))
+                {
+                    if (state.ThumbSticks.Left.X < 0)
+                    {
+                        return GlobalGameConstants.Direction.Left;
+                    }
+                    else
+                    {
+                        return GlobalGameConstants.Direction.Right;
+                    }
+                }
+                else
+                {
+                    if (state.ThumbSticks.Left.Y < 0)
+                    {
+                        return GlobalGameConstants.Direction.Down;
+                    }
+                    else
+                    {
+                        return GlobalGameConstants.Direction.Up;
+                    }
+                }
+            }
+
+            return GlobalGameConstants.Direction.NoDirection;
         }
 
         /// <summary>
@@ -360,7 +414,7 @@ namespace PattyPetitGiant
             def.Confirm = Keys.Enter;
             def.Cancel = Keys.Back;
             def.UseItem1 = Keys.A;
-            def.UseItem2 = Keys.B;
+            def.UseItem2 = Keys.S;
             def.SwitchItem1 = Keys.Q;
             def.SwitchItem2 = Keys.W;
             def.UpDirection = Keys.Up;

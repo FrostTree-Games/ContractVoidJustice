@@ -48,12 +48,12 @@ namespace PattyPetitGiant
                 drawPos = parent.CenterPoint + new Vector2((float)(GlobalGameConstants.TileSize.X * Math.Cos(theta)), (float)(GlobalGameConstants.TileSize.Y * Math.Sin(theta)));
             }
 
-            if (items.item1 == GlobalGameConstants.itemType.Compass && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+            if (items.item1 == GlobalGameConstants.itemType.Compass && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
             {
                 parent.Velocity = Vector2.Zero;
                 drawPointer = true;
             }
-            else if (items.item2 == GlobalGameConstants.itemType.Compass && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+            else if (items.item2 == GlobalGameConstants.itemType.Compass && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
             {
                 parent.Velocity = Vector2.Zero;
                 drawPointer = true;
