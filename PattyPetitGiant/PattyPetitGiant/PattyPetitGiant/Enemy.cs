@@ -57,6 +57,13 @@ namespace PattyPetitGiant
             get { return enemy_damage; }
         }
 
+        protected bool sound_alert = false;
+        public bool Sound_Alert
+        {
+            set { sound_alert = value; }
+            get { return sound_alert; }
+        }
+
         protected float range_distance = 600.0f;
         public float Range_Distance { get { return range_distance; } }
 
@@ -67,6 +74,13 @@ namespace PattyPetitGiant
 
         protected float velocity_speed = 1.0f;
         public float Velocity_Speed{ set { velocity_speed = value; } get { return velocity_speed; } }
+
+        protected Vector2 sound_position = Vector2.Zero;
+        public Vector2 Sound_Position
+        {
+            get { return sound_position; }
+            set { sound_position = value; }
+        }
 
         protected AnimationLib.SpineAnimationSet walk_down = null;
         protected AnimationLib.SpineAnimationSet walk_right = null;

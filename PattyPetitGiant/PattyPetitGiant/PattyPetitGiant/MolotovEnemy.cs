@@ -16,6 +16,8 @@ namespace PattyPetitGiant
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
+        private Entity entity_found;
+
         private bool moveWaitStepping;
         private float moveWaitTimer;
         private const float moveStepTime = 500f;
@@ -42,6 +44,8 @@ namespace PattyPetitGiant
             this.parentWorld = parentWorld;
             this.position = position;
             this.dimensions = GlobalGameConstants.TileSize;
+
+            entity_found = null;
 
             molotovState = MolotovState.MoveWait;
             moveWaitStepping = false;
@@ -125,7 +129,7 @@ namespace PattyPetitGiant
                         {
                             if (parentWorld.EntityList[i] is Enemy)
                             {
-                                if (((Enemy)parentWorld.EntityList[i]).Enemy_Type == Enemy.EnemyType.Prisoner)
+                                if (((Enemy)parentWorld.EntityList[i]).Enemy_Type == Enemy.EnemyType.Prisoner && ((Enemy)parentWorld.EntityList[i]).Enemy_Type == Enemy.EnemyType.NoType)
                                 {
                                     continue;
                                 }
@@ -134,6 +138,8 @@ namespace PattyPetitGiant
                             if (f.hitTestWithEntity(parentWorld.EntityList[i]))
                             {
                                 animation_time = 0.0f;
+
+                                entity_found = parentWorld.EntityList[i];
 
                                 molotovState = MolotovState.WindUp;
                                 windUpTimer = 0.0f;
@@ -179,6 +185,24 @@ namespace PattyPetitGiant
                     {
                         direction_facing = (GlobalGameConstants.Direction)(Game1.rand.Next() % 4);
                     }
+                }
+            }
+            else if (molotovState == MolotovState.Alert)
+            {
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
+                if (parentWorld.Map.enemyWithinRange(entity_found, this, 1000f))
+                {
+                    if (flame.active == false)
+                    {
+                        molotovState = MolotovState.WindUp;
+                        animation_time = 0.0f;
+                    }
+                }
+                else
+                {
+                    entity_found = null;
+                    molotovState = MolotovState.MoveWait;
+                    moveWaitTimer = 0.0f;
                 }
             }
             else if (molotovState == MolotovState.WindUp)
@@ -249,7 +273,7 @@ namespace PattyPetitGiant
 
                     flame = new MolotovFlame(throwPosition);
 
-                    molotovState = MolotovState.MoveWait;
+                    molotovState = MolotovState.Alert;
                     moveWaitTimer = 0.0f;
                 }
             }
@@ -397,6 +421,8 @@ namespace PattyPetitGiant
             /// When the enemy is dead. 
             /// </summary>
             Dying = 4,
+
+            Alert = 5,
         }
 
         /// <summary>

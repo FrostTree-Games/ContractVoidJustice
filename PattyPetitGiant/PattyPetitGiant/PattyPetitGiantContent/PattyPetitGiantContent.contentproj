@@ -241,6 +241,30 @@
       <Name>test</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\spine\acidSpitterDown\anims.json">
+      <Name>anims</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\acidSpitterDown\parts.atlas">
+      <Name>parts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\acidSpitterRight\anims.json">
+      <Name>anims</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\acidSpitterRight\parts.atlas">
+      <Name>parts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\acidSpitterUp\anims.json">
+      <Name>anims</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\spine\acidSpitterUp\parts.atlas">
+      <Name>parts</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="animation\spine\alienChaserDown\anims.json">
       <Name>anims</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1697,6 +1721,30 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="animation\spine\hookRight\img.png">
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\acidSpitterDown\img.png">
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\acidSpitterRight\img.png">
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\acidSpitterUp\img.png">
       <Name>img</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

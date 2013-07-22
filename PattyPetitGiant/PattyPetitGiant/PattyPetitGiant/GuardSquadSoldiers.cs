@@ -52,6 +52,7 @@ namespace PattyPetitGiant
         private int bullet_inactive_count;
         private float bullet_timer = 0.0f;
         private float firing_timer = 0.0f;
+        private float move_timer = 0.0f;
         private bool death = false;
         private bool loop = true;
 
@@ -198,6 +199,7 @@ namespace PattyPetitGiant
                         if (enemy_found == true)
                         {
                             state = SquadSoldierState.MoveIntoPosition;
+                            move_timer = 0.0f;
                             switch (direction_facing)
                             {
                                 case GlobalGameConstants.Direction.Up:
@@ -217,8 +219,9 @@ namespace PattyPetitGiant
                         distance_from_follow_pt = Vector2.Distance(follow_point, CenterPoint);
                         angle = (float)(Math.Atan2(follow_point.Y - CenterPoint.Y, follow_point.X - CenterPoint.X));
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                        move_timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                        if ((int)distance_from_follow_pt != 0)
+                        if ((int)distance_from_follow_pt != 0 || move_timer > 3000)
                         {
                             velocity = new Vector2(distance_from_follow_pt * (float)(Math.Cos(angle)) / 100.0f, distance_from_follow_pt * (float)(Math.Sin(angle)) / 100.0f);
 
@@ -255,6 +258,7 @@ namespace PattyPetitGiant
                             state = SquadSoldierState.WindUp;
                             direction_facing = Leader.Direction_Facing;
                             animation_time = 0.0f;
+                            move_timer = 0.0f;
                         }
                         break;
                     case SquadSoldierState.WindUp:

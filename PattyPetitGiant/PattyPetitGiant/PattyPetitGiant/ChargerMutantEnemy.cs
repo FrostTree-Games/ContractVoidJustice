@@ -14,15 +14,20 @@ namespace PattyPetitGiant
     {
         private enum ChargerState
         {
+            search,
+            alert,
             windUp,
             charge,
             none,
             dying
         }
         private EnemyComponents component;
-        private ChargerState charger_state;
+        private ChargerState state;
         private float windup_timer;
         private float charge_timer;
+        private float alert_timer;
+        private float angle;
+        private Entity entity_found = null;
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
 
@@ -42,12 +47,14 @@ namespace PattyPetitGiant
             change_direction_time = 0.0f;
             range_distance = 300.0f;
             charge_timer = 0.0f;
+            alert_timer = 0.0f;
 
-            state = EnemyState.Idle;
+            state = ChargerState.search;
             enemy_type = EnemyType.Prisoner;
             component = new IdleSearch();
-            charger_state = ChargerState.none;
-            
+
+            sound_alert = false;
+
             direction_facing = (GlobalGameConstants.Direction)(Game1.rand.Next() % 4);
 
             this.parentWorld = parentWorld;
@@ -68,7 +75,14 @@ namespace PattyPetitGiant
         {
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
 
-            if (charger_state == ChargerState.dying)
+
+            if (sound_alert && state == ChargerState.search && entity_found == null)
+            {
+                state = ChargerState.alert;
+                alert_timer = 0.0f;
+            }
+
+            if (state == ChargerState.dying)
             {
                 velocity = Vector2.Zero;
 
@@ -87,6 +101,7 @@ namespace PattyPetitGiant
                     disable_movement_time = 0.0f;
                     disable_movement = false;
                     velocity = Vector2.Zero;
+                    state = ChargerState.alert;
                 }
 
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
@@ -95,7 +110,7 @@ namespace PattyPetitGiant
             {
                 switch (state)
                 {
-                    case EnemyState.Idle:
+                    case ChargerState.search:
                         directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
 
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -106,16 +121,17 @@ namespace PattyPetitGiant
                             {
                                 if (parentWorld.EntityList[i] == this)
                                     continue;
-                                else if (parentWorld.EntityList[i] is Player)
+                                else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
                                 {
                                     component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
+                                    entity_found = parentWorld.EntityList[i];
                                 }
                             }
                         }
 
                         if (enemy_found)
                         {
-                            state = EnemyState.Agressive;
+                            state = ChargerState.windUp;
                             velocity = Vector2.Zero;
                         }
                         else
@@ -139,70 +155,130 @@ namespace PattyPetitGiant
                                 }
                                 change_direction_time = 0.0f;
                             }
+                            entity_found = null;
+                            sound_alert = false;
                         }
                         break;
-                    case EnemyState.Agressive:
-                        switch (charger_state)
+                        case ChargerState.alert:
+                        directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
+                        
+                        if (sound_alert && entity_found == null)
                         {
-                            case ChargerState.windUp:
-                                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
-                                windup_timer += currentTime.ElapsedGameTime.Milliseconds;
-                                if (windup_timer > 300)
-                                {
-                                    animation_time = 0.0f;
-                                    charger_state = ChargerState.charge;
-                                    switch (direction_facing)
-                                    {
-                                        case GlobalGameConstants.Direction.Right:
-                                            velocity = new Vector2(8.0f, 0.0f);
-                                            break;
-                                        case GlobalGameConstants.Direction.Left:
-                                            velocity = new Vector2(-8.0f, 0.0f);
-                                            break;
-                                        case GlobalGameConstants.Direction.Up:
-                                            velocity = new Vector2(0.0f, -8.0f);
-                                            break;
-                                        default:
-                                            velocity = new Vector2(0.0f, 8.0f);
-                                            break;
-                                    }
-                                    charge_timer = 0.0f;
-                                }
-                                break;
-                            case ChargerState.charge:
-                                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("charge");
-                                charge_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            //if false then sound didn't hit a wall
+                            if (!parentWorld.Map.soundInSight(this, sound_position))
+                            {
+                                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
+                                alert_timer += currentTime.ElapsedGameTime.Milliseconds;
                                 for (int i = 0; i < parentWorld.EntityList.Count; i++)
                                 {
-                                    if (parentWorld.EntityList[i] == this)
-                                        continue;
-                                    if (hitTest(parentWorld.EntityList[i]))
+                                    if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
                                     {
-                                        Vector2 direction = parentWorld.EntityList[i].CenterPoint - CenterPoint;
-                                        parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, enemy_damage);
+                                        float distance = Vector2.Distance(CenterPoint, parentWorld.EntityList[i].CenterPoint);
+                                        if (distance <= 600)
+                                        {
+                                            enemy_found = true;
+                                            entity_found = parentWorld.EntityList[i];
+                                            state = ChargerState.windUp;
+                                            animation_time = 0.0f;
+                                            sound_alert = false;
+                                            alert_timer = 0.0f;
+                                            windup_timer = 0.0f;
+                                            animation_time = 0.0f;
+                                            velocity = Vector2.Zero;
+                                            charge_timer = 0.0f;
+                                            break;
+                                        }
                                     }
                                 }
 
-                                if (charge_timer > 800)
+                                if (alert_timer > 3000 || ((int)CenterPoint.X == (int)sound_position.X && (int)CenterPoint.Y == (int)sound_position.Y))
                                 {
-                                    state = EnemyState.Idle;
-                                    component = new IdleSearch();
+                                    entity_found = null;
+                                    enemy_found = false;
+                                    sound_alert = false;
+                                    state = ChargerState.search;
                                     velocity = Vector2.Zero;
                                     animation_time = 0.0f;
                                     charge_timer = 0.0f;
-                                    enemy_found = false;
-                                    charger_state = ChargerState.none;
+                                    windup_timer = 0.0f;
+                                    animation_time = 0.0f;
                                 }
-                                break;
-                            default:
-                                charger_state = ChargerState.windUp;
+                            }
+                            else
+                            {
+                                entity_found = null;
+                                enemy_found = false;
+                                sound_alert = false;
+                                state = ChargerState.search;
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
+                                charge_timer = 0.0f;
                                 windup_timer = 0.0f;
                                 animation_time = 0.0f;
-                                break;
+                            }
+                        }
+                        else if(entity_found != null)
+                        {
+                            sound_alert = false;
+                            if (parentWorld.Map.enemyWithinRange(entity_found, this, 600f))
+                            {
+                                state = ChargerState.windUp;
+                                animation_time = 0.0f;
+                            }
+                            else
+                            {
+                                entity_found = null;
+                                enemy_found = false;
+                                state = ChargerState.search;
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
+                                charge_timer = 0.0f;
+                                windup_timer = 0.0f;
+                                animation_time = 0.0f;
+                            }
                         }
                         break;
-                    default:
-                        break;
+                        case ChargerState.windUp:
+                            directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
+                            windup_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            angle = (float)Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X);
+
+                            if (windup_timer > 300)
+                            {
+                                animation_time = 0.0f;
+                                state = ChargerState.charge;
+                                velocity = new Vector2(8.0f * (float)(Math.Cos(angle)), 8.0f * (float)(Math.Sin(angle)));
+
+                                charge_timer = 0.0f;
+                            }
+                            break;
+                        case ChargerState.charge:
+                            directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("charge");
+                            charge_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                            {
+                                if (parentWorld.EntityList[i] == this)
+                                    continue;
+                                if (hitTest(parentWorld.EntityList[i]))
+                                {
+                                    Vector2 direction = parentWorld.EntityList[i].CenterPoint - CenterPoint;
+                                    parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, enemy_damage);
+                                }
+                            }
+
+                            if (charge_timer > 800)
+                            {
+                                state = ChargerState.alert;
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
+                                charge_timer = 0.0f;
+                                windup_timer = 0.0f;
+                                animation_time = 0.0f;
+                                enemy_found = false;
+                            }
+                            break;
+                        default:
+                            break;
                 }
             }
 
@@ -213,13 +289,13 @@ namespace PattyPetitGiant
             position.X = finalPos.X;
             position.Y = finalPos.Y;
 
-            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time, charger_state == ChargerState.dying ? false : true);
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time, state == ChargerState.dying ? false : true);
 
-            if (enemy_life <= 0 && charger_state != ChargerState.dying)
+            if (enemy_life <= 0 && state != ChargerState.dying)
             {
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(Game1.rand.Next() % 3 == 0 ? "die" : Game1.rand.Next() % 2 == 0 ? "die2" : "die3");
 
-                charger_state = ChargerState.dying;
+                state = ChargerState.dying;
                 animation_time = 0;
             }
         }
@@ -231,7 +307,7 @@ namespace PattyPetitGiant
         {
             if (disable_movement_time == 0.0)
             {
-                if (state != EnemyState.Agressive)
+                if (state != ChargerState.windUp || state != ChargerState.charge)
                 {
                     if (attacker != null & attacker is Player)
                     {
@@ -281,6 +357,7 @@ namespace PattyPetitGiant
             if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
             {
                 enemy_found = true;
+                entity_found = attacker;
                 switch (attacker.Direction_Facing)
                 {
                     case GlobalGameConstants.Direction.Right:

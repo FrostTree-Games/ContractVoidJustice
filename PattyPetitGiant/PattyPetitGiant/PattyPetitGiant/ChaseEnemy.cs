@@ -28,6 +28,8 @@ namespace PattyPetitGiant
         private bool player_in_range;
         private ChaseAttackStage chase_stage;
 
+        private string[] death_anim = { "die", "die2", "die3" };
+
         private bool death = false;
 
         private EnemyComponents chaseComponent = null;
@@ -210,7 +212,7 @@ namespace PattyPetitGiant
                     state = EnemyState.Death;
                     animation_time = 0.0f;
                     wind_anim = 1;
-                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("die");
+                    current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(death_anim[(int)(Game1.rand.Next()) %3]);
 
                     parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.CoinValue.Twoonie);
                     parentWorld.pushCoin(CenterPoint + new Vector2(GlobalGameConstants.TileSize.X / 2, GlobalGameConstants.TileSize.Y / -2), Coin.CoinValue.Loonie);

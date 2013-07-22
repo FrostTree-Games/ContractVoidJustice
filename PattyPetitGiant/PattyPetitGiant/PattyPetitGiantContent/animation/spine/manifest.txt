@@ -34,3 +34,6 @@ alienChaserUp
 hookUp
 hookDown
 hookRight
+acidSpitterUp
+acidSpitterDown
+acidSpitterRight

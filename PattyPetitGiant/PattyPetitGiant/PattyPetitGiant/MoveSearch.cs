@@ -17,8 +17,8 @@ namespace PattyPetitGiant
         private float angle = 0.0f;
         private float range_distance = 600.0f;
         private bool wall_between = false;
-        private double sight_angle1 = 1.2;
-        private double sight_angle2 = 1.8;
+        private double sight_angle1 = 0.523;
+        private double sight_angle2 = 2.617;
         private float parent_direction_time_threshold = 2000.0f;
 
         private int change_direction;
