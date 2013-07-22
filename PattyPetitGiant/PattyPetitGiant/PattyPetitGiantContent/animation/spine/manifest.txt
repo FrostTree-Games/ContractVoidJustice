@@ -1,6 +1,9 @@
 jensenDown
 jensenRight
 jensenUp
+jensen2Down
+jensen2Right
+jensen2Up
 zippyDown
 zippyRight
 zippyUp

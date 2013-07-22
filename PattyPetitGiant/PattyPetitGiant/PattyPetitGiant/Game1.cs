@@ -102,6 +102,7 @@ namespace PattyPetitGiant
             InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerPad.GamePad1);
 #elif WINDOWS
             InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerPad.Keyboard);
+            InputDevice2.LockController(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerPad.GamePad1);
 #endif
 
             spriteBatch = new SpriteBatch(GraphicsDevice);

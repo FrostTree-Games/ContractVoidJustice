@@ -124,9 +124,18 @@ namespace PattyPetitGiant
             this.parentWorld = parentWorld;
 
             remove_from_list = false;
-            walk_down = AnimationLib.getSkeleton("jensenDown");
-            walk_right = AnimationLib.getSkeleton("jensenRight");
-            walk_up = AnimationLib.getSkeleton("jensenUp");
+            if (index == InputDevice2.PPG_Player.Player_1)
+            {
+                walk_down = AnimationLib.getSkeleton("jensenDown");
+                walk_right = AnimationLib.getSkeleton("jensenRight");
+                walk_up = AnimationLib.getSkeleton("jensenUp");
+            }
+            else
+            {
+                walk_down = AnimationLib.getSkeleton("jensen2Down");
+                walk_right = AnimationLib.getSkeleton("jensen2Right");
+                walk_up = AnimationLib.getSkeleton("jensen2Up");
+            }
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
