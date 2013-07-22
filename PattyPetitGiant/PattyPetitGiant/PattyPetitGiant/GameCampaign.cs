@@ -87,7 +87,7 @@ namespace PattyPetitGiant
             PlayerFloorHeight = 1;
 
             Player_Item_1 = GlobalGameConstants.itemType.Gun;
-            Player_Item_2 = GlobalGameConstants.itemType.WandOfGyges;
+            Player_Item_2 = GlobalGameConstants.itemType.DungeonMap;
 
             allegiance = 0.5f;
 

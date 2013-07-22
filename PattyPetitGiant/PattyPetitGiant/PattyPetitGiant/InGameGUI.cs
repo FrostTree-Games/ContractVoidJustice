@@ -33,6 +33,10 @@ namespace PattyPetitGiant
         private float blackFadeOverlay;
         public float BlackFadeOverlay { get { return blackFadeOverlay; } set { blackFadeOverlay = value; } }
 
+        private Texture2D mapIcon = null;
+
+        private float flickerTime;
+
         /// <summary>
         /// Data representing a simple text box.
         /// </summary>
@@ -123,7 +127,11 @@ namespace PattyPetitGiant
             keyFoundPic = AnimationLib.getFrameAnimationSet("keyPic");
             keyNotFoundPic = AnimationLib.getFrameAnimationSet("keyEmptyPic");
 
+            mapIcon = TextureLib.getLoadedTexture("mapPda.png");
+
             testWin = new BoxWindow("foo", 100, 100, 200, "GamePad code overflowing with madness");
+
+            flickerTime = 0.0f;
         }
 
         public static string WrapText(SpriteFont spriteFont, string text, float maxLineWidth, ref int lineCountOut)
@@ -210,6 +218,8 @@ namespace PattyPetitGiant
 
         public void update(GameTime currentTime)
         {
+            flickerTime += currentTime.ElapsedGameTime.Milliseconds;
+
             for (int i = 0; i < windowIsActive.Length; i++)
             {
                 if (!windowIsActive[i])
@@ -331,7 +341,7 @@ namespace PattyPetitGiant
                 int renderFocusX = (int)((parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide);
                 int renderFocusY = (int)((parent.CameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh);
 
-                sb.Draw(Game1.whitePixel, renderMapPosition - new Vector2(10, 10), null, Color.SandyBrown, 0.0f, Vector2.Zero, (parent.NodeMap.GetLength(0) + 0) * 32 * 2, SpriteEffects.None, 0.3f);
+                sb.Draw(mapIcon, renderMapPosition - (new Vector2(100)) / 2, Color.White);
 
                 int mapResolution = 2;
                 float mapScale = 2.5f;
@@ -339,9 +349,9 @@ namespace PattyPetitGiant
                 {
                     for (int j = 0; j < parent.Map.Map.GetLength(1); j += mapResolution)
                     {
-                        if (parent.Map.Map[i, j] != TileMap.TileType.NoWall)
+                        if (parent.Map.Map[i, j] == TileMap.TileType.NoWall)
                         {
-                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i, j) * mapScale, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(mapResolution) * mapScale, SpriteEffects.None, 0.5f);
+                            sb.Draw(Game1.whitePixel, renderMapPosition + new Vector2(i, j) * mapScale, null, Color.Lerp(Color.Cyan, Color.LightCyan, (float)(Math.Sin(flickerTime / 1000f))), 0.0f, Vector2.Zero, new Vector2(mapResolution) * mapScale, SpriteEffects.None, 0.5f);
                         }
                     }
                 }
