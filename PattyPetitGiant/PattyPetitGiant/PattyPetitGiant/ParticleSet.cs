@@ -78,6 +78,24 @@ namespace PattyPetitGiant
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
                 p.acceleration = Vector2.Zero;
             }
+
+            public static void NewDirectedParticle2(ref Particle p, Vector2 position, Color c, float direction)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 500f + (float)Game1.rand.NextDouble() * 200f;
+                p.rotation = direction;
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("directedParticle");
+                p.color = c;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+
+                p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
+                p.acceleration = Vector2.Zero;
+            }
         }
 
         private const int particlePoolSize = 100;
@@ -186,6 +204,17 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewDirectedParticle(ref particlePool[i], position, color, direction);
+                return;
+            }
+        }
+
+        public void pushDirectedParticle2(Vector2 position, Color color, float direction)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewDirectedParticle2(ref particlePool[i], position, color, direction);
                 return;
             }
         }
