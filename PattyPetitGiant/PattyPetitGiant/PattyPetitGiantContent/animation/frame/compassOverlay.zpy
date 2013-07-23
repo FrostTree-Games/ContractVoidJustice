@@ -6,8 +6,8 @@
   <initalY>0</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>96</frameWidth>
-  <frameHeight>96</frameHeight>
+  <frameWidth>94</frameWidth>
+  <frameHeight>97</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>200</frameSpeed>
   <loop>false</loop>

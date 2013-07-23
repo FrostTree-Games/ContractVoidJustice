@@ -2,7 +2,7 @@
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <name>compassArrow</name>
   <sheetName>compassOverlay.png</sheetName>
-  <initalX>96</initalX>
+  <initalX>94</initalX>
   <initalY>0</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
