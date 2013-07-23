@@ -16,8 +16,8 @@ namespace PattyPetitGiant
         private float angle = 0.0f;
         private float range_distance = 600.0f;
         private bool wall_between = false;
-        private double sight_angle1 = 1.2;
-        private double sight_angle2 = 1.8;
+        private double sight_angle1 = Math.PI/4;
+        private double sight_angle2 = 3*Math.PI/4;
 
         public void update(Enemy parent, GameTime currentTime, LevelState parentWorld)
         {

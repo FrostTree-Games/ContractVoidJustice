@@ -698,21 +698,19 @@ namespace PattyPetitGiant
                 float angle = (float)(Math.Atan2(enemy_found.CenterPoint.Y - current_entity.CenterPoint.Y, enemy_found.CenterPoint.X - current_entity.CenterPoint.X));
                 float distance = Vector2.Distance(enemy_found.CenterPoint, current_entity.CenterPoint);
 
-                float sight_angle1 = 0.872f;
-                float sight_angle2 = 2.355f;
-                if ((angle > (-1 * sight_angle2 + Math.PI / 2) && angle < (-1 * sight_angle1 + Math.PI / 2)))
+                if ((angle > (-1*Math.PI/4) && angle < (Math.PI/4)))
                 {
                     current_entity.Direction_Facing = GlobalGameConstants.Direction.Right;
                 }
-                else if (((angle > (sight_angle1 + Math.PI / 2) && angle < (sight_angle2 + Math.PI / 2))))
+                else if (((angle > (3*Math.PI/4) || angle < (-3*Math.PI/4))))
                 {
                     current_entity.Direction_Facing = GlobalGameConstants.Direction.Left;
                 }
-                else if ((angle > (-1 * sight_angle2) && angle < (-1 * sight_angle1)))
+                else if ((angle > (-3 * Math.PI/4) && angle < (-1 * Math.PI/4)))
                 {
                     current_entity.Direction_Facing = GlobalGameConstants.Direction.Up;
                 }
-                else if ((angle > sight_angle1 && angle < sight_angle2))
+                else if ((angle > Math.PI/4 && angle < 3*Math.PI/4))
                 {
                     current_entity.Direction_Facing = GlobalGameConstants.Direction.Down;
                 }

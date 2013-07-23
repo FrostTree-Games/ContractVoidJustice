@@ -48,7 +48,9 @@ namespace PattyPetitGiant
             range_distance = 300.0f;
             charge_timer = 0.0f;
             alert_timer = 0.0f;
+            range_distance = 600f;
 
+            entity_found = null;
             state = ChargerState.search;
             enemy_type = EnemyType.Prisoner;
             component = new IdleSearch();
@@ -121,10 +123,14 @@ namespace PattyPetitGiant
                             {
                                 if (parentWorld.EntityList[i] == this)
                                     continue;
-                                else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
+                                else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
                                 {
                                     component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
-                                    entity_found = parentWorld.EntityList[i];
+                                    if (enemy_found == true)
+                                    {
+                                        entity_found = parentWorld.EntityList[i];
+                                        break;
+                                    }
                                 }
                             }
                         }
@@ -171,10 +177,10 @@ namespace PattyPetitGiant
                                 alert_timer += currentTime.ElapsedGameTime.Milliseconds;
                                 for (int i = 0; i < parentWorld.EntityList.Count; i++)
                                 {
-                                    if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
+                                    if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
                                     {
                                         float distance = Vector2.Distance(CenterPoint, parentWorld.EntityList[i].CenterPoint);
-                                        if (distance <= 600)
+                                        if (distance <= range_distance)
                                         {
                                             enemy_found = true;
                                             entity_found = parentWorld.EntityList[i];
@@ -220,7 +226,7 @@ namespace PattyPetitGiant
                         else if(entity_found != null)
                         {
                             sound_alert = false;
-                            if (parentWorld.Map.enemyWithinRange(entity_found, this, 600f))
+                            if (parentWorld.Map.enemyWithinRange(entity_found, this, range_distance))
                             {
                                 state = ChargerState.windUp;
                                 animation_time = 0.0f;
@@ -268,6 +274,11 @@ namespace PattyPetitGiant
 
                             if (charge_timer > 800)
                             {
+                                if (entity_found.Death == true)
+                                {
+                                    entity_found = null;
+                                }
+                                sound_alert = false;
                                 state = ChargerState.alert;
                                 velocity = Vector2.Zero;
                                 animation_time = 0.0f;

@@ -552,6 +552,8 @@ namespace PattyPetitGiant
             {
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("die");
 
+                death = true;
+
                 velocity = Vector2.Zero;
             }
 
