@@ -168,6 +168,15 @@ namespace PattyPetitGiant
                     pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rMGun" : "lMGun");
                     parent.Velocity = Vector2.Zero;
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                    {
+                        float distance = Vector2.Distance(parentWorld.EntityList[i].Position, new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY));
+                        if (distance <= 600 && parentWorld.EntityList[i] is Enemy)
+                        {
+                            ((Enemy)parentWorld.EntityList[i]).Sound_Alert = true;
+                            ((Enemy)parentWorld.EntityList[i]).Sound_Position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                        }
+                    }
                 }
             }
             else

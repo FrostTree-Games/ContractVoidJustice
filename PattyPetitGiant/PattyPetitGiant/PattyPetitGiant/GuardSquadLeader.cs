@@ -296,6 +296,21 @@ namespace PattyPetitGiant
                                 time_between_shots = 0.0f;
                                 loop = true;
                                 enemy_found = false;
+                                switch (direction_facing)
+                                {
+                                    case GlobalGameConstants.Direction.Right:
+                                        velocity = new Vector2(1, 0);
+                                        break;
+                                    case GlobalGameConstants.Direction.Left:
+                                        velocity = new Vector2(-1, 0);
+                                        break;
+                                    case GlobalGameConstants.Direction.Down:
+                                        velocity = new Vector2(0, 1);
+                                        break;
+                                    default:
+                                        velocity = new Vector2(0, -1);
+                                        break;
+                                }
                             }
                             break;
                         case SquadLeaderState.Dying:
@@ -347,18 +362,23 @@ namespace PattyPetitGiant
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
-            /*
-            sb.Draw(Game1.whitePixel, position, null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(48, 48), SpriteEffects.None, 1.0f);
-            sb.Draw(Game1.whitePixel, follow_point_1, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2(16, 16), SpriteEffects.None, 1.0f);
-            sb.Draw(Game1.whitePixel, follow_point_2, null, Color.Green, 0.0f, Vector2.Zero, new Vector2(16, 16), SpriteEffects.None, 1.0f);
-             */
+            float bullet_angle = 0.0f;
+            if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Left)
+            {
+                bullet_angle = 0.0f;
+            }
+            else
+            {
+                bullet_angle = (float)(Math.PI / 2);
+            }
 
             for (int i = 0; i < bullet_number; i++)
             {
                 if (bullets[i].active)
                 {
-                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].Position, Color.White, 0.0f, new Vector2(2.0f));
-                    //bulletPic.drawAnimationFrame(0.0f, sb, bullets[i].Position);
+                    //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].Position, Color.White, 0.0f, new Vector2(2.0f));
+
+                    bulletPic.drawAnimationFrame(0.0f, sb, bullets[i].Position - (bulletPic.FrameDimensions / 2), new Vector2(1.0f), 0.5f, bullet_angle, bullets[i].CenterPoint, Color.White);
                 }
             }
         }
@@ -434,7 +454,7 @@ namespace PattyPetitGiant
 
         public void populateSquadMates()
         {
-            /*GuardSquadSoldiers en = new GuardSquadSoldiers(parentWorld, position.X, position.Y);
+            GuardSquadSoldiers en = new GuardSquadSoldiers(parentWorld, position.X, position.Y);
             parentWorld.EntityList.Add(en);
             squad_mates[0] = en;
             squad_mates[0].Leader = this;
@@ -442,7 +462,7 @@ namespace PattyPetitGiant
             en = new GuardSquadSoldiers(parentWorld, position.X, position.Y);
             parentWorld.EntityList.Add(en);
             squad_mates[1] = en;
-            squad_mates[1].Leader = this;*/
+            squad_mates[1].Leader = this;
         }
 
         public override void spinerender(SkeletonRenderer renderer)
@@ -475,6 +495,7 @@ namespace PattyPetitGiant
             private Vector2 nextStep_temp;
 
             public Vector2 Position { get { return position; } }
+            public Vector2 CenterPoint { get { return position + dimensions / 2; } }
 
             private const float max_time_alive = 2000.0f;
 

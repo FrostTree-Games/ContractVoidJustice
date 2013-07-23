@@ -606,6 +606,129 @@ namespace PattyPetitGiant
             ray_displacement = 0.0f;
             return ray_hit_object;
         }
+        /// <summary>
+        /// Checks to see if there is anything between the position of the enemy and the sound that is produced.
+        /// Can assume that if there is nothing between the two positions that the position is in sight
+        /// </summary>
+        /// <param name="current_enemy"></param>
+        /// <param name="sound_position"></param>
+        /// <returns></returns>
+        public bool soundInSight(Entity current_enemy, Vector2 sound_position)
+        {
+            bool ray_hit_sound = false;
+            float angle = (float)(Math.Atan2(sound_position.Y - current_enemy.CenterPoint.Y, sound_position.X - current_enemy.CenterPoint.X));
+
+            float Xa = 0.0f;
+            float Ya = 0.0f;
+
+            //determines the step values that the ray travels
+            //right
+            if(angle <= Math.PI/4 && angle > -1 * Math.PI/4)
+            {
+                Xa = GlobalGameConstants.TileSize.X / 2;
+                Ya = (float)(Xa * Math.Tan(angle));
+            }
+                //left
+            else if( angle > 3*Math.PI/4 || angle< -3 * Math.PI/4)
+            {
+                Xa = GlobalGameConstants.TileSize.X / 2;
+                Xa = -1 * Xa;
+                Ya = (float)(Xa * Math.Tan(angle));
+            }
+                //up
+            else if (angle > -3 * Math.PI / 4 && angle < -1 * Math.PI / 4)
+            {
+                Ya = GlobalGameConstants.TileSize.Y / 2;
+                Ya = -1 * Ya;
+                Xa = (float)(Ya / Math.Tan(angle));
+            }
+                // down
+            else if (angle < 3 * Math.PI / 4 && angle > Math.PI/4)
+            {
+                Ya = GlobalGameConstants.TileSize.Y / 2;
+                Xa = (float)(Ya / Math.Tan(angle));
+            }
+                    
+            Vector2 ray_travel = current_enemy.CenterPoint;
+            float distance = Vector2.Distance(current_enemy.Position, sound_position);
+            float ray_displacement = (float)(Math.Sqrt((Xa * Xa) + (Ya * Ya)));
+            float current_distance = 0.0f;
+
+            while (current_distance < distance)
+            {
+                if (ray_hit_sound)
+                {
+                    return ray_hit_sound;
+                }
+                else
+                {
+                    ray_travel += new Vector2(Xa, Ya);
+                    current_distance += ray_displacement;
+                    ray_hit_sound = hitTestWall(ray_travel);
+                }
+            }
+
+            ray_displacement = 0.0f;
+            current_enemy.Velocity = new Vector2(2.0f * (float)(Math.Cos(angle)), 2.0f * (float)Math.Sin(angle));
+            if (Math.Abs(current_enemy.Velocity.X) > Math.Abs(current_enemy.Velocity.Y))
+            {
+                if (current_enemy.Velocity.X > 0)
+                {
+                    current_enemy.Direction_Facing = GlobalGameConstants.Direction.Right;
+                }
+                else
+                {
+                    current_enemy.Direction_Facing = GlobalGameConstants.Direction.Left;
+                }
+            }
+            else
+            {
+                if (current_enemy.Velocity.Y > 0)
+                {
+                    current_enemy.Direction_Facing = GlobalGameConstants.Direction.Down;
+                }
+                else
+                {
+                    current_enemy.Direction_Facing = GlobalGameConstants.Direction.Up;
+                }
+            }
+
+            return ray_hit_sound;
+        }
+
+        public bool enemyWithinRange(Entity enemy_found, Entity current_entity, float current_radius)
+        {
+            if (enemy_found != null)
+            {
+                float angle = (float)(Math.Atan2(enemy_found.CenterPoint.Y - current_entity.CenterPoint.Y, enemy_found.CenterPoint.X - current_entity.CenterPoint.X));
+                float distance = Vector2.Distance(enemy_found.CenterPoint, current_entity.CenterPoint);
+
+                if ((angle > (-1*Math.PI/4) && angle < (Math.PI/4)))
+                {
+                    current_entity.Direction_Facing = GlobalGameConstants.Direction.Right;
+                }
+                else if (((angle > (3*Math.PI/4) || angle < (-3*Math.PI/4))))
+                {
+                    current_entity.Direction_Facing = GlobalGameConstants.Direction.Left;
+                }
+                else if ((angle > (-3 * Math.PI/4) && angle < (-1 * Math.PI/4)))
+                {
+                    current_entity.Direction_Facing = GlobalGameConstants.Direction.Up;
+                }
+                else if ((angle > Math.PI/4 && angle < 3*Math.PI/4))
+                {
+                    current_entity.Direction_Facing = GlobalGameConstants.Direction.Down;
+                }
+
+                bool enemy_in_sight = playerInSight(angle, current_radius, current_entity, enemy_found);
+
+                if (enemy_in_sight)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
         /// <summary>
         ///  Hit-checks a point against the map. Useful for ray-casting or mouse clicks.

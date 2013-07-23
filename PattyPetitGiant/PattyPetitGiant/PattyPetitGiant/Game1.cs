@@ -98,7 +98,7 @@ namespace PattyPetitGiant
             whitePixel = Content.Load<Texture2D>("whitePixel");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
-            //shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
+            shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
 
             myModel = Content.Load<Model>("model3D/PPG");
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
@@ -127,7 +127,8 @@ namespace PattyPetitGiant
 
             GameCampaign.ResetPlayerValues();
 
-            currentGameScreen = new LevelSelectState();
+            //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
+            currentGameScreen = new LevelState();
         }
 
         /// <summary>

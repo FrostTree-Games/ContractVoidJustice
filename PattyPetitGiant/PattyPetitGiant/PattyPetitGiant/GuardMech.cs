@@ -30,6 +30,7 @@ namespace PattyPetitGiant
         private float windup_timer = 0.0f;
         private float turret_angle = 0.0f;
         private float tank_hull_angle = 0.0f;
+        private float tank_hull_animation_time = 0.0f;
         private const float tank_hull_turn_magnitude = 0.02f;
         private bool melee_active = false;
         private bool death = false;
@@ -71,6 +72,7 @@ namespace PattyPetitGiant
             velocity_speed = 3.0f;
             entity_found = null;
             death = false;
+            tank_hull_animation_time = 0.0f;
 
             grenade = new Grenades(Vector2.Zero, 0.0f);
 
@@ -104,6 +106,7 @@ namespace PattyPetitGiant
                 {
                     case MechState.Moving:
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                        tank_hull_animation_time += currentTime.ElapsedGameTime.Milliseconds;
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
 
                         if (enemy_found == false)
@@ -151,6 +154,8 @@ namespace PattyPetitGiant
                         if (enemy_found)
                         {
                             distance = Vector2.Distance(position, entity_found.Position);
+
+                            tank_hull_animation_time = 0.0f;
 
                             if (Math.Abs(distance) < 300)
                             {
@@ -469,7 +474,7 @@ namespace PattyPetitGiant
                     break;
             }
 
-            tankAnim.drawAnimationFrame(0.0f, sb, position - offset/2, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
+            tankAnim.drawAnimationFrame(tank_hull_animation_time, sb, position - offset/2, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
 
             //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0,0,1,1),position, Color.Green, 0.0f, dimensions);
 

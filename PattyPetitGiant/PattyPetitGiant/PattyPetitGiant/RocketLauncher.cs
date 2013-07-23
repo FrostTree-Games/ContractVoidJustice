@@ -126,6 +126,18 @@ namespace PattyPetitGiant
                         rocket = new Rocket(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), parent.Direction_Facing);
                     }
                 }
+
+
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                {
+                    float distance = Vector2.Distance(parentWorld.EntityList[i].Position, new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY));
+                    if (distance <= 1000 && parentWorld.EntityList[i] is Enemy)
+                    {
+                        ((Enemy)parentWorld.EntityList[i]).Sound_Alert = true;
+                        ((Enemy)parentWorld.EntityList[i]).Sound_Position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                    }
+                }
+
             }
             else if (state == RocketLauncherState.Shooting)
             {

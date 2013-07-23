@@ -15,6 +15,7 @@ namespace PattyPetitGiant
         private enum SpitterState
         {
             KnockBack,
+            Alert,
             Search,
             WindUp,
             Fire,
@@ -35,6 +36,9 @@ namespace PattyPetitGiant
         private SpitProjectile[] projectile = new SpitProjectile[size_of_spit_array];
 
         private Entity entity_found = null;
+
+        private AnimationLib.SpineAnimationSet[] directionAnims = null;
+        private string[] deathAnims = { "die", "die2", "die3" };
 
         public MutantAcidSpitter(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -64,15 +68,30 @@ namespace PattyPetitGiant
             }
 
             death = false;
+
+            directionAnims = new AnimationLib.SpineAnimationSet[4];
+            directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("acidSpitterUp");
+            directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("acidSpitterDown");
+            directionAnims[(int)GlobalGameConstants.Direction.Left] = AnimationLib.loadNewAnimationSet("acidSpitterRight");
+            directionAnims[(int)GlobalGameConstants.Direction.Left].Skeleton.FlipX = true;
+            directionAnims[(int)GlobalGameConstants.Direction.Right] = AnimationLib.loadNewAnimationSet("acidSpitterRight");
+            
+            for (int i = 0; i < 4; i++)
+            {
+                directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("run");
+            }
         }
 
         public override void update(GameTime currentTime)
         {
             change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
+            animation_time += currentTime.ElapsedGameTime.Milliseconds;
 
             switch (state)
             {
                 case SpitterState.Search:
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
+
                     if (death == false)
                     {
                         if (enemy_found == false)
@@ -82,7 +101,7 @@ namespace PattyPetitGiant
                             {
                                 if (en == this)
                                     continue;
-                                else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType && en.Death == false)
+                                else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType && en.Death == false && en.Death == false)
                                 {
                                     component.update(this, en, currentTime, parentWorld);
                                     if (enemy_found)
@@ -97,6 +116,7 @@ namespace PattyPetitGiant
                         {
                             state = SpitterState.WindUp;
                             velocity = Vector2.Zero;
+                            animation_time = 0.0f;
                         }
                     }
                     break;
@@ -105,6 +125,8 @@ namespace PattyPetitGiant
 
                     if (windup_timer > max_windup_timer)
                     {
+                        directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
+
                         state = SpitterState.Fire;
                         windup_timer = 0.0f;
                     }
@@ -164,6 +186,7 @@ namespace PattyPetitGiant
                     break;
                 case SpitterState.Fire:
                     angle = (float)(Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X));
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
 
                     for (int i = 0; i < size_of_spit_array; i++)
                     {
@@ -185,6 +208,8 @@ namespace PattyPetitGiant
                     break;
                 case SpitterState.KnockBack:
                     disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
+
                     if (disable_movement_time > 300)
                     {
                         state = SpitterState.Search;
@@ -192,6 +217,8 @@ namespace PattyPetitGiant
                     }
                     break;
                 case SpitterState.Death:
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(deathAnims[Game1.rand.Next() % 3]);
+                    velocity = Vector2.Zero;
                     break;
                 default:
                     break;
@@ -210,6 +237,8 @@ namespace PattyPetitGiant
             Vector2 finalPos = parentWorld.Map.reloactePosition(pos, nextStep, dimensions);
             position.X = finalPos.X;
             position.Y = finalPos.Y;
+
+            directionAnims[(int)direction_facing].Animation.Apply(directionAnims[(int)direction_facing].Skeleton, animation_time / 1000f, state == SpitterState.Search ? true : false);
         }
 
         public override void draw(Spine.SkeletonRenderer sb)
@@ -288,23 +317,16 @@ namespace PattyPetitGiant
 
         public override void spinerender(SkeletonRenderer renderer)
         {
-            /*if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Up || direction_facing == GlobalGameConstants.Direction.Down)
-            {
-                current_skeleton.Skeleton.FlipX = false;
-            }
-            if (direction_facing == GlobalGameConstants.Direction.Left)
-            {
-                current_skeleton.Skeleton.FlipX = true;
-            }
+            AnimationLib.SpineAnimationSet currentSkeleton = directionAnims[(int)direction_facing];
 
-            current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
-            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
+            currentSkeleton.Skeleton.RootBone.X = CenterPoint.X * (currentSkeleton.Skeleton.FlipX ? -1 : 1);
+            currentSkeleton.Skeleton.RootBone.Y = CenterPoint.Y + (dimensions.Y / 2f);
 
-            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
-            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+            currentSkeleton.Skeleton.RootBone.ScaleX = 1.0f;
+            currentSkeleton.Skeleton.RootBone.ScaleY = 1.0f;
 
-            current_skeleton.Skeleton.UpdateWorldTransform();
-            renderer.Draw(current_skeleton.Skeleton);*/
+            currentSkeleton.Skeleton.UpdateWorldTransform();
+            renderer.Draw(currentSkeleton.Skeleton);
         }
 
         public struct SpitProjectile
@@ -323,6 +345,8 @@ namespace PattyPetitGiant
             public Vector2 dimensions;
             private const float max_dimensions = 100.0f;
             public bool active;
+            private bool on_wall;
+            private Vector2 nextStep_temp;
 
             private float alive_timer;
             private const float max_alive_timer = 800.0f;
@@ -345,6 +369,8 @@ namespace PattyPetitGiant
                 alive_timer = 0.0f;
                 damage_timer = 0.0f;
 
+                on_wall = false;
+                nextStep_temp = Vector2.Zero;
                 active = true;
             }
 
@@ -364,15 +390,54 @@ namespace PattyPetitGiant
                         }
                         else
                         {
-                            foreach(Entity en in parentWorld.EntityList)
+                            nextStep_temp = new Vector2(position.X - (dimensions.X / 2) + velocity.X, (position.Y + velocity.X));
+
+                            on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                            int check_corners = 0;
+                            while (check_corners != 4)
                             {
-                                if (en == parent)
-                                    continue;
-                                else if (spitHitTest(en))
+                                if (on_wall == false)
+                                {
+                                    if (check_corners == 0)
+                                    {
+                                        nextStep_temp = new Vector2(position.X + (dimensions.X / 2) + velocity.X, position.Y + velocity.Y);
+                                    }
+                                    else if (check_corners == 1)
+                                    {
+                                        nextStep_temp = new Vector2(position.X + velocity.X, position.Y - (dimensions.Y / 2) + velocity.Y);
+                                    }
+                                    else if (check_corners == 2)
+                                    {
+                                        nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                                    }
+                                    else
+                                    {
+                                        position += velocity;
+                                    }
+                                    on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                                }
+                                else
                                 {
                                     projectile_state = ProjectileState.GrowPool;
                                     alive_timer = 0.0f;
                                     original_position = position;
+                                    break;
+                                }
+                                check_corners++;
+                            }
+
+                            if (on_wall == false)
+                            {
+                                foreach (Entity en in parentWorld.EntityList)
+                                {
+                                    if (en == parent)
+                                        continue;
+                                    else if (spitHitTest(en))
+                                    {
+                                        projectile_state = ProjectileState.GrowPool;
+                                        alive_timer = 0.0f;
+                                        original_position = position;
+                                    }
                                 }
                             }
                         }

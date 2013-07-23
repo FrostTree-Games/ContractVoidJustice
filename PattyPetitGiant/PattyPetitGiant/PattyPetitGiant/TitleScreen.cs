@@ -321,7 +321,7 @@ namespace PattyPetitGiant
                         sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
                     }
 
-                    /*Matrix[] transforms = new Matrix[myModel.Bones.Count];
+                    Matrix[] transforms = new Matrix[myModel.Bones.Count];
                     myModel.CopyAbsoluteBoneTransformsTo(transforms);
 
                     AnimationLib.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -349,7 +349,7 @@ namespace PattyPetitGiant
                             //effect.Texture = ship_texture;
                         }
                         mesh.Draw();
-                    }*/
+                    }
                     break;
                 default:
                     break;
