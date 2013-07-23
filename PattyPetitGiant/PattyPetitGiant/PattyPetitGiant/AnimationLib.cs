@@ -28,6 +28,7 @@ namespace PattyPetitGiant
         private static bool spineManifestLoaded = false;
         private static bool frameManifestLoaded = false;
 
+        private static Dictionary<string, SkeletonData> skeletonDataLib = null;
         private static Dictionary<string, SpineAnimationSet> spineDict = null;
         private static Dictionary<string, FrameAnimationSet> frameDict = null;
 
@@ -49,8 +50,19 @@ namespace PattyPetitGiant
             {
                 atlas = new Atlas(spineAnimationDirectory + folderName + "/parts.atlas", textureLoader);
 
-                SkeletonJson json = new SkeletonJson(atlas);
-                SkeletonData skeletonData = json.ReadSkeletonData(spineAnimationDirectory + folderName + "/anims.json");
+                SkeletonData skeletonData;
+
+                try
+                {
+                    skeletonData = skeletonDataLib[spineAnimationDirectory + folderName + "/anims.json"];
+                }
+                catch (Exception)
+                {
+                    SkeletonJson json = new SkeletonJson(atlas);
+                    skeletonData = json.ReadSkeletonData(spineAnimationDirectory + folderName + "/anims.json");
+                    skeletonDataLib.Add(spineAnimationDirectory + folderName + "/anims.json", skeletonData);
+                }
+                
                 skeleton = new Skeleton(skeletonData);
 
                 animation = skeleton.Data.FindAnimation("run");
@@ -226,6 +238,11 @@ namespace PattyPetitGiant
             {
                 AnimationLib.textureLoader = new XnaTextureLoader(gd);
                 AnimationLib.skeletonRenderer = new SkeletonRenderer(gd);
+            }
+
+            if (skeletonDataLib == null)
+            {
+                skeletonDataLib = new Dictionary<string, SkeletonData>();
             }
 
             if (spineDict == null)
