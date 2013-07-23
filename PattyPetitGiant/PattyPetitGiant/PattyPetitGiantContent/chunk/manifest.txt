@@ -15,6 +15,7 @@ testShopG.ftc
 testShopH.ftc
 testShopI.ftc
 testShopJ.ftc
+testShopK.ftc
 testShopL.ftc
 testShopM.ftc
 testShopO.ftc

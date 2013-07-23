@@ -29,6 +29,8 @@ namespace PattyPetitGiant
         private float damage_delay = 100.0f;
         private bool damage_delay_flag = false;
 
+        private AnimationLib.FrameAnimationSet bulletAnim = null;
+
         public ShotGun()
         {
             inactive_pellets = 0;
@@ -37,11 +39,27 @@ namespace PattyPetitGiant
 
             damage_delay_flag = false;
             damage_delay_timer = 0.0f;
+
+            bulletAnim = AnimationLib.getFrameAnimationSet("testBullet");
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             position = parent.CenterPoint;
+
+            for (int i = 0; i < pellet_count; i++)
+            {
+                if (shotgun_pellets[i].active == true)
+                {
+                    shotgun_pellets[i].update(parentWorld, currentTime, parent);
+
+                    if (shotgun_pellets[i].hit_enemy && !damage_delay_flag)
+                    {
+                        damage_delay_flag = true;
+                        damage_delay_timer = 0.0f;
+                    }
+                }
+            }
 
             if (pellet_count == max_pellets)
             {
@@ -78,8 +96,20 @@ namespace PattyPetitGiant
                 }
                 for (int i = 0; i < max_pellets; i++)
                 {
+                    parent.Animation_Time = 0;
                     float angle = (float)((Game1.rand.Next() % pellet_angle_interval) + pellet_angle_direction);
-                    shotgun_pellets[i] = new Pellets(parent.CenterPoint, angle);
+
+                    if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                    {
+                        shotgun_pellets[i] = new Pellets(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), angle);
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lShotgun" : "rShotgun");
+                    }
+                    else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                    {
+                        shotgun_pellets[i] = new Pellets(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), angle);
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rShotgun" : "lShotgun");
+                    }
+
                     pellet_count++;
                 }
                 shotgun_active = true;
@@ -149,8 +179,10 @@ namespace PattyPetitGiant
             {
                 for (int i = 0; i < pellet_count; i++)
                 {
-                    //if (shotgun_pellets[i].active)
-                        //sb.Draw(Game1.whitePixel, shotgun_pellets[i].position, null, Color.White, 0.0f, Vector2.Zero, new Vector2(10.0f, 10.0f), SpriteEffects.None, 0.5f);
+                    if (shotgun_pellets[i].active)
+                    {
+                        bulletAnim.drawAnimationFrame(0, sb, shotgun_pellets[i].position - (bulletAnim.FrameDimensions / 2), new Vector2(1), 0.5f, (float)Math.Atan2(shotgun_pellets[i].velocity.Y, shotgun_pellets[i].velocity.X), Vector2.Zero, Color.White);
+                    }
                 }
             }
         }
@@ -180,7 +212,7 @@ namespace PattyPetitGiant
                 this.position = position;
                 active = true;
                 this.dimensions = new Vector2(10, 10);
-                this.velocity = new Vector2((float)(8.0f * Math.Cos(angle)), (float)(8.0f * Math.Sin(angle)));
+                this.velocity = new Vector2((float)(12.0f * Math.Cos(angle)), (float)(12.0f * Math.Sin(angle)));
                 nextStep_temp = Vector2.Zero;
                 pellet_damage = 3;
                 time_alive = 0.0f;
@@ -201,6 +233,7 @@ namespace PattyPetitGiant
                     {
                         if (hitTest(en))
                         {
+                            parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
                             hit_enemy = true;
                             entity_hit = en;
                             active = false;
@@ -243,6 +276,7 @@ namespace PattyPetitGiant
                     }
                     else
                     {
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
                         active = false;
                         time_alive = 0.0f;
                         break;

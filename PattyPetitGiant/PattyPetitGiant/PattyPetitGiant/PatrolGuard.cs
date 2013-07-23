@@ -85,8 +85,14 @@ namespace PattyPetitGiant
                 {
                     reloadTime += currentTime.ElapsedGameTime.Milliseconds;
 
-                    if (reloadTime > 5000f || parentWorld.Map.hitTestWall(center))
+                    bool hitWall = false;
+                    if (reloadTime > 5000f || (hitWall = parentWorld.Map.hitTestWall(center)))
                     {
+                        if (hitWall)
+                        {
+                            parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
+                        }
+
                         active = false;
                         reloadTime = 0.0f;
                         return;
@@ -104,6 +110,7 @@ namespace PattyPetitGiant
                             if (hitTestBullet(parentWorld.EntityList[it]) && parentWorld.EntityList[it].Enemy_Type != EnemyType.Guard)
                             {
                                 parentWorld.EntityList[it].knockBack(Vector2.Normalize(parentWorld.EntityList[it].CenterPoint - center), 2.0f, 5);
+                                parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
                                 active = false;
                                 return;
                             }
@@ -155,11 +162,15 @@ namespace PattyPetitGiant
 
         private float deadCushySoundTimer;
 
+        private AnimationLib.FrameAnimationSet bulletAnim = null;
+
         public PatrolGuard(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
             this.position = position;
             this.dimensions = GlobalGameConstants.TileSize;
+
+            bulletAnim = AnimationLib.getFrameAnimationSet("testBullet");
 
             deadCushySoundTimer = 0;
 
@@ -581,11 +592,8 @@ namespace PattyPetitGiant
                     continue;
                 }
 
-                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].position, Color.Pink, 0.0f, bullets[i].hitbox / 4);
-                //sb.Draw(Game1.whitePixel, bullets[i].position, null, Color.Pink, 0.0f, Vector2.Zero, bullets[i].hitbox, SpriteEffects.None, 0.6f);
+                bulletAnim.drawAnimationFrame(0, sb, bullets[i].position - (bulletAnim.FrameDimensions / 2), new Vector2(1), 0.5f, (float)Math.Atan2(bullets[i].velocity.Y, bullets[i].velocity.X), Vector2.Zero, Color.White);
             }
-
-            //sb.Draw(Game1.whitePixel, position, null, Color.Red, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.6f);
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)

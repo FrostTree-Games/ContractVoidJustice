@@ -64,6 +64,9 @@ namespace PattyPetitGiant
 
         }
 
+        private InputDevice2.PPG_Player index;
+        public InputDevice2.PPG_Player Index { get { return index; } set { index = value; } }
+
         private Item getItemWhenLoading(GlobalGameConstants.itemType type)
         {
             switch (type)
@@ -101,7 +104,7 @@ namespace PattyPetitGiant
             }
         }
         
-        public Player(LevelState parentWorld, float initial_x, float initial_y)
+        public Player(LevelState parentWorld, float initial_x, float initial_y, InputDevice2.PPG_Player index)
         {
             position = new Vector2(initial_x, initial_y);
 
@@ -128,6 +131,8 @@ namespace PattyPetitGiant
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
             enemy_type = EnemyType.Player;
+
+            this.index = index;
         }
 
         public override void update(GameTime currentTime)
@@ -236,23 +241,23 @@ namespace PattyPetitGiant
                 {
                     loopAnimation = true;
 
-                    if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+                    if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.UseItem1))
                     {
                         state = playerState.Item1;
                     }
-                    if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+                    if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.UseItem2))
                     {
                         state = playerState.Item2;
                     }
 
                     if (disable_movement == false)
                     {
-                        if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.RightDirection))
+                        if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.RightDirection))
                         {
                             velocity.X = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Right;
                         }
-                        else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.LeftDirection))
+                        else if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.LeftDirection))
                         {
                             velocity.X = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Left;
@@ -262,12 +267,12 @@ namespace PattyPetitGiant
                             velocity.X = 0.0f;
                         }
 
-                        if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection))
+                        if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.UpDirection))
                         {
                             velocity.Y = -playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Up;
                         }
-                        else if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
+                        else if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.DownDirection))
                         {
                             velocity.Y = playerMoveSpeed;
                             direction_facing = GlobalGameConstants.Direction.Down;
@@ -277,7 +282,7 @@ namespace PattyPetitGiant
                             velocity.Y = 0.0f;
                         }
 
-                        GlobalGameConstants.Direction analogDirection = InputDeviceManager.AnalogStickDirection();
+                        GlobalGameConstants.Direction analogDirection = InputDevice2.PlayerAnalogStickDirection(index);
                         direction_facing = (analogDirection != GlobalGameConstants.Direction.NoDirection) ? analogDirection : direction_facing;
 
                         switch (direction_facing)
@@ -325,11 +330,11 @@ namespace PattyPetitGiant
                             {
                                 itemTouched = true;
 
-                                if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && !item1_switch_button_down)
+                                if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.SwitchItem1) && !item1_switch_button_down)
                                 {
                                     item1_switch_button_down = true;
                                 }
-                                else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) && item1_switch_button_down)
+                                else if (!InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.SwitchItem1) && item1_switch_button_down)
                                 {
                                     item1_switch_button_down = false;
 
@@ -337,11 +342,11 @@ namespace PattyPetitGiant
                                     GameCampaign.Player_Item_1 = player_item_1.ItemType();
                                 }
 
-                                if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && !item2_switch_button_down)
+                                if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.SwitchItem2) && !item2_switch_button_down)
                                 {
                                     item2_switch_button_down = true;
                                 }
-                                else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2) && item2_switch_button_down)
+                                else if (!InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.SwitchItem2) && item2_switch_button_down)
                                 {
                                     item2_switch_button_down = false;
 

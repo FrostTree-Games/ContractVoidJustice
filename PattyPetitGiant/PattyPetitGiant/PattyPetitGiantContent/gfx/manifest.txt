@@ -19,8 +19,10 @@ wireFramePieces.png
 sawGuySheet.png
 testBullet.png
 bulletImpactSheet.png
-rocketProjectile.png
+projectileSheet.png
 bombExplodeSheet.png
 plasmaExplodeSheet.png
 hook.png
 testParticles.png
+mapPda.png
+compassOverlay.png

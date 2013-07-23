@@ -74,6 +74,9 @@ namespace PattyPetitGiant
         private float fadeOutTime;
         private const float fadeOutDuration = 5000f;
 
+        private static float elapsedLevelTime;
+        public static float ElapsedLevelTime { get { return elapsedLevelTime; } }
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -117,6 +120,8 @@ namespace PattyPetitGiant
             }
 
             fadeOutTime = 0.0f;
+
+            elapsedLevelTime = 0.0f;
 
             player1Dead = false;
             end_flag_placed = false;
@@ -283,9 +288,7 @@ namespace PattyPetitGiant
                     }
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
-                        entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new MolotovEnemy(this, new Vector2((currentRoomX) * GlobalGameConstants.TileSize.X, (currentRoomY + 9) * GlobalGameConstants.TileSize.Y)));
-                        //entityList.Add(new MutantAcidSpitter(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
@@ -381,6 +384,8 @@ namespace PattyPetitGiant
             {
                 entityList[i].update(currentTime);
             }
+
+            elapsedLevelTime += currentTime.ElapsedGameTime.Milliseconds;
 
             particleSet.update(currentTime);
 
@@ -516,7 +521,11 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            if (endFlagReached || player1Dead)
+            if (endFlagReached)
+            {
+                return ScreenStateType.LevelReviewState;
+            }
+            else if (player1Dead)
             {
                 return ScreenStateType.LevelSelectState;
             }

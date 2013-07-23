@@ -35,7 +35,7 @@ namespace PattyPetitGiant
                 return Vector2.Distance(centerPoint, other.CenterPoint) < MagicalShot.radius;
             }
 
-            public void updateShot(GameTime currentTime)
+            public void updateShot(GameTime currentTime, LevelState parentWorld)
             {
                 if (!active) { return; }
 
@@ -46,6 +46,7 @@ namespace PattyPetitGiant
                 }
 
                 centerPoint += currentTime.ElapsedGameTime.Milliseconds * velocity;
+                parentWorld.Particles.pushDirectedParticle2(centerPoint, Color.Cyan, (float)(Game1.rand.NextDouble() * Math.PI * 2));
             }
         }
 
@@ -53,16 +54,22 @@ namespace PattyPetitGiant
 
         private MagicalShot shot;
 
+        private float delayTimer;
+        private const float delayDuration = 200f;
+        private const float reloadDuration = 500f;
+
         public WandOfGyges()
         {
-            wandPic = AnimationLib.getFrameAnimationSet("wandPic");
+            wandPic = AnimationLib.getFrameAnimationSet("wandProjectile");
 
             shot.active = false;
+
+            delayTimer = 0;
         }
 
         private void updateShot(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            shot.updateShot(currentTime);
+            shot.updateShot(currentTime, parentWorld);
 
             if (parentWorld.Map.hitTestWall(shot.centerPoint))
             {
@@ -104,7 +111,7 @@ namespace PattyPetitGiant
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            if (!shot.active)
+            if (!shot.active && delayTimer > reloadDuration)
             {
                 float direction = -1.0f;
 
@@ -125,16 +132,37 @@ namespace PattyPetitGiant
                 }
 
                 shot = new MagicalShot(parent.CenterPoint, direction);
+                delayTimer = 0;
+
+                if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                {
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lWand" : "rWand");
+                }
+                else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                {
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rWand" : "lWand");
+                }
+
+                parent.LoopAnimation = false;
+                parent.Animation_Time = 0;
+                parent.Velocity = Vector2.Zero;
             }
+
+            delayTimer += currentTime.ElapsedGameTime.Milliseconds;
 
             updateShot(parent, currentTime, parentWorld);
 
-            parent.Disable_Movement = false;
-            parent.State = Player.playerState.Moving;
+            if (delayTimer > delayDuration)
+            {
+                parent.Disable_Movement = false;
+                parent.State = Player.playerState.Moving;
+            }
         }
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
+            delayTimer += currentTime.ElapsedGameTime.Milliseconds;
+
             updateShot(parent, currentTime, parentWorld);
         }
 
@@ -153,7 +181,7 @@ namespace PattyPetitGiant
             if (shot.active)
             {
                 //wandPic.drawAnimationFrame(0.0f, sb, shot.centerPoint, new Vector2(3.0f, 3.0f), 0.6f, shot.timeAlive, new Vector2(8.0f, 8.0f));
-                wandPic.drawAnimationFrame(0.0f, sb, shot.centerPoint, new Vector2(3), 0.5f, shot.timeAlive, Vector2.Zero, Color.White);
+                wandPic.drawAnimationFrame(0.0f, sb, shot.centerPoint, new Vector2(1), 0.5f, shot.timeAlive, Vector2.Zero, Color.White);
             }
         }
     }

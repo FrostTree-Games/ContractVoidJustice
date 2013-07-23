@@ -49,6 +49,9 @@ namespace PattyPetitGiant
         public static float aspectRatio;
         private ScreenState currentGameScreen = null;
 
+        public static VideoPlayer videoPlayer = null;
+        public static Video testVideo = null;
+
         private InputDeviceManager input_device = null;
 
 #if PROFILE
@@ -92,6 +95,14 @@ namespace PattyPetitGiant
             // Create a new SpriteBatch, which can be used to draw textures.
 
             input_device = new InputDeviceManager(graphics.GraphicsDevice);
+            InputDevice2.Initalize();
+            
+            //replace this with a join screen later
+#if XBOX
+            InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerPad.GamePad1);
+#elif WINDOWS
+            InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerPad.Keyboard);
+#endif
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
@@ -114,6 +125,9 @@ namespace PattyPetitGiant
 
             font = Content.Load<SpriteFont>("testFont");
             testComputerFont = Content.Load<SpriteFont>("TestComputerFont");
+
+            testVideo = Content.Load<Video>("fmv/WilsonTestVideo");
+            videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
 
@@ -179,6 +193,7 @@ namespace PattyPetitGiant
             }
 
             input_device.update();
+            InputDevice2.Update(gameTime);
 
             currentGameScreen.update(gameTime);
 

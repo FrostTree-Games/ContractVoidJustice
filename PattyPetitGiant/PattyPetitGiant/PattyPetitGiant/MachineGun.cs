@@ -144,7 +144,7 @@ namespace PattyPetitGiant
         {
             updateBullets(parent, currentTime, parentWorld);
 
-            if (GameCampaign.Player_Item_1 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem1))
+            if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
             {
                 fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
@@ -157,7 +157,7 @@ namespace PattyPetitGiant
                     parent.Velocity = Vector2.Zero;
                 }
             }
-            else if (GameCampaign.Player_Item_2 == ItemType() && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UseItem2))
+            else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
             {
                 fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 

@@ -78,13 +78,16 @@ namespace PattyPetitGiant
         private static string playerName = null;
         public static string PlayerName { get { return playerName; } }
 
+        private static float elapsedCampaignTime;
+        public static float ElapsedCampaignTime { get { return elapsedCampaignTime; } set { elapsedCampaignTime = value; } }
+
         public static void ResetPlayerValues()
         {
             PlayerLevelProgress = 0;
             PlayerFloorHeight = 1;
 
-            Player_Item_1 = GlobalGameConstants.itemType.RocketLauncher;
-            Player_Item_2 = GlobalGameConstants.itemType.MachineGun;
+            Player_Item_1 = GlobalGameConstants.itemType.Bomb;
+            Player_Item_2 = GlobalGameConstants.itemType.Compass;
 
             allegiance = 0.5f;
 
@@ -97,6 +100,8 @@ namespace PattyPetitGiant
             currentGuardRate = 1;
             currentPrisonerRate = 1;
             currentAlienRate = 1;
+
+            elapsedCampaignTime = 0.0f;
         }
     }
 }
