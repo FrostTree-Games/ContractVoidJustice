@@ -60,7 +60,7 @@ namespace PattyPetitGiant
 
         public WandOfGyges()
         {
-            wandPic = AnimationLib.getFrameAnimationSet("wandPic");
+            wandPic = AnimationLib.getFrameAnimationSet("wandProjectile");
 
             shot.active = false;
 
@@ -181,7 +181,7 @@ namespace PattyPetitGiant
             if (shot.active)
             {
                 //wandPic.drawAnimationFrame(0.0f, sb, shot.centerPoint, new Vector2(3.0f, 3.0f), 0.6f, shot.timeAlive, new Vector2(8.0f, 8.0f));
-                wandPic.drawAnimationFrame(0.0f, sb, shot.centerPoint, new Vector2(3), 0.5f, shot.timeAlive, Vector2.Zero, Color.White);
+                wandPic.drawAnimationFrame(0.0f, sb, shot.centerPoint, new Vector2(1), 0.5f, shot.timeAlive, Vector2.Zero, Color.White);
             }
         }
     }

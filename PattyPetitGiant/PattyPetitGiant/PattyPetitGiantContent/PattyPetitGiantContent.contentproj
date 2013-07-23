@@ -47,6 +47,10 @@
       <Name>bloodSpray</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\frame\bombArmed.zpy">
+      <Name>bombArmed</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="animation\frame\compassArrow.zpy">
       <Name>compassArrow</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -58,6 +62,10 @@
     <None Include="animation\frame\directedParticle.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>directedParticle</Name>
+    </None>
+    <None Include="animation\frame\wandProjectile.zpy">
+      <Name>wandProjectile</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="animation\frame\waveMotionBullet.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1722,14 +1730,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="gfx\rocketProjectile.png">
-      <Name>rocketProjectile</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="gfx\bombExplodeSheet.png">
       <Name>bombExplodeSheet</Name>
       <Importer>TextureImporter</Importer>
@@ -1825,6 +1825,14 @@
   <ItemGroup>
     <None Include="gfx\compassOverlay.png">
       <Name>compassOverlay</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\projectileSheet.png">
+      <Name>projectileSheet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

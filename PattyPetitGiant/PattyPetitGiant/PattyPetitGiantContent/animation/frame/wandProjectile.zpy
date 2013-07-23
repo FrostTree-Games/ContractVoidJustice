@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <name>rocketProjectile</name>
+  <name>wandProjectile</name>
   <sheetName>projectileSheet.png</sheetName>
   <initalX>0</initalX>
-  <initalY>0</initalY>
+  <initalY>79</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>88</frameWidth>
-  <frameHeight>48</frameHeight>
-  <frameCount>3</frameCount>
-  <frameSpeed>50</frameSpeed>
-  <loop>true</loop>
+  <frameWidth>24</frameWidth>
+  <frameHeight>21</frameHeight>
+  <frameCount>1</frameCount>
+  <frameSpeed>200</frameSpeed>
+  <loop>false</loop>
 </SerializableAnimationData>

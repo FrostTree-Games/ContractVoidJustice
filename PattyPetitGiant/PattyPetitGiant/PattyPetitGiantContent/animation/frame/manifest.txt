@@ -48,3 +48,5 @@ waveMotionBullet
 directedParticle
 compassArrow
 compassOverlay
+bombArmed
+wandProjectile
