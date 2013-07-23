@@ -25,3 +25,4 @@ plasmaExplodeSheet.png
 hook.png
 testParticles.png
 mapPda.png
+compassOverlay.png

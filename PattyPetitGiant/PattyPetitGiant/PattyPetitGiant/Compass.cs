@@ -13,15 +13,18 @@ namespace PattyPetitGiant
 
         private bool drawPointer;
         private Vector2 drawPos = Vector2.Zero;
+        private Vector2 drawPos2 = Vector2.Zero;
         private float theta = 0.0f;
 
         private AnimationLib.FrameAnimationSet img = null;
+        private AnimationLib.FrameAnimationSet img2 = null;
 
         public Compass()
         {
             if (img == null)
             {
-                img = AnimationLib.getFrameAnimationSet("compassPic");
+                img = AnimationLib.getFrameAnimationSet("compassArrow");
+                img2 = AnimationLib.getFrameAnimationSet("compassOverlay");
             }
 
             drawPointer = false;
@@ -65,6 +68,8 @@ namespace PattyPetitGiant
                 parent.State = Player.playerState.Moving;
                 parent.Disable_Movement = false;
             }
+
+            drawPos2 = parent.CenterPoint - img2.FrameDimensions / 2;
         }
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -86,7 +91,9 @@ namespace PattyPetitGiant
         {
             if (drawPointer)
             {
-                img.drawAnimationFrame(0.0f, sb, drawPos, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
+
+                img.drawAnimationFrame(0.0f, sb, drawPos, new Vector2(1), 0.5f, theta, Vector2.Zero, Color.White);
+                img2.drawAnimationFrame(0.0f, sb, drawPos2, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
         }
     }

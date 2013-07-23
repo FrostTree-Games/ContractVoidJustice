@@ -46,3 +46,5 @@ hook
 testParticles
 waveMotionBullet
 directedParticle
+compassArrow
+compassOverlay
