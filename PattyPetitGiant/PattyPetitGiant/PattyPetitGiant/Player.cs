@@ -41,6 +41,7 @@ namespace PattyPetitGiant
 
         private AnimationLib.SpineAnimationSet walk_down = null;
         private AnimationLib.SpineAnimationSet walk_right = null;
+        private AnimationLib.SpineAnimationSet walk_left = null;
         private AnimationLib.SpineAnimationSet walk_up = null;
         private AnimationLib.SpineAnimationSet current_skeleton = null;
         public AnimationLib.SpineAnimationSet LoadAnimation { set { current_skeleton = value; } get { return current_skeleton; } }
@@ -124,15 +125,21 @@ namespace PattyPetitGiant
             this.parentWorld = parentWorld;
 
             remove_from_list = false;
-            walk_down = AnimationLib.getSkeleton("jensenDown");
-            walk_right = AnimationLib.getSkeleton("jensenRight");
-            walk_up = AnimationLib.getSkeleton("jensenUp");
+            walk_down = AnimationLib.loadNewAnimationSet("jensenDown");
+            walk_right = AnimationLib.loadNewAnimationSet("jensenRight");
+            walk_left = AnimationLib.loadNewAnimationSet("jensenRight");
+            walk_up = AnimationLib.loadNewAnimationSet("jensenUp");
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
             enemy_type = EnemyType.Player;
 
             this.index = index;
+
+            setAnimationWeapons(walk_down, GlobalGameConstants.Direction.Right);
+            setAnimationWeapons(walk_right, GlobalGameConstants.Direction.Right);
+            setAnimationWeapons(walk_left, GlobalGameConstants.Direction.Left);
+            setAnimationWeapons(walk_up, GlobalGameConstants.Direction.Right);
         }
 
         public override void update(GameTime currentTime)
@@ -296,7 +303,7 @@ namespace PattyPetitGiant
                                 current_skeleton.Skeleton.FlipX = false;
                                 break;
                             case GlobalGameConstants.Direction.Left:
-                                current_skeleton = walk_right;
+                                current_skeleton = walk_left;
                                 current_skeleton.Skeleton.FlipX = true;
                                 break;
                             case GlobalGameConstants.Direction.Right:
@@ -340,6 +347,11 @@ namespace PattyPetitGiant
 
                                     player_item_1 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_1, currentTime);
                                     GameCampaign.Player_Item_1 = player_item_1.ItemType();
+
+                                    setAnimationWeapons(walk_down, GlobalGameConstants.Direction.Right);
+                                    setAnimationWeapons(walk_right, GlobalGameConstants.Direction.Right);
+                                    setAnimationWeapons(walk_left, GlobalGameConstants.Direction.Left);
+                                    setAnimationWeapons(walk_up, GlobalGameConstants.Direction.Right);
                                 }
 
                                 if (InputDevice2.IsPlayerButtonDown(index, InputDevice2.PlayerButton.SwitchItem2) && !item2_switch_button_down)
@@ -352,6 +364,11 @@ namespace PattyPetitGiant
 
                                     player_item_2 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_2, currentTime);
                                     GameCampaign.Player_Item_2 = player_item_2.ItemType();
+
+                                    setAnimationWeapons(walk_down, GlobalGameConstants.Direction.Right);
+                                    setAnimationWeapons(walk_right, GlobalGameConstants.Direction.Right);
+                                    setAnimationWeapons(walk_left, GlobalGameConstants.Direction.Left);
+                                    setAnimationWeapons(walk_up, GlobalGameConstants.Direction.Right);
                                 }
                             }
                         }
@@ -438,7 +455,7 @@ namespace PattyPetitGiant
             }
         }
 
-        private void setAnimationWeapons()
+        public void setAnimationWeapons(AnimationLib.SpineAnimationSet current_skeleton, GlobalGameConstants.Direction direction_facing)
         {
             switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_1.ItemType() : player_item_2.ItemType())
             {
@@ -541,8 +558,6 @@ namespace PattyPetitGiant
 
         public void spinerender(SkeletonRenderer renderer)
         {
-            setAnimationWeapons();
-
             current_skeleton.Skeleton.RootBone.X = CenterPoint.X * (current_skeleton.Skeleton.FlipX ? -1 : 1);
             current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y+(dimensions.Y/2f);
 

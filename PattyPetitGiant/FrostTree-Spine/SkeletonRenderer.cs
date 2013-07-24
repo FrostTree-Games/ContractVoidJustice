@@ -134,7 +134,49 @@ namespace Spine {
 			}
 		}
 
+        /// <summary>
+        /// A test method written by Dan. This is to sneak PattyPetitGiant's draw calls onto Spine's VertexArray. Used for tiles to save time
+        /// </summary>
+        /// <param name="texture">Source texture.</param>
+        /// <param name="srcRectangle">Source rectangle.</param>
+        /// <param name="dstPosition">Destination location</param>
+        public void DrawSpriteToSpineVertexArray(Texture2D texture, Rectangle srcRectangle, Vector2 dstPosition)
+        {
+            Rectangle dstRectangle = new Rectangle((int)dstPosition.X, (int)dstPosition.Y, srcRectangle.Width + 1, srcRectangle.Height + 1);
 
+            SpriteBatchItem item = batcher.CreateBatchItem();
+            item.Texture = texture;
+
+            //set wall colors
+            item.vertexTL.Color = Color.White;
+            item.vertexBL.Color = Color.White;
+            item.vertexBR.Color = Color.White;
+            item.vertexTR.Color = Color.White;
+
+            item.vertexTL.Position.X = dstRectangle.Left;
+            item.vertexTL.Position.Y = dstRectangle.Top;
+            item.vertexTL.Position.Z = 0;
+            item.vertexBL.Position.X = dstRectangle.Left;
+            item.vertexBL.Position.Y = dstRectangle.Bottom;
+            item.vertexBL.Position.Z = 0;
+            item.vertexBR.Position.X = dstRectangle.Right;
+            item.vertexBR.Position.Y = dstRectangle.Bottom;
+            item.vertexBR.Position.Z = 0;
+            item.vertexTR.Position.X = dstRectangle.Right;
+            item.vertexTR.Position.Y = dstRectangle.Top;
+            item.vertexTR.Position.Z = 0;
+
+            item.vertexTL.TextureCoordinate = GetUV(texture, srcRectangle.Left, srcRectangle.Top);
+            item.vertexBL.TextureCoordinate = GetUV(texture, srcRectangle.Left, srcRectangle.Bottom);
+            item.vertexBR.TextureCoordinate = GetUV(texture, srcRectangle.Right, srcRectangle.Bottom);
+            item.vertexTR.TextureCoordinate = GetUV(texture, srcRectangle.Right, srcRectangle.Top);
+
+            Matrix world = effect.World;
+            Vector3.Transform(ref item.vertexTL.Position, ref world, out item.vertexTL.Position);
+            Vector3.Transform(ref item.vertexBL.Position, ref world, out item.vertexBL.Position);
+            Vector3.Transform(ref item.vertexBR.Position, ref world, out item.vertexBR.Position);
+            Vector3.Transform(ref item.vertexTR.Position, ref world, out item.vertexTR.Position);
+        }
 
         /// <summary>
         /// A test method written by Dan. This is to sneak PattyPetitGiant's draw calls onto Spine's VertexArray.

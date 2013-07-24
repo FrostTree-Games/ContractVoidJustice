@@ -1,4 +1,4 @@
-//#define PROFILE
+#define PROFILE
 
 using System;
 using System.Collections.Generic;
@@ -170,12 +170,12 @@ namespace PattyPetitGiant
                 frameCounter = 0;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
+            if (GamePad.GetState(PlayerIndex.One).DPad.Up == ButtonState.Pressed)
             {
-                Thread.Sleep(1);
+                Thread.Sleep(5);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
+            if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed)
             {
                 return;
             }
