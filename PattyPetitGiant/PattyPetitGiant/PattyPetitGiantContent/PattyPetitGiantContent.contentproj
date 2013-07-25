@@ -1886,6 +1886,33 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="tenbyFive\tenbyFive10.bmp">
+      <Name>tenbyFive10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive14.bmp">
+      <Name>tenbyFive14</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive24.bmp">
+      <Name>tenbyFive24</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive72.bmp">
+      <Name>tenbyFive72</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive8.bmp">
+      <Name>tenbyFive8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!--  To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
