@@ -101,6 +101,7 @@
     <Compile Include="Bomb.cs" />
     <Compile Include="BroodLord.cs" />
     <Compile Include="BushidoBlade.cs" />
+    <Compile Include="CampaignLobbyState.cs" />
     <Compile Include="ChargerMutantEnemy.cs" />
     <Compile Include="Chase.cs" />
     <Compile Include="ChaseEnemy.cs" />

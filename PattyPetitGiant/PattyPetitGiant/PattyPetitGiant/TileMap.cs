@@ -262,7 +262,7 @@ namespace PattyPetitGiant
                             }
                         }
 
-                        int modRandVal = 99;
+                        int modRandVal = Game1.rand.Next() % 100;
                         if (modRandVal > 15)
                         {
                             mapMod[i, j] = WallMod.None;
