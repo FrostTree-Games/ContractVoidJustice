@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name>tankTurretDead</name>
+  <sheetName>tankHullSheet.png</sheetName>
+  <initalX>180</initalX>
+  <initalY>139</initalY>
+  <offsetX>0</offsetX>
+  <offsetY>0</offsetY>
+  <frameWidth>81</frameWidth>
+  <frameHeight>144</frameHeight>
+  <frameCount>1</frameCount>
+  <frameSpeed>100</frameSpeed>
+  <loop>false</loop>
+</SerializableAnimationData>
