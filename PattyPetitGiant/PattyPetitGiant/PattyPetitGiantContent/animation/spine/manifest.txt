@@ -37,3 +37,6 @@ hookRight
 acidSpitterUp
 acidSpitterDown
 acidSpitterRight
+ballMutantUp
+ballMutantRight
+ballMutantDown

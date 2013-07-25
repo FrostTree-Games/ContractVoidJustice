@@ -625,27 +625,27 @@ namespace PattyPetitGiant
             //right
             if(angle <= Math.PI/4 && angle > -1 * Math.PI/4)
             {
-                Xa = GlobalGameConstants.TileSize.X / 2;
+                Xa = GlobalGameConstants.TileSize.X / 4;
                 Ya = (float)(Xa * Math.Tan(angle));
             }
                 //left
             else if( angle > 3*Math.PI/4 || angle< -3 * Math.PI/4)
             {
-                Xa = GlobalGameConstants.TileSize.X / 2;
+                Xa = GlobalGameConstants.TileSize.X / 4;
                 Xa = -1 * Xa;
                 Ya = (float)(Xa * Math.Tan(angle));
             }
                 //up
             else if (angle > -3 * Math.PI / 4 && angle < -1 * Math.PI / 4)
             {
-                Ya = GlobalGameConstants.TileSize.Y / 2;
+                Ya = GlobalGameConstants.TileSize.Y / 4;
                 Ya = -1 * Ya;
                 Xa = (float)(Ya / Math.Tan(angle));
             }
                 // down
             else if (angle < 3 * Math.PI / 4 && angle > Math.PI/4)
             {
-                Ya = GlobalGameConstants.TileSize.Y / 2;
+                Ya = GlobalGameConstants.TileSize.Y / 4;
                 Xa = (float)(Ya / Math.Tan(angle));
             }
                     
@@ -722,7 +722,7 @@ namespace PattyPetitGiant
 
                 bool enemy_in_sight = playerInSight(angle, current_radius, current_entity, enemy_found);
 
-                if (enemy_in_sight)
+                if (!enemy_in_sight)
                 {
                     return true;
                 }

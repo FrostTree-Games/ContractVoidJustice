@@ -11,4 +11,16 @@
   <frameCount>4</frameCount>
   <frameSpeed>100</frameSpeed>
   <loop>true</loop>
+  
+  <name>tankHull</name>
+  <sheetName>tankHullSheet.png</sheetName>
+  <initalX>0</initalX>
+  <initalY>0</initalY>
+  <offsetX>0</offsetX>
+  <offsetY>0</offsetY>
+  <frameWidth>96</frameWidth>
+  <frameHeight>139</frameHeight>
+  <frameCount>1</frameCount>
+  <frameSpeed>100</frameSpeed>
+  <loop>false</loop>
 </SerializableAnimationData>

@@ -56,6 +56,14 @@ namespace PattyPetitGiant
         private bool death = false;
         private bool loop = true;
 
+
+        private Entity entity_found = null;
+        public Entity Entity_Found
+        {
+            set { entity_found = value; }
+            get { return entity_found; }
+        }
+
         private const int max_bullet_count = 10;
         private SquadBullet[] bullets = new SquadBullet[max_bullet_count];
         private EnemyComponents component = new MoveSearch();
@@ -96,28 +104,6 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            if (bullet_count > 0)
-            {
-                bullet_inactive_count = 0;
-                for (int i = 0; i < bullet_count; i++)
-                {
-                    if (bullets[i].active)
-                    {
-                        bullets[i].update(parentWorld, currentTime, this);
-                    }
-                    else
-                    {
-                        bullet_inactive_count++;
-                    }
-                }
-
-                if (bullet_inactive_count == max_bullet_count)
-                {
-                    bullet_count = 0;
-                    bullet_inactive_count = 0;
-                }
-            }
-
             if (disable_movement == true)
             {
                 disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
@@ -130,10 +116,6 @@ namespace PattyPetitGiant
             }
             else
             {
-                if (leader != null && death == false)
-                {
-                    direction_facing = Leader.Direction_Facing;
-                }
                 
                 switch (state)
                 {
@@ -141,8 +123,11 @@ namespace PattyPetitGiant
                         change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
                         reset_state_flag = false;
                         float distance = Vector2.Distance(Leader.CenterPoint, CenterPoint);
-                        direction_facing = Leader.Direction_Facing;
-
+                        if (leader != null && death == false)
+                        {
+                            direction_facing = Leader.Direction_Facing;
+                        }
+                
                         switch (direction_facing)
                         {
                             case GlobalGameConstants.Direction.Up:
@@ -221,7 +206,7 @@ namespace PattyPetitGiant
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         move_timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                        if ((int)distance_from_follow_pt != 0 || move_timer > 3000)
+                        if ((int)distance_from_follow_pt > 5 || move_timer < 1000)
                         {
                             velocity = new Vector2(distance_from_follow_pt * (float)(Math.Cos(angle)) / 100.0f, distance_from_follow_pt * (float)(Math.Sin(angle)) / 100.0f);
 
@@ -230,12 +215,12 @@ namespace PattyPetitGiant
                                 //enemy facing left
                                 if (velocity.X < 0)
                                 {
-                                    velocity = new Vector2(-1.5f, velocity.Y);
+                                    velocity = new Vector2(-2.5f, velocity.Y);
                                 }
                                 //enemy facing right
                                 else
                                 {
-                                    velocity = new Vector2(1.5f, velocity.Y);
+                                    velocity = new Vector2(2.5f, velocity.Y);
                                 }
                             }
                             else
@@ -243,12 +228,12 @@ namespace PattyPetitGiant
                                 //enemy facing up
                                 if (velocity.Y < 0)
                                 {
-                                    velocity = new Vector2(velocity.X, -1.5f);
+                                    velocity = new Vector2(velocity.X, -2.5f);
                                 }
                                 //enemy facing down
                                 else
                                 {
-                                    velocity = new Vector2(velocity.X, 1.5f);
+                                    velocity = new Vector2(velocity.X, 2.5f);
                                 }
                             }
                         }
@@ -259,6 +244,7 @@ namespace PattyPetitGiant
                             direction_facing = Leader.Direction_Facing;
                             animation_time = 0.0f;
                             move_timer = 0.0f;
+                            wind_up_timer = 0.0f;
                         }
                         break;
                     case SquadSoldierState.WindUp:
@@ -270,26 +256,48 @@ namespace PattyPetitGiant
                             animation_time = 0.0f;
                             firing_timer = 0.0f;
                             bullet_timer = 0.0f;
+                            wind_up_timer = 0.0f;
                         }
                         break;
                     case SquadSoldierState.Fire:
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Up:
+                                current_skeleton = walk_up;
+                                break;
+                            case GlobalGameConstants.Direction.Down:
+                                current_skeleton = walk_down;
+                                break;
+                            default:
+                                current_skeleton = walk_right;
+                                break;
+                        }
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
                         bullet_timer += currentTime.ElapsedGameTime.Milliseconds;
                         firing_timer += currentTime.ElapsedGameTime.Milliseconds;
                         angle = (float)Math.Atan2(current_skeleton.Skeleton.FindBone("muzzle").WorldY - current_skeleton.Skeleton.FindBone("gun").WorldY, current_skeleton.Skeleton.FindBone("muzzle").WorldX - current_skeleton.Skeleton.FindBone("gun").WorldX);
-
-                        if (bullet_count < max_bullet_count && bullet_timer>100)
+                        
+                        if (bullet_timer > 100)
                         {
-                            bullets[bullet_count] = new SquadBullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY));
+                            for (int i = 0; i < max_bullet_count; i++)
+                            {
+                                if (!bullets[i].active)
+                                {
+                                    bullets[i] = new SquadBullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY));
 
-                            bullets[bullet_count].velocity = new Vector2((float)(8.0*Math.Cos(angle)), (float)(8.0 * Math.Sin(angle)));
-                            bullet_count++;
-                            bullet_timer = 0.0f;
+                                    bullets[i].velocity = new Vector2((float)(8.0 * Math.Cos(angle)), (float)(8.0 * Math.Sin(angle)));
+                                    bullet_timer = 0.0f;
+                                    break;
+                                }
+                            }
                         }
+
                         if (firing_timer > 3000)
                         {
                             reset_state_flag = true;
                             enemy_found = false;
+                            firing_timer = 0.0f;
+                            bullet_timer = 0.0f;
                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                             if (leader != null)
                             {
@@ -351,6 +359,14 @@ namespace PattyPetitGiant
                 leader = null;
             }
 
+            for (int i = 0; i < max_bullet_count; i++)
+            {
+                if (bullets[i].active)
+                {
+                    bullets[i].update(parentWorld, currentTime, this);
+                }
+            }
+
             if( enemy_life <= 0 && death == false)
             {
                 //remove_from_list = true;
@@ -364,14 +380,11 @@ namespace PattyPetitGiant
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
-            if (bullet_count > 0)
+            for (int i = 0; i < max_bullet_count; i++)
             {
-                for (int i = 0; i < bullet_count; i++)
+                if (bullets[i].active)
                 {
-                    if (bullets[i].active)
-                    {
-                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].position, Color.White, 0.0f, new Vector2(10.0f, 10.0f));
-                    }
+                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].position, Color.White, 0.0f, new Vector2(10.0f, 10.0f));
                 }
             }
         }

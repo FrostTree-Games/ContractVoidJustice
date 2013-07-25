@@ -15,6 +15,7 @@ namespace PattyPetitGiant
         private enum SquadLeaderState
         {
             Patrol,
+            Alert,
             Direct,
             Fight,
             Reset,
@@ -39,6 +40,7 @@ namespace PattyPetitGiant
         private float reset_timer = 0.0f;
         private int bullet_inactive_number = 0;
         private float windup_timer;
+        private float alert_timer = 0.0f;
 
         private bool loop = true;
         private bool death = false;
@@ -76,7 +78,7 @@ namespace PattyPetitGiant
             disable_movement_time = 0.0f;
             enemy_found = false;
             change_direction_time = 0.0f;
-            range_distance = 500.0f;
+            range_distance = 400.0f;
             change_direction_time_threshold = 5000.0f;
             enemy_type = EnemyType.Guard;
             death = false;
@@ -93,6 +95,9 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
+
+            Console.WriteLine(state);
+
             if (bullet_number > 0)
             {
                 bullet_inactive_number = 0;
@@ -113,6 +118,11 @@ namespace PattyPetitGiant
                     bullet_number = 0;
                     bullet_inactive_number = 0;
                 }
+            }
+
+            if (sound_alert && state == SquadLeaderState.Patrol && entity_found == null)
+            {
+                state = SquadLeaderState.Alert;
             }
 
             if (death == false)
@@ -214,7 +224,9 @@ namespace PattyPetitGiant
                                     }
 
                                     squad_mates[0].Enemy_Found = true;
+                                    squad_mates[0].Entity_Found = entity_found;
                                     squad_mates[1].Enemy_Found = true;
+                                    squad_mates[1].Entity_Found = entity_found;
 
                                     velocity = Vector2.Zero;
                                 }
@@ -227,9 +239,88 @@ namespace PattyPetitGiant
                                 }
                             }
                             break;
+                        case SquadLeaderState.Alert:
+                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+
+                        alert_timer += currentTime.ElapsedGameTime.Milliseconds;
+
+                        if (sound_alert && entity_found == null)
+                        {
+                            //if false then sound didn't hit a wall
+                            if (!parentWorld.Map.soundInSight(this, sound_position))
+                            {
+                                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
+                                alert_timer += currentTime.ElapsedGameTime.Milliseconds;
+                                for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                                {
+                                    if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
+                                    {
+                                        float distance = Vector2.Distance(CenterPoint, parentWorld.EntityList[i].CenterPoint);
+                                        if (distance <= range_distance)
+                                        {
+                                            enemy_found = true;
+                                            entity_found = parentWorld.EntityList[i];
+                                            state = SquadLeaderState.Patrol;
+                                            animation_time = 0.0f;
+                                            sound_alert = false;
+                                            alert_timer = 0.0f;
+                                            windup_timer = 0.0f;
+                                            animation_time = 0.0f;
+                                            velocity = Vector2.Zero;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (alert_timer > 3000 || ((int)CenterPoint.X == (int)sound_position.X && (int)CenterPoint.Y == (int)sound_position.Y))
+                                {
+                                    entity_found = null;
+                                    enemy_found = false;
+                                    sound_alert = false;
+                                    state = state = SquadLeaderState.Patrol;
+                                    velocity = Vector2.Zero;
+                                    animation_time = 0.0f;
+                                    windup_timer = 0.0f;
+                                    animation_time = 0.0f;
+                                }
+                            }
+                            else
+                            {
+                                entity_found = null;
+                                enemy_found = false;
+                                sound_alert = false;
+                                state = SquadLeaderState.Patrol;
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
+                                windup_timer = 0.0f;
+                                animation_time = 0.0f;
+                            }
+                        }
+                        else if(entity_found != null)
+                        {
+                            sound_alert = false;
+                            float distance = Vector2.Distance(CenterPoint, entity_found.CenterPoint);
+                            if (parentWorld.Map.enemyWithinRange(entity_found, this, range_distance) && distance < range_distance)
+                            {
+                                state = SquadLeaderState.Patrol;
+                                animation_time = 0.0f;
+                            }
+                            else
+                            {
+                                entity_found = null;
+                                enemy_found = false;
+                                state = SquadLeaderState.Patrol;
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
+                                windup_timer = 0.0f;
+                                animation_time = 0.0f;
+                            }
+                        }
+                            break;
                         case SquadLeaderState.Direct:
 
                             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
+                            float angle = (float)(Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X));
 
                             if (squad_mates[0] != null)
                             {
@@ -240,10 +331,81 @@ namespace PattyPetitGiant
                                 squad_mates[1].Follow_Point = follow_point_2;
                             }
 
+                            switch (direction_facing)
+                            {
+                                case GlobalGameConstants.Direction.Right:
+                                    if (angle < -1 * Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Up;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Right;
+                                    }
+                                    else if (angle > -1 * Math.PI / 4 && angle<Math.PI/4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Right;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Right;
+                                    }
+                                    else if (angle > Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Right;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Down;
+                                    }
+                                    break;
+                                case GlobalGameConstants.Direction.Left:
+                                    if (angle > -3 * Math.PI / 4 && angle < 0)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Left;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Up;
+                                    }
+                                    else if (angle > 3 * Math.PI / 4 || angle < -3 * Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Left;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Left;
+                                    }
+                                    else if (angle < 3 * Math.PI / 4 && angle>0)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Down;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Left;
+                                    }
+                                    break;
+                                case GlobalGameConstants.Direction.Up:
+                                    if (angle < -3 * Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Up;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Right;
+                                    }
+                                    else if (angle < -1 * Math.PI / 4 && angle > -3 * Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Up;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Up;
+                                    }
+                                    else if (angle > -1*Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Left;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Up;
+                                    }
+                                    break;
+                                default:
+                                    if (angle < Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Right;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Down;
+                                    }
+                                    else if (angle > Math.PI / 4 && angle < 3 * Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Down;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Down;
+                                    }
+                                    else if (angle > 3 * Math.PI / 4)
+                                    {
+                                        squad_mates[0].Direction_Facing = GlobalGameConstants.Direction.Down;
+                                        squad_mates[1].Direction_Facing = GlobalGameConstants.Direction.Left;
+                                    }
+                                    break;
+                            }
+
                             if ((squad_mates[0] != null && squad_mates[1] != null && squad_mates[0].Reset_State_Flag == true && squad_mates[1].Reset_State_Flag == true) || squad_mates[0] != null && squad_mates[0].Reset_State_Flag == true || squad_mates[1] != null && squad_mates[1].Reset_State_Flag == true)
                             {
-                                state = SquadLeaderState.Patrol;
-                                enemy_found = false;
+                                state = SquadLeaderState.Alert;
                             }
 
                             float distance_from_enemy = Vector2.Distance(position, entity_found.Position);

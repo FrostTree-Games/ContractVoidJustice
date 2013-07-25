@@ -226,7 +226,8 @@ namespace PattyPetitGiant
                         else if(entity_found != null)
                         {
                             sound_alert = false;
-                            if (parentWorld.Map.enemyWithinRange(entity_found, this, range_distance))
+                            float distance = Vector2.Distance(CenterPoint, entity_found.CenterPoint);
+                            if (parentWorld.Map.enemyWithinRange(entity_found, this, range_distance) && distance < range_distance)
                             {
                                 state = ChargerState.windUp;
                                 animation_time = 0.0f;

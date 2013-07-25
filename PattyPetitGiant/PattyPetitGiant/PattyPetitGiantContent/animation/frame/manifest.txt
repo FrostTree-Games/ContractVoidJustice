@@ -50,3 +50,5 @@ compassArrow
 compassOverlay
 bombArmed
 wandProjectile
+tankDead
+tankTurretDead

@@ -42,8 +42,12 @@ namespace PattyPetitGiant
         private Vector2 melee_hitbox = new Vector2(48,48);
         private Vector2 melee_position;
         private float angle;
+        private float explode_timer;
 
         private AnimationLib.FrameAnimationSet tankAnim;
+        private AnimationLib.FrameAnimationSet tankDeadAnim;
+        private AnimationLib.FrameAnimationSet tankTurretDeadAnim;
+        private AnimationLib.FrameAnimationSet plasmaExplode;
 
         public GuardMech(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -56,7 +60,7 @@ namespace PattyPetitGiant
             angle = 0.0f;
             turret_angle = angle;
 
-            enemy_life = 50;
+            enemy_life = 5;
             disable_movement = false;
             disable_movement_time = 0.0f;
             enemy_found = false;
@@ -73,6 +77,7 @@ namespace PattyPetitGiant
             entity_found = null;
             death = false;
             tank_hull_animation_time = 0.0f;
+            explode_timer = 0.0f;
 
             grenade = new Grenades(Vector2.Zero, 0.0f);
 
@@ -84,6 +89,9 @@ namespace PattyPetitGiant
             range_distance = 600.0f;
 
             tankAnim = AnimationLib.getFrameAnimationSet("tank");
+            tankDeadAnim = AnimationLib.getFrameAnimationSet("tankDead");
+            plasmaExplode = AnimationLib.getFrameAnimationSet("plasmaExplode");
+            tankTurretDeadAnim = AnimationLib.getFrameAnimationSet("tankTurretDead");
         }
 
         public override void update(GameTime currentTime)
@@ -394,6 +402,8 @@ namespace PattyPetitGiant
                         mech_state = MechState.Moving;
                         break;
                     case MechState.Death:
+                        explode_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        velocity = Vector2.Zero;
                         break;
                     default:
                         break;
@@ -405,9 +415,11 @@ namespace PattyPetitGiant
                 grenade.update(parentWorld, currentTime, this);
             }
 
-            if (enemy_life <= 0)
+            if (enemy_life <= 0 && death == false)
             {
-
+                explode_timer = 0.0f;
+                death = true;
+                mech_state = MechState.Death;
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
@@ -424,71 +436,94 @@ namespace PattyPetitGiant
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.White, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
 
-            Vector2 offset = new Vector2(19, 0);
-
-            switch (direction_facing)
-            {
-                case GlobalGameConstants.Direction.Right:
-                    if ((float)(tank_hull_angle) < (float)((Math.PI / 2) -0.02f))
-                    {
-                        tank_hull_angle += tank_hull_turn_magnitude;
-                    }
-                    else if ((float)(tank_hull_angle) > ((float)((Math.PI / 2)+0.02f)))
-                    {
-                        tank_hull_angle -= tank_hull_turn_magnitude;
-                    }
-                    offset = new Vector2(-19, 0);
-                    break;
-                case GlobalGameConstants.Direction.Left:
-                    if ((float)(tank_hull_angle) < (float)(3 * Math.PI / 2) - 0.02f)
-                    {
-                        tank_hull_angle += tank_hull_turn_magnitude;
-                    }
-                    else if ((float)(tank_hull_angle) > ((float)(3 * Math.PI / 2) + 0.02f))
-                    {
-                        tank_hull_angle -= tank_hull_turn_magnitude;
-                    }
-                    offset = new Vector2(-19, 0);
-                    break;
-                case GlobalGameConstants.Direction.Up:
-                    if ((float)(tank_hull_angle) < (float)(0.0) - 0.02f)
-                    {
-                        tank_hull_angle += tank_hull_turn_magnitude;
-                    }
-                    else if ((float)(tank_hull_angle) > ((float)(0.0)+0.02))
-                    {
-                        tank_hull_angle -= tank_hull_turn_magnitude;
-                    }
-                    offset = new Vector2(0, 19);
-                    break;
-                default:
-                    if ((float)(tank_hull_angle) < (float)(Math.PI) -0.02)
-                    {
-                        tank_hull_angle += tank_hull_turn_magnitude;
-                    }
-                    else if ((float)(tank_hull_angle) > ((float)(Math.PI)+0.02))
-                    {
-                        tank_hull_angle -= tank_hull_turn_magnitude;
-                    }
-                    offset = new Vector2(0, 19);
-                    break;
-            }
-
-            tankAnim.drawAnimationFrame(tank_hull_animation_time, sb, position - offset/2, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
-
+            
             //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0,0,1,1),position, Color.Green, 0.0f, dimensions);
 
             //tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, tank_hull_angle, new Vector2(48f,69.5f));
 
-            if(grenade.active)
+            if(mech_state == MechState.Death)
             {
-                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), grenade.Position, Color.Blue, 0.0f, grenade.Dimensions);
-                //sb.Draw(Game1.whitePixel, grenade.Position, null, Color.Blue, 0.0f, Vector2.Zero, grenade.Dimensions, SpriteEffects.None, 0.5f);
+                tankDeadAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1.0f), 0.5f, tank_hull_angle, CenterPoint, Color.White);
+                tankTurretDeadAnim.drawAnimationFrame(0.0f, sb, position + new Vector2(50, 50), new Vector2(1.0f), 0.5f, tank_hull_angle, CenterPoint, Color.White);
+                if (explode_timer < 1000)
+                {
+                    Console.WriteLine("Drawing Explosion");
+                    plasmaExplode.drawAnimationFrame(explode_timer, sb, position, new Vector2(2.0f), 0.5f, 0.0f, CenterPoint, Color.White);
+                }
             }
-            if (melee_active)
+            else
             {
-                sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), melee_position, Color.Blue, 0.0f, melee_hitbox);
-                //sb.Draw(Game1.whitePixel, melee_position, null, Color.Blue, 0.0f, Vector2.Zero, melee_hitbox, SpriteEffects.None, 0.5f);
+
+                Vector2 offset = new Vector2(19, 0);
+
+                switch (direction_facing)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        if ((float)(tank_hull_angle) < (float)((Math.PI / 2) - 0.02f))
+                        {
+                            tank_hull_angle += tank_hull_turn_magnitude;
+                        }
+                        else if ((float)(tank_hull_angle) > ((float)((Math.PI / 2) + 0.02f)))
+                        {
+                            tank_hull_angle -= tank_hull_turn_magnitude;
+                        }
+                        offset = new Vector2(-19, 0);
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        if ((float)(tank_hull_angle) < (float)(3 * Math.PI / 2) - 0.02f)
+                        {
+                            tank_hull_angle += tank_hull_turn_magnitude;
+                        }
+                        else if ((float)(tank_hull_angle) > ((float)(3 * Math.PI / 2) + 0.02f))
+                        {
+                            tank_hull_angle -= tank_hull_turn_magnitude;
+                        }
+                        offset = new Vector2(-19, 0);
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        if ((float)(tank_hull_angle) < (float)(0.0) - 0.02f)
+                        {
+                            tank_hull_angle += tank_hull_turn_magnitude;
+                        }
+                        else if ((float)(tank_hull_angle) > ((float)(0.0) + 0.02))
+                        {
+                            tank_hull_angle -= tank_hull_turn_magnitude;
+                        }
+                        offset = new Vector2(0, 19);
+                        break;
+                    default:
+                        if ((float)(tank_hull_angle) < (float)(Math.PI) - 0.02)
+                        {
+                            tank_hull_angle += tank_hull_turn_magnitude;
+                        }
+                        else if ((float)(tank_hull_angle) > ((float)(Math.PI) + 0.02))
+                        {
+                            tank_hull_angle -= tank_hull_turn_magnitude;
+                        }
+                        offset = new Vector2(0, 19);
+                        break;
+                }
+
+                tankAnim.drawAnimationFrame(tank_hull_animation_time, sb, position - offset / 2, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
+
+
+                if(grenade.active)
+                {
+                    if (grenade.State == Grenades.GrenadeState.Travel)
+                    {
+                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), grenade.Position, Color.Blue, 0.0f, grenade.Dimensions);
+                    }
+                    else if (grenade.State == Grenades.GrenadeState.Explosion)
+                    {
+                        plasmaExplode.drawAnimationFrame(grenade.explosion_timer, sb, grenade.Position, new Vector2(2.0f), 0.5f, 0.0f, grenade.CenterPoint, Color.White);
+                    }
+                    //sb.Draw(Game1.whitePixel, grenade.Position, null, Color.Blue, 0.0f, Vector2.Zero, grenade.Dimensions, SpriteEffects.None, 0.5f);
+                }
+                if (melee_active)
+                {
+                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), melee_position, Color.Blue, 0.0f, melee_hitbox);
+                    //sb.Draw(Game1.whitePixel, melee_position, null, Color.Blue, 0.0f, Vector2.Zero, melee_hitbox, SpriteEffects.None, 0.5f);
+                }
             }
         }
 
@@ -559,25 +594,28 @@ namespace PattyPetitGiant
 
         public override void spinerender(SkeletonRenderer renderer)
         {
-            current_skeleton.Skeleton.RootBone.X = CenterPoint.X;
-            current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y;
-
-            if ((int)turret_angle < (int)(angle * 180 / Math.PI))
+            if (mech_state != MechState.Death)
             {
-                turret_angle++;
+                current_skeleton.Skeleton.RootBone.X = CenterPoint.X;
+                current_skeleton.Skeleton.RootBone.Y = CenterPoint.Y;
+
+                if ((int)turret_angle < (int)(angle * 180 / Math.PI))
+                {
+                    turret_angle++;
+                }
+                else if ((int)turret_angle > (int)(angle * 180 / Math.PI))
+                {
+                    turret_angle--;
+                }
+
+                current_skeleton.Skeleton.RootBone.Rotation = (float)(-1 * turret_angle) - 90.0f;
+
+                current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
+                current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
+                current_skeleton.Skeleton.UpdateWorldTransform();
+                renderer.Draw(current_skeleton.Skeleton);
             }
-            else if ((int)turret_angle > (int)(angle * 180 / Math.PI))
-            {
-                turret_angle--;
-            }
-
-            current_skeleton.Skeleton.RootBone.Rotation = (float)(-1* turret_angle) - 90.0f;
-
-            current_skeleton.Skeleton.RootBone.ScaleX = 1.0f;
-            current_skeleton.Skeleton.RootBone.ScaleY = 1.0f;
-
-            current_skeleton.Skeleton.UpdateWorldTransform();
-            renderer.Draw(current_skeleton.Skeleton);
+            
         }
 
         public bool meleeHitTest(Entity other)
@@ -600,17 +638,21 @@ namespace PattyPetitGiant
             private Vector2 velocity;
             public bool active;
 
-            private enum GrenadeState
+            public enum GrenadeState
             {
                 Travel,
                 Explosion,
                 Reset
             }
             private GrenadeState state;
+            public GrenadeState State
+            {
+                get { return state; }
+            }
 
             private float active_timer;
             private const float max_active_time = 2000.0f;
-            private float explosion_timer;
+            public float explosion_timer;
             private const float max_explosion_timer = 1000.0f;
             public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X / 2, position.Y + dimensions.Y / 2); } }
             private Vector2 nextStep_temp;
