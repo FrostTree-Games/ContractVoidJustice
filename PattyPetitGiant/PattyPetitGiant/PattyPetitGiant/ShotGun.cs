@@ -29,6 +29,8 @@ namespace PattyPetitGiant
         private float damage_delay = 100.0f;
         private bool damage_delay_flag = false;
 
+        private const string shot_gun_sound = "shotgun";
+
         private AnimationLib.FrameAnimationSet bulletAnim = null;
 
         public ShotGun()
@@ -94,6 +96,9 @@ namespace PattyPetitGiant
                         pellet_angle_direction = (float)(Math.PI / 2.4);
                         break;
                 }
+
+                AudioLib.playSoundEffect(shot_gun_sound);
+
                 for (int i = 0; i < max_pellets; i++)
                 {
                     parent.Animation_Time = 0;

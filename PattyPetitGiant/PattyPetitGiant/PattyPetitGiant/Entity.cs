@@ -91,7 +91,7 @@ namespace PattyPetitGiant
         public bool Remove_From_List { get { return remove_from_list; } }
 
         protected bool death = false;
-        public bool Death { get { return remove_from_list; } }
+        public bool Death { get { return death; } }
 
         protected SecondaryHitBox[] secondaryHitBoxes = null;
         public SecondaryHitBox[] SecondaryHitBoxes { get { return secondaryHitBoxes; } }

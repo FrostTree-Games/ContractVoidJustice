@@ -115,6 +115,13 @@ namespace PattyPetitGiant
                 return (fade_state == FadeState.fadeOut)? Color.Lerp(Color.White, Color.Black, (float)(fade/fade_duration)) : (fade_state == FadeState.fadeIn)? Color.Lerp(Color.White, Color.Black,1.0f - (float)(fade/fade_duration)) : Color.White;
             }
         }
+        private Color fadeTextColour
+        {
+            get
+            {
+                return (fade_state == FadeState.fadeOut) ? Color.Lerp(Color.LightSkyBlue, Color.Black, (float)(fade / fade_duration)) : (fade_state == FadeState.fadeIn) ? Color.Lerp(Color.LightSkyBlue, Color.Black, 1.0f - (float)(fade / fade_duration)) : Color.LightSkyBlue;
+            }
+        }
 
         public TitleScreen(Model model, float aspectRatio, Texture2D texture)
         {
@@ -314,14 +321,15 @@ namespace PattyPetitGiant
                     sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     break;
                 case titleScreens.menuScreen:
+                    sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
                     sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
-
+                    
                     for (int i = 0; i < menu_list.Count(); i++)
                     {
-                        sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+                        sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
                     }
-
-                    Matrix[] transforms = new Matrix[myModel.Bones.Count];
+                    
+                    /*Matrix[] transforms = new Matrix[myModel.Bones.Count];
                     myModel.CopyAbsoluteBoneTransformsTo(transforms);
 
                     AnimationLib.GraphicsDevice.BlendState = BlendState.Opaque;
@@ -349,7 +357,7 @@ namespace PattyPetitGiant
                             //effect.Texture = ship_texture;
                         }
                         mesh.Draw();
-                    }
+                    }*/
                     break;
                 default:
                     break;

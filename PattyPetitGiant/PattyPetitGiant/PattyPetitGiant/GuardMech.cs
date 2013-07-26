@@ -33,7 +33,6 @@ namespace PattyPetitGiant
         private float tank_hull_animation_time = 0.0f;
         private const float tank_hull_turn_magnitude = 0.02f;
         private bool melee_active = false;
-        private bool death = false;
 
         private MechState mech_state = MechState.Moving;
         private EnemyComponents component = null;
@@ -43,11 +42,13 @@ namespace PattyPetitGiant
         private Vector2 melee_position;
         private float angle;
         private float explode_timer;
+        private float rocket_angle;
 
         private AnimationLib.FrameAnimationSet tankAnim;
         private AnimationLib.FrameAnimationSet tankDeadAnim;
         private AnimationLib.FrameAnimationSet tankTurretDeadAnim;
         private AnimationLib.FrameAnimationSet plasmaExplode;
+        private AnimationLib.FrameAnimationSet rocketProjectile;
 
         public GuardMech(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -78,6 +79,7 @@ namespace PattyPetitGiant
             death = false;
             tank_hull_animation_time = 0.0f;
             explode_timer = 0.0f;
+            rocket_angle = 0.0f;
 
             grenade = new Grenades(Vector2.Zero, 0.0f);
 
@@ -92,6 +94,7 @@ namespace PattyPetitGiant
             tankDeadAnim = AnimationLib.getFrameAnimationSet("tankDead");
             plasmaExplode = AnimationLib.getFrameAnimationSet("plasmaExplode");
             tankTurretDeadAnim = AnimationLib.getFrameAnimationSet("tankTurretDead");
+            rocketProjectile = AnimationLib.getFrameAnimationSet("rocketProjectile");
         }
 
         public override void update(GameTime currentTime)
@@ -205,6 +208,7 @@ namespace PattyPetitGiant
                         {
                             if (grenade.active == false)
                             {
+                                rocket_angle = (float)Math.Atan2(entity_found.CenterPoint.Y - current_skeleton.Skeleton.FindBone("muzzle").WorldY, entity_found.CenterPoint.X - current_skeleton.Skeleton.FindBone("muzzle").WorldX);
                                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
                                 grenade = new Grenades(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), angle);
                                 grenade.active = true;
@@ -403,6 +407,7 @@ namespace PattyPetitGiant
                         break;
                     case MechState.Death:
                         explode_timer += currentTime.ElapsedGameTime.Milliseconds;
+                        death = true;
                         velocity = Vector2.Zero;
                         break;
                     default:
@@ -447,7 +452,6 @@ namespace PattyPetitGiant
                 tankTurretDeadAnim.drawAnimationFrame(0.0f, sb, position + new Vector2(50, 50), new Vector2(1.0f), 0.5f, tank_hull_angle, CenterPoint, Color.White);
                 if (explode_timer < 1000)
                 {
-                    Console.WriteLine("Drawing Explosion");
                     plasmaExplode.drawAnimationFrame(explode_timer, sb, position, new Vector2(2.0f), 0.5f, 0.0f, CenterPoint, Color.White);
                 }
             }
@@ -511,7 +515,7 @@ namespace PattyPetitGiant
                 {
                     if (grenade.State == Grenades.GrenadeState.Travel)
                     {
-                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), grenade.Position, Color.Blue, 0.0f, grenade.Dimensions);
+                        rocketProjectile.drawAnimationFrame(grenade.Active_Timer, sb, grenade.Position, new Vector2(1.0f), 0.5f, rocket_angle, grenade.CenterPoint, Color.White);
                     }
                     else if (grenade.State == Grenades.GrenadeState.Explosion)
                     {
@@ -651,6 +655,10 @@ namespace PattyPetitGiant
             }
 
             private float active_timer;
+            public float Active_Timer
+            {
+                get { return active_timer; }
+            }
             private const float max_active_time = 2000.0f;
             public float explosion_timer;
             private const float max_explosion_timer = 1000.0f;

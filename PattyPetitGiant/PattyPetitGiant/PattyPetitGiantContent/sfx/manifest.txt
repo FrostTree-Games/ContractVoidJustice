@@ -11,3 +11,4 @@ fleshyKnockBack
 swordHit
 waveShot
 waveHit
+shotgun

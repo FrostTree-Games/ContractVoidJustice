@@ -154,7 +154,7 @@ namespace PattyPetitGiant
                     break;
                 case Bomb_State.exploded:
                     //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Red, 0.0f, hitbox);
-                    explosionAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    explosionAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(2.25f), 0.5f, 0.0f, Vector2.Zero, Color.White);
                     break;
                 default:
                     break;

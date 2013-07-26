@@ -285,12 +285,6 @@ namespace PattyPetitGiant
                     chase_stage = ChaseAttackStage.none;
                     state = EnemyState.Moving;
 
-                    AudioLib.playSoundEffect("fleshyKnockBack");
-
-                    parentWorld.Particles.pushBloodParticle(CenterPoint);
-                    parentWorld.Particles.pushBloodParticle(CenterPoint);
-                    parentWorld.Particles.pushBloodParticle(CenterPoint);
-
                     disable_movement = true;
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
@@ -342,6 +336,12 @@ namespace PattyPetitGiant
                     }
                 }
             }
+            AudioLib.playSoundEffect("fleshyKnockBack");
+
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+
         }
 
         public bool swordSlashHitTest(Entity other)

@@ -132,7 +132,6 @@ namespace PattyPetitGiant
                     bushido_state = BushidoState.preslash;
                     animation_time = 0.0f;
                 }
-                Console.WriteLine(animation_time);
             }
             if (enemy_explode == true)
             {

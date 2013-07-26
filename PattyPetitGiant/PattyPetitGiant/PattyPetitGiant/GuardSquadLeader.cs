@@ -96,7 +96,6 @@ namespace PattyPetitGiant
         public override void update(GameTime currentTime)
         {
 
-            Console.WriteLine(state);
 
             if (bullet_number > 0)
             {
