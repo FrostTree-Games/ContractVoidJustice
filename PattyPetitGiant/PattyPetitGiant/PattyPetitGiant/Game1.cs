@@ -150,7 +150,7 @@ namespace PattyPetitGiant
 
             GlobalGameConstants.WeaponDictionary.InitalizePriceData();
 
-            GameCampaign.ResetPlayerValues();
+            GameCampaign.ResetPlayerValues("INIT", 0);
 
            currentGameScreen = new CampaignLobbyState();
         }

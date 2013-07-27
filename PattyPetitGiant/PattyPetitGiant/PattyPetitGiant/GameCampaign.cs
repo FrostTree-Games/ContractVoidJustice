@@ -77,11 +77,13 @@ namespace PattyPetitGiant
 
         private static string playerName = null;
         public static string PlayerName { get { return playerName; } }
+        private static int playerColor = 0;
+        public static int PlayerColor { get { return playerColor; } } 
 
         private static float elapsedCampaignTime;
         public static float ElapsedCampaignTime { get { return elapsedCampaignTime; } set { elapsedCampaignTime = value; } }
 
-        public static void ResetPlayerValues()
+        public static void ResetPlayerValues(string player1Name, int player1Color)
         {
             PlayerLevelProgress = 0;
             PlayerFloorHeight = 1;
@@ -91,7 +93,8 @@ namespace PattyPetitGiant
 
             allegiance = 0.5f;
 
-            playerName = "Jensen";
+            playerName = player1Name;
+            playerColor = player1Color;
 
             player_health = 100;
             player_ammunition = 100;

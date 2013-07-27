@@ -34,18 +34,18 @@ namespace PattyPetitGiant
 
         private ScreenState.ScreenStateType nextState;
 
-        private bool player1CancelPressed = false;
-        private bool player2CancelPressed = false;
-
         private bool player1RightPressed = false;
         private bool player1LeftPressed = false;
         private bool player1DownPressed = false;
         private bool player1UpPressed = false;
+        private bool player1StartPressed = false;
+        private bool player1CancelPressed = false;
 
         private bool player2RightPressed = false;
         private bool player2LeftPressed = false;
         private bool player2DownPressed = false;
         private bool player2UpPressed = false;
+        private bool player2CancelPressed = false;
 
         private float lineOffset;
         private const float lineMoveSpeed = 0.01f;
@@ -55,7 +55,8 @@ namespace PattyPetitGiant
         private float timePassed;
 
         private string addAPlayerMessage = "One or two players may join the game.";
-        private string pressStartToPlayMessage = "Press start when all players are ready.";
+        private string pressStartToPlayMessage = "Press Player 1 start when all players are ready.";
+        private string pressEnterToPlayMessage = "When all players are ready press ";
         private string joinMessage =
 #if WINDOWS
             "Press Confirm to Join";
@@ -211,8 +212,6 @@ namespace PattyPetitGiant
                     }
                 }
 
-                //// ----
-
                 if (slot2.InputDevice != InputDevice2.PlayerPad.NoPad)
                 {
                     if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.RightDirection))
@@ -272,6 +271,45 @@ namespace PattyPetitGiant
                     }
                 }
             }
+
+            // pressing cancel to quit
+            {
+                if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad)
+                {
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Cancel))
+                    {
+                        player1CancelPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Cancel) && player1CancelPressed)
+                    {
+                        player1CancelPressed = false;
+
+                        nextState = ScreenStateType.TitleScreen;
+
+                        isComplete = true;
+                    }
+                }
+            }
+
+            // pressing start to continue
+            {
+                if (slot1.InputDevice != InputDevice2.PlayerPad.NoPad)
+                {
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton))
+                    {
+                        player1StartPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection) && player1StartPressed)
+                    {
+                        player1StartPressed = false;
+
+                        nextState = ScreenStateType.LevelSelectState;
+
+                        GameCampaign.ResetPlayerValues(slot1.Name, slot1.Color);
+                        isComplete = true;
+                    }
+                }
+            }
         }
 
         private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
@@ -315,7 +353,14 @@ namespace PattyPetitGiant
             }
             else
             {
-                sb.DrawString(Game1.tenbyFive14, pressStartToPlayMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(pressStartToPlayMessage) / 2, Color.White);
+                if (slot1.InputDevice != InputDevice2.PlayerPad.Keyboard)
+                {
+                    sb.DrawString(Game1.tenbyFive14, pressStartToPlayMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(pressStartToPlayMessage) / 2, Color.White);
+                }
+                else
+                {
+                    sb.DrawString(Game1.tenbyFive14, pressEnterToPlayMessage + InputDevice2.KeyConfig.PauseButton.ToString() + ".", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(pressEnterToPlayMessage + InputDevice2.KeyConfig.PauseButton.ToString() + ".") / 2, Color.White);
+                }
             }
 
             drawBox(sb, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 306, 96, 288, 256), slot1.InputDevice != InputDevice2.PlayerPad.NoPad ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);

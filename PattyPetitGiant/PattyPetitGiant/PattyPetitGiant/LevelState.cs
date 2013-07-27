@@ -414,7 +414,6 @@ namespace PattyPetitGiant
 
                 if (fadeOutTime >= fadeOutDuration)
                 {
-                    GameCampaign.ResetPlayerValues();
                     isComplete = true;
                 }
             }
@@ -498,7 +497,7 @@ namespace PattyPetitGiant
         {
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            sb.DrawString(Game1.font, "PAUSED HOMIE\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, 0.4f));
+            sb.DrawString(Game1.font, "PAUSED HOMIE\nName: " + GameCampaign.PlayerName + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, 0.4f));
 
             sb.End();
         }
@@ -527,7 +526,7 @@ namespace PattyPetitGiant
             }
             else if (player1Dead)
             {
-                return ScreenStateType.LevelSelectState;
+                return ScreenStateType.GameSetupMenu;
             }
             else
             {
