@@ -17,13 +17,15 @@ namespace PattyPetitGiant
         {
             public InputDevice2.PlayerPad InputDevice;
             public string Name;
-            public float Hue;
+            public int Color;
 
-            public CampaignLoadout(InputDevice2.PlayerPad InputDevice, string Name, float Hue)
+            public const int NumberOfColors = 6;
+
+            public CampaignLoadout(InputDevice2.PlayerPad InputDevice, string Name, int Color)
             {
                 this.InputDevice = InputDevice;
                 this.Name = Name;
-                this.Hue = Hue % 1.0f;
+                this.Color = Color % NumberOfColors;
             }
         }
 
@@ -34,6 +36,16 @@ namespace PattyPetitGiant
 
         private bool player1CancelPressed = false;
         private bool player2CancelPressed = false;
+
+        private bool player1RightPressed = false;
+        private bool player1LeftPressed = false;
+        private bool player1DownPressed = false;
+        private bool player1UpPressed = false;
+
+        private bool player2RightPressed = false;
+        private bool player2LeftPressed = false;
+        private bool player2DownPressed = false;
+        private bool player2UpPressed = false;
 
         private float lineOffset;
         private const float lineMoveSpeed = 0.01f;
@@ -112,7 +124,7 @@ namespace PattyPetitGiant
                 {
                     if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad)
                     {
-                        slot1 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], 0.5f);
+                        slot1 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], Game1.rand.Next() % CampaignLoadout.NumberOfColors);
 
                         InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, pressed);
                     }
@@ -120,7 +132,7 @@ namespace PattyPetitGiant
                     {
                         if (pressed != slot1.InputDevice)
                         {
-                            slot2 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], 0.5f);
+                            slot2 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], Game1.rand.Next() % CampaignLoadout.NumberOfColors);
 
                             InputDevice2.LockController(InputDevice2.PPG_Player.Player_2, pressed);
                         }
@@ -140,7 +152,125 @@ namespace PattyPetitGiant
 
             // adjust player values
             {
-                //
+                if (slot1.InputDevice != InputDevice2.PlayerPad.NoPad)
+                {
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.RightDirection))
+                    {
+                        player1RightPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.RightDirection) && player1RightPressed)
+                    {
+                        player1RightPressed = false;
+
+                        slot1.Color = ((slot1.Color + 1) % CampaignLoadout.NumberOfColors);
+
+                        if (slot1.Color == 3) { slot1.Color--; }
+                        if (slot1.Color == 0) { slot1.Color = 5; }
+                    }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection))
+                    {
+                        player1LeftPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection) && player1LeftPressed)
+                    {
+                        player1LeftPressed = false;
+
+                        slot1.Color -= 1;
+
+                        if (slot1.Color < 0) { slot1.Color = 0; }
+                        if (slot1.Color == 2) { slot1.Color = 3; }
+                    }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection))
+                    {
+                        player1DownPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && player1DownPressed)
+                    {
+                        player1DownPressed = false;
+
+                        if (slot1.Color < 3)
+                        {
+                            slot1.Color += 3;
+                        }
+                    }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection))
+                    {
+                        player1UpPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && player1UpPressed)
+                    {
+                        player1UpPressed = false;
+
+                        if (slot1.Color > 2)
+                        {
+                            slot1.Color -= 3;
+                        }
+                    }
+                }
+
+                //// ----
+
+                if (slot2.InputDevice != InputDevice2.PlayerPad.NoPad)
+                {
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.RightDirection))
+                    {
+                        player2RightPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.RightDirection) && player2RightPressed)
+                    {
+                        player2RightPressed = false;
+
+                        slot2.Color = ((slot2.Color + 1) % CampaignLoadout.NumberOfColors);
+
+                        if (slot2.Color == 3) { slot2.Color--; }
+                        if (slot2.Color == 0) { slot2.Color = 5; }
+                    }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.LeftDirection))
+                    {
+                        player2LeftPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.LeftDirection) && player2LeftPressed)
+                    {
+                        player2LeftPressed = false;
+
+                        slot2.Color -= 1;
+
+                        if (slot2.Color < 0) { slot2.Color = 0; }
+                        if (slot2.Color == 2) { slot2.Color = 3; }
+                    }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.DownDirection))
+                    {
+                        player2DownPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.DownDirection) && player2DownPressed)
+                    {
+                        player2DownPressed = false;
+
+                        if (slot2.Color < 3)
+                        {
+                            slot2.Color += 3;
+                        }
+                    }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.UpDirection))
+                    {
+                        player2UpPressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.UpDirection) && player2UpPressed)
+                    {
+                        player2UpPressed = false;
+
+                        if (slot2.Color > 2)
+                        {
+                            slot2.Color -= 3;
+                        }
+                    }
+                }
             }
         }
 
@@ -202,6 +332,13 @@ namespace PattyPetitGiant
                 sb.DrawString(Game1.tenbyFive14, "Name: " + slot1.Name, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 306, 96) + new Vector2(16), Color.LightBlue);
 
                 sb.Draw(controllerIndexArt, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 306 + 288 - 40, 104, 32, 32), new Rectangle(128 * (int)(slot1.InputDevice), 0, 128, 128), Color.LightBlue);
+
+                int drawY = 96 + 64;
+                for (int i = 0; i < CampaignLoadout.NumberOfColors; i++)
+                {
+                    if (i == 3) { drawY += 80 + 8; }
+                    drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 306 + 16) + ((80 + 8) * (i % 3)), drawY, 80, 80), i == slot1.Color ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);
+                }
             }
 
             if (slot2.InputDevice == InputDevice2.PlayerPad.NoPad)
@@ -213,6 +350,13 @@ namespace PattyPetitGiant
                 sb.DrawString(Game1.tenbyFive14, "Name: " + slot2.Name, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 16, 96) + new Vector2(16), Color.LightBlue);
 
                 sb.Draw(controllerIndexArt, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 + 16 + 288 - 40, 104, 32, 32), new Rectangle(128 * (int)(slot2.InputDevice), 0, 128, 128), Color.LightBlue);
+
+                int drawY = 96 + 64;
+                for (int i = 0; i < CampaignLoadout.NumberOfColors; i++)
+                {
+                    if (i == 3) { drawY += 80 + 8; }
+                    drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 + 16 + 16) + ((80 + 8) * (i % 3)), drawY, 80, 80), i == slot2.Color ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);
+                }
             }
 
             sb.End();
@@ -254,6 +398,26 @@ namespace PattyPetitGiant
                                                 "Darline",
                                                 "Roselle",
                                                 "Hiram",
+                                                "Marin",
+                                                "John",
+                                                "Chief",
+                                                "Agent",
+                                                "Commando",
+                                                "Patrick",
+                                                "Petit",
+                                                "Giant",
+                                                "Quixote",
+                                                "Security",
+                                                "Mitt",
+                                                "Barack",
+                                                "Gregory",
+                                                "Karin",
+                                                "Robo",
+                                                "Diskun",
+                                                "Takamaru",
+                                                "Gary",
+                                                "Red",
+                                                "Levin",
                                                 "Velda",
                                                 "Roselia",
                                                 "Lizbeth",
