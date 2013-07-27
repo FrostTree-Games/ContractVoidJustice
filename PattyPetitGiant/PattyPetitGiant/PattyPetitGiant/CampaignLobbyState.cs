@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.GamerServices;
+using Spine;
 
 namespace PattyPetitGiant
 {
@@ -34,6 +35,15 @@ namespace PattyPetitGiant
         private bool player1CancelPressed = false;
         private bool player2CancelPressed = false;
 
+        private float lineOffset;
+        private const float lineMoveSpeed = 0.01f;
+
+        private Texture2D controllerIndexArt = null;
+
+        private float timePassed;
+
+        private string addAPlayerMessage = "One or two players may join the game.";
+        private string pressStartToPlayMessage = "Press start when all players are ready.";
         private string joinMessage =
 #if WINDOWS
             "Press Confirm to Join";
@@ -46,11 +56,22 @@ namespace PattyPetitGiant
             slot1.InputDevice = InputDevice2.PlayerPad.NoPad;
             slot2.InputDevice = InputDevice2.PlayerPad.NoPad;
 
-            nextState = ScreenStateType.TitleScreen; 
+            controllerIndexArt = TextureLib.getLoadedTexture("controllerIndexArt.png");
+
+            nextState = ScreenStateType.TitleScreen;
+
+            lineOffset = 0;
+
+            timePassed = 0.0f;
         }
 
         protected override void doUpdate(GameTime currentTime)
         {
+            timePassed += currentTime.ElapsedGameTime.Milliseconds;
+
+            lineOffset += (currentTime.ElapsedGameTime.Milliseconds * lineMoveSpeed);
+            if (lineOffset > 16.0f) { lineOffset -= 16.0f; }
+
             // handle players leaving
             {
                 if (slot1.InputDevice != InputDevice2.PlayerPad.NoPad)
@@ -116,6 +137,11 @@ namespace PattyPetitGiant
                     slot2.InputDevice = InputDevice2.PlayerPad.NoPad;
                 }
             }
+
+            // adjust player values
+            {
+                //
+            }
         }
 
         private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
@@ -135,45 +161,58 @@ namespace PattyPetitGiant
         {
             AnimationLib.GraphicsDevice.Clear(Color.Black);
 
+            Vector2 linesOffset = new Vector2(lineOffset);
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
 #if SHOW_TITLE_SAFE
-            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.3f));
 
-            for (int i = 0; i < GlobalGameConstants.GameResolutionWidth; i += 16)
+            for (int i = -6; i < GlobalGameConstants.GameResolutionWidth / 16 + 8; i ++)
             {
-                drawLine(sb, new Vector2(i, 0), GlobalGameConstants.GameResolutionHeight, (float)Math.PI / 2, new Color(1, 0, 1, 0.25f), 1.0f);
+                drawLine(sb, new Vector2(i * 16, -16) + linesOffset, GlobalGameConstants.GameResolutionHeight + 32, (float)Math.PI / 2, new Color(1, 0, 1, 0.1f), 1.0f);
             }
 
-            for (int i = 0; i < GlobalGameConstants.GameResolutionHeight; i += 16)
+            for (int i = -6; i < GlobalGameConstants.GameResolutionHeight / 16 + 8; i++)
             {
-                drawLine(sb, new Vector2(0, i), GlobalGameConstants.GameResolutionWidth, 0, new Color(1, 0, 1, 0.25f), 1.0f);
+                drawLine(sb, new Vector2(-16, i * 16) + linesOffset, GlobalGameConstants.GameResolutionWidth + 32, 0, new Color(1, 0, 1, 0.1f), 1.0f);
             }
+
+            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
 #endif
-
-            sb.DrawString(Game1.tenbyFive14, "Foo no way that's cool man.", new Vector2(500), Color.White);
-
-            drawBox(sb, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 306, 96, 288, 192), Color.LightBlue, 2.0f);
-            sb.DrawString(Game1.tenbyFive14, "Player 1", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 306, 288), Color.LightBlue);
-            drawBox(sb, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 + 16, 96, 288, 192), Color.LightBlue, 2.0f);
-            sb.DrawString(Game1.tenbyFive14, "Player 2", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 16, 288), Color.LightBlue);
 
             if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad)
             {
-                sb.DrawString(Game1.tenbyFive14, joinMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 306, 96) + new Vector2(288 / 2, 192 / 2) - (Game1.tenbyFive14.MeasureString(joinMessage) / 2.0f), Color.LightBlue);
+                sb.DrawString(Game1.tenbyFive14, addAPlayerMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(addAPlayerMessage) / 2, new Color(1, 1, 1, (float)Math.Abs(Math.Sin(timePassed / 600f))));
+            }
+            else
+            {
+                sb.DrawString(Game1.tenbyFive14, pressStartToPlayMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(pressStartToPlayMessage) / 2, Color.White);
+            }
+
+            drawBox(sb, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 306, 96, 288, 256), slot1.InputDevice != InputDevice2.PlayerPad.NoPad ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);
+            sb.DrawString(Game1.tenbyFive14, "Player 1", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 306, 352), slot1.InputDevice != InputDevice2.PlayerPad.NoPad ? Color.LightBlue : new Color(173, 216, 230, 80));
+            drawBox(sb, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 + 16, 96, 288, 256), slot2.InputDevice != InputDevice2.PlayerPad.NoPad ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);
+            sb.DrawString(Game1.tenbyFive14, "Player 2", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 16, 352), slot2.InputDevice != InputDevice2.PlayerPad.NoPad ? Color.LightBlue : new Color(173, 216, 230, 80));
+
+            if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad)
+            {
+                sb.DrawString(Game1.tenbyFive14, joinMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 306, 96) + new Vector2(288 / 2, 256 / 2) - (Game1.tenbyFive14.MeasureString(joinMessage) / 2.0f), Color.LightBlue);
             }
             else
             {
                 sb.DrawString(Game1.tenbyFive14, "Name: " + slot1.Name, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 306, 96) + new Vector2(16), Color.LightBlue);
+
+                sb.Draw(controllerIndexArt, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 306 + 288 - 40, 104, 32, 32), new Rectangle(128 * (int)(slot1.InputDevice), 0, 128, 128), Color.LightBlue);
             }
 
             if (slot2.InputDevice == InputDevice2.PlayerPad.NoPad)
             {
-                sb.DrawString(Game1.tenbyFive14, joinMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 16, 96) + new Vector2(288 / 2, 192 / 2) - (Game1.tenbyFive14.MeasureString(joinMessage) / 2.0f), Color.LightBlue);
+                sb.DrawString(Game1.tenbyFive14, joinMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 16, 96) + new Vector2(288 / 2, 256 / 2) - (Game1.tenbyFive14.MeasureString(joinMessage) / 2.0f), Color.LightBlue);
             }
             else
             {
                 sb.DrawString(Game1.tenbyFive14, "Name: " + slot2.Name, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 16, 96) + new Vector2(16), Color.LightBlue);
+
+                sb.Draw(controllerIndexArt, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 + 16 + 288 - 40, 104, 32, 32), new Rectangle(128 * (int)(slot2.InputDevice), 0, 128, 128), Color.LightBlue);
             }
 
             sb.End();

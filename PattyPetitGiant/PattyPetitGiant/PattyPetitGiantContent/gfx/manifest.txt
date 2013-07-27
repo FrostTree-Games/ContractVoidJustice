@@ -26,3 +26,4 @@ hook.png
 testParticles.png
 mapPda.png
 compassOverlay.png
+controllerIndexArt.png
