@@ -250,7 +250,7 @@ namespace PattyPetitGiant
             Rectangle contractBox = new Rectangle(1125, 525, 550, 200);
             drawBox(sb, contractBox, Color.Orange, 2);
             sb.DrawString(Game1.tenbyFive24, "Contract", new Vector2(1325, 525), Color.Orange);
-            sb.DrawString(Game1.tenbyFive14, "Foo foo bar foo bar foo bar foo", new Vector2(1140, 565), Color.Orange);
+            sb.DrawString(Game1.tenbyFive14, levelMap[selectedLevelX, selectedLevelY].contract.contractMessage, new Vector2(1140, 565), Color.Orange);
 
             sb.End();
         }

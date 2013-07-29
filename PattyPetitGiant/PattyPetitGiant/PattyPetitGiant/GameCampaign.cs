@@ -19,11 +19,66 @@ namespace PattyPetitGiant
             public Entity.EnemyType killTarget;
             public int goldPerKill;
 
+            public string contractMessage;
+
             public GameContract(ContractType type, Entity.EnemyType killTarget, int goldPerKill)
             {
                 this.type = type;
                 this.killTarget = killTarget;
                 this.goldPerKill = goldPerKill;
+
+                StringBuilder builder = new StringBuilder();
+
+                if (killTarget == Entity.EnemyType.Prisoner)
+                {
+                    switch (Game1.rand.Next() % 3)
+                    {
+                        case 0:
+                            builder.Append("The ship's Warden wants to quell a prisoner uprising in the sector. ");
+                            break;
+                        case 1:
+                            builder.Append("The guards in this sector need escaped prisoners killed and are posting a bounty. ");
+                            break;
+                        default:
+                            builder.Append("A prisoner riot is building in this sector and the Warden wants it shut down. ");
+                            break;
+                    }
+                }
+                else if (killTarget == Entity.EnemyType.Guard)
+                {
+                    switch (Game1.rand.Next() % 3)
+                    {
+                        case 0:
+                            builder.Append("Escaped prisoners are trying to take over the sector and have requested aid. ");
+                            break;
+                        case 1:
+                            builder.Append("Prisoners want guards dead. ");
+                            break;
+                        default:
+                            builder.Append("The prisoners are preparing a riot in one of the sectors and posted a bounty. ");
+                            break;
+                    }
+                }
+
+                builder.Append(Game1.rand.Next() % 2 == 0 ? "Take out " : "Terminate ");
+
+                if (killTarget == Entity.EnemyType.Prisoner)
+                {
+                    builder.Append(Game1.rand.Next() % 2 == 0 ? "escaped prisoners " : "prisoners ");
+                }
+                else if (killTarget == Entity.EnemyType.Guard)
+                {
+                    builder.Append(Game1.rand.Next() % 2 == 0 ? "prison security " : "guards ");
+                }
+
+                builder.Append("for ");
+
+                builder.Append(goldPerKill);
+
+                builder.Append(" credits per kill. ");
+
+                int linesOut = 0;
+                contractMessage = InGameGUI.WrapText(Game1.tenbyFive14, builder.ToString(), 525, ref linesOut);
             }
         }
 
