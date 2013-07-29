@@ -52,8 +52,8 @@ namespace PattyPetitGiant
         private const float cursorVelocity = 0.5f;
         private float cursorAnimationTime;
 
-        private Vector2 drawMapTestOffset = new Vector2(1000, 225);
-        private Vector2 testDetailStuff = new Vector2(750, 550);
+        private Vector2 drawMapTestOffset = new Vector2(850, 225);
+        private Vector2 testDetailStuff = new Vector2(775, 530);
 
         private bool upPressed = false;
         private bool downPressed = false;
@@ -197,7 +197,7 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) / 2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
 
-            sb.Draw(wireframe, Vector2.Zero, null, Color.Lerp(Color.DarkOrange, Color.Black, 0.375f + (0.025f * (float)Math.Sin(cursorAnimationTime / 10))), 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
+            sb.Draw(wireframe, new Vector2(-150, 0), null, Color.Lerp(Color.DarkOrange, Color.Black, 0.375f + (0.025f * (float)Math.Sin(cursorAnimationTime / 10))), 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
 
             for (int i = 0; i < levelMap.GetLength(0); i++)
             {
@@ -237,14 +237,20 @@ namespace PattyPetitGiant
             rx.Height += 6;
             drawBox(sb, rx, Color.Orange, 2);
 
-            sb.DrawString(Game1.testComputerFont, "\nPrisoner Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Orange);
-            sb.DrawString(Game1.testComputerFont, "\n\nAlien Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Red);
+            drawBox(sb, new Rectangle(755, 500, 305, 200), Color.Orange, 2);
+            sb.DrawString(Game1.testComputerFont, "\n\nPrisoner Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Orange);
+            sb.DrawString(Game1.testComputerFont, "\n\n\n\nAlien Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Red);
             sb.DrawString(Game1.testComputerFont, "\n\n\nGuard Rates: " + Math.Round(100 * (levelMap[selectedLevelX, selectedLevelY].guardRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].alienRates + levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.LightBlue);
 
-            sb.Draw(Game1.whitePixel, testDetailStuff - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(52, 16), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.whitePixel, testDetailStuff, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.whitePixel, testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.Red, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.whitePixel, testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0) + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 0), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].guardRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 50, 14), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, new Vector2(75, 0) + testDetailStuff - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(127, 34), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, new Vector2(75, 0) + testDetailStuff, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 125, 32), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, new Vector2(75, 0) + testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 125, 0), null, Color.Red, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 125, 32), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, new Vector2(75, 0) + testDetailStuff + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].prisonerRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 125, 0) + new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].alienRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 125, 0), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2((float)(levelMap[selectedLevelX, selectedLevelY].guardRates / (levelMap[selectedLevelX, selectedLevelY].prisonerRates + levelMap[selectedLevelX, selectedLevelY].guardRates + levelMap[selectedLevelX, selectedLevelY].alienRates)) * 125, 32), SpriteEffects.None, 0.5f);
+          
+            Rectangle contractBox = new Rectangle(1125, 525, 550, 200);
+            drawBox(sb, contractBox, Color.Orange, 2);
+            sb.DrawString(Game1.tenbyFive24, "Contract", new Vector2(1325, 525), Color.Orange);
+            sb.DrawString(Game1.tenbyFive14, "Foo foo bar foo bar foo bar foo", new Vector2(1140, 565), Color.Orange);
 
             sb.End();
         }
