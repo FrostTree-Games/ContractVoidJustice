@@ -27,6 +27,12 @@ namespace PattyPetitGiant
                 this.killTarget = killTarget;
                 this.goldPerKill = goldPerKill;
 
+                if (type == ContractType.NoContract)
+                {
+                    contractMessage = "No contracts available at this time.";
+                    return;
+                }
+
                 StringBuilder builder = new StringBuilder();
 
                 if (killTarget == Entity.EnemyType.Prisoner)
@@ -123,6 +129,8 @@ namespace PattyPetitGiant
         public static GlobalGameConstants.itemType Player_Item_1;
         public static GlobalGameConstants.itemType Player_Item_2;
 
+        public static GameContract currentContract;
+
         /// <summary>
         /// Indicates how many levels the player has completed so far in the campaign.
         /// </summary>
@@ -180,6 +188,9 @@ namespace PattyPetitGiant
             currentAlienRate = 1;
 
             elapsedCampaignTime = 0.0f;
+
+            currentContract = new GameContract();
+            currentContract.type = GameContract.ContractType.NoContract;
         }
     }
 }

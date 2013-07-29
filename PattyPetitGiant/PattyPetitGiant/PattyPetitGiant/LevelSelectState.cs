@@ -41,7 +41,18 @@ namespace PattyPetitGiant
                 this.alienRates = alienRates;
                 this.lootRates = lootRates;
 
-                contract = new GameCampaign.GameContract(GameCampaign.GameContract.ContractType.KillQuest, Entity.EnemyType.Prisoner, 10);
+                if ((prisonerRates / (prisonerRates + guardRates + alienRates)) > 0.4)
+                {
+                    contract = new GameCampaign.GameContract(GameCampaign.GameContract.ContractType.KillQuest, Entity.EnemyType.Prisoner, 10);
+                }
+                else if ((guardRates / (prisonerRates + guardRates + alienRates)) > 0.4)
+                {
+                    contract = new GameCampaign.GameContract(GameCampaign.GameContract.ContractType.KillQuest, Entity.EnemyType.Guard, 10);
+                }
+                else
+                {
+                    contract = new GameCampaign.GameContract(GameCampaign.GameContract.ContractType.NoContract, Entity.EnemyType.Prisoner, 10);
+                }
             }
         }
 
@@ -158,6 +169,8 @@ namespace PattyPetitGiant
                 GameCampaign.CurrentAlienRate = levelMap[selectedLevelX, selectedLevelY].alienRates;
                 GameCampaign.CurrentGuardRate = levelMap[selectedLevelX, selectedLevelY].guardRates;
                 GameCampaign.CurrentPrisonerRate = levelMap[selectedLevelX, selectedLevelY].prisonerRates;
+
+                GameCampaign.currentContract = levelMap[selectedLevelX, selectedLevelY].contract;
 
                 GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
                 GameCampaign.PlayerFloorHeight = selectedLevelY;
