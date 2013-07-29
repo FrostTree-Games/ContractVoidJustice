@@ -7,6 +7,26 @@ namespace PattyPetitGiant
 {
     class GameCampaign
     {
+        public struct GameContract
+        {
+            public enum ContractType
+            {
+                NoContract,
+                KillQuest,
+            }
+
+            public ContractType type;
+            public Entity.EnemyType killTarget;
+            public int goldPerKill;
+
+            public GameContract(ContractType type, Entity.EnemyType killTarget, int goldPerKill)
+            {
+                this.type = type;
+                this.killTarget = killTarget;
+                this.goldPerKill = goldPerKill;
+            }
+        }
+
         private static float player_health = 100.00f;
         public static float Player_Health
         {

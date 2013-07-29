@@ -29,6 +29,8 @@ namespace PattyPetitGiant
             public double guardRates;
             public double alienRates;
             public double lootRates;
+            
+            public GameCampaign.GameContract contract;
 
             public LevelData(double prisonerRates, double guardRates, double alienRates, double lootRates)
             {
@@ -38,6 +40,8 @@ namespace PattyPetitGiant
                 this.guardRates = guardRates;
                 this.alienRates = alienRates;
                 this.lootRates = lootRates;
+
+                contract = new GameCampaign.GameContract(GameCampaign.GameContract.ContractType.KillQuest, Entity.EnemyType.Prisoner, 10);
             }
         }
 

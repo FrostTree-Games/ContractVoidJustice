@@ -102,6 +102,8 @@ namespace PattyPetitGiant
 
             input_device = new InputDeviceManager(graphics.GraphicsDevice);
             InputDevice2.Initalize();
+
+            HighScoresState.InitalizeHighScores();
             
             //replace this with a join screen later
 #if XBOX
