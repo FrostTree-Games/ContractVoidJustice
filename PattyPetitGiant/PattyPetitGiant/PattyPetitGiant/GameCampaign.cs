@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PattyPetitGiant
 {
-    class GameCampaign
+    public class GameCampaign
     {
         public struct GameContract
         {
@@ -166,6 +166,8 @@ namespace PattyPetitGiant
         private static float elapsedCampaignTime;
         public static float ElapsedCampaignTime { get { return elapsedCampaignTime; } set { elapsedCampaignTime = value; } }
 
+        public static LevelSelectState.LevelData[,] levelMap = null;
+
         public static void ResetPlayerValues(string player1Name, int player1Color)
         {
             PlayerLevelProgress = 0;
@@ -191,6 +193,21 @@ namespace PattyPetitGiant
 
             currentContract = new GameContract();
             currentContract.type = GameContract.ContractType.NoContract;
+
+            levelMap = new LevelSelectState.LevelData[6, 3];
+
+            for (int i = 0; i < levelMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < levelMap.GetLength(1); j++)
+                {
+                    levelMap[i, j] = new LevelSelectState.LevelData(Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble());
+                }
+            }
+
+            levelMap[0, 0].visible = false;
+            levelMap[0, 2].visible = false;
+            levelMap[levelMap.GetLength(0) - 1, 0].visible = false;
+            levelMap[levelMap.GetLength(0) - 1, 2].visible = false;
         }
     }
 }
