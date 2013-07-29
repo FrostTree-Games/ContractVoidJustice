@@ -89,12 +89,12 @@ namespace PattyPetitGiant
                                 continue;
                             else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
                             {
-                                    component.update(this, en, currentTime, parentWorld);
-                                    if (enemy_found)
-                                    {
-                                        target = en;
-                                        break;
-                                    }
+                                component.update(this, en, currentTime, parentWorld);
+                                if (enemy_found)
+                                {
+                                    target = en;
+                                    break;
+                                }
                             }
                         }
                     }

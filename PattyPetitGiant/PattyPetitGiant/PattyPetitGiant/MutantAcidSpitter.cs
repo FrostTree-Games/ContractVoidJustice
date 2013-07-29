@@ -28,10 +28,15 @@ namespace PattyPetitGiant
 
         private float windup_timer = 0.0f;
         private const float max_windup_timer = 500f;
+        private float alert_timer = 0.0f;
+        private float spitter_timer = 0.0f;
+        private bool spit_fired = false;
 
         private float angle = 0.0f;
 
-        private const int size_of_spit_array = 3;
+        private float distance = 0.0f;
+
+        private const int size_of_spit_array = 5;
         private int spitter_count = 0;
         private SpitProjectile[] projectile = new SpitProjectile[size_of_spit_array];
 
@@ -39,6 +44,8 @@ namespace PattyPetitGiant
 
         private AnimationLib.SpineAnimationSet[] directionAnims = null;
         private string[] deathAnims = { "die", "die2", "die3" };
+
+        private AnimationLib.FrameAnimationSet acid_pool;
 
         public MutantAcidSpitter(LevelState parentWorld, float initial_x, float initial_y)
         {
@@ -54,12 +61,14 @@ namespace PattyPetitGiant
             change_direction_time = 0.0f;
             change_direction_time_threshold = 1000.0f;
             angle = 0.0f;
+            range_distance = 500.0f;
 
             state = SpitterState.Search;
             this.parentWorld = parentWorld;
             direction_facing = GlobalGameConstants.Direction.Right;
             enemy_type = EnemyType.Alien;
             entity_found = null;
+            acid_pool = AnimationLib.getFrameAnimationSet("acidPool");
 
             for (int i = 0; i < size_of_spit_array; i++)
             {
@@ -86,6 +95,13 @@ namespace PattyPetitGiant
         {
             change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
             animation_time += currentTime.ElapsedGameTime.Milliseconds;
+
+            if (state == SpitterState.Search && sound_alert && entity_found == null)
+            {
+                alert_timer = 0.0f;
+                animation_time = 0.0f;
+                state = SpitterState.Alert;
+            }
 
             switch (state)
             {
@@ -120,15 +136,92 @@ namespace PattyPetitGiant
                         }
                     }
                     break;
+                case SpitterState.Alert:
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
+
+                    if (sound_alert && entity_found == null)
+                    {
+                        //if false then sound didn't hit a wall
+                        if (!parentWorld.Map.soundInSight(this, sound_position))
+                        {
+                            directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
+                            alert_timer += currentTime.ElapsedGameTime.Milliseconds;
+                            for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                            {
+                                if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
+                                {
+                                    distance = Vector2.Distance(CenterPoint, parentWorld.EntityList[i].CenterPoint);
+                                    if (distance <= range_distance)
+                                    {
+                                        enemy_found = true;
+                                        entity_found = parentWorld.EntityList[i];
+                                        state = SpitterState.WindUp;
+                                        animation_time = 0.0f;
+                                        sound_alert = false;
+                                        alert_timer = 0.0f;
+                                        windup_timer = 0.0f;
+                                        animation_time = 0.0f;
+                                        velocity = Vector2.Zero;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (alert_timer > 3000 || ((int)CenterPoint.X == (int)sound_position.X && (int)CenterPoint.Y == (int)sound_position.Y))
+                            {
+                                entity_found = null;
+                                enemy_found = false;
+                                sound_alert = false;
+                                state = SpitterState.Search;
+                                velocity = Vector2.Zero;
+                                animation_time = 0.0f;
+                                windup_timer = 0.0f;
+                                animation_time = 0.0f;
+                            }
+                        }
+                        else
+                        {
+                            entity_found = null;
+                            enemy_found = false;
+                            sound_alert = false;
+                            state = SpitterState.Search;
+                            velocity = Vector2.Zero;
+                            animation_time = 0.0f;
+                            windup_timer = 0.0f;
+                            animation_time = 0.0f;
+                        }
+                    }
+                    else if (entity_found != null)
+                    {
+                        sound_alert = false;
+                        distance = Vector2.Distance(CenterPoint, entity_found.CenterPoint);
+                        if (parentWorld.Map.enemyWithinRange(entity_found, this, range_distance) && distance < range_distance && entity_found.Death == false)
+                        {
+                            state = SpitterState.WindUp;
+                            animation_time = 0.0f;
+                            windup_timer = 0.0f;
+                        }
+                        else
+                        {
+                            entity_found = null;
+                            enemy_found = false;
+                            state = SpitterState.Search;
+                            velocity = Vector2.Zero;
+                            animation_time = 0.0f;
+                            windup_timer = 0.0f;
+                            animation_time = 0.0f;
+                        }
+                    }
+                    break;
                 case SpitterState.WindUp:
                     windup_timer += currentTime.ElapsedGameTime.Milliseconds;
-
+                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
                     if (windup_timer > max_windup_timer)
                     {
-                        directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
-
                         state = SpitterState.Fire;
+                        spitter_timer = 0.0f;
                         windup_timer = 0.0f;
+                        animation_time = 0.0f;
                     }
 
                     switch (direction_facing)
@@ -187,29 +280,37 @@ namespace PattyPetitGiant
                 case SpitterState.Fire:
                     angle = (float)(Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X));
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
+                    spitter_timer += currentTime.ElapsedGameTime.Milliseconds;
 
-                    for (int i = 0; i < size_of_spit_array; i++)
+                    if(!spit_fired)
                     {
-                        if (!projectile[i].active)
+                        for (int i = 0; i < size_of_spit_array; i++)
                         {
-                            projectile[i] = new SpitProjectile(CenterPoint, angle);
-                            state = SpitterState.WindUp;
-                            break;
+                            if (!projectile[i].active)
+                            {
+                                projectile[i] = new SpitProjectile(new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("head").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("head").WorldY), angle);
+                                spit_fired = true;
+                                break;
+                            }
                         }
                     }
 
-                    float distance = Vector2.Distance(CenterPoint, entity_found.CenterPoint);
-                    if (Math.Abs(distance) > 300)
+                    if (spitter_timer > 500)
                     {
-                        state = SpitterState.Search;
-                        enemy_found = false;
-                        entity_found = null;
+                        if (entity_found.Death)
+                        {
+                            entity_found = null;
+                            enemy_found = false;
+                        }
+                        spit_fired = false;
+                        state = SpitterState.Alert;
+                        spitter_timer = 0.0f;
                     }
                     break;
                 case SpitterState.KnockBack:
                     disable_movement_time += currentTime.ElapsedGameTime.Milliseconds;
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("hurt");
-
+                    
                     if (disable_movement_time > 300)
                     {
                         state = SpitterState.Search;
@@ -243,20 +344,28 @@ namespace PattyPetitGiant
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
-            sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.White, 0.0f, dimensions);
+            //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.White, 0.0f, dimensions);
 
             for (int i = 0; i < size_of_spit_array; i++)
             {
                 if (projectile[i].active)
                 {
-                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
+                    if(projectile[i].Projectile_State == SpitProjectile.ProjectileState.Travel)
+                    {
+                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
+                        //acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].position, new Vector2(1.0f), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
+                    }
+                    else
+                    {
+                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
+                        acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].position, new Vector2(projectile[i].scale), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
+                    }
                 }
             }
         }
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            //base.knockBack(direction, magnitude, damage, attacker);
             if (death == false)
             {
                 if (disable_movement_time == 0.0)
@@ -331,7 +440,7 @@ namespace PattyPetitGiant
 
         public struct SpitProjectile
         {
-            private enum ProjectileState
+            public enum ProjectileState
             {
                 Travel,
                 GrowPool,
@@ -348,10 +457,18 @@ namespace PattyPetitGiant
             private bool on_wall;
             private Vector2 nextStep_temp;
 
-            private float alive_timer;
-            private const float max_alive_timer = 800.0f;
+            public float scale;
+            private const float scale_factor = 50.0f;
+
+            public float alive_timer;
+            private const float max_alive_timer = 500.0f;
             private const float max_pool_alive_timer = 1000.0f;
             private ProjectileState projectile_state;
+            public ProjectileState Projectile_State
+            {
+                get { return projectile_state; }
+            }
+
             public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X / 2, position.Y + dimensions.Y / 2); } }
      
             private float damage_timer;
@@ -364,6 +481,7 @@ namespace PattyPetitGiant
                 original_position = Vector2.Zero;
                 velocity = new Vector2((float)(8*Math.Cos(angle)), (float)(8*Math.Sin(angle)));
                 dimensions = new Vector2(10, 10);
+                scale = 0.0f;
 
                 projectile_state = ProjectileState.Travel;
                 alive_timer = 0.0f;
@@ -446,6 +564,7 @@ namespace PattyPetitGiant
                         damage_timer += currentTime.ElapsedGameTime.Milliseconds;
                         if (dimensions.X < max_dimensions && dimensions.Y < max_dimensions)
                         {
+                            scale = (dimensions.X + 1) / scale_factor;
                             dimensions += new Vector2(1, 1);
                             position = original_position - (dimensions/2);
                             alive_timer = 0.0f;
@@ -510,6 +629,14 @@ namespace PattyPetitGiant
                         damage_timer += currentTime.ElapsedGameTime.Milliseconds;
                         if (dimensions.X > 0 && dimensions.Y > 0)
                         {
+                            if (dimensions.X - 1 != 0)
+                            {
+                                scale = (dimensions.X - 1) / scale_factor;
+                            }
+                            else
+                            {
+                                scale = 0.0f;
+                            }
                             dimensions -= new Vector2(1, 1);
                             position = original_position - (dimensions / 2);
                             if (damage_timer > damage_timer_threshold)

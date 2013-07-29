@@ -406,8 +406,8 @@ namespace PattyPetitGiant
                         mech_state = MechState.Moving;
                         break;
                     case MechState.Death:
-                        explode_timer += currentTime.ElapsedGameTime.Milliseconds;
                         death = true;
+                        explode_timer += currentTime.ElapsedGameTime.Milliseconds;
                         velocity = Vector2.Zero;
                         break;
                     default:
@@ -422,9 +422,11 @@ namespace PattyPetitGiant
 
             if (enemy_life <= 0 && death == false)
             {
-                explode_timer = 0.0f;
+                explode_timer += currentTime.ElapsedGameTime.Milliseconds;
+                animation_time = 0.0f;
                 death = true;
                 mech_state = MechState.Death;
+                velocity = Vector2.Zero;
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);
@@ -446,20 +448,23 @@ namespace PattyPetitGiant
 
             //tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, tank_hull_angle, new Vector2(48f,69.5f));
 
+            Vector2 offset = new Vector2(19, 0);
+
             if(mech_state == MechState.Death)
             {
-                tankDeadAnim.drawAnimationFrame(0.0f, sb, position, new Vector2(1.0f), 0.5f, tank_hull_angle, CenterPoint, Color.White);
-                tankTurretDeadAnim.drawAnimationFrame(0.0f, sb, position + new Vector2(50, 50), new Vector2(1.0f), 0.5f, tank_hull_angle, CenterPoint, Color.White);
-                if (explode_timer < 1000)
+                if (explode_timer > 30)
                 {
-                    plasmaExplode.drawAnimationFrame(explode_timer, sb, position, new Vector2(2.0f), 0.5f, 0.0f, CenterPoint, Color.White);
+                    tankDeadAnim.drawAnimationFrame(0.0f, sb, position - offset / 2, new Vector2(1.0f), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
+                    tankTurretDeadAnim.drawAnimationFrame(0.0f, sb, position + new Vector2(50, 50), new Vector2(1.0f), 0.5f, tank_hull_angle, CenterPoint, Color.White);
                 }
+                else
+                {
+                    tankAnim.drawAnimationFrame(tank_hull_animation_time, sb, position - offset / 2, new Vector2(1), 0.5f, tank_hull_angle, new Vector2(48f, 69.5f), Color.White);
+                }
+                plasmaExplode.drawAnimationFrame(explode_timer, sb, position - offset / 2, new Vector2(2.0f), 0.5f, 0.0f, CenterPoint, Color.White);
             }
             else
             {
-
-                Vector2 offset = new Vector2(19, 0);
-
                 switch (direction_facing)
                 {
                     case GlobalGameConstants.Direction.Right:

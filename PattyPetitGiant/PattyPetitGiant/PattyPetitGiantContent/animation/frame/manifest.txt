@@ -52,3 +52,4 @@ bombArmed
 wandProjectile
 tankDead
 tankTurretDead
+acidPool

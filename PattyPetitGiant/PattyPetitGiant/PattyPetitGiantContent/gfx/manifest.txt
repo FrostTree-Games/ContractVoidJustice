@@ -27,3 +27,4 @@ testParticles.png
 mapPda.png
 compassOverlay.png
 controllerIndexArt.png
+acidPool.png
