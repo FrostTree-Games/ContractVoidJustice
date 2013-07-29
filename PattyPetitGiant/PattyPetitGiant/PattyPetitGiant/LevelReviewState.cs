@@ -65,8 +65,28 @@ namespace PattyPetitGiant
             {
                 confirmPressed = false;
 
-                isComplete = true;
+                if (screenTimePassed < 600f)
+                {
+                    screenTimePassed += 600;
+                }
+                else
+                {
+                    isComplete = true;
+                }
             }
+        }
+
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
+        {
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, width), SpriteEffects.None, 0.5f);
+        }
+
+        private void drawBox(SpriteBatch sb, Rectangle rect, Color clr, float lineWidth)
+        {
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X - lineWidth, rect.Y + rect.Height), rect.Width + lineWidth, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
         }
 
         public override void render(SpriteBatch sb)
@@ -91,7 +111,14 @@ namespace PattyPetitGiant
             sb.DrawString(Game1.tenbyFive24, view_levelCoins, new Vector2(GlobalGameConstants.GameResolutionWidth / 3, 265) - (Game1.tenbyFive14.MeasureString(view_levelCoins) / 2) + new Vector2(0, 24), Color.White);
             sb.DrawString(Game1.tenbyFive24, view_totalCoins, new Vector2((GlobalGameConstants.GameResolutionWidth / 3) * 2, 265) - (Game1.tenbyFive14.MeasureString(view_totalCoins) / 2) + new Vector2(0, 24), Color.White);
 
-            sb.DrawString(Game1.tenbyFive24, "Press A to continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - (Game1.tenbyFive24.MeasureString("Press A to continue") / 2), Color.Lerp(Color.White, Color.Transparent, (float)(Math.Sin(screenTimePassed / 500) * 0.5f) + 0.5f));
+            drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 8), 350, 550, 200), Color.White, 2);
+            sb.DrawString(Game1.tenbyFive24, "Contract", new Vector2((GlobalGameConstants.GameResolutionWidth / 8) + 350/2 + 30, 350), Color.White);
+            sb.DrawString(Game1.tenbyFive14, GameCampaign.levelMap[GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight].contract.contractMessage, new Vector2((GlobalGameConstants.GameResolutionWidth / 8) + 15, 385), Color.Orange);
+
+            if (screenTimePassed > numberTickingDuration)
+            {
+                sb.DrawString(Game1.tenbyFive24, "Press A to continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 596) - (Game1.tenbyFive24.MeasureString("Press A to continue") / 2), Color.Lerp(Color.White, Color.Transparent, (float)(Math.Sin(screenTimePassed / 500) * 0.5f) + 0.5f));
+            }
 
             sb.End();
         }
