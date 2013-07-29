@@ -11,13 +11,20 @@ namespace PattyPetitGiant
     {
         private bool confirmPressed = false;
 
+        private float screenTimePassed;
+        private const float numberTickingDuration = 500f;
+
         public LevelReviewState()
         {
             GameCampaign.ElapsedCampaignTime += LevelState.ElapsedLevelTime;
+
+            screenTimePassed = 0;
         }
 
         protected override void doUpdate(GameTime currentTime)
         {
+            screenTimePassed += currentTime.ElapsedGameTime.Milliseconds;
+
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
             {
                 confirmPressed = true;
