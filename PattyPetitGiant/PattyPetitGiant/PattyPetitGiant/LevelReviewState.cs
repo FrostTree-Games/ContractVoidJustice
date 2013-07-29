@@ -14,16 +14,36 @@ namespace PattyPetitGiant
         private float screenTimePassed;
         private const float numberTickingDuration = 500f;
 
+        private string view_timePassed;
+        private string view_timeElapsed;
+
+        private string message_timePassed = "Level Time";
+        private string message_totalTimePassed = "Total Game Time";
+
         public LevelReviewState()
         {
             GameCampaign.ElapsedCampaignTime += LevelState.ElapsedLevelTime;
 
             screenTimePassed = 0;
+
+            view_timePassed = "0";
+            view_timeElapsed = "0";
         }
 
         protected override void doUpdate(GameTime currentTime)
         {
             screenTimePassed += currentTime.ElapsedGameTime.Milliseconds;
+
+            if (screenTimePassed < numberTickingDuration)
+            {
+                view_timePassed = ((int)((screenTimePassed / numberTickingDuration) * LevelState.ElapsedLevelTime / 1000)).ToString();
+                view_timeElapsed = ((int)((screenTimePassed / numberTickingDuration) * GameCampaign.ElapsedCampaignTime / 1000)).ToString();
+            }
+            else
+            {
+                view_timePassed = ((int)(LevelState.ElapsedLevelTime / 1000)).ToString();
+                view_timeElapsed = ((int)(GameCampaign.ElapsedCampaignTime / 1000)).ToString();
+            }
 
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
             {
@@ -43,10 +63,16 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, new Vector2(-400), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(9999), SpriteEffects.None, 0.5f);
 
-            sb.DrawString(Game1.tenbyFive24, "Level Time: " + Math.Round(LevelState.ElapsedLevelTime / 1000f) + " seconds", new Vector2(100, 200), Color.White);
-            sb.DrawString(Game1.tenbyFive24, "Total Game Time: " + Math.Round(GameCampaign.ElapsedCampaignTime / 1000f) + " seconds", new Vector2(100, 224), Color.White);
+            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
-            sb.DrawString(Game1.tenbyFive24, "Press A to continue", new Vector2(100, 300), Color.White);
+            sb.DrawString(Game1.tenbyFive24, "Level Complete", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - (Game1.tenbyFive24.MeasureString("Level Complete") / 2), Color.White);
+
+            sb.DrawString(Game1.tenbyFive14, message_timePassed, new Vector2(GlobalGameConstants.GameResolutionWidth / 3, 200) - (Game1.tenbyFive14.MeasureString(message_timePassed) / 2), Color.White);
+            sb.DrawString(Game1.tenbyFive14, message_totalTimePassed, new Vector2((GlobalGameConstants.GameResolutionWidth / 3) * 2, 200) - (Game1.tenbyFive14.MeasureString(message_totalTimePassed) / 2), Color.White);
+            sb.DrawString(Game1.tenbyFive24, view_timePassed, new Vector2(GlobalGameConstants.GameResolutionWidth / 3, 200) - (Game1.tenbyFive14.MeasureString(view_timePassed) / 2) + new Vector2(0, 24), Color.White);
+            sb.DrawString(Game1.tenbyFive24, view_timeElapsed, new Vector2((GlobalGameConstants.GameResolutionWidth / 3) * 2, 200) - (Game1.tenbyFive14.MeasureString(view_timeElapsed) / 2) + new Vector2(0, 24), Color.White);
+
+            sb.DrawString(Game1.tenbyFive24, "Press A to continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - (Game1.tenbyFive24.MeasureString("Press A to continue") / 2), Color.Lerp(Color.White, Color.Transparent, (float)(Math.Sin(screenTimePassed / 500) * 0.5f) + 0.5f));
 
             sb.End();
         }
