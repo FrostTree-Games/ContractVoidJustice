@@ -77,6 +77,9 @@ namespace PattyPetitGiant
         private static float elapsedLevelTime;
         public static float ElapsedLevelTime { get { return elapsedLevelTime; } }
 
+        private static int elapsedCoinAmount;
+        public static int ElapsedCoinAmount { get { return elapsedCoinAmount; } set { elapsedCoinAmount = value; } }
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -122,6 +125,7 @@ namespace PattyPetitGiant
             fadeOutTime = 0.0f;
 
             elapsedLevelTime = 0.0f;
+            elapsedCoinAmount = 0;
 
             player1Dead = false;
             end_flag_placed = false;
@@ -289,7 +293,7 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-                        entityList.Add(new GuardMech(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X + 200, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {

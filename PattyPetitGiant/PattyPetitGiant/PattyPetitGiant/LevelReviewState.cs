@@ -16,9 +16,13 @@ namespace PattyPetitGiant
 
         private string view_timePassed;
         private string view_timeElapsed;
+        private string view_levelCoins;
+        private string view_totalCoins;
 
         private string message_timePassed = "Level Time";
         private string message_totalTimePassed = "Total Game Time";
+        private string message_levelCoins = "Coins Collected";
+        private string message_totalCoins = "Net Coins";
 
         public LevelReviewState()
         {
@@ -28,6 +32,8 @@ namespace PattyPetitGiant
 
             view_timePassed = "0";
             view_timeElapsed = "0";
+            view_levelCoins = "0";
+            view_totalCoins = "0";
         }
 
         protected override void doUpdate(GameTime currentTime)
@@ -38,11 +44,17 @@ namespace PattyPetitGiant
             {
                 view_timePassed = ((int)((screenTimePassed / numberTickingDuration) * LevelState.ElapsedLevelTime / 1000)).ToString();
                 view_timeElapsed = ((int)((screenTimePassed / numberTickingDuration) * GameCampaign.ElapsedCampaignTime / 1000)).ToString();
+
+                view_levelCoins = ((int)((screenTimePassed / numberTickingDuration) * LevelState.ElapsedCoinAmount)).ToString();
+                view_totalCoins = ((int)((screenTimePassed / numberTickingDuration) * GameCampaign.Player_Coin_Amount)).ToString();
             }
             else
             {
                 view_timePassed = ((int)(LevelState.ElapsedLevelTime / 1000)).ToString();
                 view_timeElapsed = ((int)(GameCampaign.ElapsedCampaignTime / 1000)).ToString();
+
+                view_levelCoins = (LevelState.ElapsedCoinAmount).ToString();
+                view_totalCoins = (GameCampaign.Player_Coin_Amount).ToString();
             }
 
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
@@ -67,10 +79,17 @@ namespace PattyPetitGiant
 
             sb.DrawString(Game1.tenbyFive24, "Level Complete", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - (Game1.tenbyFive24.MeasureString("Level Complete") / 2), Color.White);
 
+            // time
             sb.DrawString(Game1.tenbyFive14, message_timePassed, new Vector2(GlobalGameConstants.GameResolutionWidth / 3, 200) - (Game1.tenbyFive14.MeasureString(message_timePassed) / 2), Color.White);
             sb.DrawString(Game1.tenbyFive14, message_totalTimePassed, new Vector2((GlobalGameConstants.GameResolutionWidth / 3) * 2, 200) - (Game1.tenbyFive14.MeasureString(message_totalTimePassed) / 2), Color.White);
             sb.DrawString(Game1.tenbyFive24, view_timePassed, new Vector2(GlobalGameConstants.GameResolutionWidth / 3, 200) - (Game1.tenbyFive14.MeasureString(view_timePassed) / 2) + new Vector2(0, 24), Color.White);
             sb.DrawString(Game1.tenbyFive24, view_timeElapsed, new Vector2((GlobalGameConstants.GameResolutionWidth / 3) * 2, 200) - (Game1.tenbyFive14.MeasureString(view_timeElapsed) / 2) + new Vector2(0, 24), Color.White);
+
+            // coins
+            sb.DrawString(Game1.tenbyFive14, message_levelCoins, new Vector2(GlobalGameConstants.GameResolutionWidth / 3, 265) - (Game1.tenbyFive14.MeasureString(message_levelCoins) / 2), Color.White);
+            sb.DrawString(Game1.tenbyFive14, message_totalCoins, new Vector2((GlobalGameConstants.GameResolutionWidth / 3) * 2, 265) - (Game1.tenbyFive14.MeasureString(message_totalCoins) / 2), Color.White);
+            sb.DrawString(Game1.tenbyFive24, view_levelCoins, new Vector2(GlobalGameConstants.GameResolutionWidth / 3, 265) - (Game1.tenbyFive14.MeasureString(view_levelCoins) / 2) + new Vector2(0, 24), Color.White);
+            sb.DrawString(Game1.tenbyFive24, view_totalCoins, new Vector2((GlobalGameConstants.GameResolutionWidth / 3) * 2, 265) - (Game1.tenbyFive14.MeasureString(view_totalCoins) / 2) + new Vector2(0, 24), Color.White);
 
             sb.DrawString(Game1.tenbyFive24, "Press A to continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - (Game1.tenbyFive24.MeasureString("Press A to continue") / 2), Color.Lerp(Color.White, Color.Transparent, (float)(Math.Sin(screenTimePassed / 500) * 0.5f) + 0.5f));
 
