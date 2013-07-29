@@ -422,7 +422,7 @@ namespace PattyPetitGiant
             def.LeftDirection = Keys.Left;
             def.RightDirection = Keys.Right;
             def.BackButton = Keys.Back;
-            def.PauseButton = Keys.Pause;
+            def.PauseButton = Keys.Escape;
 
             return def;
         }

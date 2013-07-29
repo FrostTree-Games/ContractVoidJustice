@@ -64,6 +64,8 @@ namespace PattyPetitGiant
                     return null;
                 case ScreenStateType.LevelReviewState:
                     return new LevelReviewState();
+                case ScreenStateType.GameSetupMenu:
+                    return new CampaignLobbyState();
                 default:
                     return null;
             }

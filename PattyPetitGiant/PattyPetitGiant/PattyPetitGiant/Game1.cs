@@ -35,6 +35,12 @@ namespace PattyPetitGiant
 
         public static SpriteFont font;
         public static SpriteFont testComputerFont;
+        public static SpriteFont tenbyFive8;
+        public static SpriteFont tenbyFive10;
+        public static SpriteFont tenbyFive14;
+        public static SpriteFont tenbyFive24;
+        public static SpriteFont tenbyFive72;
+
         private static Effect bloomFilter = null;
         public static Effect BloomFilter { get { return bloomFilter; } }
         public static Texture2D whitePixel = null;
@@ -97,6 +103,8 @@ namespace PattyPetitGiant
 
             input_device = new InputDeviceManager(graphics.GraphicsDevice);
             InputDevice2.Initalize();
+
+            HighScoresState.InitalizeHighScores();
             
             //replace this with a join screen later
 #if XBOX
@@ -125,8 +133,13 @@ namespace PattyPetitGiant
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadFromManifest();
 
-            font = Content.Load<SpriteFont>("testFont");
-            testComputerFont = Content.Load<SpriteFont>("TestComputerFont");
+            tenbyFive8 = Content.Load<SpriteFont>("tenbyFive/tenbyFive8");
+            tenbyFive10 = Content.Load<SpriteFont>("tenbyFive/tenbyFive10");
+            tenbyFive14 = Content.Load<SpriteFont>("tenbyFive/tenbyFive14");
+            tenbyFive24 = Content.Load<SpriteFont>("tenbyFive/tenbyFive24");
+            tenbyFive72 = Content.Load<SpriteFont>("tenbyFive/tenbyFive72");
+            font = tenbyFive14;
+            testComputerFont = tenbyFive24;
 
             testVideo = Content.Load<Video>("fmv/WilsonTestVideo");
             videoPlayer = new VideoPlayer();
@@ -141,10 +154,10 @@ namespace PattyPetitGiant
 
             GlobalGameConstants.WeaponDictionary.InitalizePriceData();
 
-            GameCampaign.ResetPlayerValues();
+            GameCampaign.ResetPlayerValues("INIT", 0);
 
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            currentGameScreen = new LevelSelectState();
+            currentGameScreen = new CampaignLobbyState();
         }
 
         /// <summary>
@@ -173,12 +186,12 @@ namespace PattyPetitGiant
                 frameCounter = 0;
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.PageUp))
+            if (GamePad.GetState(PlayerIndex.One).DPad.Up == ButtonState.Pressed)
             {
-                Thread.Sleep(1);
+                Thread.Sleep(5);
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.PageDown))
+            if (GamePad.GetState(PlayerIndex.One).DPad.Down == ButtonState.Pressed)
             {
                 return;
             }

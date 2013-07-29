@@ -36,10 +36,10 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, new Vector2(-400), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(9999), SpriteEffects.None, 0.5f);
 
-            sb.DrawString(Game1.testComputerFont, "Level Time: " + Math.Round(LevelState.ElapsedLevelTime / 1000f) + " seconds", new Vector2(100, 200), Color.White);
-            sb.DrawString(Game1.testComputerFont, "Total Game Time: " + Math.Round(GameCampaign.ElapsedCampaignTime / 1000f) + " seconds", new Vector2(100, 224), Color.White);
+            sb.DrawString(Game1.tenbyFive24, "Level Time: " + Math.Round(LevelState.ElapsedLevelTime / 1000f) + " seconds", new Vector2(100, 200), Color.White);
+            sb.DrawString(Game1.tenbyFive24, "Total Game Time: " + Math.Round(GameCampaign.ElapsedCampaignTime / 1000f) + " seconds", new Vector2(100, 224), Color.White);
 
-            sb.DrawString(Game1.testComputerFont, "Press A to continue", new Vector2(100, 300), Color.White);
+            sb.DrawString(Game1.tenbyFive24, "Press A to continue", new Vector2(100, 300), Color.White);
 
             sb.End();
         }

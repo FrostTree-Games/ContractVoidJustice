@@ -7,6 +7,26 @@ namespace PattyPetitGiant
 {
     class GameCampaign
     {
+        public struct GameContract
+        {
+            public enum ContractType
+            {
+                NoContract,
+                KillQuest,
+            }
+
+            public ContractType type;
+            public Entity.EnemyType killTarget;
+            public int goldPerKill;
+
+            public GameContract(ContractType type, Entity.EnemyType killTarget, int goldPerKill)
+            {
+                this.type = type;
+                this.killTarget = killTarget;
+                this.goldPerKill = goldPerKill;
+            }
+        }
+
         private static float player_health = 100.00f;
         public static float Player_Health
         {
@@ -77,21 +97,24 @@ namespace PattyPetitGiant
 
         private static string playerName = null;
         public static string PlayerName { get { return playerName; } }
+        private static int playerColor = 0;
+        public static int PlayerColor { get { return playerColor; } } 
 
         private static float elapsedCampaignTime;
         public static float ElapsedCampaignTime { get { return elapsedCampaignTime; } set { elapsedCampaignTime = value; } }
 
-        public static void ResetPlayerValues()
+        public static void ResetPlayerValues(string player1Name, int player1Color)
         {
             PlayerLevelProgress = 0;
             PlayerFloorHeight = 1;
 
-            Player_Item_1 = GlobalGameConstants.itemType.MachineGun;
-            Player_Item_2 = GlobalGameConstants.itemType.ShotGun;
+            Player_Item_1 = GlobalGameConstants.itemType.Sword;
+            Player_Item_2 = GlobalGameConstants.itemType.Gun;
 
             allegiance = 0.5f;
 
-            playerName = "Jensen";
+            playerName = player1Name;
+            playerColor = player1Color;
 
             player_health = 100;
             player_ammunition = 100;

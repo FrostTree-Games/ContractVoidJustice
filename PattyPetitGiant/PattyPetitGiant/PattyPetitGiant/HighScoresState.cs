@@ -30,12 +30,17 @@ namespace PattyPetitGiant
 
         private static List<HighScoreValue> highScores = null;
 
-        public HighScoresState()
+        public static void InitalizeHighScores()
         {
             if (highScores == null)
             {
                 highScores = new List<HighScoreValue>();
             }
+        }
+
+        public HighScoresState()
+        {
+            InitalizeHighScores();
 
             //test values to punch in
             highScores.Add(new HighScoreValue("Wilson", 6969, 83939, 2, 2));
@@ -52,6 +57,8 @@ namespace PattyPetitGiant
 
         public override void render(SpriteBatch sb)
         {
+            AnimationLib.GraphicsDevice.Clear(Color.Black);
+
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
 
             for (int i = 0; i < highScores.Count; i++)

@@ -1950,6 +1950,41 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="tenbyFive\tenbyFive10.bmp">
+      <Name>tenbyFive10</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive14.bmp">
+      <Name>tenbyFive14</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive24.bmp">
+      <Name>tenbyFive24</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive72.bmp">
+      <Name>tenbyFive72</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tenbyFive\tenbyFive8.bmp">
+      <Name>tenbyFive8</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\controllerIndexArt.png">
+      <Name>controllerIndexArt</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="sfx\shotgun.wav">
       <Name>shotgun</Name>
       <Importer>WavImporter</Importer>
