@@ -21,11 +21,15 @@ namespace PattyPetitGiant
 
             public string contractMessage;
 
+            public int killCount;
+
             public GameContract(ContractType type, Entity.EnemyType killTarget, int goldPerKill)
             {
                 this.type = type;
                 this.killTarget = killTarget;
                 this.goldPerKill = goldPerKill;
+
+                killCount = 0;
 
                 if (type == ContractType.NoContract)
                 {
