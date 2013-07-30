@@ -99,7 +99,7 @@ namespace PattyPetitGiant
             {
                 for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (parentWorld.EntityList[i] is Enemy || parentWorld.EntityList[i] is ShopKeeper || parentWorld.EntityList[i] is Key || parentWorld.EntityList[i] is Coin)
+                    if (parentWorld.EntityList[i] is Enemy || parentWorld.EntityList[i] is ShopKeeper || parentWorld.EntityList[i] is Key || parentWorld.EntityList[i] is Coin || parentWorld.EntityList[i] is Pickup)
                     {
                         if (hitTest(parentWorld.EntityList[i]))
                         {

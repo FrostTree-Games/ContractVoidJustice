@@ -13,12 +13,21 @@ namespace PattyPetitGiant
     {
         GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.Bomb;
 
+        private AnimationLib.FrameAnimationSet currentAnimation = null;
+
+        private bool isKnockedBack = false;
+        private const float knockBackSpeed = 0.4f;
+        private float knockedBackTime = 0.0f;
+        private const float knockBackDuration = 250f;
+
         public Pickup(LevelState parentWorld, Vector2 position, GlobalGameConstants.itemType item_choice)
         {
             this.position = position;
             dimensions = GlobalGameConstants.TileSize;
 
             item_type = item_choice;
+
+            this.parentWorld = parentWorld;
         }
 
         public Pickup(LevelState parentWorld, Vector2 position, Random rand)
@@ -30,11 +39,30 @@ namespace PattyPetitGiant
             if (rValue == 9) { rValue++; } // casting an int to item enum; no index for 9
 
             item_type = (GlobalGameConstants.itemType)rValue;
+
+            this.parentWorld = parentWorld;
         }
 
         public override void update(GameTime currentTime)
         {
-            return;
+            if (isKnockedBack)
+            {
+                knockedBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (knockedBackTime > knockBackDuration)
+                {
+                    isKnockedBack = false;
+                }
+            }
+            else
+            {
+                velocity = Vector2.Zero;
+            }
+
+            Vector2 nextStep = position + (velocity * currentTime.ElapsedGameTime.Milliseconds);
+
+            Vector2 finalPos = parentWorld.Map.reloactePosition(position, nextStep, dimensions);
+            position = finalPos;
         }
 
         //after the item gets picked up, it gets replaced with the item the player dropped
@@ -95,7 +123,18 @@ namespace PattyPetitGiant
         }
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            return;
+            if (isKnockedBack)
+            {
+                return;
+            }
+            else
+            {
+                direction.Normalize();
+
+                isKnockedBack = true;
+                knockedBackTime = 0.0f;
+                velocity = direction * knockBackSpeed;
+            }
         }
     }
 }
