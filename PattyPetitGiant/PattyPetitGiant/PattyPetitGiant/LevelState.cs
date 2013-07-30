@@ -103,12 +103,16 @@ namespace PattyPetitGiant
             map.TileSkin = TextureLib.getLoadedTexture("scifiTemplate.png");
             map.ShopTileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
 
+            Thread.Sleep(250);
+
             endFlagReached = false;
 
             gui = new InGameGUI(this);
             keyModule = new LevelKeyModule();
 
             particleSet = new ParticleSet();
+
+            Thread.Sleep(250);
 
             entityList = new List<Entity>();
 
@@ -120,7 +124,11 @@ namespace PattyPetitGiant
                 entityList.Add(coinPool[i]);
             }
 
+            Thread.Sleep(250);
+
             populateRooms(nodeMap, currentSeed);
+
+            Thread.Sleep(250);
 
             for (int i = 0; i < entityList.Count; i++)
             {
@@ -137,8 +145,6 @@ namespace PattyPetitGiant
 
             player1Dead = false;
             end_flag_placed = false;
-
-            Thread.Sleep(1000);
 
             state = LoadingState.LevelRunning;
         }
