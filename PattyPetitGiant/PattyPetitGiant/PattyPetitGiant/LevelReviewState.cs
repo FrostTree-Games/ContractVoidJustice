@@ -114,6 +114,10 @@ namespace PattyPetitGiant
             drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 8), 350, 550, 200), Color.White, 2);
             sb.DrawString(Game1.tenbyFive24, "Contract", new Vector2((GlobalGameConstants.GameResolutionWidth / 8) + 350/2 + 30, 350), Color.White);
             sb.DrawString(Game1.tenbyFive14, GameCampaign.levelMap[GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight].contract.contractMessage, new Vector2((GlobalGameConstants.GameResolutionWidth / 8) + 15, 385), Color.Orange);
+            if (GameCampaign.currentContract.type == GameCampaign.GameContract.ContractType.KillQuest)
+            {
+                // draw a rad calculation
+            }
 
             if (screenTimePassed > numberTickingDuration)
             {
