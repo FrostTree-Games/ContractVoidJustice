@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -84,11 +85,18 @@ namespace PattyPetitGiant
         {
             currentSeed = Game1.rand.Next();
 
+            state = LoadingState.LevelLoading;
+
             PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
             textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             halfTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 2, pp.BackBufferHeight / 2, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             quarterTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
+            new Thread(loadLevel).Start();
+        }
+
+        private void loadLevel()
+        {
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
@@ -129,6 +137,9 @@ namespace PattyPetitGiant
 
             player1Dead = false;
             end_flag_placed = false;
+
+            Thread.Sleep(1000);
+
             state = LoadingState.LevelRunning;
         }
 
@@ -367,7 +378,7 @@ namespace PattyPetitGiant
 
         private void loadingUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
-            throw new NotImplementedException("asset loading not necessary yet");
+            //throw new NotImplementedException("asset loading not necessary yet");
         }
 
         private void gameLogicUpdate(Microsoft.Xna.Framework.GameTime currentTime)
@@ -457,6 +468,9 @@ namespace PattyPetitGiant
                 case LoadingState.LevelPaused:
                     pausedUpdate(currentTime);
                     break;
+                case LoadingState.LevelLoading:
+                    loadingUpdate(currentTime);
+                    break;
                 case LoadingState.InvalidState:
                 default:
                     throw new InvalidLevelStateExcepton();
@@ -506,6 +520,17 @@ namespace PattyPetitGiant
             sb.End();
         }
 
+        private void renderLoadScreen(SpriteBatch sb)
+        {
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+
+            sb.Draw(Game1.whitePixel, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), Color.Black);
+
+            sb.DrawString(Game1.font, "LOADING", new Vector2(100), Color.Beige);
+
+            sb.End();
+        }
+
         public override void render(SpriteBatch sb)
         {
             switch (state)
@@ -516,6 +541,9 @@ namespace PattyPetitGiant
                 case LoadingState.LevelPaused:
                     renderGameStuff(sb);
                     renderPauseOverlay(sb);
+                    break;
+                case LoadingState.LevelLoading:
+                    renderLoadScreen(sb);
                     break;
                 default:
                     break;
