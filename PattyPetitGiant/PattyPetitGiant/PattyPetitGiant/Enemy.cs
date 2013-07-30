@@ -16,6 +16,7 @@ namespace PattyPetitGiant
         {
             Moving,
             Agressive,
+            KnockBack,
             Chase,
             Idle,
             Firing,

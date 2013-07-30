@@ -289,7 +289,15 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-                        entityList.Add(new MutantAcidSpitter(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
+                        //entityList.Add(new MutantAcidSpitter(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 6) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 5) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 4) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 3) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 2) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 1) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 6) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 6) * GlobalGameConstants.TileSize.X, (currentRoomY + 6) * GlobalGameConstants.TileSize.Y));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {

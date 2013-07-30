@@ -20,6 +20,8 @@ namespace PattyPetitGiant
         private int pellet_count = 0;
         private Vector2 position;
         private bool shotgun_active;
+        private float shotgun_active_timer;
+        private const float shotgun_active_timer_max = 500.0f;
 
         private const float pellet_angle_interval = (float)Math.PI / 6;
         private float pellet_angle_direction = 0.0f;
@@ -75,7 +77,6 @@ namespace PattyPetitGiant
                 if (inactive_pellets == max_pellets)
                 {
                     pellet_count = 0;
-                    shotgun_active = false;
                 }
             }
 
@@ -118,6 +119,7 @@ namespace PattyPetitGiant
                     pellet_count++;
                 }
                 shotgun_active = true;
+                shotgun_active_timer = 0.0f;
             }
             parent.State = Player.playerState.Moving;
         }
@@ -125,6 +127,7 @@ namespace PattyPetitGiant
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             damage_delay_timer += currentTime.ElapsedGameTime.Milliseconds;
+            shotgun_active_timer += currentTime.ElapsedGameTime.Milliseconds;
 
             for (int i = 0; i < pellet_count; i++)
             {
@@ -170,6 +173,12 @@ namespace PattyPetitGiant
                     }
                 }
             }
+
+            if (shotgun_active_timer > shotgun_active_timer_max)
+            {
+                shotgun_active = false;
+            }
+
         }
 
         public GlobalGameConstants.itemType ItemType()

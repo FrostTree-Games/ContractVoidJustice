@@ -124,42 +124,87 @@ namespace PattyPetitGiant
             int check_enemy_corners = 0;
             float angle_to_enemy = 0.0f;
             float distance_to_enemy = 0.0f;
+
+            //checks to see if any of the entity's corners are touching the flame
+
+            //need to write other check for left hand side
             while (check_enemy_corners != 4)
             {
                 if (check_enemy_corners == 0)
                 {
                     angle_to_enemy = (float)(Math.Atan2(other.Position.Y - position.Y, other.Position.X - position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position);
-                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
+
+                    if (item_direction == GlobalGameConstants.Direction.Left)
                     {
-                        return true;
+                        if (((angle_to_enemy > angle1 && angle_to_enemy > 0) || (angle_to_enemy < angle2 && angle_to_enemy < 0)) && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
                     }
                 }
                 else if (check_enemy_corners == 1)
                 {
                     angle_to_enemy = (float)(Math.Atan2(other.Position.Y - position.Y, (other.Position.X + other.Dimensions.X) - position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position + new Vector2(other.Dimensions.X, 0));
-                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
+                    if (item_direction == GlobalGameConstants.Direction.Left)
                     {
-                        return true;
+                        if (((angle_to_enemy > angle1 && angle_to_enemy > 0) || (angle_to_enemy < angle2 && angle_to_enemy < 0)) && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
                     }
                 }
                 else if (check_enemy_corners == 2)
                 {
                     angle_to_enemy = (float)(Math.Atan2((other.Position.Y + other.Dimensions.Y)- position.Y, other.Position.X - position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position + new Vector2(0, other.Dimensions.Y));
-                    if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
+                    if (item_direction == GlobalGameConstants.Direction.Left)
                     {
-                        return true;
+                        if (((angle_to_enemy > angle1 && angle_to_enemy > 0) || (angle_to_enemy < angle2 && angle_to_enemy < 0)) && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if (angle_to_enemy > angle1 && angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
                     }
                 }
                 else
                 {
                     angle_to_enemy = (float)(Math.Atan2((other.Position.Y + other.Dimensions.Y)- position.Y, (other.Position.X + other.Dimensions.X)- position.X));
                     distance_to_enemy = Vector2.Distance(position, other.Position + other.Dimensions);
-                    if (angle_to_enemy > angle1 || angle_to_enemy < angle2 && Math.Abs(distance_to_enemy) <= 96.0)
+                    if (item_direction == GlobalGameConstants.Direction.Left)
                     {
-                        return true;
+                        if (((angle_to_enemy > angle1 && angle_to_enemy > 0) || (angle_to_enemy < angle2 && angle_to_enemy < 0)) && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if ((angle_to_enemy > angle1 && angle_to_enemy < angle2) && Math.Abs(distance_to_enemy) <= 96.0)
+                        {
+                            return true;
+                        }
                     }
                 }
                 check_enemy_corners++;
