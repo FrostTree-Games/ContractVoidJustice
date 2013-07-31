@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -77,20 +78,32 @@ namespace PattyPetitGiant
         private static float elapsedLevelTime;
         public static float ElapsedLevelTime { get { return elapsedLevelTime; } }
 
+        private static int elapsedCoinAmount;
+        public static int ElapsedCoinAmount { get { return elapsedCoinAmount; } set { elapsedCoinAmount = value; } }
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
+
+            state = LoadingState.LevelLoading;
 
             PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
             textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             halfTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 2, pp.BackBufferHeight / 2, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             quarterTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
+            new Thread(loadLevel).Start();
+        }
+
+        private void loadLevel()
+        {
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
             map.TileSkin = TextureLib.getLoadedTexture("scifiTemplate.png");
             map.ShopTileSkin = TextureLib.getLoadedTexture("tileTemplate.png");
+
+            Thread.Sleep(250);
 
             endFlagReached = false;
 
@@ -98,6 +111,8 @@ namespace PattyPetitGiant
             keyModule = new LevelKeyModule();
 
             particleSet = new ParticleSet();
+
+            Thread.Sleep(250);
 
             entityList = new List<Entity>();
 
@@ -109,7 +124,11 @@ namespace PattyPetitGiant
                 entityList.Add(coinPool[i]);
             }
 
+            Thread.Sleep(250);
+
             populateRooms(nodeMap, currentSeed);
+
+            Thread.Sleep(250);
 
             for (int i = 0; i < entityList.Count; i++)
             {
@@ -122,9 +141,11 @@ namespace PattyPetitGiant
             fadeOutTime = 0.0f;
 
             elapsedLevelTime = 0.0f;
+            elapsedCoinAmount = 0;
 
             player1Dead = false;
             end_flag_placed = false;
+
             state = LoadingState.LevelRunning;
         }
 
@@ -289,15 +310,6 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-                        //entityList.Add(new MutantAcidSpitter(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 6) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 5) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 4) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 3) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 2) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 1) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 6) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 6) * GlobalGameConstants.TileSize.X, (currentRoomY + 6) * GlobalGameConstants.TileSize.Y));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
@@ -372,7 +384,7 @@ namespace PattyPetitGiant
 
         private void loadingUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
-            throw new NotImplementedException("asset loading not necessary yet");
+            //throw new NotImplementedException("asset loading not necessary yet");
         }
 
         private void gameLogicUpdate(Microsoft.Xna.Framework.GameTime currentTime)
@@ -462,6 +474,9 @@ namespace PattyPetitGiant
                 case LoadingState.LevelPaused:
                     pausedUpdate(currentTime);
                     break;
+                case LoadingState.LevelLoading:
+                    loadingUpdate(currentTime);
+                    break;
                 case LoadingState.InvalidState:
                 default:
                     throw new InvalidLevelStateExcepton();
@@ -506,7 +521,18 @@ namespace PattyPetitGiant
         {
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            sb.DrawString(Game1.font, "PAUSED HOMIE\nName: " + GameCampaign.PlayerName + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, 0.4f));
+            sb.DrawString(Game1.font, "PAUSED HOMIE\nName: " + GameCampaign.PlayerName + "\nContract: " + GameCampaign.currentContract.type + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, 0.4f));
+
+            sb.End();
+        }
+
+        private void renderLoadScreen(SpriteBatch sb)
+        {
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+
+            sb.Draw(Game1.whitePixel, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), Color.Black);
+
+            sb.DrawString(Game1.font, "LOADING", new Vector2(100), Color.Beige);
 
             sb.End();
         }
@@ -521,6 +547,9 @@ namespace PattyPetitGiant
                 case LoadingState.LevelPaused:
                     renderGameStuff(sb);
                     renderPauseOverlay(sb);
+                    break;
+                case LoadingState.LevelLoading:
+                    renderLoadScreen(sb);
                     break;
                 default:
                     break;

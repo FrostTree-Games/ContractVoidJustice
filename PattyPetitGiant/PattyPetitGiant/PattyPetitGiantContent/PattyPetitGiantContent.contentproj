@@ -67,6 +67,70 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>directedParticle</Name>
     </None>
+    <None Include="animation\frame\itemBattery.zpy">
+      <Name>itemBattery</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemBomb.zpy">
+      <Name>itemBomb</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemCompass.zpy">
+      <Name>itemCompass</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemFlamethrower.zpy">
+      <Name>itemFlamethrower</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemHealth.zpy">
+      <Name>itemHealth</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemHermes.zpy">
+      <Name>itemHermes</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemLaser.zpy">
+      <Name>itemLaser</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemMachineGun.zpy">
+      <Name>itemMachineGun</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemMagnum.zpy">
+      <Name>itemMagnum</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemMap.zpy">
+      <Name>itemMap</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemPistol.zpy">
+      <Name>itemPistol</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemRayGun.zpy">
+      <Name>itemRayGun</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemRocket.zpy">
+      <Name>itemRocket</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemShotgun.zpy">
+      <Name>itemShotgun</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemSword.zpy">
+      <Name>itemSword</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\itemWand.zpy">
+      <Name>itemWand</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="animation\frame\tankDead.zpy">
       <Name>tankDead</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -1999,6 +2063,14 @@
   <ItemGroup>
     <None Include="gfx\acidPool.png">
       <Name>acidPool</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\itemSheet.png">
+      <Name>itemSheet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

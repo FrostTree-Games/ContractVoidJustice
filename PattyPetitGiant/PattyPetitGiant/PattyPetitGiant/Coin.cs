@@ -72,6 +72,7 @@ namespace PattyPetitGiant
                         if (hitTest(parentWorld.EntityList[i]))
                         {
                             GameCampaign.Player_Coin_Amount = GameCampaign.Player_Coin_Amount + (int)value;
+                            LevelState.ElapsedCoinAmount += (int)value;
 
                             AudioLib.playSoundEffect("testCoin");
 

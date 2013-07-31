@@ -28,3 +28,4 @@ mapPda.png
 compassOverlay.png
 controllerIndexArt.png
 acidPool.png
+itemSheet.png

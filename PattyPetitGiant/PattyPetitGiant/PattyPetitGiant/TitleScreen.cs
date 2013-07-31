@@ -373,7 +373,7 @@ namespace PattyPetitGiant
 
         public override ScreenStateType nextLevelState()
         {
-            return ScreenStateType.LevelSelectState;
+            return ScreenStateType.GameSetupMenu;
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PattyPetitGiant
 {
-    class GameCampaign
+    public class GameCampaign
     {
         public struct GameContract
         {
@@ -19,11 +19,76 @@ namespace PattyPetitGiant
             public Entity.EnemyType killTarget;
             public int goldPerKill;
 
+            public string contractMessage;
+
+            public int killCount;
+
             public GameContract(ContractType type, Entity.EnemyType killTarget, int goldPerKill)
             {
                 this.type = type;
                 this.killTarget = killTarget;
                 this.goldPerKill = goldPerKill;
+
+                killCount = 0;
+
+                if (type == ContractType.NoContract)
+                {
+                    contractMessage = "No contracts available at this time.";
+                    return;
+                }
+
+                StringBuilder builder = new StringBuilder();
+
+                if (killTarget == Entity.EnemyType.Prisoner)
+                {
+                    switch (Game1.rand.Next() % 3)
+                    {
+                        case 0:
+                            builder.Append("The ship's Warden wants to quell a prisoner uprising in the sector. ");
+                            break;
+                        case 1:
+                            builder.Append("The guards in this sector need escaped prisoners killed and are posting a bounty. ");
+                            break;
+                        default:
+                            builder.Append("A prisoner riot is building in this sector and the Warden wants it shut down. ");
+                            break;
+                    }
+                }
+                else if (killTarget == Entity.EnemyType.Guard)
+                {
+                    switch (Game1.rand.Next() % 3)
+                    {
+                        case 0:
+                            builder.Append("Escaped prisoners are trying to take over the sector and have requested aid. ");
+                            break;
+                        case 1:
+                            builder.Append("Prisoners want guards dead. ");
+                            break;
+                        default:
+                            builder.Append("The prisoners are preparing a riot in one of the sectors and posted a bounty. ");
+                            break;
+                    }
+                }
+
+                builder.Append(Game1.rand.Next() % 2 == 0 ? "Take out " : "Terminate ");
+
+                if (killTarget == Entity.EnemyType.Prisoner)
+                {
+                    builder.Append(Game1.rand.Next() % 2 == 0 ? "escaped prisoners " : "prisoners ");
+                }
+                else if (killTarget == Entity.EnemyType.Guard)
+                {
+                    builder.Append(Game1.rand.Next() % 2 == 0 ? "prison security " : "guards ");
+                }
+
+                builder.Append("for ");
+
+                builder.Append(goldPerKill);
+
+                builder.Append(" credits per kill. ");
+
+                int linesOut = 0;
+                contractMessage = InGameGUI.WrapText(Game1.tenbyFive14, builder.ToString(), 525, ref linesOut);
             }
         }
 
@@ -68,6 +133,8 @@ namespace PattyPetitGiant
         public static GlobalGameConstants.itemType Player_Item_1;
         public static GlobalGameConstants.itemType Player_Item_2;
 
+        public static GameContract currentContract;
+
         /// <summary>
         /// Indicates how many levels the player has completed so far in the campaign.
         /// </summary>
@@ -103,6 +170,8 @@ namespace PattyPetitGiant
         private static float elapsedCampaignTime;
         public static float ElapsedCampaignTime { get { return elapsedCampaignTime; } set { elapsedCampaignTime = value; } }
 
+        public static LevelSelectState.LevelData[,] levelMap = null;
+
         public static void ResetPlayerValues(string player1Name, int player1Color)
         {
             PlayerLevelProgress = 0;
@@ -125,6 +194,24 @@ namespace PattyPetitGiant
             currentAlienRate = 1;
 
             elapsedCampaignTime = 0.0f;
+
+            currentContract = new GameContract();
+            currentContract.type = GameContract.ContractType.NoContract;
+
+            levelMap = new LevelSelectState.LevelData[6, 3];
+
+            for (int i = 0; i < levelMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < levelMap.GetLength(1); j++)
+                {
+                    levelMap[i, j] = new LevelSelectState.LevelData(Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble());
+                }
+            }
+
+            levelMap[0, 0].visible = false;
+            levelMap[0, 2].visible = false;
+            levelMap[levelMap.GetLength(0) - 1, 0].visible = false;
+            levelMap[levelMap.GetLength(0) - 1, 2].visible = false;
         }
     }
 }
