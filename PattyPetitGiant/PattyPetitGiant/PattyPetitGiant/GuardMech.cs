@@ -61,7 +61,7 @@ namespace PattyPetitGiant
             angle = 0.0f;
             turret_angle = angle;
 
-            enemy_life = 5;
+            enemy_life = 35;
             disable_movement = false;
             disable_movement_time = 0.0f;
             enemy_found = false;
