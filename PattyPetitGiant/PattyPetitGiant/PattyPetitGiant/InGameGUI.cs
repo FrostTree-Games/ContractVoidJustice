@@ -278,13 +278,17 @@ namespace PattyPetitGiant
         {
             Color textColor = Game1.GameIsRunningSlowly ? Color.Red : Color.White;
 
-            string player_health_display = "Health: " + GameCampaign.Player_Health;
-            string ammunition_amount_display = "Ammunition: " + GameCampaign.Player_Ammunition;
+            AnimationLib.FrameAnimationSet player_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Item_1].pickupImage;
+            AnimationLib.FrameAnimationSet player_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Item_2].pickupImage;
+
+            string player_health_display = "H: ";
+            string ammunition_amount_display = "A: ";
             string coin_amount_display = "Coin: " + GameCampaign.Player_Coin_Amount;
-            string player_item_1 = "Item 1: " + GameCampaign.Player_Item_1;
-            string player_item_2 = "Item 2: " + GameCampaign.Player_Item_2;
+            string player_item_1 = "L: ";
+            string player_item_2 = "R: ";
 
             //draw a black 1px outline over the GUI font
+
             for (int i = -1; i < 2; i++)
             {
                 for (int j = -1; j < 2; j++)
@@ -296,19 +300,29 @@ namespace PattyPetitGiant
 
                     Vector2 offset = new Vector2(i, j);
                     sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 52) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 80) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, player_item_1, new Vector2(370, 10) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, player_item_2, new Vector2(370, 46) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    //sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                 }
             }
-
             sb.DrawString(Game1.font, player_health_display, new Vector2(10, 10), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 42), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 74), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 10), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            sb.DrawString(Game1.font, player_item_2, new Vector2(320, 42), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            sb.Draw(Game1.whitePixel, new Vector2(32, 10), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(320, 32), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, new Vector2(32, 10), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Health*3.2f, 32), SpriteEffects.None, 0.51f);
 
+            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(10, 52), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            sb.Draw(Game1.whitePixel, new Vector2(32, 46), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(320, 32), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.whitePixel, new Vector2(32, 46), null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Ammunition * 3.2f, 32), SpriteEffects.None, 0.51f);
+
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(10, 80), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+
+            sb.DrawString(Game1.font, player_item_1, new Vector2(370, 10), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(390, 10), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            
+            sb.DrawString(Game1.font, player_item_2, new Vector2(370, 46), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(390, 46), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            
             sb.Draw(Game1.whitePixel, new Vector2(499, 31), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(66, 26), SpriteEffects.None, 0.0f);
             sb.Draw(Game1.whitePixel, new Vector2(500, 32), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2(64 * (1 - GameCampaign.PlayerAllegiance), 24), SpriteEffects.None, 0.0f);
             sb.Draw(Game1.whitePixel, new Vector2(500 + (64 * (1 - GameCampaign.PlayerAllegiance)), 32), null, Color.LightBlue, 0.0f, Vector2.Zero, new Vector2(64 * GameCampaign.PlayerAllegiance, 24), SpriteEffects.None, 0.0f);

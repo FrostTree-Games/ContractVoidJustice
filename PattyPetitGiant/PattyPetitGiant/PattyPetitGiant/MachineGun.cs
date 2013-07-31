@@ -103,6 +103,8 @@ namespace PattyPetitGiant
         private float fireTimer;
         private const float durationBetweenShots = 100;
 
+        private const int ammo_consumption = 1;
+
         public const string machineGunSoundEffect = "machineGun";
 
         public static AnimationLib.FrameAnimationSet bulletPic = null;
@@ -143,50 +145,59 @@ namespace PattyPetitGiant
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             updateBullets(parent, currentTime, parentWorld);
-
-            if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+            if (GameCampaign.Player_Ammunition >= 1.0f)
             {
-                fireTimer += currentTime.ElapsedGameTime.Milliseconds;
-
-                if (fireTimer > durationBetweenShots)
+                if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
                 {
-                    fireTimer = 0;
-                    parent.Animation_Time = 0;
-                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lMGun" : "rMGun");
-                    parent.Velocity = Vector2.Zero;
-                }
-            }
-            else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
-            {
-                fireTimer += currentTime.ElapsedGameTime.Milliseconds;
+                    fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
-                if (fireTimer > durationBetweenShots)
-                {
-                    fireTimer = 0;
-                    parent.Animation_Time = 0;
-                    pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rMGun" : "lMGun");
-                    parent.Velocity = Vector2.Zero;
-                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                    if (fireTimer > durationBetweenShots)
                     {
-                        float distance = Vector2.Distance(parentWorld.EntityList[i].Position, new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY));
-                        if (distance <= 600 && parentWorld.EntityList[i] is Enemy)
+                        GameCampaign.Player_Ammunition -= ammo_consumption;
+                        fireTimer = 0;
+                        parent.Animation_Time = 0;
+                        pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lMGun" : "rMGun");
+                        parent.Velocity = Vector2.Zero;
+                    }
+                }
+                else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                {
+                    fireTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (fireTimer > durationBetweenShots)
+                    {
+                        GameCampaign.Player_Ammunition -= ammo_consumption;
+                        fireTimer = 0;
+                        parent.Animation_Time = 0;
+                        pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rMGun" : "lMGun");
+                        parent.Velocity = Vector2.Zero;
+                        for (int i = 0; i < parentWorld.EntityList.Count; i++)
                         {
-                            ((Enemy)parentWorld.EntityList[i]).Sound_Alert = true;
-                            ((Enemy)parentWorld.EntityList[i]).Sound_Position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                            float distance = Vector2.Distance(parentWorld.EntityList[i].Position, new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY));
+                            if (distance <= 600 && parentWorld.EntityList[i] is Enemy)
+                            {
+                                ((Enemy)parentWorld.EntityList[i]).Sound_Alert = true;
+                                ((Enemy)parentWorld.EntityList[i]).Sound_Position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                            }
                         }
                     }
+                }
+                else
+                {
+                    fireTimer = float.MaxValue;
+
+                    parent.Disable_Movement = false;
+                    parent.State = Player.playerState.Moving;
+
+                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
                 }
             }
             else
             {
-                fireTimer = float.MaxValue;
-
-                parent.Disable_Movement = false;
                 parent.State = Player.playerState.Moving;
-
-                parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("idle");
+                return;
             }
         }
 
