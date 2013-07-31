@@ -2,7 +2,7 @@
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <name>itemHermes</name>
   <sheetName>itemSheet.png</sheetName>
-  <initalX>96</initalX>
+  <initalX>97</initalX>
   <initalY>60</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>

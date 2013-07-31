@@ -156,8 +156,8 @@ namespace PattyPetitGiant
 
             GameCampaign.ResetPlayerValues("INIT", 0);
 
-            currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            //currentGameScreen = new CampaignLobbyState();
+            //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
+            currentGameScreen = new CampaignLobbyState();
         }
 
         /// <summary>
