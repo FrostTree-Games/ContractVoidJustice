@@ -137,6 +137,14 @@ namespace PattyPetitGiant
             {
                 directionAnims[i].Animation = directionAnims[i].Skeleton.Data.FindAnimation("idle");
             }
+
+            for (int i = 0; i < 3; i++)
+            {
+                InGameGUI.prices[i].active = true;
+                InGameGUI.prices[i].description = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].name;
+                InGameGUI.prices[i].price = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].price.ToString();
+                InGameGUI.prices[i].position = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y)) - (Game1.tenbyFive14.MeasureString(InGameGUI.prices[i].price) / 2);
+            }
         }
 
         private double distance(Vector2 a, Vector2 b)
@@ -272,6 +280,21 @@ namespace PattyPetitGiant
             {
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
 
+                if (Vector2.Distance(CenterPoint, parentWorld.CameraFocus.CenterPoint) > 720)
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        InGameGUI.prices[i].active = false;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        InGameGUI.prices[i].active = true;
+                    }
+                }
+
                 for (int it = 0; it < parentWorld.EntityList.Count; it++)
                 {
                     if (parentWorld.EntityList[it] is Player)
@@ -296,6 +319,7 @@ namespace PattyPetitGiant
 
                                         purchaseTransaction(itemPrices[i]);
                                         itemsForSale[i] = GlobalGameConstants.itemType.NoItem;
+                                        InGameGUI.prices[i].active = false;
                                     }
                                 }
                             }
@@ -409,6 +433,7 @@ namespace PattyPetitGiant
                     Vector2 drawItemPos = this.position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
                     items[i].Position = drawItemPos;
+                    InGameGUI.prices[i].active = false;
                 }
 
                 attackerTarget = attacker;
@@ -463,6 +488,7 @@ namespace PattyPetitGiant
                 Vector2 drawItemPos = this.position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
                 items[i].Position = drawItemPos;
+                InGameGUI.prices[i].active = false;
             }
 
             for (int it = 0; it < parentWorld.EntityList.Count; it++)

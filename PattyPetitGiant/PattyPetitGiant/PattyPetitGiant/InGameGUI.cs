@@ -37,6 +37,16 @@ namespace PattyPetitGiant
 
         private float flickerTime;
 
+        public struct PriceDisplay
+        {
+            public bool active;
+            public string price;
+            public string description;
+            public Vector2 position;
+        }
+
+        public static PriceDisplay[] prices;
+
         /// <summary>
         /// Data representing a simple text box.
         /// </summary>
@@ -116,6 +126,11 @@ namespace PattyPetitGiant
         public InGameGUI(LevelState parent)
         {
             this.parent = parent;
+
+            if (prices == null)
+            {
+                prices = new PriceDisplay[3];
+            }
 
             for (int i = 0; i < windowIsActive.Length; i++)
             {
@@ -286,6 +301,14 @@ namespace PattyPetitGiant
             string coin_amount_display = "Coin: " + GameCampaign.Player_Coin_Amount;
             string player_item_1 = "L: ";
             string player_item_2 = "R: ";
+
+            for (int i = 0; i < prices.Length; i++)
+            {
+                if (prices[i].active)
+                {
+                    sb.DrawString(Game1.tenbyFive14, prices[i].price.ToString(), prices[i].position - parent.CameraFocus.Position + new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), Color.LightBlue);
+                }
+            }
 
             //draw a black 1px outline over the GUI font
 
