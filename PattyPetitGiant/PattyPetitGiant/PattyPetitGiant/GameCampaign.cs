@@ -189,8 +189,8 @@ namespace PattyPetitGiant
             PlayerLevelProgress = 0;
             PlayerFloorHeight = 1;
 
-            Player_Item_1 = GlobalGameConstants.itemType.FlameThrower;
-            Player_Item_2 = GlobalGameConstants.itemType.Gun;
+            Player_Item_1 = GlobalGameConstants.itemType.WaveMotionGun;
+            Player_Item_2 = GlobalGameConstants.itemType.RocketLauncher;
 
             allegiance = 0.5f;
 
@@ -198,7 +198,7 @@ namespace PattyPetitGiant
             playerColor = player1Color;
 
             player_health = 100;
-            player_ammunition = 100;
+            player_ammunition = 15;
             player_coin_amount = 200;
 
             currentGuardRate = 1;

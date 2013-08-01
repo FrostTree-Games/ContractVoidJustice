@@ -15,7 +15,8 @@ namespace PattyPetitGiant
         {
             reset,
             placed,
-            exploded
+            exploded,
+            none
         }
 
         private Vector2 hitbox = Vector2.Zero;
@@ -32,6 +33,7 @@ namespace PattyPetitGiant
         private AnimationLib.FrameAnimationSet explosionAnim;
         private float animation_time;
         private float knockback_magnitude;
+        private const float ammo_consumption = 10;
 
         public Bomb()
         {
@@ -66,13 +68,23 @@ namespace PattyPetitGiant
             switch (bomb_state)
             {
                 case Bomb_State.placed:
-                    if (time_explosion > 1500)
+                    if (GameCampaign.Player_Ammunition >= 10)
                     {
-                        hitbox = hitbox_exploded;
-                        position = new Vector2(center_placed_bomb.X - hitbox.X / 2, center_placed_bomb.Y - hitbox.Y / 2);
-                        bomb_state = Bomb_State.exploded;
-                        time_explosion = 0.0f;
-                        bombAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
+                        if (time_explosion > 1500)
+                        {
+                            GameCampaign.Player_Ammunition -= ammo_consumption;
+                            hitbox = hitbox_exploded;
+                            position = new Vector2(center_placed_bomb.X - hitbox.X / 2, center_placed_bomb.Y - hitbox.Y / 2);
+                            bomb_state = Bomb_State.exploded;
+                            time_explosion = 0.0f;
+                            bombAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
+                        }
+                    }
+                    else
+                    {
+                        parent.State = Player.playerState.Moving;
+                        bomb_state = Bomb_State.none;
+                        return;
                     }
                     break;
                 case Bomb_State.exploded:
@@ -125,6 +137,8 @@ namespace PattyPetitGiant
                     }
                     animation_time += currentTime.ElapsedGameTime.Milliseconds;
                     break;
+                case Bomb_State.none:
+                    break;
                 default:
                     bombAnim = AnimationLib.getFrameAnimationSet("bombPic");
                     hitbox = hitbox_placed;
@@ -150,6 +164,7 @@ namespace PattyPetitGiant
             {
                 case Bomb_State.placed:
                     //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), position, Color.Red, 0.0f, hitbox);
+                    
                     bombAnim.drawAnimationFrame(animation_time, sb, position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, Color.White);
                     break;
                 case Bomb_State.exploded:
