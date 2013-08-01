@@ -97,14 +97,13 @@ namespace PattyPetitGiant
         private Vector2 endFlagPosition = new Vector2(-1, -1);
         public Vector2 EndFlagPosition { get { return endFlagPosition; } }
 
-        private Texture2D tileSkin = null;
-        public Texture2D TileSkin { get { return tileSkin; } set { tileSkin = value; } }
-
-        private Texture2D shopTileSkin = null;
-        public Texture2D ShopTileSkin { get { return shopTileSkin; } set { shopTileSkin = value; } }
+        private Texture2D[] tileSkin = null;
+        public Texture2D[] TileSkin { get { return tileSkin; } set { tileSkin = value; } }
 
         public TileMap(LevelState parent, DungeonGenerator.DungeonRoom[,] room, Vector2 tileSize)
         {
+            tileSkin = new Texture2D[4];
+
             this.size = new TileDimensions(room.GetLength(0) * GlobalGameConstants.TilesPerRoomWide, room.GetLength(1)  * GlobalGameConstants.TilesPerRoomHigh);
             this.tileSize = tileSize;
 
@@ -372,28 +371,28 @@ namespace PattyPetitGiant
                     switch (floorMap[i, j])
                     {
                         case FloorType.A:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[0], new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case FloorType.B:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[0], new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case FloorType.C:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[1], new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case FloorType.D:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[1], new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case FloorType.E:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[2], new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case FloorType.F:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[2], new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case FloorType.G:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 9), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X) - 1, (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[3], new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case FloorType.H:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 10), (int)(5 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[3], new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 3), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                     }
                 }
@@ -411,7 +410,7 @@ namespace PattyPetitGiant
                         case TileType.NoWall:
                             break;
                         case TileType.TestWall:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[0], new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case TileType.WallA:
                         case TileType.WallB:
@@ -431,19 +430,11 @@ namespace PattyPetitGiant
                         case TileType.WallP:
                             tileX = ((int)(map[i, j]) - 2) % 5;
                             tileY = ((int)(map[i, j]) - 2) / 5;
-                            if (mapMod[i, j] == WallMod.Mod1 || mapMod[i, j] == WallMod.Mod3)
-                            {
-                                tileX += 5;
-                            }
-                            if (mapMod[i, j] == WallMod.Mod2 || mapMod[i, j] == WallMod.Mod3)
-                            {
-                                tileY += 3;
-                            }
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(tileX * GlobalGameConstants.TileSize.X + tileX), (int)(tileY * GlobalGameConstants.TileSize.Y + tileY), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[(int)mapMod[i , j]], new Rectangle((int)(tileX * GlobalGameConstants.TileSize.X + tileX), (int)(tileY * GlobalGameConstants.TileSize.Y + tileY), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));
                             break;
                         case TileType.WallUnidentified:
                         default:
-                            sb.DrawSpriteToSpineVertexArray(tileSkin, new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));    
+                            sb.DrawSpriteToSpineVertexArray(tileSkin[0], new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Vector2((int)(i * tileSize.X), (int)(j * tileSize.Y)));    
                             break;
                     }
                 }

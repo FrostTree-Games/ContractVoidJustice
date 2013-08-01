@@ -29,3 +29,7 @@ compassOverlay.png
 controllerIndexArt.png
 acidPool.png
 itemSheet.png
+deathStar/0.png
+deathStar/1.png
+deathStar/2.png
+deathStar/3.png
