@@ -30,6 +30,8 @@ namespace PattyPetitGiant
         private const float shootDuration = 500f;
         private const float coolDownDuration = 0;
 
+        private const int ammo_consumption = 20;
+
         private static AnimationLib.FrameAnimationSet explosionAnim = null;
 
         private const string rocketSound = "testRocket";
@@ -77,28 +79,38 @@ namespace PattyPetitGiant
         {
             updateRocketAndExplosion(parent, currentTime, parentWorld);
             
+            
             if (state == RocketLauncherState.IdleWait)
             {
-                if (!rocket.active && !explosion.active)
+                if(GameCampaign.Player_Ammunition>= 20)
                 {
-                    parent.Velocity = Vector2.Zero;
-
-                    timer = 0;
-                    state = RocketLauncherState.WindUp;
-
-                    if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                    if (!rocket.active && !explosion.active)
                     {
-                        slot1 = true;
-                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lRocket" : "rRocket");
-                    }
-                    else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
-                    {
-                        slot1 = false;
-                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rRocket" : "lRocket");
-                    }
+                        parent.Velocity = Vector2.Zero;
 
-                    parent.Animation_Time = 0;
-                    parent.LoopAnimation = false;
+                        timer = 0;
+                        state = RocketLauncherState.WindUp;
+
+                        if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                        {
+                            slot1 = true;
+                            parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lRocket" : "rRocket");
+                        }
+                        else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                        {
+                            slot1 = false;
+                            parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rRocket" : "lRocket");
+                        }
+
+                        GameCampaign.Player_Ammunition -= ammo_consumption;
+                        parent.Animation_Time = 0;
+                        parent.LoopAnimation = false;
+                    }
+                    else
+                    {
+                        parent.Disable_Movement = false;
+                        parent.State = Player.playerState.Moving;
+                    }
                 }
                 else
                 {
@@ -109,7 +121,7 @@ namespace PattyPetitGiant
             else if (state == RocketLauncherState.WindUp)
             {
                 timer += currentTime.ElapsedGameTime.Milliseconds;
-
+                
                 if (timer > windUpDuration)
                 {
                     timer = 0;

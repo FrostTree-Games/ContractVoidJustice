@@ -48,6 +48,7 @@ namespace PattyPetitGiant
         public static Texture2D testArrow = null;
         public static Texture2D shipTexture = null;
         public static Texture2D backGroundPic = null;
+        public static Texture2D heartPic = null;
         public static Random rand = new Random();
 
         private static bool gameIsRunningSlowly;
@@ -120,6 +121,7 @@ namespace PattyPetitGiant
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
             shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
+            heartPic = Content.Load<Texture2D>("heartSheet");
 
             myModel = Content.Load<Model>("model3D/PPG");
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;

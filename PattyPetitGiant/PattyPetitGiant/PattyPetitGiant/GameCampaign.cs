@@ -200,7 +200,7 @@ namespace PattyPetitGiant
             PlayerFloorHeight = 1;
 
             Player_Item_1 = GlobalGameConstants.itemType.DungeonMap;
-            Player_Item_2 = GlobalGameConstants.itemType.Gun;
+            Player_Item_2 = GlobalGameConstants.itemType.RocketLauncher;
 
             allegiance = 0.5f;
 
@@ -208,7 +208,7 @@ namespace PattyPetitGiant
             playerColor = player1Color;
 
             player_health = 100;
-            player_ammunition = 100;
+            player_ammunition = 15;
             player_coin_amount = 200;
 
             currentGuardRate = 1;

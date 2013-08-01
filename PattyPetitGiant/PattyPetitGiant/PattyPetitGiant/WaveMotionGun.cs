@@ -28,6 +28,8 @@ namespace PattyPetitGiant
         private float timeBetweenShots = 0.0f;
         private const float timeBetweenShotsDelay = 1000f;
 
+        private const int ammo_consumption = 5;
+
         private WaveMotionState state;
 
         public static AnimationLib.FrameAnimationSet bulletAnimation = null;
@@ -58,63 +60,72 @@ namespace PattyPetitGiant
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             updateBullets(parentWorld, currentTime);
-
             if (state == WaveMotionState.Wait)
             {
-                shotTime = 0.0f;
-                parent.Disable_Movement = true;
-                parent.Velocity = Vector2.Zero;
-
-                float shotDirection = 0.0f;
-
-                switch (parent.Direction_Facing)
+                if (GameCampaign.Player_Ammunition >= 5)
                 {
-                    case GlobalGameConstants.Direction.Up:
-                        shotDirection = (float)Math.PI / -2;
-                        break;
-                    case GlobalGameConstants.Direction.Down:
-                        shotDirection = (float)Math.PI / 2;
-                        break;
-                    case GlobalGameConstants.Direction.Left:
-                        shotDirection = (float)Math.PI;
-                        break;
-                    case GlobalGameConstants.Direction.Right:
-                        shotDirection = 0.0f;
-                        break;
+                    shotTime = 0.0f;
+                    parent.Disable_Movement = true;
+                    parent.Velocity = Vector2.Zero;
+
+                    float shotDirection = 0.0f;
+
+                    switch (parent.Direction_Facing)
+                    {
+                        case GlobalGameConstants.Direction.Up:
+                            shotDirection = (float)Math.PI / -2;
+                            break;
+                        case GlobalGameConstants.Direction.Down:
+                            shotDirection = (float)Math.PI / 2;
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            shotDirection = (float)Math.PI;
+                            break;
+                        case GlobalGameConstants.Direction.Right:
+                            shotDirection = 0.0f;
+                            break;
+                    }
+
+                    Vector2 bulletPos = Vector2.Zero;
+
+                    if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                    {
+                        GameCampaign.Player_Ammunition -= ammo_consumption;
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lRayGun" : "rRayGun");
+                        bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                    }
+                    else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                    { 
+                        GameCampaign.Player_Ammunition -= ammo_consumption;
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rRayGun" : "lRayGun");
+                        bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY);
+                    }
+
+                    if (!bullet1.active)
+                    {
+                        bullet1 = new WaveMotionBullet(bulletPos, shotDirection);
+                    }
+                    else if (!bullet2.active)
+                    {
+                        bullet2 = new WaveMotionBullet(bulletPos, shotDirection);
+                    }
+                    else if (!bullet3.active)
+                    {
+                        bullet3 = new WaveMotionBullet(bulletPos, shotDirection);
+                    }
+
+                    AudioLib.playSoundEffect("waveShot");
+
+                    state = WaveMotionState.Shooting;
+                    parent.Animation_Time = 0.0f;
+
+                    parent.LoopAnimation = false;
                 }
-
-                Vector2 bulletPos = Vector2.Zero;
-
-                if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                else
                 {
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ?"lRayGun" : "rRayGun");
-                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                    parent.State = Player.playerState.Moving;
+                    return;
                 }
-                else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
-                {
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rRayGun" : "lRayGun");
-                    bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY);
-                }
-
-                if (!bullet1.active)
-                {
-                    bullet1 = new WaveMotionBullet(bulletPos, shotDirection);
-                }
-                else if (!bullet2.active)
-                {
-                    bullet2 = new WaveMotionBullet(bulletPos, shotDirection);
-                }
-                else if (!bullet3.active)
-                {
-                    bullet3 = new WaveMotionBullet(bulletPos, shotDirection);
-                }
-
-                AudioLib.playSoundEffect("waveShot");
-
-                state = WaveMotionState.Shooting;
-                parent.Animation_Time = 0.0f;
-
-                parent.LoopAnimation = false;
             }
             else if (state == WaveMotionState.Shooting)
             {

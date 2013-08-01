@@ -60,12 +60,14 @@ namespace PattyPetitGiant
                 public int price;
                 public string message;
                 public AnimationLib.FrameAnimationSet pickupImage;
+                public int ammo_consumption;
 
-                public WeaponInformation(int price, string message, string pickupFrameImage)
+                public WeaponInformation(int price, string message, string pickupFrameImage, int ammo_consumption)
                 {
                     this.price = price;
                     this.message = message;
                     this.pickupImage = AnimationLib.getFrameAnimationSet(pickupFrameImage);
+                    this.ammo_consumption = ammo_consumption;
                 }
             }
 
@@ -80,20 +82,20 @@ namespace PattyPetitGiant
 
                 weaponInfo = new WeaponInformation[20];
 
-                weaponInfo[(int)itemType.Sword] = new WeaponInformation(20, "A simple sword. It's dangerous to go alone without one.", "itemSword");
-                weaponInfo[(int)itemType.WandOfGyges] = new WeaponInformation(200, "A magical wand that seems to let its weilder bend space and location.", "itemWand");
-                weaponInfo[(int)itemType.Gun] = new WeaponInformation(120, "A pistol issued to trainee guards on the ship. Hokey religions and ancient weapons are no match for this.", "itemPistol");
-                weaponInfo[(int)itemType.Bomb] = new WeaponInformation(70, "Bombs will destroy enemies in a radius, but watch out! They're dangerous!", "itemBomb");
-                weaponInfo[(int)itemType.Compass] = new WeaponInformation(55, "A magical tool that always seems to direct you toward the exit on this floor of the ship.", "itemCompass");
-                weaponInfo[(int)itemType.HermesSandals] = new WeaponInformation(130, "Enables you to run at extreme speeds, but at the price of vulnerability.", "itemHermes");
-                weaponInfo[(int)itemType.WaveMotionGun] = new WeaponInformation(80, "A strange weapon that fires in an ecclectic motion. Somewhat impractical.", "itemRayGun");
-                weaponInfo[(int)itemType.BushidoBlade] = new WeaponInformation(90, "This weapon will allow you to slay almost any foe perfectly, but brings an honorable death to the imperfect warrior.", "gunPic");
-                weaponInfo[(int)itemType.RocketLauncher] = new WeaponInformation(120, "A one-handed device that fires rockets that combust on explosion. Avoid shooting it in close quarters.", "itemRocket");
-                weaponInfo[(int)itemType.ShotGun] = new WeaponInformation(170, "A shotgun formely used by space mobsters to rob banks with.", "itemShotgun");
-                weaponInfo[(int)itemType.DungeonMap] = new WeaponInformation(45, "Allows you to see the corridors of the current floor of the ship.", "itemMap");
-                weaponInfo[(int)itemType.FlameThrower] = new WeaponInformation(200, "Badassery. Enough said.", "itemFlamethrower");
-                weaponInfo[(int)itemType.LazerGun] = new WeaponInformation(159, "A hard laser that can burn flesh in an instant.", "itemLaser");
-                weaponInfo[(int)itemType.MachineGun] = new WeaponInformation(100, "Rapid-fire gunplay has never been so satisfying!", "itemMachineGun");
+                weaponInfo[(int)itemType.Sword] = new WeaponInformation(20, "A simple sword. It's dangerous to go alone without one.", "itemSword", 0);
+                weaponInfo[(int)itemType.WandOfGyges] = new WeaponInformation(200, "A magical wand that seems to let its weilder bend space and location.", "itemWand", 5);
+                weaponInfo[(int)itemType.Gun] = new WeaponInformation(120, "A pistol issued to trainee guards on the ship. Hokey religions and ancient weapons are no match for this.", "itemPistol", 1);
+                weaponInfo[(int)itemType.Bomb] = new WeaponInformation(70, "Bombs will destroy enemies in a radius, but watch out! They're dangerous!", "itemBomb", 10);
+                weaponInfo[(int)itemType.Compass] = new WeaponInformation(55, "A magical tool that always seems to direct you toward the exit on this floor of the ship.", "itemCompass", 0);
+                weaponInfo[(int)itemType.HermesSandals] = new WeaponInformation(130, "Enables you to run at extreme speeds, but at the price of vulnerability.", "itemHermes", 1);
+                weaponInfo[(int)itemType.WaveMotionGun] = new WeaponInformation(80, "A strange weapon that fires in an ecclectic motion. Somewhat impractical.", "itemRayGun", 5);
+                weaponInfo[(int)itemType.BushidoBlade] = new WeaponInformation(90, "This weapon will allow you to slay almost any foe perfectly, but brings an honorable death to the imperfect warrior.", "gunPic", 0);
+                weaponInfo[(int)itemType.RocketLauncher] = new WeaponInformation(120, "A one-handed device that fires rockets that combust on explosion. Avoid shooting it in close quarters.", "itemRocket", 20);
+                weaponInfo[(int)itemType.ShotGun] = new WeaponInformation(170, "A shotgun formely used by space mobsters to rob banks with.", "itemShotgun", 5);
+                weaponInfo[(int)itemType.DungeonMap] = new WeaponInformation(45, "Allows you to see the corridors of the current floor of the ship.", "itemMap", 0);
+                weaponInfo[(int)itemType.FlameThrower] = new WeaponInformation(200, "Badassery. Enough said.", "itemFlamethrower", 1);
+                weaponInfo[(int)itemType.LazerGun] = new WeaponInformation(159, "A hard laser that can burn flesh in an instant.", "itemLaser", 15);
+                weaponInfo[(int)itemType.MachineGun] = new WeaponInformation(100, "Rapid-fire gunplay has never been so satisfying!", "itemMachineGun", 1);
             }
         }
     }
