@@ -475,8 +475,6 @@ namespace PattyPetitGiant
             List<DungeonRoomClass> addedRooms = new List<DungeonRoomClass>();
             List<DungeonRoomClass> themeRooms = new List<DungeonRoomClass>();
 
-            RoomColors colorsRegister = new RoomColors();
-
             //place initial room
             int randX = GlobalGameConstants.StandardMapSize.x / 2;
             int randY = GlobalGameConstants.StandardMapSize.y - 1;
