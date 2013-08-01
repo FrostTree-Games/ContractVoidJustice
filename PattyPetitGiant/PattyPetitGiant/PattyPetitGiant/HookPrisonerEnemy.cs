@@ -275,6 +275,11 @@ namespace PattyPetitGiant
                 disable_movement_time = 0.0f;
                 disable_movement = true;
                 state = ChainState.knockBack;
+
+                if (enemy_life < 1 && !death && attacker != null & attacker is Player)
+                {
+                    GameCampaign.AlterAllegiance(0.005f);
+                }
             }
 
             if (attacker == null)

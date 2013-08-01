@@ -219,9 +219,9 @@ namespace PattyPetitGiant
                 wind_anim = 1;
                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(death_anim[(int)(Game1.rand.Next()) %3]);
 
-                parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.CoinValue.Twoonie);
-                parentWorld.pushCoin(CenterPoint + new Vector2(GlobalGameConstants.TileSize.X / 2, GlobalGameConstants.TileSize.Y / -2), Coin.CoinValue.Loonie);
-                parentWorld.pushCoin(CenterPoint + GlobalGameConstants.TileSize / 2, Coin.CoinValue.Twoonie);
+                parentWorld.pushCoin(CenterPoint, Coin.CoinValue.Twoonie);
+                parentWorld.pushCoin(CenterPoint, Coin.CoinValue.Loonie);
+                parentWorld.pushCoin(CenterPoint, Coin.CoinValue.Twoonie);
             }
             Vector2 pos = new Vector2(position.X, position.Y);
 
@@ -282,10 +282,6 @@ namespace PattyPetitGiant
                 {
                     disable_movement = true;
                     disable_movement_time = 0.0f;
-                    if (attacker != null & attacker is Player)
-                    {
-                        GameCampaign.AlterAllegiance(0.005f);
-                    }
 
                     chase_stage = ChaseAttackStage.none;
                     state = EnemyState.KnockBack;
@@ -313,6 +309,14 @@ namespace PattyPetitGiant
                         }
                     }
                     enemy_life = enemy_life - damage;
+
+                    if (enemy_life < 1 && !death)
+                    {
+                        if (attacker != null & attacker is Player)
+                        {
+                            GameCampaign.AlterAllegiance(0.005f);
+                        }
+                    }
                 }
 
                 if (attacker == null)

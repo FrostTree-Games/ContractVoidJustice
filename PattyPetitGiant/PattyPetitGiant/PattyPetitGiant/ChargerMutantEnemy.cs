@@ -323,11 +323,6 @@ namespace PattyPetitGiant
                 {
                     if (state != ChargerState.windUp || state != ChargerState.charge)
                     {
-                        if (attacker != null & attacker is Player)
-                        {
-                            GameCampaign.AlterAllegiance(0.005f);
-                        }
-
                         disable_movement = true;
                         animation_time = 0;
                         
@@ -358,6 +353,14 @@ namespace PattyPetitGiant
                     }
 
                     enemy_life = enemy_life - damage;
+
+                    if (enemy_life < 1 && !death)
+                    {
+                        if (attacker != null & attacker is Player)
+                        {
+                            GameCampaign.AlterAllegiance(0.005f);
+                        }
+                    }
                 }
 
                 if (attacker == null)

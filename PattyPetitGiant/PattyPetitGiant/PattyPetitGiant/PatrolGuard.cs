@@ -607,6 +607,8 @@ namespace PattyPetitGiant
 
             if (health <= 0 && guardState != PatrolGuardState.Dying)
             {
+                GameCampaign.AlterAllegiance(-0.005f);
+
                 guardState = PatrolGuardState.Dying;
                 animation_time = 0;
 
@@ -650,11 +652,6 @@ namespace PattyPetitGiant
             parentWorld.Particles.pushBloodParticle(CenterPoint);
 
             AudioLib.playSoundEffect("fleshyKnockBack");
-
-            if (attacker != null & attacker is Player)
-            {
-                GameCampaign.AlterAllegiance(-0.005f);
-            }
 
             //where you look in the entity's direction and start chasing them
             if (attacker != null && (attacker.Enemy_Type != EnemyType.NoType && attacker.Enemy_Type!= enemy_type))

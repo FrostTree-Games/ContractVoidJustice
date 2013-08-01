@@ -121,13 +121,25 @@ namespace PattyPetitGiant
         /// <summary>
         /// Increment or decrement the player's standing between the prisoners and guards.
         /// </summary>
-        /// <param name="value">Value to alter PlayerAllegiance by.</param>
+        /// <param name="value">Value to alter PlayerAllegiance by. Make it negative for when a guard is killed. Positive when a prisoner is killed.</param>
         public static void AlterAllegiance(float value)
         {
             allegiance += value;
 
             if (allegiance < 0.0f) { allegiance = 0.0f; }
             if (allegiance > 1.0f) { allegiance = 1.0f; }
+
+            if (currentContract.type == GameContract.ContractType.KillQuest)
+            {
+                if (value < 0 && currentContract.killTarget == Entity.EnemyType.Guard)
+                {
+                    currentContract.killCount++;
+                }
+                else if (value > 0 && currentContract.killTarget == Entity.EnemyType.Prisoner)
+                {
+                    currentContract.killCount++;
+                }
+            }
         }
 
         public static GlobalGameConstants.itemType Player_Item_1;

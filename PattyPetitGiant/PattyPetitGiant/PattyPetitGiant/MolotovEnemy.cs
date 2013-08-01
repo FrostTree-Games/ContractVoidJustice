@@ -58,6 +58,8 @@ namespace PattyPetitGiant
             flame = new MolotovFlame(position);
             flame.active = false;
 
+            this.enemy_type = EnemyType.Prisoner;
+
             direction_facing = (GlobalGameConstants.Direction)(Game1.rand.Next() % 4);
 
             range_distance = 400.0f;
@@ -448,16 +450,16 @@ namespace PattyPetitGiant
 
                     return;
                 }
-
-                if (attacker != null && attacker is Player)
-                {
-                    GameCampaign.AlterAllegiance(0.005f);
-                }
                 
                 direction.Normalize();
                 velocity = direction * magnitude;
 
                 health -= damage;
+
+                if (health < 1 && !death && attacker != null & attacker is Player)
+                {
+                    GameCampaign.AlterAllegiance(0.005f);
+                }
 
                 knockBackTime = 0.0f;
 

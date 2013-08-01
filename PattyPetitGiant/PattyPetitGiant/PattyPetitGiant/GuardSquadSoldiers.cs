@@ -430,7 +430,7 @@ namespace PattyPetitGiant
                 {
                     enemy_found = true;
 
-                    if (attacker != null & attacker is Player)
+                    if (enemy_life < 1 && !death && attacker != null & attacker is Player)
                     {
                         GameCampaign.AlterAllegiance(-0.005f);
                     }

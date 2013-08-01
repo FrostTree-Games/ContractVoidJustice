@@ -21,6 +21,10 @@ namespace PattyPetitGiant
             ClosedAndWaiting,
         }
 
+#if DEBUG
+        private bool showStats = false;
+#endif
+
         private LoadingState state = LoadingState.UninitializedAndWaiting;
 
         private bool pauseButtonDown = false;
@@ -443,6 +447,17 @@ namespace PattyPetitGiant
             {
                 isComplete = true;
             }
+
+#if DEBUG
+            if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.SwitchItem2) != InputDevice2.PlayerPad.NoPad)
+            {
+                showStats = true;
+            }
+            else
+            {
+                showStats = false;
+            }
+#endif
         }
 
         private void pausedUpdate(Microsoft.Xna.Framework.GameTime currentTime)
@@ -514,6 +529,13 @@ namespace PattyPetitGiant
 
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
             gui.render(sb);
+
+#if DEBUG
+            if (showStats)
+            {
+                sb.DrawString(Game1.tenbyFive14, "Allegiance: " + GameCampaign.PlayerAllegiance + "\nName: " + GameCampaign.PlayerName + "\nContract: " + GameCampaign.currentContract.type + "\nSeed: " + currentSeed + "\nContract Kills: " + GameCampaign.currentContract.killCount, Vector2.Zero, Color.LimeGreen);
+            }
+#endif
             sb.End();
         }
 
@@ -521,7 +543,7 @@ namespace PattyPetitGiant
         {
             sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
 
-            sb.DrawString(Game1.font, "PAUSED HOMIE\nName: " + GameCampaign.PlayerName + "\nContract: " + GameCampaign.currentContract.type + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, 0.4f));
+            sb.DrawString(Game1.font, "PAUSED HOMIE\nAllegiance: " + GameCampaign.PlayerAllegiance + "\nName: " + GameCampaign.PlayerName + "\nContract: " + GameCampaign.currentContract.type + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, 0.4f));
 
             sb.End();
         }

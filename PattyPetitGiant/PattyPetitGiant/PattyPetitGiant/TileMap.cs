@@ -263,15 +263,15 @@ namespace PattyPetitGiant
                         }
 
                         int modRandVal = Game1.rand.Next() % 100;
-                        if (modRandVal > 15)
+                        if (modRandVal > 40)
                         {
                             mapMod[i, j] = WallMod.None;
                         }
-                        else if (modRandVal > 10)
+                        else if (modRandVal > 25)
                         {
                             mapMod[i, j] = WallMod.Mod1;
                         }
-                        else if (modRandVal > 5)
+                        else if (modRandVal > 10)
                         {
                             mapMod[i, j] = WallMod.Mod2;
                         }
@@ -350,107 +350,6 @@ namespace PattyPetitGiant
                                 map[i, j] = TileType.WallUnidentified;
                                 break;
                         }
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Draws the tilemap to the specified device.
-        ///  <para name="spriteBatch">The XNA SpriteBatch to render the TileMap to.</para>
-        ///  <para name="depth">Specify Z-layering. Typically this tends to be below the sprites.</para>
-        /// </summary>
-        public void render(SpriteBatch spriteBatch, float depth)
-        {
-            int focusTileX = (int)(parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X);
-            int focusTileY = (int)(parent.CameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y);
-
-            for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
-            {
-                for (int i = Math.Max(0, focusTileX - 27); i < Math.Min(size.x, focusTileX + 27); i++)
-                {
-                    if (map[i, j] != TileType.NoWall)
-                    {
-                        continue;
-                    }
-
-                    switch (floorMap[i,j])
-                    {
-                        case FloorType.A:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case FloorType.B:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case FloorType.C:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case FloorType.D:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(2 * GlobalGameConstants.TileSize.Y + 2), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case FloorType.E:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(3 * GlobalGameConstants.TileSize.X + 3), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case FloorType.F:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(4 * GlobalGameConstants.TileSize.X + 4), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case FloorType.G:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(8 * GlobalGameConstants.TileSize.X + 8), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case FloorType.H:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(9 * GlobalGameConstants.TileSize.X + 9), (int)(5 * GlobalGameConstants.TileSize.Y + 5), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                    }
-                }
-            }
-
-            for (int j = Math.Max(0, focusTileY - 16); j < Math.Min(size.y, focusTileY + 16); j++)
-            {
-                for (int i = Math.Max(0, focusTileX - 27); i < Math.Min(size.x, focusTileX + 27); i++)
-                {
-                    int tileX;
-                    int tileY;
-
-                    switch (map[i, j])
-                    {
-                        case TileType.NoWall:
-                            break;
-                        case TileType.TestWall:
-                            if (tileSkin == null)
-                                spriteBatch.Draw(Game1.whitePixel, new Vector2(i * tileSize.X, j * tileSize.Y), null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(tileSize.X, tileSize.Y), SpriteEffects.None, depth);
-                            break;
-                        case TileType.WallA:
-                        case TileType.WallB:
-                        case TileType.WallC:
-                        case TileType.WallD:
-                        case TileType.WallE:
-                        case TileType.WallF:
-                        case TileType.WallG:
-                        case TileType.WallH:
-                        case TileType.WallI:
-                        case TileType.WallJ:
-                        case TileType.WallK:
-                        case TileType.WallL:
-                        case TileType.WallM:
-                        case TileType.WallN:
-                        case TileType.WallO:
-                        case TileType.WallP:
-                            tileX = ((int)(map[i, j]) - 2) % 5;
-                            tileY = ((int)(map[i, j]) - 2) / 5;
-                            if (mapMod[i, j] == WallMod.Mod1 || mapMod[i, j] == WallMod.Mod3)
-                            {
-                                tileX += 5;
-                            }
-                            if (mapMod[i, j] == WallMod.Mod2 || mapMod[i, j] == WallMod.Mod3)
-                            {
-                                tileY += 3;
-                            }
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X), (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(tileX * GlobalGameConstants.TileSize.X + tileX), (int)(tileY * GlobalGameConstants.TileSize.Y + tileY), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
-                        case TileType.WallUnidentified:
-                        default:
-                            spriteBatch.Draw(tileSkin, new Rectangle((int)(i * tileSize.X) , (int)(j * tileSize.Y), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), new Rectangle((int)(1 * GlobalGameConstants.TileSize.X + 1), (int)(6 * GlobalGameConstants.TileSize.Y + 6), (int)(GlobalGameConstants.TileSize.X), (int)(GlobalGameConstants.TileSize.Y)), Color.White);
-                            break;
                     }
                 }
             }
