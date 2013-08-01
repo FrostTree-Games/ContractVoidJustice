@@ -357,8 +357,8 @@ namespace PattyPetitGiant
                     }
                     else
                     {
-                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
-                        acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].position, new Vector2(projectile[i].scale), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
+                        //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
+                        acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].position, new Vector2(projectile[i].scale), 0.5f, 0.0f, Vector2.Zero, Color.White);
                     }
                 }
             }
@@ -504,7 +504,7 @@ namespace PattyPetitGiant
                         {
                             alive_timer = 0.0f;
                             projectile_state = ProjectileState.GrowPool;
-                            original_position = position;
+                            original_position = CenterPoint;
                         }
                         else
                         {
@@ -538,7 +538,7 @@ namespace PattyPetitGiant
                                 {
                                     projectile_state = ProjectileState.GrowPool;
                                     alive_timer = 0.0f;
-                                    original_position = position;
+                                    original_position = CenterPoint;
                                     break;
                                 }
                                 check_corners++;
@@ -554,7 +554,7 @@ namespace PattyPetitGiant
                                     {
                                         projectile_state = ProjectileState.GrowPool;
                                         alive_timer = 0.0f;
-                                        original_position = position;
+                                        original_position = CenterPoint;
                                     }
                                 }
                             }
