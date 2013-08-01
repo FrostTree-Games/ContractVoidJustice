@@ -356,38 +356,6 @@ namespace PattyPetitGiant
             GC.Collect();
         }
 
-        /// <summary>
-        /// Really crude
-        /// </summary>
-        private void testPopulateEnemies()
-        {
-            if (map == null)
-            {
-                return;
-            }
-
-            Random rand = new Random();
-            for (int i = 0; i < 50; i++ )
-            {
-                int placeX = rand.Next() % map.Map.GetLength(0);
-                int placeY = rand.Next() % map.Map.GetLength(1);
-
-                if (map.Map[placeX, placeY] == TileMap.TileType.NoWall)
-                {
-                    switch (rand.Next() % 2)
-                    {
-                        case 1:
-                            //entityList.Add(new ChaseEnemy(this, placeX * GlobalGameConstants.TileSize.X, placeY * GlobalGameConstants.TileSize.Y + 60));
-                            break;
-                        case 0:
-                        default:
-                            entityList.Add(new TestEnemy(this, new Vector2(placeX * GlobalGameConstants.TileSize.X, placeY * GlobalGameConstants.TileSize.Y + 60)));
-                            break;
-                    }
-                }
-            }
-        }
-
         private void loadingUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
             //throw new NotImplementedException("asset loading not necessary yet");
