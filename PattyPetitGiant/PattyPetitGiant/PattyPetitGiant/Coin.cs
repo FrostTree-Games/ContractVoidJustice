@@ -11,6 +11,36 @@ namespace PattyPetitGiant
 {
     public class Coin : Entity
     {
+        public enum DropItemType
+        {
+            CoinDrop = 0,
+            MedDrop = 1,
+            AmmoDrop = 2,
+        }
+
+        public enum MedState
+        {
+            Active,
+            Inactive,
+        }
+
+        private MedState med_state;
+        public MedState medState
+        {
+            get { return med_state; }
+        }
+
+        public enum AmmoState
+        {
+            Active,
+            Inactive
+        }
+        private AmmoState ammo_state;
+        public AmmoState ammoState
+        {
+            get { return ammo_state; }
+        }
+
         public enum CoinState
         {
             Active,
@@ -27,6 +57,9 @@ namespace PattyPetitGiant
             Mackenzie = 50,
             Borden = 100,
         }
+
+        private DropItemType dropItem;
+        public DropItemType DropItem { get { return dropItem; } }
 
         private CoinState state;
         public CoinState State { get { return state; } }
@@ -61,49 +94,80 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            if (state == CoinState.Active)
+            switch(dropItem)
             {
-                animationTime += currentTime.ElapsedGameTime.Milliseconds;
-
-                for (int i = 0; i < parentWorld.EntityList.Count; i++)
-                {
-                    if (parentWorld.EntityList[i] is Player)
+                case DropItemType.CoinDrop:
+                    if (state == CoinState.Active)
                     {
-                        if (hitTest(parentWorld.EntityList[i]))
+                        animationTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                        for (int i = 0; i < parentWorld.EntityList.Count; i++)
                         {
-                            GameCampaign.Player_Coin_Amount = GameCampaign.Player_Coin_Amount + (int)value;
-                            LevelState.ElapsedCoinAmount += (int)value;
+                            if (parentWorld.EntityList[i] is Player)
+                            {
+                                if (hitTest(parentWorld.EntityList[i]))
+                                {
+                                    GameCampaign.Player_Coin_Amount = GameCampaign.Player_Coin_Amount + (int)value;
+                                    LevelState.ElapsedCoinAmount += (int)value;
 
-                            AudioLib.playSoundEffect("testCoin");
+                                    AudioLib.playSoundEffect("testCoin");
 
-                            state = CoinState.Inactive;
+                                    state = CoinState.Inactive;
+                                }
+                            }
                         }
+
+                        if (isKnockedBack)
+                        {
+                            knockedBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                            if (knockedBackTime > knockBackDuration)
+                            {
+                                isKnockedBack = false;
+                            }
+                        }
+                        else
+                        {
+                            velocity = Vector2.Zero;
+                        }
+
+                        Vector2 nextStep = position + (velocity * currentTime.ElapsedGameTime.Milliseconds);
+
+                        Vector2 finalPos = parentWorld.Map.reloactePosition(position, nextStep, dimensions);
+                        position = finalPos;
                     }
-                }
-
-                if (isKnockedBack)
-                {
-                    knockedBackTime += currentTime.ElapsedGameTime.Milliseconds;
-
-                    if (knockedBackTime > knockBackDuration)
+                    else
                     {
-                        isKnockedBack = false;
+                        position = new Vector2(-100, -100);
+                    }
+                break;
+                case DropItemType.AmmoDrop:
+                break;
+                case DropItemType.MedDrop:
+                if (med_state == MedState.Active)
+                {
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                    {
+                        if (parentWorld.EntityList[i] is Player)
+                        {
+                            if (hitTest(parentWorld.EntityList[i]))
+                            {
+                                //GameCampaign.Player_Health += value;
+                                med_state = MedState.Inactive;
+                            }
+                        }
                     }
                 }
                 else
                 {
-                    velocity = Vector2.Zero;
+                    position = new Vector2(-100, -100);
                 }
+                break;
+                default:
+                throw new System.InvalidOperationException("invalid DropItem state");
 
-                Vector2 nextStep = position + (velocity * currentTime.ElapsedGameTime.Milliseconds);
-
-                Vector2 finalPos = parentWorld.Map.reloactePosition(position, nextStep, dimensions);
-                position = finalPos;
-            }
-            else
-            {
-                position = new Vector2(-100, -100);
-            }
+                break;
+                }
         }
 
         public override void draw(Spine.SkeletonRenderer sb)

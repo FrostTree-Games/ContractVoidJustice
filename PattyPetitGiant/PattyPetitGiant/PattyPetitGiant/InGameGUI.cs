@@ -281,7 +281,7 @@ namespace PattyPetitGiant
             AnimationLib.FrameAnimationSet player_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Item_1].pickupImage;
             AnimationLib.FrameAnimationSet player_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Item_2].pickupImage;
 
-            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
+            //sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
 
 
             string player_health_display = "H: ";

@@ -323,6 +323,8 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
+                        //entityList.Add(new HookPrisonerEnemy(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new MutantAcidSpitter(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {

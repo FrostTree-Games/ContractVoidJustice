@@ -55,7 +55,7 @@ namespace PattyPetitGiant
             dimensions = new Vector2(48.0f, 48.0f);
 
             enemy_damage = 4;
-            enemy_life = 20;
+            enemy_life = 5;
             windup_timer = 0.0f;
             spitter_count = 0;
             change_direction_time = 0.0f;
@@ -96,11 +96,19 @@ namespace PattyPetitGiant
             change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
             animation_time += currentTime.ElapsedGameTime.Milliseconds;
 
-            if (state == SpitterState.Search && sound_alert && entity_found == null)
+            if (state == SpitterState.Search && sound_alert && entity_found == null && !death)
             {
                 alert_timer = 0.0f;
                 animation_time = 0.0f;
                 state = SpitterState.Alert;
+            }
+
+            if (!death && enemy_life <= 0)
+            {
+                state = SpitterState.Death;
+                death = true;
+                directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(deathAnims[Game1.rand.Next() % 3]);
+                animation_time = 0.0f;
             }
 
             switch (state)
@@ -318,7 +326,6 @@ namespace PattyPetitGiant
                     }
                     break;
                 case SpitterState.Death:
-                    directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(deathAnims[Game1.rand.Next() % 3]);
                     velocity = Vector2.Zero;
                     break;
                 default:
@@ -358,7 +365,7 @@ namespace PattyPetitGiant
                     else
                     {
                         //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
-                        acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].position, new Vector2(projectile[i].scale), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                       acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].CenterPoint - acid_pool.FrameDimensions/2, new Vector2(projectile[i].scale), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
                     }
                 }
             }
@@ -370,6 +377,7 @@ namespace PattyPetitGiant
             {
                 if (disable_movement_time == 0.0)
                 {
+                    AudioLib.playSoundEffect("fleshyKnockBack");
                     state = SpitterState.KnockBack;
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
@@ -458,7 +466,7 @@ namespace PattyPetitGiant
             private Vector2 nextStep_temp;
 
             public float scale;
-            private const float scale_factor = 50.0f;
+            private const float scale_factor = 128.0f;
 
             public float alive_timer;
             private const float max_alive_timer = 500.0f;
@@ -580,7 +588,7 @@ namespace PattyPetitGiant
                                         }
                                         else if (en is Player)
                                         {
-                                            GameCampaign.Player_Health -= acid_damage;
+                                            //GameCampaign.Player_Health -= acid_damage;
                                         }
                                     }
                                 }
@@ -613,7 +621,7 @@ namespace PattyPetitGiant
                                     }
                                     else if (en is Player)
                                     {
-                                        GameCampaign.Player_Health -= acid_damage;
+                                        //GameCampaign.Player_Health -= acid_damage;
                                     }
                                 }
                             }
@@ -651,7 +659,7 @@ namespace PattyPetitGiant
                                         }
                                         else if (en is Player)
                                         {
-                                            GameCampaign.Player_Health -= acid_damage;
+                                            //GameCampaign.Player_Health -= acid_damage;
                                         }
                                     }
                                 }

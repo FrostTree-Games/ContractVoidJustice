@@ -214,6 +214,7 @@ namespace PattyPetitGiant
 
                 sb.DrawSpriteToSpineVertexArray(sheet, new Rectangle(x + (frame * frameWidth), y, frameWidth, frameHeight), position + new Vector2((int)offsetX, (int)offsetY), color, rotation, scale);
             }
+
         }
 
         public class SerializableAnimationData

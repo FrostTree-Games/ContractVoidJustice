@@ -280,6 +280,7 @@ namespace PattyPetitGiant
             {
                 if (disable_movement == false)
                 {
+                    AudioLib.playSoundEffect("fleshyKnockBack");
                     disable_movement = true;
                     disable_movement_time = 0.0f;
 
@@ -343,8 +344,6 @@ namespace PattyPetitGiant
                             break;
                     }
                 }
-
-                AudioLib.playSoundEffect("fleshyKnockBack");
             }
 
             parentWorld.Particles.pushBloodParticle(CenterPoint);
