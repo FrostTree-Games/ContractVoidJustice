@@ -174,6 +174,8 @@ namespace PattyPetitGiant
                 GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
                 GameCampaign.PlayerFloorHeight = selectedLevelY;
 
+                GameCampaign.floorProgress[GameCampaign.PlayerLevelProgress] = GameCampaign.PlayerFloorHeight;
+
                 isComplete = true;
             }
 

@@ -118,6 +118,9 @@ namespace PattyPetitGiant
         /// <remarks>Ranged between 0.0f and 1.0f. 0.0f represents the player siding with the prisoners. 1.0f represents the player siding with the guards.</remarks>
         public static float PlayerAllegiance { get { return allegiance; } }
 
+        public const int numberOfLevels = 6;
+        public static int[] floorProgress = null;
+
         /// <summary>
         /// Increment or decrement the player's standing between the prisoners and guards.
         /// </summary>
@@ -186,7 +189,14 @@ namespace PattyPetitGiant
 
         public static void ResetPlayerValues(string player1Name, int player1Color)
         {
-            PlayerLevelProgress = 0;
+            if (floorProgress == null)
+            {
+                floorProgress = new int[numberOfLevels];
+            }
+
+            for (int i = 0; i < numberOfLevels; i++) { floorProgress[i] = -1; }
+
+            PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
             Player_Item_1 = GlobalGameConstants.itemType.FlameThrower;
