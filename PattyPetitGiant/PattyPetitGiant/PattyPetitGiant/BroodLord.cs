@@ -28,6 +28,8 @@ namespace PattyPetitGiant
 
         private AnimationLib.SpineAnimationSet anim = null;
 
+        private float deadCushySoundTimer;
+
         public BroodLord(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -50,12 +52,15 @@ namespace PattyPetitGiant
             anim = AnimationLib.loadNewAnimationSet("broodlord");
             anim.Animation = anim.Skeleton.Data.FindAnimation("idle");
             animation_time = 0;
+
+            deadCushySoundTimer = 0;
         }
 
         public override void update(GameTime currentTime)
         {
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
             knockBackTimer += currentTime.ElapsedGameTime.Milliseconds;
+            deadCushySoundTimer += currentTime.ElapsedGameTime.Milliseconds;
 
             if (broodState != BroodLordState.Dying && broodState != BroodLordState.Dead)
             {
@@ -167,6 +172,13 @@ namespace PattyPetitGiant
                 parentWorld.Particles.pushBloodParticle(CenterPoint);
 
                 enemy_life -= damage;
+
+                if (deadCushySoundTimer > 500f)
+                {
+                    AudioLib.playSoundEffect("fleshyKnockBack");
+
+                    deadCushySoundTimer = 0;
+                }
 
                 if (enemy_life < 1)
                 {

@@ -232,7 +232,7 @@ namespace PattyPetitGiant
                 }
                 else if (faction == Entity.EnemyType.Alien)
                 {
-                    //entityList.Add(new BroodLord(this, spawnPos));
+                    entityList.Add(new BroodLord(this, spawnPos));
                 }
             }
         }
