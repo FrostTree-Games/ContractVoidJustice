@@ -119,7 +119,32 @@ namespace PattyPetitGiant
                 sb.DrawString(Game1.tenbyFive24, GameCampaign.currentContract.killCount + " kills made", new Vector2((GlobalGameConstants.GameResolutionWidth / 8) + 350 / 2 + 20, 500), Color.White);
             }
 
-            //
+            for (int i = 0; i < GameCampaign.levelMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < GameCampaign.levelMap.GetLength(1); j++)
+                {
+                    if (!GameCampaign.levelMap[i, j].visible)
+                    {
+                        continue;
+                    }
+
+                    if (j == GameCampaign.floorProgress[i])
+                    {
+                        sb.Draw(Game1.whitePixel, new Vector2(755, 390) + new Vector2(64 * i, 64 * j), null, Color.White, 0.0f, Vector2.Zero, new Vector2(32), SpriteEffects.None, 0.5f);
+                    }
+                    else
+                    {
+                        sb.Draw(Game1.whitePixel, new Vector2(755, 390) + new Vector2(64 * i, 64 * j), null, new Color(1, 1, 1, 0.5f), 0.0f, Vector2.Zero, new Vector2(32), SpriteEffects.None, 0.5f);
+                    }
+                }
+            }
+
+            for (int i = 0; i < GameCampaign.PlayerLevelProgress; i++)
+            {
+                float length = GameCampaign.floorProgress[i + 1] == GameCampaign.floorProgress[i] ? 64 : 90.5f;
+
+                drawLine(sb, new Vector2(755, 390) + new Vector2(64 * i, 64 * GameCampaign.floorProgress[i]) + new Vector2(16), length, (float)(Math.Atan2(GameCampaign.floorProgress[i+1] - GameCampaign.floorProgress[i], 1)), Color.Red, 2.0f);
+            }
 
             if (screenTimePassed > numberTickingDuration)
             {
