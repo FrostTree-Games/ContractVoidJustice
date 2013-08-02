@@ -143,7 +143,7 @@ namespace PattyPetitGiant
             font = tenbyFive14;
             testComputerFont = tenbyFive24;
 
-            testVideo = Content.Load<Video>("fmv/WilsonTestVideo");
+            testVideo = Content.Load<Video>("fmv/levelStart");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
