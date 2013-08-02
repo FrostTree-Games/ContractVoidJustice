@@ -633,7 +633,7 @@ namespace PattyPetitGiant
         {
             if (endFlagReached)
             {
-                return ScreenStateType.LevelReviewState;
+                return ScreenStateType.FMV_ELEVATOR_EXIT;
             }
             else if (player1Dead)
             {

@@ -143,7 +143,7 @@ namespace PattyPetitGiant
             font = tenbyFive14;
             testComputerFont = tenbyFive24;
 
-            testVideo = Content.Load<Video>("fmv/levelStart");
+            testVideo = Content.Load<Video>("fmv/elevatorExit");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
@@ -159,6 +159,7 @@ namespace PattyPetitGiant
             GameCampaign.ResetPlayerValues("INIT", 0);
 
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
+            //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             currentGameScreen = new CampaignLobbyState();
         }
 
