@@ -21,6 +21,14 @@ namespace PattyPetitGiant
             ClosedAndWaiting,
         }
 
+        private enum PushMessageQueueState
+        {
+            Wait,
+            FadeIn,
+            ShowMessage,
+            FadeOut,
+        }
+
 #if DEBUG
         private bool showStats = false;
 #endif
@@ -85,11 +93,18 @@ namespace PattyPetitGiant
         private static int elapsedCoinAmount;
         public static int ElapsedCoinAmount { get { return elapsedCoinAmount; } set { elapsedCoinAmount = value; } }
 
+        private Queue<string> pushMessageQueue = null;
+        private PushMessageQueueState messageQueueState;
+        private float queueTimer;
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
 
             state = LoadingState.LevelLoading;
+
+            pushMessageQueue = new Queue<string>(5);
+            messageQueueState = PushMessageQueueState.Wait;
 
             PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
             textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
@@ -381,6 +396,45 @@ namespace PattyPetitGiant
                 GameCampaign.Player_Ammunition = 0;
             }
 
+            if (messageQueueState == PushMessageQueueState.Wait)
+            {
+                if (pushMessageQueue.Count > 0)
+                {
+                    messageQueueState = PushMessageQueueState.FadeIn;
+                    queueTimer = 0;
+                }
+            }
+            else if (messageQueueState == PushMessageQueueState.ShowMessage)
+            {
+                queueTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (queueTimer > 1000f + (25 * pushMessageQueue.Peek().Length))
+                {
+                    messageQueueState = PushMessageQueueState.FadeOut;
+                    queueTimer = 0;
+                }
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeIn)
+            {
+                queueTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (queueTimer > 200f)
+                {
+                    messageQueueState = PushMessageQueueState.ShowMessage;
+                    queueTimer = 0;
+                }
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeOut)
+            {
+                queueTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (queueTimer > 200f)
+                {
+                    messageQueueState = PushMessageQueueState.Wait;
+                    queueTimer = 0;
+                    pushMessageQueue.Dequeue();
+                }
+            }
 
             for (int i = 0; i < entityList.Count; i++)
             {
@@ -507,6 +561,19 @@ namespace PattyPetitGiant
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
             gui.render(sb);
 
+            if (messageQueueState == PushMessageQueueState.ShowMessage)
+            {
+                sb.DrawString(Game1.tenbyFive24, pushMessageQueue.Peek(), new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - Game1.tenbyFive24.MeasureString(pushMessageQueue.Peek()) / 2, Color.White);
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeIn)
+            {
+                sb.DrawString(Game1.tenbyFive24, pushMessageQueue.Peek(), new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - Game1.tenbyFive24.MeasureString(pushMessageQueue.Peek()) / 2 - new Vector2(0, 50 * (1 - (queueTimer / 200))), Color.Lerp(Color.Transparent, Color.White, queueTimer / 200));
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeOut)
+            {
+                sb.DrawString(Game1.tenbyFive24, pushMessageQueue.Peek(), new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - Game1.tenbyFive24.MeasureString(pushMessageQueue.Peek()) / 2 + new Vector2(0, 50 * (queueTimer / 200)), Color.Lerp(Color.White, Color.Transparent, queueTimer / 200));
+            }
+
 #if DEBUG
             if (showStats)
             {
@@ -593,6 +660,17 @@ namespace PattyPetitGiant
                 }
             }
             while (freeCoinIndex != lastAt);
+        }
+
+        public void pushMessage(string message)
+        {
+            //don't bother with spam
+            if (pushMessageQueue.Count > 4 || message == null || message.Length > 140 || message.Length < 1)
+            {
+                return;
+            }
+
+            pushMessageQueue.Enqueue(message);
         }
     }
 }
