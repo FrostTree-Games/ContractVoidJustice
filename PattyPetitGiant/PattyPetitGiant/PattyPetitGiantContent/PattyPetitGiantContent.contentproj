@@ -86,6 +86,7 @@
     <None Include="animation\frame\itemHealth.zpy">
       <Name>itemHealth</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="animation\frame\itemHermes.zpy">
       <Name>itemHermes</Name>
@@ -2101,8 +2102,8 @@
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-</ItemGroup>
-<ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="heartSheet.png">
       <Name>heartSheet</Name>
       <Importer>TextureImporter</Importer>

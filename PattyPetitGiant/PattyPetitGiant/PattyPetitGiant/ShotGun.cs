@@ -80,7 +80,7 @@ namespace PattyPetitGiant
                 }
             }
 
-            if (shotgun_active == false)
+            if (shotgun_active == false && GameCampaign.Player_Ammunition >= 5)
             {
                 switch (parent.Direction_Facing)
                 {
@@ -120,6 +120,7 @@ namespace PattyPetitGiant
                 }
                 shotgun_active = true;
                 shotgun_active_timer = 0.0f;
+                GameCampaign.Player_Ammunition -= 5;
             }
             parent.State = Player.playerState.Moving;
         }

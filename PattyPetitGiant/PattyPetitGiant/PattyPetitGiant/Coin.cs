@@ -18,6 +18,20 @@ namespace PattyPetitGiant
             AmmoDrop = 2,
         }
 
+        public enum AmmoValue
+        {
+            smallAmmo = 15,
+            mediumAmmo = 30,
+            largeAmmo = 50,
+            fullAmmo = 100,
+        }
+
+        private AmmoValue ammo_value = AmmoValue.smallAmmo;
+        public AmmoValue ammoValue
+        {
+            get { return ammo_value; }
+        }
+
         public enum MedValue
         {
             smallPack = 15,
@@ -62,6 +76,7 @@ namespace PattyPetitGiant
 
         private AnimationLib.FrameAnimationSet coinAnim = null;
         private AnimationLib.FrameAnimationSet medAnim = null;
+        private AnimationLib.FrameAnimationSet ammoAnim = null;
         private float animationTime;
 
         private bool isKnockedBack = false;
@@ -82,6 +97,7 @@ namespace PattyPetitGiant
 
             coinAnim = AnimationLib.getFrameAnimationSet("testCoin");
             medAnim = AnimationLib.getFrameAnimationSet("itemHealth");
+            ammoAnim = AnimationLib.getFrameAnimationSet("itemBattery");
             animationTime = 0.0f;
 
             isKnockedBack = false;
@@ -137,6 +153,58 @@ namespace PattyPetitGiant
                     }
                 break;
                 case DropItemType.AmmoDrop:
+                if (state == DropState.Active)
+                {
+                    for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                    {
+                        if (parentWorld.EntityList[i] is Player)
+                        {
+                            if (hitTest(parentWorld.EntityList[i]))
+                            {
+                                if (ammo_value == AmmoValue.fullAmmo)
+                                {
+                                    GameCampaign.Player_Ammunition = 100;
+                                }
+                                else
+                                {
+                                    float ammo = GameCampaign.Player_Ammunition + (int)ammo_value;
+                                    if (ammo > 100)
+                                    {
+                                        GameCampaign.Player_Ammunition = 100;
+                                    }
+                                    else
+                                    {
+                                        GameCampaign.Player_Ammunition += (int)ammo_value;
+                                    }
+                                }
+                                state = DropState.Inactive;
+                            }
+                        }
+                    }
+
+                    if (isKnockedBack)
+                    {
+                        knockedBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                        if (knockedBackTime > knockBackDuration)
+                        {
+                            isKnockedBack = false;
+                        }
+                    }
+                    else
+                    {
+                        velocity = Vector2.Zero;
+                    }
+
+                    Vector2 nextStep = position + (velocity * currentTime.ElapsedGameTime.Milliseconds);
+
+                    Vector2 finalPos = parentWorld.Map.reloactePosition(position, nextStep, dimensions);
+                    position = finalPos;
+                }
+                else
+                {
+                    position = new Vector2(-100, -100);
+                }
                 break;
                 case DropItemType.MedDrop:
                 if (state == DropState.Active)
@@ -153,7 +221,15 @@ namespace PattyPetitGiant
                                 }
                                 else
                                 {
-                                    GameCampaign.Player_Health += (int)med_value;
+                                    float health = GameCampaign.Player_Health + (int)med_value;
+                                    if (health > 100)
+                                    {
+                                        GameCampaign.Player_Health = 100;
+                                    }
+                                    else
+                                    {
+                                        GameCampaign.Player_Health += (int)med_value;
+                                    }
                                 }
                                 state = DropState.Inactive;
                             }
@@ -201,6 +277,10 @@ namespace PattyPetitGiant
                 else if (dropItem == DropItemType.MedDrop)
                 {
                     medAnim.drawAnimationFrame(animationTime, sb, this.position,new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                }
+                else if (dropItem == DropItemType.AmmoDrop)
+                {
+                    ammoAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
                 }
             }
         }
@@ -302,11 +382,57 @@ namespace PattyPetitGiant
                     case MedValue.mediumPack:
                         shadeColor = Color.Yellow;
                         break;
+                    case MedValue.fullPack:
+                        shadeColor = Color.Blue;
+                        break;
+                    case MedValue.largePack:
+                        shadeColor = Color.Green;
+                        break;
                     default:
                         shadeColor = Color.Blue;
                         med_value = MedValue.smallPack;
                         break;
                 }
+            }
+            else if (drop_type == DropItemType.AmmoDrop)
+            {
+                dropItem = DropItemType.AmmoDrop;
+
+                if (Enum.IsDefined(typeof(AmmoValue), drop_value))
+                {
+                    this.ammo_value = (AmmoValue)drop_value;
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("value is not specified in Coin Value");
+                }
+
+                isKnockedBack = false;
+                float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
+                knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
+                switch (ammo_value)
+                {
+                    case AmmoValue.smallAmmo:
+                        shadeColor = Color.Red;
+                        break;
+                    case AmmoValue.mediumAmmo:
+                        shadeColor = Color.Yellow;
+                        break;
+                    case AmmoValue.largeAmmo:
+                        shadeColor = Color.Yellow;
+                        break;
+                    case AmmoValue.fullAmmo:
+                        shadeColor = Color.Green;
+                        break;
+                    default:
+                        shadeColor = Color.Blue;
+                        med_value = MedValue.smallPack;
+                        break;
+                }
+            }
+            else
+            {
+                throw new System.InvalidOperationException("not a valid dropItem");
             }
         }
     }
