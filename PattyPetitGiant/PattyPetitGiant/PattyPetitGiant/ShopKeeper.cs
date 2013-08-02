@@ -86,6 +86,9 @@ namespace PattyPetitGiant
 
         private bool windingUp = false;
 
+        private string greetingMessage;
+        private bool playerInRange;
+
         public ShopKeeper(LevelState parentWorld, Vector2 position)
         {
             this.parentWorld = parentWorld;
@@ -94,6 +97,9 @@ namespace PattyPetitGiant
             this.dimensions = GlobalGameConstants.TileSize;
 
             this.direction_facing = GlobalGameConstants.Direction.Down;
+
+            greetingMessage = "Welcome to " + CampaignLobbyState.randomNames[Game1.rand.Next() % CampaignLobbyState.randomNames.Length] + "'s shop!";
+            playerInRange = false;
 
             state = ShopKeeperState.Normal;
 
@@ -280,6 +286,7 @@ namespace PattyPetitGiant
             {
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("idle");
 
+                //render prices
                 if (Vector2.Distance(CenterPoint, parentWorld.CameraFocus.CenterPoint) > 720)
                 {
                     for (int i = 0; i < 3; i++)
@@ -293,6 +300,17 @@ namespace PattyPetitGiant
                     {
                         InGameGUI.prices[i].active = true;
                     }
+                }
+
+                if (Vector2.Distance(CenterPoint, parentWorld.CameraFocus.CenterPoint) < 500 && !playerInRange)
+                {
+                    playerInRange = true;
+
+                    parentWorld.pushMessage(greetingMessage);
+                }
+                else if (Vector2.Distance(CenterPoint, parentWorld.CameraFocus.CenterPoint) > 500 && playerInRange)
+                {
+                    playerInRange = false;
                 }
 
                 for (int it = 0; it < parentWorld.EntityList.Count; it++)

@@ -116,8 +116,8 @@ namespace PattyPetitGiant
 
         private void loadLevel()
         {
-            //nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
-            nodeMap = DungeonGenerator.generateEntityZoo();
+            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
+            //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
 
             string tileSetName = "deathStar";
