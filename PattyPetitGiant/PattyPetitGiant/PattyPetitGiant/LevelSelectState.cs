@@ -304,7 +304,7 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            return ScreenStateType.LevelState;
+            return ScreenStateType.FMV_ELEVATOR_ENTER;
         }
     }
 }

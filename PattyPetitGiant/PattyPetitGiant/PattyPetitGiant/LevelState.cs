@@ -603,9 +603,9 @@ namespace PattyPetitGiant
         {
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
-            sb.Draw(Game1.whitePixel, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), Color.Black);
+            sb.Draw(Game1.whitePixel, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), Color.White);
 
-            sb.DrawString(Game1.font, "LOADING", new Vector2(100), Color.Beige);
+            sb.DrawString(Game1.font, "LOADING...", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2) - Game1.font.MeasureString("LOADING..."), Color.Black);
 
             sb.End();
         }
