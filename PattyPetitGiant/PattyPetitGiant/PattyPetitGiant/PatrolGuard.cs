@@ -616,8 +616,8 @@ namespace PattyPetitGiant
 
                 dimensions /= 8;
 
-                parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.CoinValue.Elizabeth);
-                parentWorld.pushCoin(CenterPoint + GlobalGameConstants.TileSize / 2, Coin.CoinValue.Laurier);
+                parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.DropItemType.CoinDrop, (int)Coin.CoinValue.Elizabeth);
+                parentWorld.pushCoin(CenterPoint + GlobalGameConstants.TileSize / 2, Coin.DropItemType.CoinDrop, (int)Coin.CoinValue.Laurier);
 
                 death = true;
 

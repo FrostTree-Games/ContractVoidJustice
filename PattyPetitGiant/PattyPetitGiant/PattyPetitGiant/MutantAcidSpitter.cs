@@ -430,6 +430,9 @@ namespace PattyPetitGiant
                     }
                 }
             }
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
         }
 
         public override void spinerender(SkeletonRenderer renderer)

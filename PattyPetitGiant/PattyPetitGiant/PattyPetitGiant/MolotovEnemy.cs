@@ -481,8 +481,8 @@ namespace PattyPetitGiant
 
                     death = true;
 
-                    parentWorld.pushCoin(CenterPoint, Coin.CoinValue.Laurier);
-                    parentWorld.pushCoin(CenterPoint, Coin.CoinValue.MacDonald);
+                    parentWorld.pushCoin(CenterPoint, Coin.DropItemType.CoinDrop, (int)Coin.CoinValue.Laurier);
+                    parentWorld.pushCoin(CenterPoint, Coin.DropItemType.CoinDrop, (int)Coin.CoinValue.MacDonald);
 
                     dimensions /= 8;
 

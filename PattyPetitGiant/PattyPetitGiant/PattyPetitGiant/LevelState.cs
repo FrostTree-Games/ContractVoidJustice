@@ -324,7 +324,7 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
                         //entityList.Add(new HookPrisonerEnemy(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new MutantAcidSpitter(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
@@ -580,7 +580,7 @@ namespace PattyPetitGiant
             public InvalidLevelStateExcepton(string message, System.Exception inner) { }
         }
 
-        public void pushCoin(Vector2 position, Coin.CoinValue value)
+        public void pushCoin(Vector2 position, Coin.DropItemType drop_type, int value)
         {
             int lastAt = freeCoinIndex;
 
@@ -588,9 +588,9 @@ namespace PattyPetitGiant
             {
                 freeCoinIndex = (freeCoinIndex + 1) % coinPoolSize;
 
-                if (coinPool[freeCoinIndex].State == Coin.CoinState.Inactive)
+                if (coinPool[freeCoinIndex].State == Coin.DropState.Inactive)
                 {
-                    coinPool[freeCoinIndex].activate(position, value);
+                    coinPool[freeCoinIndex].activate(position, drop_type,value);
                     break;
                 }
             }

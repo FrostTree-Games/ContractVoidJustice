@@ -207,7 +207,7 @@ namespace PattyPetitGiant
             playerName = player1Name;
             playerColor = player1Color;
 
-            player_health = 100;
+            player_health = 80;
             player_ammunition = 100;
             player_coin_amount = 200;
 

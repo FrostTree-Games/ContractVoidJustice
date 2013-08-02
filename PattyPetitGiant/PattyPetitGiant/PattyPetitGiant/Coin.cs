@@ -18,30 +18,21 @@ namespace PattyPetitGiant
             AmmoDrop = 2,
         }
 
-        public enum MedState
+        public enum MedValue
         {
-            Active,
-            Inactive,
+            smallPack = 15,
+            mediumPack = 30,
+            largePack = 50,
+            fullPack = 100,
         }
 
-        private MedState med_state;
-        public MedState medState
+        private MedValue med_value = MedValue.smallPack;
+        public MedValue medValue
         {
-            get { return med_state; }
+            get { return med_value; }
         }
 
-        public enum AmmoState
-        {
-            Active,
-            Inactive
-        }
-        private AmmoState ammo_state;
-        public AmmoState ammoState
-        {
-            get { return ammo_state; }
-        }
-
-        public enum CoinState
+        public enum DropState
         {
             Active,
             Inactive,
@@ -61,8 +52,8 @@ namespace PattyPetitGiant
         private DropItemType dropItem;
         public DropItemType DropItem { get { return dropItem; } }
 
-        private CoinState state;
-        public CoinState State { get { return state; } }
+        private DropState state;
+        public DropState State { get { return state; } }
 
         private CoinValue value = CoinValue.Loonie;
         public CoinValue Value { get { return value; } }
@@ -70,6 +61,7 @@ namespace PattyPetitGiant
         private Color shadeColor = Color.Yellow;
 
         private AnimationLib.FrameAnimationSet coinAnim = null;
+        private AnimationLib.FrameAnimationSet medAnim = null;
         private float animationTime;
 
         private bool isKnockedBack = false;
@@ -84,9 +76,12 @@ namespace PattyPetitGiant
 
             dimensions = new Vector2(24, 24);
 
-            state = CoinState.Inactive;
+            dropItem = DropItemType.CoinDrop;
+
+            state = DropState.Inactive;
 
             coinAnim = AnimationLib.getFrameAnimationSet("testCoin");
+            medAnim = AnimationLib.getFrameAnimationSet("itemHealth");
             animationTime = 0.0f;
 
             isKnockedBack = false;
@@ -97,7 +92,7 @@ namespace PattyPetitGiant
             switch(dropItem)
             {
                 case DropItemType.CoinDrop:
-                    if (state == CoinState.Active)
+                    if (state == DropState.Active)
                     {
                         animationTime += currentTime.ElapsedGameTime.Milliseconds;
 
@@ -112,7 +107,7 @@ namespace PattyPetitGiant
 
                                     AudioLib.playSoundEffect("testCoin");
 
-                                    state = CoinState.Inactive;
+                                    state = DropState.Inactive;
                                 }
                             }
                         }
@@ -144,7 +139,7 @@ namespace PattyPetitGiant
                 case DropItemType.AmmoDrop:
                 break;
                 case DropItemType.MedDrop:
-                if (med_state == MedState.Active)
+                if (state == DropState.Active)
                 {
                     for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
@@ -152,11 +147,37 @@ namespace PattyPetitGiant
                         {
                             if (hitTest(parentWorld.EntityList[i]))
                             {
-                                //GameCampaign.Player_Health += value;
-                                med_state = MedState.Inactive;
+                                if (med_value == MedValue.fullPack)
+                                {
+                                    GameCampaign.Player_Health = 100;
+                                }
+                                else
+                                {
+                                    GameCampaign.Player_Health += (int)med_value;
+                                }
+                                state = DropState.Inactive;
                             }
                         }
                     }
+
+                    if (isKnockedBack)
+                    {
+                        knockedBackTime += currentTime.ElapsedGameTime.Milliseconds;
+
+                        if (knockedBackTime > knockBackDuration)
+                        {
+                            isKnockedBack = false;
+                        }
+                    }
+                    else
+                    {
+                        velocity = Vector2.Zero;
+                    }
+
+                    Vector2 nextStep = position + (velocity * currentTime.ElapsedGameTime.Milliseconds);
+
+                    Vector2 finalPos = parentWorld.Map.reloactePosition(position, nextStep, dimensions);
+                    position = finalPos;
                 }
                 else
                 {
@@ -165,16 +186,22 @@ namespace PattyPetitGiant
                 break;
                 default:
                 throw new System.InvalidOperationException("invalid DropItem state");
-
                 break;
                 }
         }
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
-            if (state == CoinState.Active)
+            if (state == DropState.Active)
             {
-                coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                if (dropItem == DropItemType.CoinDrop)
+                {
+                    coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                }
+                else if (dropItem == DropItemType.MedDrop)
+                {
+                    medAnim.drawAnimationFrame(animationTime, sb, this.position,new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                }
             }
         }
 
@@ -193,50 +220,93 @@ namespace PattyPetitGiant
                 velocity = direction * knockBackSpeed;
             }
         }
-
-        public void activate(Vector2 position, CoinValue value)
+        
+        public void activate(Vector2 position, DropItemType drop_type, int drop_value)
         {
-            if (state == CoinState.Active)
+            if (state == DropState.Active)
             {
                 return;
             }
 
-            state = CoinState.Active;
+            state = DropState.Active;
 
             this.position = position;
-            this.value = value;
 
-            isKnockedBack = false;
-            float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
-            knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
-
-            switch (value)
+            if (drop_type == DropItemType.CoinDrop)
             {
-                case CoinValue.Loonie:
-                    shadeColor = Color.Brown;
-                    break;
-                case CoinValue.Twoonie:
-                    shadeColor = Color.White;
-                    break;
-                case CoinValue.Laurier:
-                    shadeColor = Color.LightBlue;
-                    break;
-                case CoinValue.MacDonald:
-                    shadeColor = Color.Purple;
-                    break;
-                case CoinValue.Elizabeth:
-                    shadeColor = Color.Green;
-                    break;
-                case CoinValue.Mackenzie:
-                    shadeColor = Color.Red;
-                    break;
-                case CoinValue.Borden:
-                    shadeColor = Color.Goldenrod;
-                    break;
-                default:
-                    shadeColor = Color.Brown;
-                    value = CoinValue.Loonie;
-                    break;
+                dropItem = DropItemType.CoinDrop;
+
+                if (Enum.IsDefined(typeof(CoinValue), drop_value))
+                {
+                    this.value = (CoinValue)drop_value;
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("value is not specified in Coin Value");
+                }
+
+                isKnockedBack = false;
+                float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
+                knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
+
+                switch (value)
+                {
+                    case CoinValue.Loonie:
+                        shadeColor = Color.Brown;
+                        break;
+                    case CoinValue.Twoonie:
+                        shadeColor = Color.White;
+                        break;
+                    case CoinValue.Laurier:
+                        shadeColor = Color.LightBlue;
+                        break;
+                    case CoinValue.MacDonald:
+                        shadeColor = Color.Purple;
+                        break;
+                    case CoinValue.Elizabeth:
+                        shadeColor = Color.Green;
+                        break;
+                    case CoinValue.Mackenzie:
+                        shadeColor = Color.Red;
+                        break;
+                    case CoinValue.Borden:
+                        shadeColor = Color.Goldenrod;
+                        break;
+                    default:
+                        shadeColor = Color.Brown;
+                        value = CoinValue.Loonie;
+                        break;
+                }
+            }
+            else if (drop_type == DropItemType.MedDrop)
+            {
+                dropItem = DropItemType.MedDrop;
+
+                if (Enum.IsDefined(typeof(MedValue), drop_value))
+                {
+                    this.med_value = (MedValue)drop_value;
+                }
+                else
+                {
+                    throw new System.InvalidOperationException("value is not specified in Coin Value");
+                }
+
+                isKnockedBack = false;
+                float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
+                knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
+                switch (med_value)
+                {
+                    case MedValue.smallPack:
+                        shadeColor = Color.Red;
+                        break;
+                    case MedValue.mediumPack:
+                        shadeColor = Color.Yellow;
+                        break;
+                    default:
+                        shadeColor = Color.Blue;
+                        med_value = MedValue.smallPack;
+                        break;
+                }
             }
         }
     }

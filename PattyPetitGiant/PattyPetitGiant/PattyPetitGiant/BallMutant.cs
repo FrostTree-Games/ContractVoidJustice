@@ -21,10 +21,10 @@ namespace PattyPetitGiant
         private float alert_timer;
         private Vector2 ball_coordinate;
         private Entity entity_found;
-
-        private bool loop;
-
+        
         private AnimationLib.FrameAnimationSet chain_ball;
+
+        private string[] deathAnim = { "die", "die2", "die3" };
 
         private enum mutantBallState
         {
@@ -32,7 +32,8 @@ namespace PattyPetitGiant
             Alert,
             Agressive,
             KnockBack,
-            Reset
+            Reset,
+            Death
         }
         private mutantBallState state;
 
@@ -58,10 +59,10 @@ namespace PattyPetitGiant
 
             this.parentWorld = parentWorld;
 
-            loop = true;
+            death = false;
 
             enemy_damage = 5;
-            enemy_life = 25;
+            enemy_life = 5;
             enemy_type = EnemyType.Prisoner;
 
             walk_down = AnimationLib.getSkeleton("ballMutantUp");
@@ -80,11 +81,19 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-            animation_time += currentTime.ElapsedGameTime.Milliseconds;
-            if (sound_alert && state == mutantBallState.Search && entity_found == null)
+            if (sound_alert && state == mutantBallState.Search && entity_found == null && !death)
             {
                 state = mutantBallState.Alert;
                 alert_timer = 0.0f;
+            }
+
+            if (enemy_life <= 0 && !death)
+            {
+                velocity = Vector2.Zero;
+                death = true;
+                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(deathAnim[Game1.rand.Next() % 3]);
+                state = mutantBallState.Death;
+                animation_time = 0.0f;
             }
             switch (state)
             {
@@ -336,6 +345,9 @@ namespace PattyPetitGiant
                         animation_time = 0.0f;
                     }
                     break;
+                case mutantBallState.Death:
+                    velocity = Vector2.Zero;
+                    break;
                 default:
                     break;
             }
@@ -346,7 +358,7 @@ namespace PattyPetitGiant
             position.Y = finalPos.Y;
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
-            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, loop);
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, (state == mutantBallState.Death)? false:true);
         }
         public override void draw(Spine.SkeletonRenderer sb)
         {
@@ -377,61 +389,68 @@ namespace PattyPetitGiant
                 }
             }
         }
-        
+
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
-            if (disable_movement == false)
+            if (!death)
             {
-                state = mutantBallState.KnockBack;
-                if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
+                if (disable_movement == false)
                 {
-                    if (direction.X < 0)
+                    AudioLib.playSoundEffect("fleshyKnockBack");
+                    state = mutantBallState.KnockBack;
+                    if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
-                        velocity = new Vector2(-5.51f * magnitude, direction.Y / 100 * magnitude);
+                        if (direction.X < 0)
+                        {
+                            velocity = new Vector2(-5.51f * magnitude, direction.Y / 100 * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2(5.51f * magnitude, direction.Y / 100 * magnitude);
+                        }
                     }
                     else
                     {
-                        velocity = new Vector2(5.51f * magnitude, direction.Y / 100 * magnitude);
+                        if (direction.Y < 0)
+                        {
+                            velocity = new Vector2(direction.X / 100f * magnitude, -5.51f * magnitude);
+                        }
+                        else
+                        {
+                            velocity = new Vector2((direction.X / 100f) * magnitude, 5.51f * magnitude);
+                        }
                     }
-                }
-                else
-                {
-                    if (direction.Y < 0)
-                    {
-                        velocity = new Vector2(direction.X / 100f * magnitude, -5.51f * magnitude);
-                    }
-                    else
-                    {
-                        velocity = new Vector2((direction.X / 100f) * magnitude, 5.51f * magnitude);
-                    }
+
+                    enemy_life = enemy_life - damage;
                 }
 
-                enemy_life = enemy_life - damage;
-            }
-
-            if (attacker == null)
-            {
-                return;
-            }
-            else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
-            {
-                switch (attacker.Direction_Facing)
+                if (attacker == null)
                 {
-                    case GlobalGameConstants.Direction.Right:
-                        direction_facing = GlobalGameConstants.Direction.Left;
-                        break;
-                    case GlobalGameConstants.Direction.Left:
-                        direction_facing = GlobalGameConstants.Direction.Right;
-                        break;
-                    case GlobalGameConstants.Direction.Up:
-                        direction_facing = GlobalGameConstants.Direction.Down;
-                        break;
-                    default:
-                        direction_facing = GlobalGameConstants.Direction.Up;
-                        break;
+                    return;
                 }
+                else if (attacker.Enemy_Type != enemy_type && attacker.Enemy_Type != EnemyType.NoType)
+                {
+                    switch (attacker.Direction_Facing)
+                    {
+                        case GlobalGameConstants.Direction.Right:
+                            direction_facing = GlobalGameConstants.Direction.Left;
+                            break;
+                        case GlobalGameConstants.Direction.Left:
+                            direction_facing = GlobalGameConstants.Direction.Right;
+                            break;
+                        case GlobalGameConstants.Direction.Up:
+                            direction_facing = GlobalGameConstants.Direction.Down;
+                            break;
+                        default:
+                            direction_facing = GlobalGameConstants.Direction.Up;
+                            break;
+                    }
+                }
+                animation_time = 0.0f;
             }
-            animation_time = 0.0f;
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
+            parentWorld.Particles.pushBloodParticle(CenterPoint);
         }
 
         public override void spinerender(Spine.SkeletonRenderer renderer)
