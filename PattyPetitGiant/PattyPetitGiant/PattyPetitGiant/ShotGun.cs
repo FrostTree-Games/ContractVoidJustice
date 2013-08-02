@@ -109,18 +109,19 @@ namespace PattyPetitGiant
                     {
                         shotgun_pellets[i] = new Pellets(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), angle);
                         parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lShotgun" : "rShotgun");
+                        GameCampaign.Player_Ammunition -= 1;
                     }
                     else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
                     {
                         shotgun_pellets[i] = new Pellets(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), angle);
                         parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rShotgun" : "lShotgun");
+                        GameCampaign.Player_Ammunition -= 1;
                     }
 
                     pellet_count++;
                 }
                 shotgun_active = true;
                 shotgun_active_timer = 0.0f;
-                GameCampaign.Player_Ammunition -= 5;
             }
             parent.State = Player.playerState.Moving;
         }
