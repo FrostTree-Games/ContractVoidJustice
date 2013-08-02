@@ -62,6 +62,7 @@ namespace PattyPetitGiant
                 public string message;
                 public AnimationLib.FrameAnimationSet pickupImage;
                 public int ammo_consumption;
+                public string priceString; // for rendering purposes to save on garbage
 
                 public WeaponInformation(int price, string name, string message, string pickupFrameImage, int ammo_consumption)
                 {
@@ -70,6 +71,7 @@ namespace PattyPetitGiant
                     this.message = message;
                     this.pickupImage = AnimationLib.getFrameAnimationSet(pickupFrameImage);
                     this.ammo_consumption = ammo_consumption;
+                    this.priceString = this.price.ToString();
                 }
             }
 
@@ -93,7 +95,7 @@ namespace PattyPetitGiant
                 weaponInfo[(int)itemType.WaveMotionGun] = new WeaponInformation(80, "Sine Motion Gun", "A strange weapon that fires in an ecclectic motion. Somewhat impractical.", "itemRayGun", 5);
                 weaponInfo[(int)itemType.BushidoBlade] = new WeaponInformation(90, "Bushido Blade", "This weapon will allow you to slay almost any foe perfectly, but brings an honorable death to the imperfect warrior.", "gunPic", 0);
                 weaponInfo[(int)itemType.RocketLauncher] = new WeaponInformation(120, "Rocket Launcher", "A one-handed device that fires rockets that combust on explosion. Avoid shooting it in close quarters.", "itemRocket", 20);
-                weaponInfo[(int)itemType.ShotGun] = new WeaponInformation(170, "Shotgun", "Formely used by space mobsters to rob banks with.", "itemShotgun", 5);
+                weaponInfo[(int)itemType.ShotGun] = new WeaponInformation(170, "Shotgun", "Formely used by space mobsters when performing bank robbery. It's signed!", "itemShotgun", 5);
                 weaponInfo[(int)itemType.DungeonMap] = new WeaponInformation(45, "Level Map", "Allows you to view the corridors of the current floor of the ship.", "itemMap", 0);
                 weaponInfo[(int)itemType.FlameThrower] = new WeaponInformation(200, "Flamethrower", "Badassery. Enough said.", "itemFlamethrower", 1);
                 weaponInfo[(int)itemType.LazerGun] = new WeaponInformation(159, "Laser Gun", "A hard laser that can burn flesh in an instant.", "itemLaser", 15);

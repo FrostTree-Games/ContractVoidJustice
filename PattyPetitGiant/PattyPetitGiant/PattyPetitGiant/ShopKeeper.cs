@@ -149,7 +149,7 @@ namespace PattyPetitGiant
                 InGameGUI.prices[i].active = true;
                 InGameGUI.prices[i].description = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].name;
                 InGameGUI.prices[i].price = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].price.ToString();
-                InGameGUI.prices[i].position = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y)) - (Game1.tenbyFive14.MeasureString(InGameGUI.prices[i].price) / 2);
+                InGameGUI.prices[i].position = position + new Vector2((-3 * GlobalGameConstants.TileSize.X) + (i * 3f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y)) - (Game1.tenbyFive14.MeasureString(InGameGUI.prices[i].price) / 2) + new Vector2(0, 16);
             }
         }
 
@@ -291,6 +291,7 @@ namespace PattyPetitGiant
                 {
                     for (int i = 0; i < 3; i++)
                     {
+                        
                         InGameGUI.prices[i].active = false;
                     }
                 }
@@ -298,7 +299,10 @@ namespace PattyPetitGiant
                 {
                     for (int i = 0; i < 3; i++)
                     {
-                        InGameGUI.prices[i].active = true;
+                        if (itemsForSale[i] != GlobalGameConstants.itemType.NoItem)
+                        {
+                            InGameGUI.prices[i].active = true;
+                        }
                     }
                 }
 
@@ -315,7 +319,7 @@ namespace PattyPetitGiant
 
                 for (int it = 0; it < parentWorld.EntityList.Count; it++)
                 {
-                    if (parentWorld.EntityList[it] is Player)
+                    if (parentWorld.EntityList[it] is Player && ((Player)parentWorld.EntityList[it]).Index == InputDevice2.PPG_Player.Player_1)
                     {
                         if (distance(parentWorld.EntityList[it].Position, position) < GlobalGameConstants.TileSize.X * GlobalGameConstants.TilesPerRoomHigh / 2)
                         {
@@ -323,15 +327,17 @@ namespace PattyPetitGiant
 
                             for (int i = 0; i < 3; i++)
                             {
-                                Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
+                                Vector2 drawItemPos = position + new Vector2((-3 * GlobalGameConstants.TileSize.X) + (i * 3f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
                                 if (distance(drawItemPos + GlobalGameConstants.TileSize / 2, parentWorld.EntityList[it].CenterPoint) < 32 && itemsForSale[i] != GlobalGameConstants.itemType.NoItem)
                                 {
                                     playerOverlap = true;
                                     buyLocation = parentWorld.EntityList[it].Position - new Vector2(0, 48);
                                     overlapIndex = i;
+                                    InGameGUI.prices[i].price = InGameGUI.prices[i].description;
+                                    InGameGUI.prices[i].position = position + new Vector2((-3 * GlobalGameConstants.TileSize.X) + (i * 3f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y)) - (Game1.tenbyFive14.MeasureString(InGameGUI.prices[i].description) / 2) + new Vector2(0, 16);
 
-                                    if (switchItemPressed && !(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && GameCampaign.Player_Coin_Amount >= itemPrices[i])
+                                    if (switchItemPressed && !(InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem1) || InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem2)) && GameCampaign.Player_Coin_Amount >= itemPrices[i])
                                     {
                                         items[i].Position = drawItemPos;
 
@@ -340,12 +346,17 @@ namespace PattyPetitGiant
                                         InGameGUI.prices[i].active = false;
                                     }
                                 }
+                                else
+                                {
+                                    InGameGUI.prices[i].price = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].priceString;
+                                    InGameGUI.prices[i].position = position + new Vector2((-3 * GlobalGameConstants.TileSize.X) + (i * 3f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y)) - (Game1.tenbyFive14.MeasureString(InGameGUI.prices[i].price) / 2) + new Vector2(0, 16);
+                                }
                             }
                         }
                     }
                 }
 
-                if ((InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && !switchItemPressed)
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem1) || (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem2)) && !switchItemPressed)
                 {
                     switchItemPressed = true;
                 }
@@ -418,7 +429,7 @@ namespace PattyPetitGiant
                         continue;
                     }
 
-                    Vector2 drawItemPos = position + new Vector2((-2 * GlobalGameConstants.TileSize.X) + (i * 2f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
+                    Vector2 drawItemPos = position + new Vector2((-3 * GlobalGameConstants.TileSize.X) + (i * 3f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y));
 
                     itemIcons[i].drawAnimationFrame(0.0f, sb, drawItemPos, new Vector2(1.0f, 1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
                 }
