@@ -126,6 +126,9 @@ namespace PattyPetitGiant
             InitalizeHighScores();
 
             HighScoreValue newScore = new HighScoreValue(GameCampaign.PlayerName, GameCampaign.Player_Coin_Amount, GameCampaign.ElapsedCampaignTime, GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight);
+            highScores.Add(newScore);
+            highScores.Sort(new CompareHighScores());
+            highScores.Reverse();
 
             state = HighScoreStateScreenAnimationState.Start;
             stateTimer = 0;
@@ -163,7 +166,7 @@ namespace PattyPetitGiant
             {
                 Vector2 drawListPosition = new Vector2(100) + new Vector2(0, i * 28);
 
-                sb.DrawString(Game1.font, highScores[i].playerName, drawListPosition, Color.White);
+                sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
             }
 
             sb.End();
