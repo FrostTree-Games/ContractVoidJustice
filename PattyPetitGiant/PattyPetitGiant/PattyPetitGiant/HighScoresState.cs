@@ -25,6 +25,7 @@ namespace PattyPetitGiant
             public float secondsElapsed;
             public int levelDiedAt;
             public int floorDiedOn;
+            public bool completedGame;
 
             public HighScoreValue(string playerName, int coinCollected, float secondsElapsed, int levelDiedAt, int floorDiedOn)
             {
@@ -33,6 +34,17 @@ namespace PattyPetitGiant
                 this.secondsElapsed = secondsElapsed;
                 this.levelDiedAt = levelDiedAt;
                 this.floorDiedOn = floorDiedOn % 3;
+                completedGame = false;
+            }
+
+            public HighScoreValue(string playerName, int coinCollected, float secondsElapsed, int levelDiedAt, int floorDiedOn, bool completedGame)
+            {
+                this.playerName = playerName;
+                this.coinCollected = coinCollected;
+                this.secondsElapsed = secondsElapsed;
+                this.levelDiedAt = levelDiedAt;
+                this.floorDiedOn = floorDiedOn % 3;
+                this.completedGame = completedGame;
             }
         }
 
@@ -121,7 +133,7 @@ namespace PattyPetitGiant
                 highScores.Add(new HighScoreValue("Daniel", 123456, 123, 1, 1));
                 highScores.Add(new HighScoreValue("Ivan", 1000, 345, 0, 1));
                 highScores.Add(new HighScoreValue("Alyosha", 1000, 345, 0, 1));
-                highScores.Add(new HighScoreValue("Dmitri", 1500, 43567, 4, 2));
+                highScores.Add(new HighScoreValue("Dmitri", 1500, 43567, 4, 2, true));
                 highScores.Add(new HighScoreValue("Gunther", 2233, 2332, 2, 1));
                 highScores.Add(new HighScoreValue("lolololol", 2020, 333, 1, 0));
                 highScores.Add(new HighScoreValue("quinten", 20202, 9981, 1, 1));
@@ -197,33 +209,6 @@ namespace PattyPetitGiant
 
             CampaignLobbyState.lineOffset += (currentTime.ElapsedGameTime.Milliseconds * CampaignLobbyState.lineMoveSpeed);
             if (CampaignLobbyState.lineOffset > 16.0f) { CampaignLobbyState.lineOffset -= 16.0f; }
-
-            if (state == HighScoreStateScreenAnimationState.Start)
-            {
-                if (newlyAddedScoreIndex == -2)
-                {
-                    stateTimer = -300;
-                    state = HighScoreStateScreenAnimationState.IdleWait;
-                }
-
-                if (stateTimer > preWaitDuration)
-                {
-                    stateTimer = 0;
-                    state = HighScoreStateScreenAnimationState.SlideNewHighScoreIn;
-                }
-            }
-            else if (state == HighScoreStateScreenAnimationState.SlideNewHighScoreIn)
-            {
-                if (stateTimer > slideInDuration)
-                {
-                    stateTimer = 0;
-                    state = HighScoreStateScreenAnimationState.IdleWait;
-                }
-            }
-            else
-            {
-                //
-            }
         }
 
         private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
@@ -261,8 +246,30 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
-            //draw who has the most gold
+            drawBox(sb, new Rectangle(128 + 32, 128, 448, (32 * (highScores.Count + 1))), Color.White, 2);
+            drawLine(sb, new Vector2(128 + 32 + 150, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(128 + 32 + 150 + 100, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(128 + 32 + 150 + 100 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(128 + 32 + 150 + 100 + 75 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            sb.DrawString(Game1.tenbyFive14, "NAME", new Vector2(128 + 32, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "FATE", new Vector2(128 + 32 + 150, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "FUND", new Vector2(128 + 32 + 150 + 100, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "TIME", new Vector2(128 + 32 + 150 + 100 + 75, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "RANK", new Vector2(128 + 32 + 150 + 100 + 75 + 75, 128), Color.White);
 
+            for (int i = 0; i < highScores.Count; i++)
+            {
+                Color textColor = (i == newlyAddedScoreIndex ? Color.Lerp(Color.Cyan, Color.Orange, (float)((1 + Math.Sin(stateTimer / 300)) / 2)) : Color.White);
+
+                drawLine(sb, new Vector2(128 + 32, 128 + 32 + (i * 32)), 448, 0.0f, Color.White, 2);
+                sb.DrawString(Game1.tenbyFive14, highScores[i].playerName, new Vector2(128 + 32, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                sb.DrawString(Game1.tenbyFive14, (highScores[i].completedGame ? "ESCAPED" : ("DIED AT " + highScores[i].levelDiedAt + (highScores[i].floorDiedOn == 0 ? 'A' : ((highScores[i].floorDiedOn == 1) ? 'B' : 'C')))), new Vector2(128 + 32 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), (highScores[i].completedGame && i != newlyAddedScoreIndex) ? Color.Red : textColor);
+                sb.DrawString(Game1.tenbyFive14, highScores[i].coinCollected.ToString(), new Vector2(128 + 32 + 150 + 100, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                sb.DrawString(Game1.tenbyFive14, highScores[i].secondsElapsed.ToString(), new Vector2(128 + 32 + 150 + 100 + 75, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                sb.DrawString(Game1.tenbyFive14, (i + 1).ToString(), new Vector2(128 + 32 + 150 + 100 + 75 + 75, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+            }
+
+            /*
             for (int i = 0; i < highScores.Count; i++)
             {
                 if (state == HighScoreStateScreenAnimationState.Start)
@@ -297,7 +304,7 @@ namespace PattyPetitGiant
 
                     sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
                 }
-            }
+            } */
 
             sb.End();
         }
