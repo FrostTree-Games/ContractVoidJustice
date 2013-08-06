@@ -62,6 +62,8 @@ namespace PattyPetitGiant
             enemy_life = 15;
             knockback_magnitude = 5.0f;
             wind_anim = 0.0f;
+            number_drop_items = 3;
+            prob_item_drop = 0.3;
 
             walk_down = AnimationLib.loadNewAnimationSet("chaseDown");
             walk_right = AnimationLib.loadNewAnimationSet("chaseRight");
@@ -219,9 +221,12 @@ namespace PattyPetitGiant
                 wind_anim = 1;
                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(death_anim[(int)(Game1.rand.Next()) %3]);
 
-                parentWorld.pushCoin(CenterPoint, Coin.DropItemType.CoinDrop, (int)Coin.CoinValue.Twoonie);
-                parentWorld.pushCoin(CenterPoint, Coin.DropItemType.AmmoDrop, (int)Coin.AmmoValue.smallAmmo);
-                parentWorld.pushCoin(CenterPoint, Coin.DropItemType.MedDrop, (int)Coin.MedValue.smallPack);
+                parentWorld.pushCoin(this);
+                //parentWorld.pushCoin(CenterPoint, Coin.DropItemType.AmmoDrop, (int)Coin.AmmoValue.smallAmmo);
+                //parentWorld.pushCoin(CenterPoint, Coin.DropItemType.MedDrop, (int)Coin.MedValue.smallPack);
+
+
+                
             }
             Vector2 pos = new Vector2(position.X, position.Y);
 
