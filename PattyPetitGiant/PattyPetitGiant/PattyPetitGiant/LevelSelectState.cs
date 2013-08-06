@@ -238,6 +238,19 @@ namespace PattyPetitGiant
                         continue;
                     }
 
+                    if (i == 0 && j == 1)
+                    {
+                        sb.DrawString(Game1.tenbyFive10, "HANGAR", new Vector2(i * 128, j * 96) + drawMapTestOffset - new Vector2(0, 18), Color.Cyan);
+                    }
+                    else if (i == 5 && j == 1)
+                    {
+                        sb.DrawString(Game1.tenbyFive10, "BRIDGE", new Vector2(i * 128, j * 96) + drawMapTestOffset - new Vector2(0, 18), Color.Cyan);
+                    }
+                    else
+                    {
+                        sb.DrawString(Game1.tenbyFive10, "ZONE " + i + (j == 0 ? 'A' : ((j == 1) ? 'B' : 'C')), new Vector2(i * 128, j * 96) + drawMapTestOffset - new Vector2(0, 18), Color.Cyan);
+                    }
+
                     if (i == GameCampaign.PlayerLevelProgress && j == GameCampaign.PlayerFloorHeight)
                     {
                         sb.Draw(tex, new Vector2(i * 128, j * 96) + drawMapTestOffset, new Rectangle(48, 0, 48, 48), Color.Blue);
