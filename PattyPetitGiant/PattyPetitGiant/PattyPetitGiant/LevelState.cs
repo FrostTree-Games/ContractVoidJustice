@@ -131,6 +131,8 @@ namespace PattyPetitGiant
             map.TileSkin[2] = TextureLib.getLoadedTexture(tileSetName + "/2.png");
             map.TileSkin[3] = TextureLib.getLoadedTexture(tileSetName + "/3.png");
 
+            map.ElevatorRoomSkin = TextureLib.getLoadedTexture("elevator/0.png");
+
             Thread.Sleep(250);
 
             endFlagReached = false;
@@ -345,8 +347,6 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-                        //entityList.Add(new HookPrisonerEnemy(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
@@ -358,6 +358,15 @@ namespace PattyPetitGiant
                         {
                             entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 12) * GlobalGameConstants.TileSize.X, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y)));
                             end_flag_placed = true;
+
+                            for (int ii = 0; ii < GlobalGameConstants.TilesPerRoomWide; ii++)
+                            {
+                                for (int jj = 0; jj < GlobalGameConstants.TilesPerRoomHigh; jj++)
+                                {
+                                    map.mapMod[(i * GlobalGameConstants.TilesPerRoomWide) + ii, (j * GlobalGameConstants.TilesPerRoomHigh) + jj] = TileMap.WallMod.Elevator;
+                                    map.floorMap[(i * GlobalGameConstants.TilesPerRoomWide) + ii, (j * GlobalGameConstants.TilesPerRoomHigh) + jj] = TileMap.FloorType.Elevator;
+                                }
+                            }
                         }
                     }
                     else
