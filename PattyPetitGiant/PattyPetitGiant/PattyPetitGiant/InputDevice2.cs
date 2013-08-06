@@ -154,11 +154,11 @@ namespace PattyPetitGiant
                         if (xInputControllers[i].Buttons.Back == ButtonState.Pressed) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
                         if (keyboardController.IsKeyDown(keyConfig.BackButton)) { return PlayerPad.Keyboard; }
                         break;
-                    case PlayerButton.UseItem1:
+                    case PlayerButton.UseItem2:
                         if (xInputControllers[i].Buttons.A == ButtonState.Pressed || xInputControllers[i].Triggers.Left > 0.01f) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
                         if (keyboardController.IsKeyDown(keyConfig.UseItem1)) { return PlayerPad.Keyboard; }
                         break;
-                    case PlayerButton.UseItem2:
+                    case PlayerButton.UseItem1:
                         if (xInputControllers[i].Buttons.B == ButtonState.Pressed || xInputControllers[i].Triggers.Right > 0.01f) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
                         if (keyboardController.IsKeyDown(keyConfig.UseItem2)) { return PlayerPad.Keyboard; }
                         break;
@@ -248,10 +248,10 @@ namespace PattyPetitGiant
                     case PlayerButton.BackButton:
                         if (keyboardController.IsKeyDown(keyConfig.BackButton)) { return true; }
                         break;
-                    case PlayerButton.UseItem1:
+                    case PlayerButton.UseItem2:
                         if (keyboardController.IsKeyDown(keyConfig.UseItem1)) { return true; }
                         break;
-                    case PlayerButton.UseItem2:
+                    case PlayerButton.UseItem1:
                         if (keyboardController.IsKeyDown(keyConfig.UseItem2)) { return true; }
                         break;
                     case PlayerButton.SwitchItem1:
@@ -292,10 +292,10 @@ namespace PattyPetitGiant
                     case PlayerButton.BackButton:
                         if (state.Buttons.Back == ButtonState.Pressed) { return true; }
                         break;
-                    case PlayerButton.UseItem1:
+                    case PlayerButton.UseItem2:
                         if (state.Buttons.A == ButtonState.Pressed || state.Triggers.Left > 0.01f) { return true; }
                         break;
-                    case PlayerButton.UseItem2:
+                    case PlayerButton.UseItem1:
                         if (state.Buttons.B == ButtonState.Pressed || state.Triggers.Right > 0.01f) { return true; }
                         break;
                     case PlayerButton.SwitchItem1:
