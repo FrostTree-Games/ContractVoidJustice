@@ -100,6 +100,7 @@ namespace PattyPetitGiant
         }
 
         private static List<HighScoreValue> highScores = null;
+        private static HighScoreValue mostCoin = null;
 
         private int newlyAddedScoreIndex = -2;
 
@@ -125,43 +126,65 @@ namespace PattyPetitGiant
                 highScores.Add(new HighScoreValue("lolololol", 2020, 333, 1, 0));
                 highScores.Add(new HighScoreValue("quinten", 20202, 9981, 1, 1));
                 highScores.Add(new HighScoreValue("Zippy", 200, 000, 5, 1));
+
+                //find the high score value with the most coin collected
+                mostCoin = highScores[0];
+                for (int i = 1; i < highScores.Count; i++)
+                {
+                    if (highScores[i].coinCollected > mostCoin.coinCollected)
+                    {
+                        mostCoin = highScores[i];
+                    }
+                }
             }
         }
 
-        public HighScoresState()
+        /// <summary>
+        /// Creates a new high scores screen state.
+        /// </summary>
+        /// <param name="inGame">If the player has died or completed the game, set this to true. If simply checking the scores from the menu, set this to false</param>
+        public HighScoresState(bool inGame)
         {
             InitalizeHighScores();
 
             HighScoreValue newScore = new HighScoreValue(GameCampaign.PlayerName, GameCampaign.Player_Coin_Amount, GameCampaign.ElapsedCampaignTime, GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight);
 
-            highScores.Add(newScore);
-
-            // if there are 11 high scores now, remove the lowest score
-            if (highScores.Count > 10)
+            if (inGame)
             {
-                HighScoreValue lowestScore = highScores[0];
-                CompareHighScores comparer = new CompareHighScores();
+                highScores.Add(newScore);
 
-                for (int i = 1; i < highScores.Count; i++)
+                // if there are 11 high scores now, remove the lowest score
+                if (highScores.Count > 10)
                 {
-                    if (comparer.Compare(highScores[i], lowestScore) < 0)
+                    HighScoreValue lowestScore = highScores[0];
+                    CompareHighScores comparer = new CompareHighScores();
+
+                    for (int i = 1; i < highScores.Count; i++)
                     {
-                        lowestScore = highScores[i];
+                        if (comparer.Compare(highScores[i], lowestScore) < 0)
+                        {
+                            lowestScore = highScores[i];
+                        }
+                    }
+
+                    highScores.Remove(lowestScore);
+                }
+
+                highScores.Sort(new CompareHighScores());
+                highScores.Reverse();
+
+                for (int i = 0; i < highScores.Count; i++)
+                {
+                    if (highScores[i] == newScore)
+                    {
+                        newlyAddedScoreIndex = i;
                     }
                 }
-
-                highScores.Remove(lowestScore);
             }
-
-            highScores.Sort(new CompareHighScores());
-            highScores.Reverse();
-
-            for (int i = 0; i < highScores.Count; i++)
+            else
             {
-                if (highScores[i] == newScore)
-                {
-                    newlyAddedScoreIndex = i;
-                }
+                highScores.Sort(new CompareHighScores());
+                highScores.Reverse();
             }
 
             state = HighScoreStateScreenAnimationState.Start;
@@ -171,6 +194,9 @@ namespace PattyPetitGiant
         protected override void doUpdate(GameTime currentTime)
         {
             stateTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+            CampaignLobbyState.lineOffset += (currentTime.ElapsedGameTime.Milliseconds * CampaignLobbyState.lineMoveSpeed);
+            if (CampaignLobbyState.lineOffset > 16.0f) { CampaignLobbyState.lineOffset -= 16.0f; }
 
             if (state == HighScoreStateScreenAnimationState.Start)
             {
@@ -200,11 +226,42 @@ namespace PattyPetitGiant
             }
         }
 
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
+        {
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, width), SpriteEffects.None, 0.5f);
+        }
+
+        private void drawBox(SpriteBatch sb, Rectangle rect, Color clr, float lineWidth)
+        {
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X - lineWidth, rect.Y + rect.Height), rect.Width + lineWidth, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+        }
+
         public override void render(SpriteBatch sb)
         {
             AnimationLib.GraphicsDevice.Clear(Color.Black);
 
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
+
+            sb.DrawString(Game1.tenbyFive24, "Postcareer Statistics Report", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - Game1.tenbyFive24.MeasureString("Postcareer Statistics Report") / 2, Color.White);
+
+            Vector2 linesOffset = new Vector2(CampaignLobbyState.lineOffset);
+
+            for (int i = -6; i < GlobalGameConstants.GameResolutionWidth / 16 + 8; i ++)
+            {
+                drawLine(sb, new Vector2(i * 16, -16) + linesOffset, GlobalGameConstants.GameResolutionHeight + 32, (float)Math.PI / 2, new Color(1, 0, 1, 0.1f), 1.0f);
+            }
+
+            for (int i = -6; i < GlobalGameConstants.GameResolutionHeight / 16 + 8; i++)
+            {
+                drawLine(sb, new Vector2(-16, i * 16) + linesOffset, GlobalGameConstants.GameResolutionWidth + 32, 0, new Color(1, 0, 1, 0.1f), 1.0f);
+            }
+
+            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
+
+            //draw who has the most gold
 
             for (int i = 0; i < highScores.Count; i++)
             {
@@ -212,7 +269,7 @@ namespace PattyPetitGiant
                 {
                     if (i == newlyAddedScoreIndex) { continue; }
 
-                    Vector2 drawListPosition = new Vector2(100) + new Vector2(0, i * 28);
+                    Vector2 drawListPosition = new Vector2(128) + new Vector2(0, i * 28);
                     if (i > newlyAddedScoreIndex) { drawListPosition.Y -= 28; }
 
                     sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
@@ -221,14 +278,14 @@ namespace PattyPetitGiant
                 {
                     if (i == newlyAddedScoreIndex)
                     {
-                        Vector2 drawListPosition = new Vector2(100) + new Vector2(-200, i * 28);
+                        Vector2 drawListPosition = new Vector2(128) + new Vector2(-200, i * 28);
                         drawListPosition.X += 200 * (stateTimer / slideInDuration);
 
                         sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
                     }
                     else
                     {
-                        Vector2 drawListPosition = new Vector2(100) + new Vector2(0, i * 28);
+                        Vector2 drawListPosition = new Vector2(128) + new Vector2(0, i * 28);
                         if (i > newlyAddedScoreIndex) { drawListPosition.Y -= 28 * (1 - (stateTimer / slideInDuration)); }
 
                         sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
@@ -236,7 +293,7 @@ namespace PattyPetitGiant
                 }
                 else
                 {
-                    Vector2 drawListPosition = new Vector2(100) + new Vector2(0, i * 28);
+                    Vector2 drawListPosition = new Vector2(128) + new Vector2(0, i * 28);
 
                     sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
                 }
