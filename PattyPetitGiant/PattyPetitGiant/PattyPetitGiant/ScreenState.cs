@@ -19,6 +19,8 @@ namespace PattyPetitGiant
             LevelSelectState = 4,
             HighScoresState = 5,
             LevelReviewState = 6,
+            FMV_ELEVATOR_EXIT = 7,
+            FMV_ELEVATOR_ENTER = 8,
         }
 
         protected bool pause = false;
@@ -66,6 +68,10 @@ namespace PattyPetitGiant
                     return new LevelReviewState();
                 case ScreenStateType.GameSetupMenu:
                     return new CampaignLobbyState();
+                case ScreenStateType.FMV_ELEVATOR_EXIT:
+                    return new CutsceneVideoState(Game1.levelExitVideo, ScreenStateType.LevelReviewState);
+                case ScreenStateType.FMV_ELEVATOR_ENTER:
+                    return new CutsceneVideoState(Game1.levelEnterVideo, ScreenStateType.LevelState);
                 default:
                     return null;
             }

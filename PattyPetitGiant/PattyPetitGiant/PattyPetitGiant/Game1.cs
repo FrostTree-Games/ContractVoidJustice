@@ -58,7 +58,8 @@ namespace PattyPetitGiant
         private ScreenState currentGameScreen = null;
 
         public static VideoPlayer videoPlayer = null;
-        public static Video testVideo = null;
+        public static Video levelExitVideo = null;
+        public static Video levelEnterVideo = null;
 
         private InputDeviceManager input_device = null;
 
@@ -143,7 +144,8 @@ namespace PattyPetitGiant
             font = tenbyFive14;
             testComputerFont = tenbyFive24;
 
-            testVideo = Content.Load<Video>("fmv/WilsonTestVideo");
+            levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
+            levelEnterVideo = Content.Load<Video>("fmv/levelStart");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
@@ -158,8 +160,11 @@ namespace PattyPetitGiant
 
             GameCampaign.ResetPlayerValues("INIT", 0);
 
+            // lol so many game screens
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
+            //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             currentGameScreen = new CampaignLobbyState();
+            //currentGameScreen = new HighScoresState();
         }
 
         /// <summary>

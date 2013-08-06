@@ -21,6 +21,14 @@ namespace PattyPetitGiant
             ClosedAndWaiting,
         }
 
+        private enum PushMessageQueueState
+        {
+            Wait,
+            FadeIn,
+            ShowMessage,
+            FadeOut,
+        }
+
 #if DEBUG
         private bool showStats = false;
 #endif
@@ -85,11 +93,18 @@ namespace PattyPetitGiant
         private static int elapsedCoinAmount;
         public static int ElapsedCoinAmount { get { return elapsedCoinAmount; } set { elapsedCoinAmount = value; } }
 
+        private Queue<string> pushMessageQueue = null;
+        private PushMessageQueueState messageQueueState;
+        private float queueTimer;
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
 
             state = LoadingState.LevelLoading;
+
+            pushMessageQueue = new Queue<string>(5);
+            messageQueueState = PushMessageQueueState.Wait;
 
             PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
             textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
@@ -104,10 +119,17 @@ namespace PattyPetitGiant
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
-            map.TileSkin[0] = TextureLib.getLoadedTexture("deathStar/0.png");
-            map.TileSkin[1] = TextureLib.getLoadedTexture("deathStar/1.png");
-            map.TileSkin[2] = TextureLib.getLoadedTexture("deathStar/2.png");
-            map.TileSkin[3] = TextureLib.getLoadedTexture("deathStar/3.png");
+
+            string tileSetName = "deathStar";
+
+            if (GameCampaign.PlayerFloorHeight == 0) { tileSetName = "hightech"; }
+            if (GameCampaign.PlayerFloorHeight == 1) { tileSetName = "factory"; }
+            if (GameCampaign.PlayerFloorHeight == 2) { tileSetName = "prisoncell"; }
+
+            map.TileSkin[0] = TextureLib.getLoadedTexture(tileSetName + "/0.png");
+            map.TileSkin[1] = TextureLib.getLoadedTexture(tileSetName + "/1.png");
+            map.TileSkin[2] = TextureLib.getLoadedTexture(tileSetName + "/2.png");
+            map.TileSkin[3] = TextureLib.getLoadedTexture(tileSetName + "/3.png");
 
             Thread.Sleep(250);
 
@@ -334,7 +356,7 @@ namespace PattyPetitGiant
                     {
                         if (end_flag_placed == false)
                         {
-                            entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
+                            entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 12) * GlobalGameConstants.TileSize.X, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y)));
                             end_flag_placed = true;
                         }
                     }
@@ -372,7 +394,7 @@ namespace PattyPetitGiant
 
         private void gameLogicUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton))
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton) && !player1Dead)
             {
                 state = LoadingState.LevelPaused;
                 pauseDialogMinimumTime = 0;
@@ -383,6 +405,45 @@ namespace PattyPetitGiant
                 GameCampaign.Player_Ammunition = 0;
             }
 
+            if (messageQueueState == PushMessageQueueState.Wait)
+            {
+                if (pushMessageQueue.Count > 0)
+                {
+                    messageQueueState = PushMessageQueueState.FadeIn;
+                    queueTimer = 0;
+                }
+            }
+            else if (messageQueueState == PushMessageQueueState.ShowMessage)
+            {
+                queueTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (queueTimer > 1000f + (25 * pushMessageQueue.Peek().Length))
+                {
+                    messageQueueState = PushMessageQueueState.FadeOut;
+                    queueTimer = 0;
+                }
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeIn)
+            {
+                queueTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (queueTimer > 200f)
+                {
+                    messageQueueState = PushMessageQueueState.ShowMessage;
+                    queueTimer = 0;
+                }
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeOut)
+            {
+                queueTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+                if (queueTimer > 200f)
+                {
+                    messageQueueState = PushMessageQueueState.Wait;
+                    queueTimer = 0;
+                    pushMessageQueue.Dequeue();
+                }
+            }
 
             for (int i = 0; i < entityList.Count; i++)
             {
@@ -509,6 +570,19 @@ namespace PattyPetitGiant
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
             gui.render(sb);
 
+            if (messageQueueState == PushMessageQueueState.ShowMessage)
+            {
+                sb.DrawString(Game1.tenbyFive24, pushMessageQueue.Peek(), new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - Game1.tenbyFive24.MeasureString(pushMessageQueue.Peek()) / 2, Color.White);
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeIn)
+            {
+                sb.DrawString(Game1.tenbyFive24, pushMessageQueue.Peek(), new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - Game1.tenbyFive24.MeasureString(pushMessageQueue.Peek()) / 2 - new Vector2(0, 50 * (1 - (queueTimer / 200))), Color.Lerp(Color.Transparent, Color.White, queueTimer / 200));
+            }
+            else if (messageQueueState == PushMessageQueueState.FadeOut)
+            {
+                sb.DrawString(Game1.tenbyFive24, pushMessageQueue.Peek(), new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 576) - Game1.tenbyFive24.MeasureString(pushMessageQueue.Peek()) / 2 + new Vector2(0, 50 * (queueTimer / 200)), Color.Lerp(Color.White, Color.Transparent, queueTimer / 200));
+            }
+
 #if DEBUG
             if (showStats)
             {
@@ -531,9 +605,9 @@ namespace PattyPetitGiant
         {
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
-            sb.Draw(Game1.whitePixel, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), Color.Black);
+            sb.Draw(Game1.whitePixel, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), Color.White);
 
-            sb.DrawString(Game1.font, "LOADING", new Vector2(100), Color.Beige);
+            sb.DrawString(Game1.font, "LOADING...", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2) - Game1.font.MeasureString("LOADING..."), Color.Black);
 
             sb.End();
         }
@@ -561,7 +635,7 @@ namespace PattyPetitGiant
         {
             if (endFlagReached)
             {
-                return ScreenStateType.LevelReviewState;
+                return ScreenStateType.FMV_ELEVATOR_EXIT;
             }
             else if (player1Dead)
             {
@@ -595,6 +669,17 @@ namespace PattyPetitGiant
                 }
             }
             while (freeCoinIndex != lastAt);
+        }
+
+        public void pushMessage(string message)
+        {
+            //don't bother with spam
+            if (pushMessageQueue.Count > 4 || message == null || message.Length > 140 || message.Length < 1)
+            {
+                return;
+            }
+
+            pushMessageQueue.Enqueue(message);
         }
     }
 }

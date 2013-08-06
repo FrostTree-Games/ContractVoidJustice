@@ -47,7 +47,7 @@ namespace PattyPetitGiant
         private bool player2UpPressed = false;
         private bool player2CancelPressed = false;
 
-        private float lineOffset;
+        public static float lineOffset;
         private const float lineMoveSpeed = 0.01f;
 
         private Texture2D controllerIndexArt = null;

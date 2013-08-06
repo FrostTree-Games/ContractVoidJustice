@@ -83,6 +83,8 @@ namespace PattyPetitGiant
 
         private bool openingSoundMade;
 
+        private const float lineMoveSpeed = 0.01f;
+
         public LevelSelectState()
         {
             GameCampaign.levelMap = new LevelData[6, 3];
@@ -119,6 +121,9 @@ namespace PattyPetitGiant
 
         protected override void doUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
+            CampaignLobbyState.lineOffset += (currentTime.ElapsedGameTime.Milliseconds * lineMoveSpeed);
+            if (CampaignLobbyState.lineOffset > 16.0f) { CampaignLobbyState.lineOffset -= 16.0f; }
+
             if (!openingSoundMade)
             {
                 AudioLib.playSoundEffect("monitorOpening");
@@ -207,9 +212,20 @@ namespace PattyPetitGiant
         {
             Texture2D tex = TextureLib.getLoadedTexture("wireFramePieces.png");
 
-            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-575, -100, 0) * Matrix.CreateScale(1.0f, cursorAnimationTime > 500f ? 1.0f : (cursorAnimationTime / 500f), 1.0f) * Matrix.CreateScale(scale));
-
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
             sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) / 2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
+            Vector2 linesOffset = new Vector2(CampaignLobbyState.lineOffset);
+            for (int i = -6; i < GlobalGameConstants.GameResolutionWidth / 16 + 8; i++)
+            {
+                drawLine(sb, new Vector2(i * 16, -16) + linesOffset, GlobalGameConstants.GameResolutionHeight + 32, (float)Math.PI / 2, new Color(1, 0, 1, 0.1f), 1.0f);
+            }
+            for (int i = -6; i < GlobalGameConstants.GameResolutionHeight / 16 + 8; i++)
+            {
+                drawLine(sb, new Vector2(-16, i * 16) + linesOffset, GlobalGameConstants.GameResolutionWidth + 32, 0, new Color(1, 0, 1, 0.1f), 1.0f);
+            }
+            sb.End();
+
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-575, -100, 0) * Matrix.CreateScale(1.0f, cursorAnimationTime > 500f ? 1.0f : (cursorAnimationTime / 500f), 1.0f) * Matrix.CreateScale(scale));
 
             sb.Draw(wireframe, new Vector2(-150, 0), null, Color.Lerp(Color.DarkCyan, Color.Black, 0.375f + (0.025f * (float)Math.Sin(cursorAnimationTime / 10))), 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
 
@@ -304,7 +320,7 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            return ScreenStateType.LevelState;
+            return ScreenStateType.FMV_ELEVATOR_ENTER;
         }
     }
 }

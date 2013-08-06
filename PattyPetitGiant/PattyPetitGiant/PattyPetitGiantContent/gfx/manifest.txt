@@ -33,3 +33,15 @@ deathStar/0.png
 deathStar/1.png
 deathStar/2.png
 deathStar/3.png
+factory/0.png
+factory/1.png
+factory/2.png
+factory/3.png
+hightech/0.png
+hightech/1.png
+hightech/2.png
+hightech/3.png
+prisoncell/0.png
+prisoncell/1.png
+prisoncell/2.png
+prisoncell/3.png

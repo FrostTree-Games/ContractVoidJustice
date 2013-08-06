@@ -95,6 +95,16 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, new Vector2(-400), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(9999), SpriteEffects.None, 0.5f);
 
+            Vector2 linesOffset = new Vector2(CampaignLobbyState.lineOffset);
+            for (int i = -6; i < GlobalGameConstants.GameResolutionWidth / 16 + 8; i++)
+            {
+                drawLine(sb, new Vector2(i * 16, -16) + linesOffset, GlobalGameConstants.GameResolutionHeight + 32, (float)Math.PI / 2, new Color(1, 0, 1, 0.1f), 1.0f);
+            }
+            for (int i = -6; i < GlobalGameConstants.GameResolutionHeight / 16 + 8; i++)
+            {
+                drawLine(sb, new Vector2(-16, i * 16) + linesOffset, GlobalGameConstants.GameResolutionWidth + 32, 0, new Color(1, 0, 1, 0.1f), 1.0f);
+            }
+
             sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
             sb.DrawString(Game1.tenbyFive24, "Level Complete", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - (Game1.tenbyFive24.MeasureString("Level Complete") / 2), Color.White);
