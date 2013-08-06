@@ -24,7 +24,7 @@ namespace PattyPetitGiant
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.LazerGun;
 
-        private const float lazer_range_multiplier = 2.0f;
+        private const float lazer_range_multiplier = 5.0f;
         private const float lazer_damage_multiplier = 1.015f;
         private const float max_lazer_range = 500.0f;
         private const float dimensions_reset = 10.0f;
@@ -37,6 +37,8 @@ namespace PattyPetitGiant
         private float fire_timer = 0.0f;
 
         private Vector2 start_point = Vector2.Zero;
+
+        private AnimationLib.FrameAnimationSet laserAnim = AnimationLib.getFrameAnimationSet("laser");
 
         public LazerGun()
         {
@@ -53,27 +55,15 @@ namespace PattyPetitGiant
             switch (lazer_state)
             {
                 case LazerState.Neutral:
-                    if ((GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
+                    if ((GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)))
                     {
-                        switch (parent.Direction_Facing)
-                        {
-                            case GlobalGameConstants.Direction.Right:
-                                position = parent.CenterPoint + new Vector2(parent.Dimensions.X / 2, 0);
-                                start_point = position;
-                                break;
-                            case GlobalGameConstants.Direction.Left:
-                                position = parent.CenterPoint - new Vector2(parent.Dimensions.X / 2, 0);
-                                start_point = position;
-                                break;
-                            case GlobalGameConstants.Direction.Up:
-                                position = parent.CenterPoint - new Vector2(0, parent.Dimensions.Y / 2);
-                                start_point = position;
-                                break;
-                            default:
-                                position = parent.CenterPoint + new Vector2(0, parent.Dimensions.Y / 2);
-                                start_point = position;
-                                break;
-                        }
+                        position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
+                        lazer_state = LazerState.Charging;
+                    }
+                    else if((GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
+                    {
+                        position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY);
+
                         lazer_state = LazerState.Charging;
                     }
                     break;
@@ -155,6 +145,8 @@ namespace PattyPetitGiant
         public void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
+            sb.DrawSpriteToSpineVertexArray(Game1.laserPic, new Rectangle(1,1,0,0), position, Color.White, 0.0f, dimensions);
+            //laserAnim.drawAnimationFrame(0.0f, sb, position, dimensions, 0.5f, 0.0f, Vector2.Zero, Color.White);
         }
 
         public bool hitTest(Entity other)

@@ -206,6 +206,8 @@ namespace PattyPetitGiant
             animation_time += currentTime.ElapsedGameTime.Milliseconds;
             deadCushySoundTimer += currentTime.ElapsedGameTime.Milliseconds;
 
+            Console.WriteLine(GameCampaign.PlayerAllegiance);
+
             if (guardState == PatrolGuardState.InvalidState)
             {
                 throw new Exception("Patrol Guard went into invalid state");
@@ -304,7 +306,14 @@ namespace PattyPetitGiant
 
                         if (parentWorld.EntityList[it].Enemy_Type != enemy_type || parentWorld.EntityList[it].Enemy_Type != EnemyType.NoType)
                         {
-                            target = parentWorld.EntityList[it];
+                            if (GameCampaign.PlayerAllegiance > 0.7f && parentWorld.EntityList[it] is Player)
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                target = parentWorld.EntityList[it];
+                            }
                         }
 
                         else if (parentWorld.EntityList[it] is ShopKeeper)

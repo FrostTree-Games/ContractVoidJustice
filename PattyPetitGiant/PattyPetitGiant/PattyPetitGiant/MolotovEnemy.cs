@@ -149,7 +149,11 @@ namespace PattyPetitGiant
                                 }
                             }
 
-                            if (f.hitTestWithEntity(parentWorld.EntityList[i]))
+                            if (GameCampaign.PlayerAllegiance < 0.3 && parentWorld.EntityList[i] is Player)
+                            {
+                                continue;
+                            }
+                            else if (f.hitTestWithEntity(parentWorld.EntityList[i]))
                             {
                                 animation_time = 0.0f;
 
