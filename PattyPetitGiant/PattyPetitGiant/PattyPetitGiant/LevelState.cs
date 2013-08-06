@@ -354,7 +354,7 @@ namespace PattyPetitGiant
                     {
                         if (end_flag_placed == false)
                         {
-                            entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
+                            entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 12) * GlobalGameConstants.TileSize.X, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y)));
                             end_flag_placed = true;
                         }
                     }
