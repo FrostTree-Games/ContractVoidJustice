@@ -392,7 +392,7 @@ namespace PattyPetitGiant
 
         private void gameLogicUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton))
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton) && !player1Dead)
             {
                 state = LoadingState.LevelPaused;
                 pauseDialogMinimumTime = 0;

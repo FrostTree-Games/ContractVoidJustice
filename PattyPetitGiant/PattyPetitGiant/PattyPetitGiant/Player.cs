@@ -150,6 +150,8 @@ namespace PattyPetitGiant
             {
                 if (!parentWorld.Player1Dead)
                 {
+                    AudioLib.playSoundEffect("missionFailed");
+
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
                     parentWorld.Particles.pushBloodParticle(CenterPoint);

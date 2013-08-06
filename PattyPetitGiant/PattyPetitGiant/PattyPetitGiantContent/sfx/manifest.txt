@@ -12,3 +12,4 @@ swordHit
 waveShot
 waveHit
 shotgun
+missionFailed
