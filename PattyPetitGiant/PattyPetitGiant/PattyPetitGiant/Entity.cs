@@ -68,6 +68,20 @@ namespace PattyPetitGiant
         public Vector2 Position { get { return position; } set { position = value; } }
         public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X/2, position.Y + dimensions.Y/2); } }
 
+        protected int number_drop_items = 3;
+        public int numberDropItems
+        {
+            set { number_drop_items = value; }
+            get { return number_drop_items; }
+        }
+
+        //probability that a health item or ammo item gets dropped vs a coin, lower the number = lower the prob that health or ammo get dropped
+        protected double prob_item_drop = 0.0f;
+        public double probItemDrop
+        {
+            get { return prob_item_drop; }
+        }
+
         protected Vector2 velocity = Vector2.Zero;
         public Vector2 Velocity 
         {

@@ -654,21 +654,227 @@ namespace PattyPetitGiant
             public InvalidLevelStateExcepton(string message, System.Exception inner) { }
         }
 
-        public void pushCoin(Vector2 position, Coin.DropItemType drop_type, int value)
+        public void pushCoin(Entity parent)
         {
-            int lastAt = freeCoinIndex;
+            int total_coin_count = 0;
+            int value = 0;
+            Coin.DropItemType drop_type = Coin.DropItemType.CoinDrop;
 
-            do
+            if (parent.Enemy_Type == GameCampaign.currentContract.killTarget)
             {
-                freeCoinIndex = (freeCoinIndex + 1) % coinPoolSize;
+                total_coin_count = GameCampaign.currentContract.goldPerKill;
+                drop_type = Coin.DropItemType.CoinDrop;
 
-                if (coinPool[freeCoinIndex].State == Coin.DropState.Inactive)
+                while (total_coin_count != 0)
                 {
-                    coinPool[freeCoinIndex].activate(position, drop_type,value);
-                    break;
+                    double coin_value = Game1.rand.NextDouble();
+
+                    if (coin_value < 0.20)
+                    {
+                        if ((int)Coin.CoinValue.Borden <= total_coin_count)
+                        {
+                            total_coin_count -= (int)Coin.CoinValue.Borden;
+                            value = (int)Coin.CoinValue.Borden;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (coin_value < 0.35)
+                    {
+                        if ((int)Coin.CoinValue.Mackenzie <= total_coin_count)
+                        {
+                            value = (int)Coin.CoinValue.Mackenzie;
+                            total_coin_count -= value;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (coin_value < 0.45)
+                    {
+                        if ((int)Coin.CoinValue.Elizabeth <= total_coin_count)
+                        {
+                            value = (int)Coin.CoinValue.Elizabeth;
+                            total_coin_count -= value;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (coin_value < 0.55)
+                    {
+                        if ((int)Coin.CoinValue.MacDonald <= total_coin_count)
+                        {
+                            value = (int)Coin.CoinValue.MacDonald;
+                            total_coin_count -= value;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (coin_value < 0.70)
+                    {
+                        if ((int)Coin.CoinValue.Laurier <= total_coin_count)
+                        {
+                            value = (int)Coin.CoinValue.Laurier;
+                            total_coin_count -= value;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (coin_value < 0.85)
+                    {
+                        if ((int)Coin.CoinValue.Twoonie <= total_coin_count)
+                        {
+                            value = (int)Coin.CoinValue.Twoonie;
+                            total_coin_count -= value;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    else if (coin_value <= 1.0)
+                    {
+                        if ((int)Coin.CoinValue.Loonie <= total_coin_count)
+                        {
+                            value = (int)Coin.CoinValue.Loonie;
+                            total_coin_count -= value;
+                        }
+                        else
+                        {
+                            continue;
+                        }
+
+                    }
+
+                    int lastAt = freeCoinIndex;
+
+                    do
+                    {
+                        freeCoinIndex = (freeCoinIndex + 1) % coinPoolSize;
+
+                        if (coinPool[freeCoinIndex].State == Coin.DropState.Inactive)
+                        {
+                            coinPool[freeCoinIndex].activate(parent.CenterPoint, drop_type, value);
+                            break;
+                        }
+                    }
+                    while (freeCoinIndex != lastAt);
+
                 }
             }
-            while (freeCoinIndex != lastAt);
+            else
+            {
+                int number_of_items_drop = parent.numberDropItems;
+                while (number_of_items_drop > 0)
+                {
+                    double drop_type_value = Game1.rand.NextDouble();
+                    
+                    if (drop_type_value < parent.probItemDrop)
+                    {
+                        double health_or_ammo = Game1.rand.NextDouble();
+                        drop_type_value = Game1.rand.NextDouble();
+                        if (health_or_ammo < 0.5)
+                        {
+                            drop_type = Coin.DropItemType.MedDrop;
+                            if (drop_type_value < 0.10)
+                            {
+                                value = (int)Coin.MedValue.fullPack;
+                            }
+                            else if (drop_type_value < 0.25)
+                            {
+                                value = (int)Coin.MedValue.largePack;
+                            }
+                            else if (drop_type_value < 0.50)
+                            {
+                                value = (int)Coin.MedValue.mediumPack;
+                            }
+                            else if (drop_type_value <= 1.0)
+                            {
+                                value = (int)Coin.MedValue.smallPack;
+                            }
+                        }
+                        else
+                        {
+                            drop_type = Coin.DropItemType.AmmoDrop;
+                            if (drop_type_value < 0.10)
+                            {
+                                value = (int)Coin.AmmoValue.fullAmmo;
+                            }
+                            else if (drop_type_value < 0.25)
+                            {
+                                value = (int)Coin.AmmoValue.largeAmmo;
+                            }
+                            else if (drop_type_value < 0.50)
+                            {
+                                value = (int)Coin.AmmoValue.mediumAmmo;
+                            }
+                            else if (drop_type_value <= 1.0)
+                            {
+                                value = (int)Coin.AmmoValue.smallAmmo;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        drop_type = Coin.DropItemType.CoinDrop;
+                        drop_type_value = Game1.rand.NextDouble();
+                        if (drop_type_value < 0.1)
+                        {
+                            value = (int)Coin.CoinValue.Borden;
+                        }
+                        else if (drop_type_value < 0.2)
+                        {
+                            value = (int)Coin.CoinValue.Mackenzie;
+                        }
+                        else if (drop_type_value < 0.35)
+                        {
+                            value = (int)Coin.CoinValue.Elizabeth;
+                        }
+                        else if (drop_type_value < 0.50)
+                        {
+                            value = (int)Coin.CoinValue.MacDonald;
+                        }
+                        else if (drop_type_value < 0.65)
+                        {
+                            value = (int)Coin.CoinValue.Laurier;
+                        }
+                        else if (drop_type_value < 0.80)
+                        {
+                            value = (int)Coin.CoinValue.Twoonie;
+                        }
+                        else if (drop_type_value <= 1.0)
+                        {
+                            value = (int)Coin.CoinValue.Loonie;
+                        }
+                    }
+
+                    int lastAt = freeCoinIndex;
+
+                    do
+                    {
+                        freeCoinIndex = (freeCoinIndex + 1) % coinPoolSize;
+
+                        if (coinPool[freeCoinIndex].State == Coin.DropState.Inactive)
+                        {
+                            coinPool[freeCoinIndex].activate(parent.CenterPoint, drop_type, value);
+                            break;
+                        }
+                    }
+                    while (freeCoinIndex != lastAt);
+
+                    number_of_items_drop--;
+                }
+            }
+            
         }
 
         public void pushMessage(string message)
