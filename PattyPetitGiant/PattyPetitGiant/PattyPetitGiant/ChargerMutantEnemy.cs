@@ -121,7 +121,7 @@ namespace PattyPetitGiant
                         {
                             for (int i = 0; i < parentWorld.EntityList.Count; i++)
                             {
-                                if (parentWorld.EntityList[i] == this)
+                                if (parentWorld.EntityList[i] == this || (GameCampaign.PlayerAllegiance < 0.3 && parentWorld.EntityList[i] is Player))
                                     continue;
                                 else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
                                 {

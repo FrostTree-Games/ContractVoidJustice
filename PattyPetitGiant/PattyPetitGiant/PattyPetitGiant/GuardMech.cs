@@ -122,16 +122,16 @@ namespace PattyPetitGiant
 
                         if (enemy_found == false)
                         {
-                            foreach (Entity en in parentWorld.EntityList)
+                            for (int i = 0; i < parentWorld.EntityList.Count; i++)
                             {
-                                if (en == this)
+                                if (parentWorld.EntityList[i] == this || (parentWorld.EntityList[i] is Player && GameCampaign.PlayerAllegiance > 0.7))
                                     continue;
-                                else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType && en.Death==false)
+                                else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
                                 {
-                                    component.update(this, en, currentTime, parentWorld);
+                                    component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
                                     if (enemy_found)
                                     {
-                                        entity_found = en;
+                                        entity_found = parentWorld.EntityList[i];
                                         break;
                                     }
                                 }

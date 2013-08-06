@@ -84,7 +84,7 @@ namespace PattyPetitGiant
                     current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                     for (int i = 0; i < parentWorld.EntityList.Count; i++)
                     {
-                        if (parentWorld.EntityList[i] == this)
+                        if (parentWorld.EntityList[i] == this || (parentWorld.EntityList[i] is Player && GameCampaign.PlayerAllegiance < 0.3))
                         {
                             continue;
                         }

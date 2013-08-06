@@ -97,7 +97,7 @@ namespace PattyPetitGiant
                     {
                         foreach (Entity en in parentWorld.EntityList)
                         {
-                            if (en == this)
+                            if (en == this || (en is Player && GameCampaign.PlayerAllegiance < 0.3))
                                 continue;
                             else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType)
                             {

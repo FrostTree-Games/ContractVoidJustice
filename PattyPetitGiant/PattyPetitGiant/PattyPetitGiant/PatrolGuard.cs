@@ -616,7 +616,10 @@ namespace PattyPetitGiant
 
             if (health <= 0 && guardState != PatrolGuardState.Dying)
             {
-                GameCampaign.AlterAllegiance(-0.005f);
+                if (attacker is Player)
+                {
+                    GameCampaign.AlterAllegiance(-0.005f);
+                }
 
                 guardState = PatrolGuardState.Dying;
                 animation_time = 0;
