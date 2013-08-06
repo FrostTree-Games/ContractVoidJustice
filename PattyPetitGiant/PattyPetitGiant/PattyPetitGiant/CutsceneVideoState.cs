@@ -10,7 +10,7 @@ namespace PattyPetitGiant
 {
     class CutsceneVideoState : ScreenState
     {
-        //private bool confirmPressed = false;
+        private bool confirmPressed = false;
 
         private Texture2D videoTexture = null;
 
@@ -44,18 +44,18 @@ namespace PattyPetitGiant
                 }
 
             }
-
-            /*
+            
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
             {
                 confirmPressed = true;
             }
             else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && confirmPressed)
             {
+                Game1.videoPlayer.Stop();
                 confirmPressed = false;
 
                 isComplete = true;
-            }*/
+            }
         }
 
         public override void render(SpriteBatch sb)
