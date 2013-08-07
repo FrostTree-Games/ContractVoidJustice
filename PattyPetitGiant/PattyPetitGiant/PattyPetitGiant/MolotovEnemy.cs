@@ -465,7 +465,7 @@ namespace PattyPetitGiant
 
                 if (health < 1 && !death && attacker != null & attacker is Player)
                 {
-                    GameCampaign.AlterAllegiance(0.005f);
+                    GameCampaign.AlterAllegiance(0.015f);
                 }
 
                 knockBackTime = 0.0f;

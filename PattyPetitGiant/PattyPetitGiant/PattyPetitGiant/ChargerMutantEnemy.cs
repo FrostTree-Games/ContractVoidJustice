@@ -362,7 +362,7 @@ namespace PattyPetitGiant
                     {
                         if (attacker != null & attacker is Player)
                         {
-                            GameCampaign.AlterAllegiance(0.005f);
+                            GameCampaign.AlterAllegiance(0.015f);
                         }
                     }
                 }
