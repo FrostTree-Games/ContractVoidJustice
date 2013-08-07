@@ -63,6 +63,18 @@
       <Name>compassOverlay</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\frame\flame1.zpy">
+      <Name>flame1</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\flame2.zpy">
+      <Name>flame2</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="animation\frame\flame3.zpy">
+      <Name>flame3</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="animation\frame\pistolFlash.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>pistolFlash</Name>
@@ -2238,6 +2250,14 @@
   <ItemGroup>
     <None Include="gfx\pistolFlash.png">
       <Name>pistolFlash</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gfx\flameSheet.png">
+      <Name>flameSheet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

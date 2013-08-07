@@ -70,3 +70,6 @@ itemShotgun
 itemSword
 itemWand
 pistolFlash
+flame1
+flame2
+flame3
