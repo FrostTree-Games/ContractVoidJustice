@@ -45,11 +45,11 @@ namespace PattyPetitGiant
 
             }
             
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton) && !confirmPressed)
             {
                 confirmPressed = true;
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && confirmPressed)
+            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton) && confirmPressed)
             {
                 Game1.videoPlayer.Stop();
                 confirmPressed = false;

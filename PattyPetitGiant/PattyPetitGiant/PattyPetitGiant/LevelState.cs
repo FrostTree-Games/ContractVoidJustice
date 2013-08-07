@@ -465,7 +465,10 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < entityList.Count; i++)
             {
-                entityList[i].update(currentTime);
+                if (Vector2.Distance(cameraFocus.CenterPoint, entityList[i].CenterPoint) < 800)
+                {
+                    entityList[i].update(currentTime);
+                }
             }
 
             elapsedLevelTime += currentTime.ElapsedGameTime.Milliseconds;

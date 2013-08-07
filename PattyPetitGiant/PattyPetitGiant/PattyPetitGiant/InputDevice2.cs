@@ -163,11 +163,11 @@ namespace PattyPetitGiant
                         if (keyboardController.IsKeyDown(keyConfig.UseItem2)) { return PlayerPad.Keyboard; }
                         break;
                     case PlayerButton.SwitchItem1:
-                        if (xInputControllers[i].Buttons.X == ButtonState.Pressed || xInputControllers[i].Buttons.LeftShoulder == ButtonState.Pressed) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
+                        if (xInputControllers[i].Buttons.X == ButtonState.Pressed || xInputControllers[i].Buttons.RightShoulder == ButtonState.Pressed) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
                         if (keyboardController.IsKeyDown(keyConfig.SwitchItem1)) { return PlayerPad.Keyboard; }
                         break;
                     case PlayerButton.SwitchItem2:
-                        if (xInputControllers[i].Buttons.Y == ButtonState.Pressed || xInputControllers[i].Buttons.RightShoulder == ButtonState.Pressed) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
+                        if (xInputControllers[i].Buttons.Y == ButtonState.Pressed || xInputControllers[i].Buttons.LeftShoulder == ButtonState.Pressed) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
                         if (keyboardController.IsKeyDown(keyConfig.SwitchItem2)) { return PlayerPad.Keyboard; }
                         break;
                     case PlayerButton.DownDirection:
@@ -299,10 +299,10 @@ namespace PattyPetitGiant
                         if (state.Buttons.B == ButtonState.Pressed || state.Triggers.Right > 0.01f) { return true; }
                         break;
                     case PlayerButton.SwitchItem1:
-                        if (state.Buttons.X == ButtonState.Pressed || state.Buttons.LeftShoulder == ButtonState.Pressed) { return true; }
+                        if (state.Buttons.X == ButtonState.Pressed || state.Buttons.RightShoulder == ButtonState.Pressed) { return true; }
                         break;
                     case PlayerButton.SwitchItem2:
-                        if (state.Buttons.Y == ButtonState.Pressed || state.Buttons.RightShoulder == ButtonState.Pressed) { return true; }
+                        if (state.Buttons.Y == ButtonState.Pressed || state.Buttons.LeftShoulder == ButtonState.Pressed) { return true; }
                         break;
                     case PlayerButton.DownDirection:
                         if (state.DPad.Down == ButtonState.Pressed || state.ThumbSticks.Left.Y < 0) { return true; }
