@@ -111,6 +111,7 @@
     <Compile Include="MolotovEnemy.cs" />
     <Compile Include="MoveSearch.cs" />
     <Compile Include="MutantAcidSpitter.cs" />
+    <Compile Include="OptionsMenu.cs" />
     <Compile Include="ParticleSet.cs" />
     <Compile Include="PatrolGuard.cs" />
     <Compile Include="Pickup.cs" />
