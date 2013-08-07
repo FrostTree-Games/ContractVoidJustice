@@ -130,11 +130,11 @@ namespace PattyPetitGiant
                 openingSoundMade = true;
             }
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection) && !downPressed)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && !downPressed)
             {
                 downPressed = true;
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection) && downPressed)
+            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && downPressed)
             {
                 downPressed = false;
 
@@ -145,11 +145,11 @@ namespace PattyPetitGiant
                 }
             }
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection) && !upPressed)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && !upPressed)
             {
                 upPressed = true;
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection) && upPressed)
+            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && upPressed)
             {
                 upPressed = false;
 
@@ -162,11 +162,11 @@ namespace PattyPetitGiant
 
             selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && !confirmPressed)
             {
                 confirmPressed = true;
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && confirmPressed)
+            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && confirmPressed)
             {
                 confirmPressed = false;
 
