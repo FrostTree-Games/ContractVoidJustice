@@ -5,6 +5,9 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace PattyPetitGiant
 {
+    /// <summary>
+    /// The particle system engine for PattyPetitGiant.
+    /// </summary>
     public class ParticleSet
     {
         public enum ParticleType
@@ -95,6 +98,39 @@ namespace PattyPetitGiant
 
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
                 p.acceleration = Vector2.Zero;
+            }
+
+            public static void NewPistolFlash(ref Particle p, Vector2 position, Color c, GlobalGameConstants.Direction direction)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 75;
+                p.rotation = (int)direction * (float)(Math.PI / 2);
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("pistolFlash");
+                p.color = c;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+
+                switch (direction)
+                {
+                    case GlobalGameConstants.Direction.Right:
+                        p.position -= new Vector2(0, 28);
+                        break;
+                    case GlobalGameConstants.Direction.Left:
+                        p.position -= new Vector2(78, 28);
+                        break;
+                    case GlobalGameConstants.Direction.Down:
+                        p.position -= new Vector2(46, 0);
+                        break;
+                    case GlobalGameConstants.Direction.Up:
+                        p.position -= new Vector2(28, 58);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -215,6 +251,17 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewDirectedParticle2(ref particlePool[i], position, color, direction);
+                return;
+            }
+        }
+
+        public void pushPistolFlash(Vector2 position, Color color, GlobalGameConstants.Direction direction)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewPistolFlash(ref particlePool[i], position, color, direction);
                 return;
             }
         }

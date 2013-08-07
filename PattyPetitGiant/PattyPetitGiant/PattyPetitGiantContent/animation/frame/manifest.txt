@@ -69,3 +69,4 @@ itemRocket
 itemShotgun
 itemSword
 itemWand
+pistolFlash

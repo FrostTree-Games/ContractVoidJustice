@@ -47,3 +47,4 @@ prisoncell/1.png
 prisoncell/2.png
 prisoncell/3.png
 elevator/0.png
+pistolFlash.png
