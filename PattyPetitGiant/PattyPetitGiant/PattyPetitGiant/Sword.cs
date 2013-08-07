@@ -59,11 +59,11 @@ namespace PattyPetitGiant
                 //sword is on the right hand side of the player, if hitboxes are different dimensions, need to adjust the position of sword.
                 parent.Animation_Time = 0.0f;
 
-                if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_1 : GameCampaign.Player2_Item_1) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
                 {
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lSlash" : "rSlash");
                 }
-                else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_2 : GameCampaign.Player2_Item_2) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
                 {
                     parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rSlash" : "lSlash");
                 }

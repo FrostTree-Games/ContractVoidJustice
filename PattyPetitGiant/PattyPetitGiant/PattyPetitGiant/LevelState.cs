@@ -162,7 +162,7 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < entityList.Count; i++)
             {
-                if (entityList[i] is Player)
+                if (entityList[i] is Player && ((Player)entityList[i]).Index == InputDevice2.PPG_Player.Player_1) 
                 {
                     cameraFocus = entityList[i];
                 }
@@ -347,6 +347,11 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
+
+                        if (GameCampaign.IsATwoPlayerGame)
+                        {
+                            entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2));
+                        }
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
@@ -412,6 +417,10 @@ namespace PattyPetitGiant
             if (GameCampaign.Player_Ammunition < 0)
             {
                 GameCampaign.Player_Ammunition = 0;
+            }
+            if (GameCampaign.Player2_Ammunition < 0)
+            {
+                GameCampaign.Player2_Ammunition = 0;
             }
 
             if (messageQueueState == PushMessageQueueState.Wait)
@@ -648,7 +657,7 @@ namespace PattyPetitGiant
             }
             else if (player1Dead)
             {
-                return ScreenStateType.GameSetupMenu;
+                return ScreenStateType.HighScoresState;
             }
             else
             {

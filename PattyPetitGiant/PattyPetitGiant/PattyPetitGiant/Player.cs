@@ -113,8 +113,16 @@ namespace PattyPetitGiant
             
             velocity = Vector2.Zero;
 
-            player_item_1 = getItemWhenLoading(GameCampaign.Player_Item_1);
-            player_item_2 = getItemWhenLoading(GameCampaign.Player_Item_2);
+            if (index == InputDevice2.PPG_Player.Player_1)
+            {
+                player_item_1 = getItemWhenLoading(GameCampaign.Player_Item_1);
+                player_item_2 = getItemWhenLoading(GameCampaign.Player_Item_2);
+            }
+            else if (index == InputDevice2.PPG_Player.Player_2)
+            {
+                player_item_1 = getItemWhenLoading(GameCampaign.Player2_Item_1);
+                player_item_2 = getItemWhenLoading(GameCampaign.Player2_Item_2);
+            }
 
             state = playerState.Moving;
 
@@ -146,7 +154,7 @@ namespace PattyPetitGiant
         {
             double delta = currentTime.ElapsedGameTime.Milliseconds;
 
-            if (GameCampaign.Player_Health <= 0.0f)
+            if (index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Health <= 0.0f : GameCampaign.Player2_Health <= 0.0f)
             {
                 if (!parentWorld.Player1Dead)
                 {
@@ -348,7 +356,15 @@ namespace PattyPetitGiant
                                     item1_switch_button_down = false;
 
                                     player_item_1 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_1, currentTime);
-                                    GameCampaign.Player_Item_1 = player_item_1.ItemType();
+
+                                    if (index == InputDevice2.PPG_Player.Player_1)
+                                    {
+                                        GameCampaign.Player_Item_2 = player_item_2.ItemType();
+                                    }
+                                    else if (index == InputDevice2.PPG_Player.Player_2)
+                                    {
+                                        GameCampaign.Player2_Item_1 = player_item_1.ItemType();
+                                    }
 
                                     setAnimationWeapons(walk_down, GlobalGameConstants.Direction.Right);
                                     setAnimationWeapons(walk_right, GlobalGameConstants.Direction.Right);
@@ -365,7 +381,15 @@ namespace PattyPetitGiant
                                     item2_switch_button_down = false;
 
                                     player_item_2 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_2, currentTime);
-                                    GameCampaign.Player_Item_2 = player_item_2.ItemType();
+
+                                    if (index == InputDevice2.PPG_Player.Player_1)
+                                    {
+                                        GameCampaign.Player_Item_2 = player_item_2.ItemType();
+                                    }
+                                    else if (index == InputDevice2.PPG_Player.Player_2)
+                                    {
+                                        GameCampaign.Player2_Item_2 = player_item_2.ItemType();
+                                    }
 
                                     setAnimationWeapons(walk_down, GlobalGameConstants.Direction.Right);
                                     setAnimationWeapons(walk_right, GlobalGameConstants.Direction.Right);
@@ -453,12 +477,20 @@ namespace PattyPetitGiant
                         velocity = new Vector2(direction.Y / 100f * magnitude, 1.51f * magnitude);
                     }
                 }
-                GameCampaign.Player_Health = GameCampaign.Player_Health - damage;
+
+                if (index == InputDevice2.PPG_Player.Player_1)
+                {
+                    GameCampaign.Player_Health = GameCampaign.Player_Health - damage;
+                }
+                else if (index == InputDevice2.PPG_Player.Player_2)
+                {
+                    GameCampaign.Player2_Health = GameCampaign.Player2_Health - damage;
+                }
             }
         }
 
         public void setAnimationWeapons(AnimationLib.SpineAnimationSet current_skeleton, GlobalGameConstants.Direction direction_facing)
-        {
+    {
             switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_1.ItemType() : player_item_2.ItemType())
             {
                 case GlobalGameConstants.itemType.Sword:

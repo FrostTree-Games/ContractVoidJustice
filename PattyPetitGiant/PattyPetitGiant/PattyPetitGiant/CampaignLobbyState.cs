@@ -68,6 +68,7 @@ namespace PattyPetitGiant
         {
             slot1.InputDevice = InputDevice2.PlayerPad.NoPad;
             slot2.InputDevice = InputDevice2.PlayerPad.NoPad;
+            InputDevice2.UnlockAllControllers();
 
             controllerIndexArt = TextureLib.getLoadedTexture("controllerIndexArt.png");
 
@@ -299,13 +300,21 @@ namespace PattyPetitGiant
                     {
                         player1StartPressed = true;
                     }
-                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection) && player1StartPressed)
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton) && player1StartPressed)
                     {
                         player1StartPressed = false;
 
                         nextState = ScreenStateType.LevelSelectState;
 
-                        GameCampaign.ResetPlayerValues(slot1.Name, slot1.Color);
+                        if (slot2.InputDevice == InputDevice2.PlayerPad.NoPad)
+                        {
+                            GameCampaign.ResetPlayerValues(slot1.Name, slot1.Color);
+                        }
+                        else
+                        {
+                            GameCampaign.ResetPlayerValues(slot1.Name, slot1.Color, slot2.Name, slot2.Color);
+                        }
+
                         isComplete = true;
                     }
                 }

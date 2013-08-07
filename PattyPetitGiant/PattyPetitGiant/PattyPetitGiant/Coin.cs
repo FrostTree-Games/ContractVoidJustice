@@ -159,22 +159,45 @@ namespace PattyPetitGiant
                     {
                         if (parentWorld.EntityList[i] is Player)
                         {
+                            InputDevice2.PPG_Player playerIndex = ((Player)parentWorld.EntityList[i]).Index;
+
                             if (hitTest(parentWorld.EntityList[i]))
                             {
                                 if (ammo_value == AmmoValue.fullAmmo)
                                 {
-                                    GameCampaign.Player_Ammunition = 100;
+                                    if (playerIndex == InputDevice2.PPG_Player.Player_1)
+                                    {
+                                        GameCampaign.Player_Ammunition = 100;
+                                    }
+                                    else
+                                    {
+                                        GameCampaign.Player2_Ammunition = 100;
+                                    }
                                 }
                                 else
                                 {
                                     float ammo = GameCampaign.Player_Ammunition + (int)ammo_value;
                                     if (ammo > 100)
                                     {
-                                        GameCampaign.Player_Ammunition = 100;
+                                        if (playerIndex == InputDevice2.PPG_Player.Player_1)
+                                        {
+                                            GameCampaign.Player_Ammunition = 100;
+                                        }
+                                        else
+                                        {
+                                            GameCampaign.Player2_Ammunition = 100;
+                                        }
                                     }
                                     else
                                     {
-                                        GameCampaign.Player_Ammunition += (int)ammo_value;
+                                        if (playerIndex == InputDevice2.PPG_Player.Player_1)
+                                        {
+                                            GameCampaign.Player_Ammunition += (int)ammo_value;
+                                        }
+                                        else
+                                        {
+                                            GameCampaign.Player2_Ammunition += (int)ammo_value;
+                                        }
                                     }
                                 }
                                 state = DropState.Inactive;

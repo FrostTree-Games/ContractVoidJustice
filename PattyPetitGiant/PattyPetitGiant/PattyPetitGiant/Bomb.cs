@@ -68,11 +68,19 @@ namespace PattyPetitGiant
             switch (bomb_state)
             {
                 case Bomb_State.placed:
-                    if (GameCampaign.Player_Ammunition >= 10)
+                    if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= 10)
                     {
                         if (time_explosion > 1500)
                         {
-                            GameCampaign.Player_Ammunition -= ammo_consumption;
+                            if (parent.Index == InputDevice2.PPG_Player.Player_1)
+                            {
+                                GameCampaign.Player_Ammunition -= ammo_consumption;
+                            }
+                            else
+                            {
+                                GameCampaign.Player2_Ammunition -= ammo_consumption;
+                            }
+
                             hitbox = hitbox_exploded;
                             position = new Vector2(center_placed_bomb.X - hitbox.X / 2, center_placed_bomb.Y - hitbox.Y / 2);
                             bomb_state = Bomb_State.exploded;
