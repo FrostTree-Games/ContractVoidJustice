@@ -260,18 +260,18 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
-            drawBox(sb, new Rectangle(400, 128, 480, (32 * (10 + 1))), new Color(1, 1, 1, 0.5f), 2);
-            drawBox(sb, new Rectangle(400, 128, 480, (32 * (highScores.Count + 1))), Color.White, 2);
+            drawBox(sb, new Rectangle(400, 166, 480, (32 * (10 + 1))), new Color(1, 1, 1, 0.5f), 2);
+            drawBox(sb, new Rectangle(400, 166, 480, (32 * (highScores.Count + 1))), Color.White, 2);
 
-            drawLine(sb, new Vector2(400 + 150, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            drawLine(sb, new Vector2(400 + 150 + 132, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            drawLine(sb, new Vector2(400 + 150 + 132 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            drawLine(sb, new Vector2(400 + 150 + 132 + 75 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            sb.DrawString(Game1.tenbyFive14, "NAME", new Vector2(400, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "FATE", new Vector2(400 + 150, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "FUND", new Vector2(400 + 150 + 132, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "TIME", new Vector2(400 + 150 + 132 + 75, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "RANK", new Vector2(400 + 150 + 132 + 75 + 75, 128), Color.White);
+            drawLine(sb, new Vector2(400 + 150, 166), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(400 + 150 + 132, 166), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(400 + 150 + 132 + 75, 166), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(400 + 150 + 132 + 75 + 75, 166), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            sb.DrawString(Game1.tenbyFive14, "NAME", new Vector2(400, 166), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "FATE", new Vector2(400 + 150, 166), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "FUND", new Vector2(400 + 150 + 132, 166), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "TIME", new Vector2(400 + 150 + 132 + 75, 166), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "RANK", new Vector2(400 + 150 + 132 + 75 + 75, 166), Color.White);
 
             for (int i = 0; i < 10; i++)
             {
@@ -279,30 +279,36 @@ namespace PattyPetitGiant
 
                 if (i < highScores.Count)
                 {
-                    drawLine(sb, new Vector2(400, 128 + 32 + (i * 32)), 480, 0.0f, Color.White, 2);
-                    sb.DrawString(Game1.tenbyFive14, highScores[i].playerName, new Vector2(400, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                    drawLine(sb, new Vector2(400, 166 + 32 + (i * 32)), 480, 0.0f, Color.White, 2);
+                    sb.DrawString(Game1.tenbyFive14, highScores[i].playerName, new Vector2(400, 166 + ((i + 1) * 32)) + new Vector2(4), textColor);
                     if (highScores[i].levelDiedAt == 0 && highScores[i].floorDiedOn == 1)
                     {
-                        sb.DrawString(Game1.tenbyFive14, "DIED IN HANGAR", new Vector2(400 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                        sb.DrawString(Game1.tenbyFive14, "DIED IN HANGAR", new Vector2(400 + 150, 166 + ((i + 1) * 32)) + new Vector2(4), textColor);
                     }
                     else if (highScores[i].levelDiedAt == 5 && highScores[i].floorDiedOn == 1)
                     {
-                        sb.DrawString(Game1.tenbyFive14, "DIED AT BRIDGE", new Vector2(400 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                        sb.DrawString(Game1.tenbyFive14, "DIED AT BRIDGE", new Vector2(400 + 150, 166 + ((i + 1) * 32)) + new Vector2(4), textColor);
                     }
                     else
                     {
-                        sb.DrawString(Game1.tenbyFive14, (highScores[i].completedGame ? "ESCAPED" : ("DIED AT " + highScores[i].levelDiedAt + (highScores[i].floorDiedOn == 0 ? 'A' : ((highScores[i].floorDiedOn == 1) ? 'B' : 'C')))), new Vector2(400 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), (highScores[i].completedGame && i != newlyAddedScoreIndex) ? Color.Red : textColor);
+                        sb.DrawString(Game1.tenbyFive14, (highScores[i].completedGame ? "ESCAPED" : ("DIED AT " + highScores[i].levelDiedAt + (highScores[i].floorDiedOn == 0 ? 'A' : ((highScores[i].floorDiedOn == 1) ? 'B' : 'C')))), new Vector2(400 + 150, 166 + ((i + 1) * 32)) + new Vector2(4), (highScores[i].completedGame && i != newlyAddedScoreIndex) ? Color.Red : textColor);
                     }
-                    sb.DrawString(Game1.tenbyFive14, highScores[i].coinCollected.ToString(), new Vector2(400 + 150 + 132, 128 + ((i + 1) * 32)) + new Vector2(4) + new Vector2(65 - Game1.tenbyFive14.MeasureString(highScores[i].coinCollected.ToString()).X, 0), textColor);
-                    sb.DrawString(Game1.tenbyFive14, highScores[i].secondsElapsed.ToString(), new Vector2(400 + 150 + 132 + 75, 128 + ((i + 1) * 32)) + new Vector2(4) + new Vector2(65 - Game1.tenbyFive14.MeasureString(highScores[i].secondsElapsed.ToString()).X, 0), textColor);
-                    sb.DrawString(Game1.tenbyFive14, (i + 1).ToString(), new Vector2(400 + 150 + 132 + 75 + 75, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                    sb.DrawString(Game1.tenbyFive14, highScores[i].coinCollected.ToString(), new Vector2(400 + 150 + 132, 166 + ((i + 1) * 32)) + new Vector2(4) + new Vector2(65 - Game1.tenbyFive14.MeasureString(highScores[i].coinCollected.ToString()).X, 0), textColor);
+                    sb.DrawString(Game1.tenbyFive14, highScores[i].secondsElapsed.ToString(), new Vector2(400 + 150 + 132 + 75, 166 + ((i + 1) * 32)) + new Vector2(4) + new Vector2(65 - Game1.tenbyFive14.MeasureString(highScores[i].secondsElapsed.ToString()).X, 0), textColor);
+                    sb.DrawString(Game1.tenbyFive14, (i + 1).ToString(), new Vector2(400 + 150 + 132 + 75 + 75, 166 + ((i + 1) * 32)) + new Vector2(4), textColor);
                 }
                 else
                 {
-                    drawLine(sb, new Vector2(400, 128 + 32 + (i * 32)), 480, 0.0f, new Color(1, 1, 1, 0.25f), 2);
-                    sb.DrawString(Game1.tenbyFive14, "<NO DATA>", new Vector2(400 + (448 / 2), 128 + ((i + 1) * 32)) + new Vector2(4) - new Vector2(Game1.tenbyFive14.MeasureString("<NO DATA>").X, 0) / 2, new Color(1, 1, 1, 0.25f));
+                    drawLine(sb, new Vector2(400, 166 + 32 + (i * 32)), 480, 0.0f, new Color(1, 1, 1, 0.25f), 2);
+                    sb.DrawString(Game1.tenbyFive14, "<NO DATA>", new Vector2(400 + (448 / 2), 166 + ((i + 1) * 32)) + new Vector2(4) - new Vector2(Game1.tenbyFive14.MeasureString("<NO DATA>").X, 0) / 2, new Color(1, 1, 1, 0.25f));
                 }
             }
+
+#if XBOX
+            sb.DrawString(Game1.tenbyFive24, "Press (A) to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press (A) to Continue") / 2, new Color(1, 1, 1, (float)(Math.Sin(stateTimer / 300f) / 2) + 0.5f));
+#elif WINDOWS
+            sb.DrawString(Game1.tenbyFive24, "Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue") / 2, new Color(1, 1, 1, (float)(Math.Sin(stateTimer / 300f) / 2) + 0.5f));
+#endif
 
             sb.End();
         }
