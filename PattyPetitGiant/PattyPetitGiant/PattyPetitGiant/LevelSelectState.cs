@@ -273,12 +273,8 @@ namespace PattyPetitGiant
             Rectangle rx = XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f);
             rx.X += 575;
             rx.Y += 100;
-            drawBox(sb, rx, Color.Cyan, 2);
-            rx.X -= 3;
-            rx.Y -= 3;
-            rx.Width += 6;
-            rx.Height += 6;
-            drawBox(sb, rx, Color.Cyan, 2);
+
+            sb.Draw(Game1.whitePixel, rx, new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
             drawBox(sb, new Rectangle(755, 500, 305, 200), Color.Cyan, 2);
             sb.DrawString(Game1.testComputerFont, "\n\nPrisoner Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Orange);

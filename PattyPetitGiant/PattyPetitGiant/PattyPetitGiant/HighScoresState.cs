@@ -116,25 +116,26 @@ namespace PattyPetitGiant
 
         private int newlyAddedScoreIndex = -2;
 
-        private HighScoreStateScreenAnimationState state;
         private float stateTimer;
         private const float preWaitDuration = 600f;
         private const float slideInDuration = 300f;
+
+        private bool player1ConfirmPressed = false;
 
         public static void InitalizeHighScores()
         {
             if (highScores == null)
             {
-                highScores = new List<HighScoreValue>();
+                highScores = new List<HighScoreValue>(10);
 
                 //test values to punch in; load from card later
                 highScores.Add(new HighScoreValue("Wilson", 6969, 83939, 2, 2));
                 highScores.Add(new HighScoreValue("Eric", 999999, 123, 3, 0));
                 highScores.Add(new HighScoreValue("Daniel", 123456, 123, 1, 1));
                 highScores.Add(new HighScoreValue("Ivan", 1000, 345, 0, 1));
-                highScores.Add(new HighScoreValue("Alyosha", 1000, 345, 0, 1));
-                highScores.Add(new HighScoreValue("Dmitri", 1500, 43567, 4, 2, true));
-                highScores.Add(new HighScoreValue("Gunther", 2233, 2332, 2, 1));
+                //highScores.Add(new HighScoreValue("Alyosha", 1000, 345, 0, 1));
+                //highScores.Add(new HighScoreValue("Dmitri", 1500, 43567, 4, 2, true));
+                //highScores.Add(new HighScoreValue("Gunther", 2233, 2332, 2, 1));
                 highScores.Add(new HighScoreValue("lolololol", 2020, 333, 1, 0));
                 highScores.Add(new HighScoreValue("quinten", 20202, 9981, 1, 1));
                 highScores.Add(new HighScoreValue("Zippy", 200, 000, 5, 1));
@@ -199,13 +200,26 @@ namespace PattyPetitGiant
                 highScores.Reverse();
             }
 
-            state = HighScoreStateScreenAnimationState.Start;
             stateTimer = 0;
         }
 
         protected override void doUpdate(GameTime currentTime)
         {
             stateTimer += currentTime.ElapsedGameTime.Milliseconds;
+
+            if (stateTimer > 1500f)
+            {
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && !player1ConfirmPressed)
+                {
+                    player1ConfirmPressed = true;
+                }
+                else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && player1ConfirmPressed)
+                {
+                    player1ConfirmPressed = false;
+
+                    isComplete = true;
+                }
+            }
 
             CampaignLobbyState.lineOffset += (currentTime.ElapsedGameTime.Milliseconds * CampaignLobbyState.lineMoveSpeed);
             if (CampaignLobbyState.lineOffset > 16.0f) { CampaignLobbyState.lineOffset -= 16.0f; }
@@ -246,72 +260,56 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
-            drawBox(sb, new Rectangle(128 + 32, 128, 448, (32 * (highScores.Count + 1))), Color.White, 2);
-            drawLine(sb, new Vector2(128 + 32 + 150, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            drawLine(sb, new Vector2(128 + 32 + 150 + 100, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            drawLine(sb, new Vector2(128 + 32 + 150 + 100 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            drawLine(sb, new Vector2(128 + 32 + 150 + 100 + 75 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
-            sb.DrawString(Game1.tenbyFive14, "NAME", new Vector2(128 + 32, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "FATE", new Vector2(128 + 32 + 150, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "FUND", new Vector2(128 + 32 + 150 + 100, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "TIME", new Vector2(128 + 32 + 150 + 100 + 75, 128), Color.White);
-            sb.DrawString(Game1.tenbyFive14, "RANK", new Vector2(128 + 32 + 150 + 100 + 75 + 75, 128), Color.White);
+            drawBox(sb, new Rectangle(400, 128, 480, (32 * (10 + 1))), new Color(1, 1, 1, 0.5f), 2);
+            drawBox(sb, new Rectangle(400, 128, 480, (32 * (highScores.Count + 1))), Color.White, 2);
 
-            for (int i = 0; i < highScores.Count; i++)
+            drawLine(sb, new Vector2(400 + 150, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(400 + 150 + 132, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(400 + 150 + 132 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            drawLine(sb, new Vector2(400 + 150 + 132 + 75 + 75, 128), (32 * (highScores.Count + 1)), (float)Math.PI / 2, Color.White, 2);
+            sb.DrawString(Game1.tenbyFive14, "NAME", new Vector2(400, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "FATE", new Vector2(400 + 150, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "FUND", new Vector2(400 + 150 + 132, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "TIME", new Vector2(400 + 150 + 132 + 75, 128), Color.White);
+            sb.DrawString(Game1.tenbyFive14, "RANK", new Vector2(400 + 150 + 132 + 75 + 75, 128), Color.White);
+
+            for (int i = 0; i < 10; i++)
             {
                 Color textColor = (i == newlyAddedScoreIndex ? Color.Lerp(Color.Cyan, Color.Orange, (float)((1 + Math.Sin(stateTimer / 300)) / 2)) : Color.White);
 
-                drawLine(sb, new Vector2(128 + 32, 128 + 32 + (i * 32)), 448, 0.0f, Color.White, 2);
-                sb.DrawString(Game1.tenbyFive14, highScores[i].playerName, new Vector2(128 + 32, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
-                sb.DrawString(Game1.tenbyFive14, (highScores[i].completedGame ? "ESCAPED" : ("DIED AT " + highScores[i].levelDiedAt + (highScores[i].floorDiedOn == 0 ? 'A' : ((highScores[i].floorDiedOn == 1) ? 'B' : 'C')))), new Vector2(128 + 32 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), (highScores[i].completedGame && i != newlyAddedScoreIndex) ? Color.Red : textColor);
-                sb.DrawString(Game1.tenbyFive14, highScores[i].coinCollected.ToString(), new Vector2(128 + 32 + 150 + 100, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
-                sb.DrawString(Game1.tenbyFive14, highScores[i].secondsElapsed.ToString(), new Vector2(128 + 32 + 150 + 100 + 75, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
-                sb.DrawString(Game1.tenbyFive14, (i + 1).ToString(), new Vector2(128 + 32 + 150 + 100 + 75 + 75, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
-            }
-
-            /*
-            for (int i = 0; i < highScores.Count; i++)
-            {
-                if (state == HighScoreStateScreenAnimationState.Start)
+                if (i < highScores.Count)
                 {
-                    if (i == newlyAddedScoreIndex) { continue; }
-
-                    Vector2 drawListPosition = new Vector2(128) + new Vector2(0, i * 28);
-                    if (i > newlyAddedScoreIndex) { drawListPosition.Y -= 28; }
-
-                    sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
-                }
-                else if (state == HighScoreStateScreenAnimationState.SlideNewHighScoreIn)
-                {
-                    if (i == newlyAddedScoreIndex)
+                    drawLine(sb, new Vector2(400, 128 + 32 + (i * 32)), 480, 0.0f, Color.White, 2);
+                    sb.DrawString(Game1.tenbyFive14, highScores[i].playerName, new Vector2(400, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                    if (highScores[i].levelDiedAt == 0 && highScores[i].floorDiedOn == 1)
                     {
-                        Vector2 drawListPosition = new Vector2(128) + new Vector2(-200, i * 28);
-                        drawListPosition.X += 200 * (stateTimer / slideInDuration);
-
-                        sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
+                        sb.DrawString(Game1.tenbyFive14, "DIED IN HANGAR", new Vector2(400 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
+                    }
+                    else if (highScores[i].levelDiedAt == 5 && highScores[i].floorDiedOn == 1)
+                    {
+                        sb.DrawString(Game1.tenbyFive14, "DIED AT BRIDGE", new Vector2(400 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
                     }
                     else
                     {
-                        Vector2 drawListPosition = new Vector2(128) + new Vector2(0, i * 28);
-                        if (i > newlyAddedScoreIndex) { drawListPosition.Y -= 28 * (1 - (stateTimer / slideInDuration)); }
-
-                        sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
+                        sb.DrawString(Game1.tenbyFive14, (highScores[i].completedGame ? "ESCAPED" : ("DIED AT " + highScores[i].levelDiedAt + (highScores[i].floorDiedOn == 0 ? 'A' : ((highScores[i].floorDiedOn == 1) ? 'B' : 'C')))), new Vector2(400 + 150, 128 + ((i + 1) * 32)) + new Vector2(4), (highScores[i].completedGame && i != newlyAddedScoreIndex) ? Color.Red : textColor);
                     }
+                    sb.DrawString(Game1.tenbyFive14, highScores[i].coinCollected.ToString(), new Vector2(400 + 150 + 132, 128 + ((i + 1) * 32)) + new Vector2(4) + new Vector2(65 - Game1.tenbyFive14.MeasureString(highScores[i].coinCollected.ToString()).X, 0), textColor);
+                    sb.DrawString(Game1.tenbyFive14, highScores[i].secondsElapsed.ToString(), new Vector2(400 + 150 + 132 + 75, 128 + ((i + 1) * 32)) + new Vector2(4) + new Vector2(65 - Game1.tenbyFive14.MeasureString(highScores[i].secondsElapsed.ToString()).X, 0), textColor);
+                    sb.DrawString(Game1.tenbyFive14, (i + 1).ToString(), new Vector2(400 + 150 + 132 + 75 + 75, 128 + ((i + 1) * 32)) + new Vector2(4), textColor);
                 }
                 else
                 {
-                    Vector2 drawListPosition = new Vector2(128) + new Vector2(0, i * 28);
-
-                    sb.DrawString(Game1.font, highScores[i].playerName + " died on " + highScores[i].levelDiedAt + " with " + highScores[i].coinCollected + " after " + highScores[i].secondsElapsed, drawListPosition, Color.White);
+                    drawLine(sb, new Vector2(400, 128 + 32 + (i * 32)), 480, 0.0f, new Color(1, 1, 1, 0.25f), 2);
+                    sb.DrawString(Game1.tenbyFive14, "<NO DATA>", new Vector2(400 + (448 / 2), 128 + ((i + 1) * 32)) + new Vector2(4) - new Vector2(Game1.tenbyFive14.MeasureString("<NO DATA>").X, 0) / 2, new Color(1, 1, 1, 0.25f));
                 }
-            } */
+            }
 
             sb.End();
         }
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
- 	        return ScreenStateType.TitleScreen;
+ 	        return ScreenStateType.GameSetupMenu;
         }
     }
 }
