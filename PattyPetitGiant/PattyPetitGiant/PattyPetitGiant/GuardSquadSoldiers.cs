@@ -93,6 +93,9 @@ namespace PattyPetitGiant
             change_direction_time_threshold = 4000.0f;
             enemy_type = EnemyType.Guard;
 
+            prob_item_drop = 0.6;
+            number_drop_items = 5;
+
             walk_down = AnimationLib.loadNewAnimationSet("squadSoldierDown");
             walk_right = AnimationLib.loadNewAnimationSet("squadSoldierRight");
             walk_up = AnimationLib.loadNewAnimationSet("squadSoldierUp");
@@ -339,7 +342,8 @@ namespace PattyPetitGiant
                         }
                         break;
                     case SquadSoldierState.Dying:
-
+                        velocity = Vector2.Zero;
+                        break;
                     default:
                         break;
                 }
@@ -375,6 +379,7 @@ namespace PattyPetitGiant
                 loop = false;
                 animation_time = 0.0f;
                 state = SquadSoldierState.Dying;
+                parentWorld.pushCoin(this);
             } 
         }
 

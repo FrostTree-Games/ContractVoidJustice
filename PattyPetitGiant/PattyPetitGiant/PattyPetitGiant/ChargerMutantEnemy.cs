@@ -42,13 +42,16 @@ namespace PattyPetitGiant
             windup_timer = 0.0f;
             knockback_magnitude = 8.0f;
             enemy_damage = 20;
-            enemy_life = 15;
+            enemy_life = 35;
             enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
             charge_timer = 0.0f;
             alert_timer = 0.0f;
             range_distance = 600f;
+
+            prob_item_drop = 0.5;
+            number_drop_items = 5;
 
             entity_found = null;
             state = ChargerState.search;
@@ -309,6 +312,7 @@ namespace PattyPetitGiant
                 death = true;
                 state = ChargerState.dying;
                 animation_time = 0;
+                parentWorld.pushCoin(this);
             }
         }
         public override void draw(Spine.SkeletonRenderer sb)

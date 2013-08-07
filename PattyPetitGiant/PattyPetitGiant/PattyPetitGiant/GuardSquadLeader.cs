@@ -84,6 +84,9 @@ namespace PattyPetitGiant
             death = false;
             windup_timer = 0.0f;
 
+            prob_item_drop = 0.4;
+            number_drop_items = 4;
+
             walk_down = AnimationLib.loadNewAnimationSet("squadLeaderDown");
             walk_right = AnimationLib.loadNewAnimationSet("squadLeaderRight");
             walk_up = AnimationLib.loadNewAnimationSet("squadLeaderUp");
@@ -516,6 +519,7 @@ namespace PattyPetitGiant
                 animation_time = 0.0f;
                 loop = false;
                 death = true;
+                parentWorld.pushCoin(this);
                 //remove_from_list = true;
             }
 

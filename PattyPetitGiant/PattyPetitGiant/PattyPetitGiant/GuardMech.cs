@@ -23,7 +23,7 @@ namespace PattyPetitGiant
             Death,
         }
 
-        private const float enemy_range_damage = 10.0f;
+        private const float enemy_range_damage = 30.0f;
         private const float enemy_melee_damage = 20.0f;
         private const float knockback_magnitude = 2.0f;
 
@@ -61,7 +61,7 @@ namespace PattyPetitGiant
             angle = 0.0f;
             turret_angle = angle;
 
-            enemy_life = 35;
+            enemy_life = 75;
             disable_movement = false;
             disable_movement_time = 0.0f;
             enemy_found = false;
@@ -70,6 +70,9 @@ namespace PattyPetitGiant
             enemy_type = EnemyType.Guard;
             change_direction_time_threshold = 3000.0f;
             direction_facing = GlobalGameConstants.Direction.Right;
+
+            prob_item_drop = 0.6;
+            number_drop_items = 5;
 
             component = new MoveSearch();
             mech_state = MechState.Moving;
@@ -427,6 +430,7 @@ namespace PattyPetitGiant
                 death = true;
                 mech_state = MechState.Death;
                 velocity = Vector2.Zero;
+                parentWorld.pushCoin(this);
             }
 
             Vector2 pos = new Vector2(position.X, position.Y);

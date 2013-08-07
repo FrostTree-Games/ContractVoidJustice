@@ -60,6 +60,9 @@ namespace PattyPetitGiant
             angle = 0.0f;
             animation_time = 0.0f;
 
+            prob_item_drop = 0.5;
+            number_drop_items = 5;
+            
             state = ChainState.Moving;
             enemy_type = EnemyType.Prisoner;
             component = new MoveSearch();
@@ -86,6 +89,7 @@ namespace PattyPetitGiant
                 state = ChainState.Death;
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(die_animations[Game1.rand.Next() % 3]);
                 animation_time = 0.0f;
+                parentWorld.pushCoin(this);
             }
 
             switch (state)

@@ -47,6 +47,9 @@ namespace PattyPetitGiant
             enemy_type = EnemyType.Guard;
             enemy_life = 70;
 
+            prob_item_drop = 0.5;
+            number_drop_items = 7;
+
             if (position.X > 0)
             {
                 other = new AntiFairy(parentWorld, new Vector2(-100, 100));

@@ -73,6 +73,9 @@ namespace PattyPetitGiant
             enemy_life = 16;
             enemy_type = EnemyType.Alien;
 
+            prob_item_drop = 0.3;
+            number_drop_items = 4;
+
             tailData = new TailPosition[tailPiecesCount, positionsCount];
             tailMostRecent = 0;
             for (int j = 0; j < tailPiecesCount; j++)
@@ -117,6 +120,7 @@ namespace PattyPetitGiant
                 if (enemy_life < 1)
                 {
                     snakeState = SnakeWormState.Dying;
+                    parentWorld.pushCoin(this);
                 }
 
                 foreach (Entity en in parentWorld.EntityList)

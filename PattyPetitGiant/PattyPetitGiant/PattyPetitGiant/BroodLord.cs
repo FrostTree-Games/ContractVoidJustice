@@ -49,6 +49,9 @@ namespace PattyPetitGiant
             enemy_life = 25;
             enemy_type = EnemyType.Alien;
 
+            prob_item_drop = 0.45;
+            number_drop_items = 4;
+
             anim = AnimationLib.loadNewAnimationSet("broodlord");
             anim.Animation = anim.Skeleton.Data.FindAnimation("idle");
             animation_time = 0;
@@ -183,6 +186,7 @@ namespace PattyPetitGiant
                 if (enemy_life < 1)
                 {
                     broodState = BroodLordState.Dying;
+                    parentWorld.pushCoin(this);
                 }
 
                 knockBackTimer = 0;

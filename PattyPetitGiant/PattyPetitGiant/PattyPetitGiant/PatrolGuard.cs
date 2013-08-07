@@ -181,6 +181,9 @@ namespace PattyPetitGiant
             guardState = PatrolGuardState.MoveWait;
             enemy_type = EnemyType.Guard;
 
+            prob_item_drop = 0.3;
+            number_drop_items = 3;
+
             directionAnims = new AnimationLib.SpineAnimationSet[4];
             directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("patrolUp");
             directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("patrolDown");
@@ -628,8 +631,7 @@ namespace PattyPetitGiant
 
                 dimensions /= 8;
 
-                //parentWorld.pushCoin(CenterPoint - new Vector2(GlobalGameConstants.TileSize.X / 2, 0), Coin.DropItemType.CoinDrop, (int)Coin.CoinValue.Elizabeth);
-                //parentWorld.pushCoin(CenterPoint + GlobalGameConstants.TileSize / 2, Coin.DropItemType.CoinDrop, (int)Coin.CoinValue.Laurier);
+                parentWorld.pushCoin(this);
 
                 death = true;
 

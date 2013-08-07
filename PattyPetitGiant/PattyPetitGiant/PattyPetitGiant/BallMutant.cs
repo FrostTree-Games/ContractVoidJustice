@@ -65,6 +65,9 @@ namespace PattyPetitGiant
             enemy_life = 5;
             enemy_type = EnemyType.Prisoner;
 
+            prob_item_drop = 0.4;
+            number_drop_items = 4;
+
             walk_down = AnimationLib.getSkeleton("ballMutantUp");
             walk_right = AnimationLib.getSkeleton("ballMutantRight");
             walk_up = AnimationLib.getSkeleton("ballMutantUp");
@@ -94,6 +97,7 @@ namespace PattyPetitGiant
                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(deathAnim[Game1.rand.Next() % 3]);
                 state = mutantBallState.Death;
                 animation_time = 0.0f;
+                parentWorld.pushCoin(this);
             }
             switch (state)
             {

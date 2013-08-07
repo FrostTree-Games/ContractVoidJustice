@@ -63,6 +63,9 @@ namespace PattyPetitGiant
             angle = 0.0f;
             range_distance = 500.0f;
 
+            prob_item_drop = 0.4;
+            number_drop_items = 4;
+
             state = SpitterState.Search;
             this.parentWorld = parentWorld;
             direction_facing = GlobalGameConstants.Direction.Right;
@@ -109,6 +112,7 @@ namespace PattyPetitGiant
                 death = true;
                 directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(deathAnims[Game1.rand.Next() % 3]);
                 animation_time = 0.0f;
+                parentWorld.pushCoin(this);
             }
 
             switch (state)
