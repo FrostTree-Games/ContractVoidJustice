@@ -15,9 +15,9 @@ namespace PattyPetitGiant
 
         private enum titleScreens
         {
-            introScreen,
             logoScreen,
             menuScreen,
+            playScreen
         }
 
         private class TitleMenuOptions
@@ -132,7 +132,7 @@ namespace PattyPetitGiant
 
             menu_item_selected = 0;
 
-            screen = titleScreens.introScreen;
+            screen = titleScreens.logoScreen;
 
             fade_state = FadeState.stay;
 
@@ -149,7 +149,7 @@ namespace PattyPetitGiant
             button_pressed_timer += currentTime.ElapsedGameTime.Milliseconds;
             fade += currentTime.ElapsedGameTime.Milliseconds;
 
-            if (screen == titleScreens.menuScreen)
+            if (screen == titleScreens.menuScreen || screen == titleScreens.playScreen)
             {
                 fade_duration = max_fade_menu_timer;
             }
@@ -160,7 +160,7 @@ namespace PattyPetitGiant
 
             switch(screen)
             {
-                case titleScreens.introScreen:
+                /*case titleScreens.introScreen:
                     if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.AnyButton) && !confirm_pressed)
                     {
                         confirm_pressed = true;
@@ -177,7 +177,7 @@ namespace PattyPetitGiant
                             fade_state = FadeState.fadeIn;
                         }
                     }
-                    break;
+                    break;*/
                 /**************************************************************************************************************************/
                 case titleScreens.logoScreen:
                     if (fade > max_fade_timer)
@@ -271,8 +271,9 @@ namespace PattyPetitGiant
                         switch(menu_list[menu_item_selected].text)
                         {
                             case "START":
-                                isComplete = true;
-                                BackGroundAudio.stopAllSongs();
+                                screen = titleScreens.playScreen;
+                                fade_state = FadeState.fadeOut;
+                                fade = 0.0f;
                                 break;
                             case "OPTIONS":
                                 break;
@@ -300,6 +301,11 @@ namespace PattyPetitGiant
                     break;
                 /*****************************************************************************************************/
                 default:
+                    if (fade > max_fade_menu_timer)
+                    {
+                        isComplete = true;
+                        BackGroundAudio.stopAllSongs();
+                    }
                     break;
             }
         }
@@ -313,10 +319,10 @@ namespace PattyPetitGiant
             //sb.Draw(Game1.whitePixel,new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f
             switch (screen)
             {
-                case titleScreens.introScreen:
+                /*case titleScreens.introScreen:
                     sb.DrawString(Game1.font, "PattyPetitGiant", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), fadeColour);
                     sb.DrawString(Game1.font, "Press Any Key to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2 + 32), fadeColour);
-                    break;
+                    break;*/
                 case titleScreens.logoScreen:
                     sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     break;
@@ -360,6 +366,13 @@ namespace PattyPetitGiant
                     }*/
                     break;
                 default:
+                    sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
+                    sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
+                    
+                    for (int i = 0; i < menu_list.Count(); i++)
+                    {
+                        sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+                    }
                     break;
             }
             
