@@ -260,6 +260,10 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new BroodLord(this, spawnPos));
                     }
+                    else if (randomSpawnValue < 0.4)
+                    {
+                        entityList.Add(new AlienChaser(this, spawnPos));
+                    }
                     else
                     {
                         entityList.Add(new MutantAcidSpitter(this, spawnPos.X, spawnPos.Y));
