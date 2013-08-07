@@ -184,12 +184,12 @@ namespace PattyPetitGiant
             int iteration = 0;
             int placedMonsterCount = 0;
 
-            while (placedMonsterCount < 3)
+            while (placedMonsterCount < 5)
             {
             // deeply-nested loops; justified as a special continue statement
             MonsterCheck:
 
-                if (iteration > 10)
+                if (iteration > 14)
                 {
                     return;
                 }
