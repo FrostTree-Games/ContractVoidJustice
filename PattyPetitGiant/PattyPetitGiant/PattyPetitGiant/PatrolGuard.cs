@@ -620,7 +620,7 @@ namespace PattyPetitGiant
             {
                 if (attacker is Player)
                 {
-                    GameCampaign.AlterAllegiance(-0.005f);
+                    GameCampaign.AlterAllegiance(-0.015f);
                 }
 
                 guardState = PatrolGuardState.Dying;
