@@ -209,7 +209,6 @@ namespace PattyPetitGiant
             animation_time += currentTime.ElapsedGameTime.Milliseconds;
             deadCushySoundTimer += currentTime.ElapsedGameTime.Milliseconds;
 
-            Console.WriteLine(GameCampaign.PlayerAllegiance);
 
             if (guardState == PatrolGuardState.InvalidState)
             {

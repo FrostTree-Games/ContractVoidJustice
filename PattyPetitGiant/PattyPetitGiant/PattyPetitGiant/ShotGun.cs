@@ -28,7 +28,7 @@ namespace PattyPetitGiant
         private int damage_multiplier;
 
         private float damage_delay_timer = 0.0f;
-        private float damage_delay = 100.0f;
+        private float damage_delay = 30.0f;
         private bool damage_delay_flag = false;
 
         private const string shot_gun_sound = "shotgun";

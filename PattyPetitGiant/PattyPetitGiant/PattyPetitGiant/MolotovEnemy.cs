@@ -66,6 +66,9 @@ namespace PattyPetitGiant
 
             health = 15;
 
+            prob_item_drop = 0.3;
+            number_drop_items = 3;
+
             templateAnim = AnimationLib.getFrameAnimationSet("molotov");
             flameAnim = AnimationLib.getFrameAnimationSet("molotovFlame");
             animation_time = 0.0f;
@@ -491,6 +494,7 @@ namespace PattyPetitGiant
                     dimensions /= 8;
 
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(deathAnims[Game1.rand.Next() % 3]);
+                    parentWorld.pushCoin(this);
                 }
 
                 if (attacker == null)
