@@ -111,6 +111,19 @@ namespace PattyPetitGiant
             get { return player_coin_amount; }
         }
 
+        private static float player2_health = 100.00f;
+        public static float Player2_Health
+        {
+            set { player2_health = value; }
+            get { return player2_health; }
+        }
+        private static float player2_ammunition = 100;
+        public static float Player2_Ammunition
+        {
+            set { player2_ammunition = value; }
+            get { return player2_ammunition; }
+        }
+
         private static float allegiance = 0.5f;
         /// <summary>
         /// Used to determine where the player stands with the guards and/or prisoners.
@@ -148,6 +161,9 @@ namespace PattyPetitGiant
         public static GlobalGameConstants.itemType Player_Item_1;
         public static GlobalGameConstants.itemType Player_Item_2;
 
+        public static GlobalGameConstants.itemType Player2_Item_1;
+        public static GlobalGameConstants.itemType Player2_Item_2;
+
         public static GameContract currentContract;
 
         /// <summary>
@@ -180,12 +196,20 @@ namespace PattyPetitGiant
         private static string playerName = null;
         public static string PlayerName { get { return playerName; } }
         private static int playerColor = 0;
-        public static int PlayerColor { get { return playerColor; } } 
+        public static int PlayerColor { get { return playerColor; } }
+
+        private static string player2Name = null;
+        public static string Player2Name { get { return player2Name; } }
+        private static int player2Color = 0;
+        public static int Player2Color { get { return player2Color; } } 
 
         private static float elapsedCampaignTime;
         public static float ElapsedCampaignTime { get { return elapsedCampaignTime; } set { elapsedCampaignTime = value; } }
 
         public static LevelSelectState.LevelData[,] levelMap = null;
+
+        private static bool isATwoPlayerGame;
+        public static bool IsATwoPlayerGame { get { return isATwoPlayerGame; } set { isATwoPlayerGame = value; } }
 
         public static void ResetPlayerValues(string player1Name, int player1Color)
         {
@@ -235,6 +259,24 @@ namespace PattyPetitGiant
             levelMap[0, 2].visible = false;
             levelMap[levelMap.GetLength(0) - 1, 0].visible = false;
             levelMap[levelMap.GetLength(0) - 1, 2].visible = false;
+
+            isATwoPlayerGame = false;
+        }
+
+        public static void ResetPlayerValues(string player1Name, int player1Color, string Player2Name, int Player2Color)
+        {
+            ResetPlayerValues(player1Name, player1Color);
+
+            Player2_Item_1 = GlobalGameConstants.itemType.Sword;
+            Player2_Item_2 = GlobalGameConstants.itemType.Gun;
+
+            player2Name = Player2Name;
+            player2Color = Player2Color;
+
+            player2_health = 100;
+            player2_ammunition = 100;
+
+            isATwoPlayerGame = true;
         }
     }
 }

@@ -528,6 +528,9 @@ namespace PattyPetitGiant
                         {
                             Vector2 muzzleLocation = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("muzzle").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("muzzle").WorldY);
                             bullets[i] = new GunBullet(muzzleLocation, direction_facing, this);
+
+                            parentWorld.Particles.pushPistolFlash(muzzleLocation, Color.White, direction_facing);
+
                             break;
                         }
                     }

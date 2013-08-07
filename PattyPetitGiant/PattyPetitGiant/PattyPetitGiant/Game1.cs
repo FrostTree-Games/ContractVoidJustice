@@ -167,7 +167,7 @@ namespace PattyPetitGiant
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             currentGameScreen = new CampaignLobbyState();
-            //currentGameScreen = new HighScoresState();
+            //currentGameScreen = new HighScoresState(true);
         }
 
         /// <summary>

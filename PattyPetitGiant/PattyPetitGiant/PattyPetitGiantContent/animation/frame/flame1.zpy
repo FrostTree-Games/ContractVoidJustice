@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <name>flagPic</name>
-  <sheetName>elevator.png</sheetName>
+  <name>flame1</name>
+  <sheetName>flameSheet.png</sheetName>
   <initalX>0</initalX>
   <initalY>0</initalY>
   <offsetX>0</offsetX>
@@ -10,5 +10,5 @@
   <frameHeight>64</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>
-  <loop>true</loop>
+  <loop>false</loop>
 </SerializableAnimationData>

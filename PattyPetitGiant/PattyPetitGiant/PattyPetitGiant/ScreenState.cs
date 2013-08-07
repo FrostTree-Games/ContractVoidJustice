@@ -61,7 +61,7 @@ namespace PattyPetitGiant
                 case ScreenStateType.TitleScreen:
                     //return new TitleScreen();
                 case ScreenStateType.HighScoresState:
-                    return new HighScoresState();
+                    return new HighScoresState(true);
                 case ScreenStateType.OptionsMenu:
                     return null;
                 case ScreenStateType.LevelReviewState:

@@ -131,6 +131,8 @@ namespace PattyPetitGiant
             map.TileSkin[2] = TextureLib.getLoadedTexture(tileSetName + "/2.png");
             map.TileSkin[3] = TextureLib.getLoadedTexture(tileSetName + "/3.png");
 
+            map.ElevatorRoomSkin = TextureLib.getLoadedTexture("elevator/0.png");
+
             Thread.Sleep(250);
 
             endFlagReached = false;
@@ -160,7 +162,7 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < entityList.Count; i++)
             {
-                if (entityList[i] is Player)
+                if (entityList[i] is Player && ((Player)entityList[i]).Index == InputDevice2.PPG_Player.Player_1) 
                 {
                     cameraFocus = entityList[i];
                 }
@@ -182,12 +184,12 @@ namespace PattyPetitGiant
             int iteration = 0;
             int placedMonsterCount = 0;
 
-            while (placedMonsterCount < 3)
+            while (placedMonsterCount < 5)
             {
             // deeply-nested loops; justified as a special continue statement
             MonsterCheck:
 
-                if (iteration > 10)
+                if (iteration > 14)
                 {
                     return;
                 }
@@ -257,6 +259,10 @@ namespace PattyPetitGiant
                     if (randomSpawnValue < 0.15)
                     {
                         entityList.Add(new BroodLord(this, spawnPos));
+                    }
+                    else if (randomSpawnValue < 0.4)
+                    {
+                        entityList.Add(new AlienChaser(this, spawnPos));
                     }
                     else
                     {
@@ -345,15 +351,11 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-                        //entityList.Add(new MutantAcidSpitter(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
-                        entityList.Add(new ChaseEnemy(this, (currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y));
 
-                        /*entityList.Add(new AntiFairy(this, new Vector2((currentRoomX + 6) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
-                        entityList.Add(new AntiFairy(this, new Vector2((currentRoomX + 6) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y)));
-                        entityList.Add(new AntiFairy(this, new Vector2((currentRoomX + 4) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y)));
-                        entityList.Add(new AntiFairy(this, new Vector2((currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 9) * GlobalGameConstants.TileSize.Y)));
-                        entityList.Add(new AntiFairy(this, new Vector2((currentRoomX + 9) * GlobalGameConstants.TileSize.X, (currentRoomY + 9) * GlobalGameConstants.TileSize.Y)));
-                        entityList.Add(new AntiFairy(this, new Vector2((currentRoomX + 5) * GlobalGameConstants.TileSize.X, (currentRoomY + 7) * GlobalGameConstants.TileSize.Y)));*/
+                        if (GameCampaign.IsATwoPlayerGame)
+                        {
+                            entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2));
+                        }
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
                     {
@@ -365,6 +367,15 @@ namespace PattyPetitGiant
                         {
                             entityList.Add(new BetaEndLevelFag(this, new Vector2((currentRoomX + 12) * GlobalGameConstants.TileSize.X, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y)));
                             end_flag_placed = true;
+
+                            for (int ii = 0; ii < GlobalGameConstants.TilesPerRoomWide; ii++)
+                            {
+                                for (int jj = 0; jj < GlobalGameConstants.TilesPerRoomHigh; jj++)
+                                {
+                                    map.mapMod[(i * GlobalGameConstants.TilesPerRoomWide) + ii, (j * GlobalGameConstants.TilesPerRoomHigh) + jj] = TileMap.WallMod.Elevator;
+                                    map.floorMap[(i * GlobalGameConstants.TilesPerRoomWide) + ii, (j * GlobalGameConstants.TilesPerRoomHigh) + jj] = TileMap.FloorType.Elevator;
+                                }
+                            }
                         }
                     }
                     else
@@ -411,6 +422,10 @@ namespace PattyPetitGiant
             {
                 GameCampaign.Player_Ammunition = 0;
             }
+            if (GameCampaign.Player2_Ammunition < 0)
+            {
+                GameCampaign.Player2_Ammunition = 0;
+            }
 
             if (messageQueueState == PushMessageQueueState.Wait)
             {
@@ -454,7 +469,10 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < entityList.Count; i++)
             {
-                entityList[i].update(currentTime);
+                if (Vector2.Distance(cameraFocus.CenterPoint, entityList[i].CenterPoint) < 800)
+                {
+                    entityList[i].update(currentTime);
+                }
             }
 
             elapsedLevelTime += currentTime.ElapsedGameTime.Milliseconds;
@@ -646,7 +664,7 @@ namespace PattyPetitGiant
             }
             else if (player1Dead)
             {
-                return ScreenStateType.GameSetupMenu;
+                return ScreenStateType.HighScoresState;
             }
             else
             {

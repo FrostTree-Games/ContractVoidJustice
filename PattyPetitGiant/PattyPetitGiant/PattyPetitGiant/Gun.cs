@@ -143,9 +143,9 @@ namespace PattyPetitGiant
         {
             updateBullets(parent, currentTime, parentWorld);
 
-            if (GameCampaign.Player_Ammunition >= 1.0)
+            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= 1.0)
             {
-                if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_1 : GameCampaign.Player2_Item_1) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
                 {
                     fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
@@ -160,13 +160,21 @@ namespace PattyPetitGiant
                         parent.Velocity = Vector2.Zero;
                     }
                 }
-                else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_2 : GameCampaign.Player2_Item_2) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
                 {
                     fireTimer += currentTime.ElapsedGameTime.Milliseconds;
 
                     if (fireTimer > durationBetweenShots)
                     {
-                        GameCampaign.Player_Ammunition -= energy_consumption;
+                        if (parent.Index == InputDevice2.PPG_Player.Player_1)
+                        {
+                            GameCampaign.Player_Ammunition -= energy_consumption;
+                        }
+                        else
+                        {
+                            GameCampaign.Player2_Ammunition -= energy_consumption;
+                        }
+
                         fireTimer = 0;
                         parent.Animation_Time = 0;
                         pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));

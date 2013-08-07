@@ -1,4 +1,5 @@
 derek.png
+elevator.png
 tileTemplate.png
 scifiTemplate.png
 explosionlarge2.png
@@ -46,3 +47,6 @@ prisoncell/1.png
 prisoncell/2.png
 prisoncell/3.png
 laser.png
+elevator/0.png
+pistolFlash.png
+flameSheet.png

@@ -130,11 +130,11 @@ namespace PattyPetitGiant
                 openingSoundMade = true;
             }
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection) && !downPressed)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && !downPressed)
             {
                 downPressed = true;
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection) && downPressed)
+            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && downPressed)
             {
                 downPressed = false;
 
@@ -145,11 +145,11 @@ namespace PattyPetitGiant
                 }
             }
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection) && !upPressed)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && !upPressed)
             {
                 upPressed = true;
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection) && upPressed)
+            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && upPressed)
             {
                 upPressed = false;
 
@@ -162,11 +162,11 @@ namespace PattyPetitGiant
 
             selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
 
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && !confirmPressed)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && !confirmPressed)
             {
                 confirmPressed = true;
             }
-            else if (!InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm) && confirmPressed)
+            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && confirmPressed)
             {
                 confirmPressed = false;
 
@@ -238,6 +238,19 @@ namespace PattyPetitGiant
                         continue;
                     }
 
+                    if (i == 0 && j == 1)
+                    {
+                        sb.DrawString(Game1.tenbyFive10, "HANGAR", new Vector2(i * 128, j * 96) + drawMapTestOffset - new Vector2(0, 18), Color.Cyan);
+                    }
+                    else if (i == 5 && j == 1)
+                    {
+                        sb.DrawString(Game1.tenbyFive10, "BRIDGE", new Vector2(i * 128, j * 96) + drawMapTestOffset - new Vector2(0, 18), Color.Cyan);
+                    }
+                    else
+                    {
+                        sb.DrawString(Game1.tenbyFive10, "ZONE " + i + (j == 0 ? 'A' : ((j == 1) ? 'B' : 'C')), new Vector2(i * 128, j * 96) + drawMapTestOffset - new Vector2(0, 18), Color.Cyan);
+                    }
+
                     if (i == GameCampaign.PlayerLevelProgress && j == GameCampaign.PlayerFloorHeight)
                     {
                         sb.Draw(tex, new Vector2(i * 128, j * 96) + drawMapTestOffset, new Rectangle(48, 0, 48, 48), Color.Blue);
@@ -260,12 +273,8 @@ namespace PattyPetitGiant
             Rectangle rx = XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f);
             rx.X += 575;
             rx.Y += 100;
-            drawBox(sb, rx, Color.Cyan, 2);
-            rx.X -= 3;
-            rx.Y -= 3;
-            rx.Width += 6;
-            rx.Height += 6;
-            drawBox(sb, rx, Color.Cyan, 2);
+
+            sb.Draw(Game1.whitePixel, rx, new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
             drawBox(sb, new Rectangle(755, 500, 305, 200), Color.Cyan, 2);
             sb.DrawString(Game1.testComputerFont, "\n\nPrisoner Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Orange);

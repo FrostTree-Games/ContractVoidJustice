@@ -52,14 +52,14 @@ namespace PattyPetitGiant
                         break;
                 }
 
-                if (GameCampaign.Player_Item_1 == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_1 : GameCampaign.Player2_Item_1) == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
                 {
                     state = HermesSandalsState.Idle;
 
                     parent.Disable_Movement = false;
                     parent.State = Player.playerState.Moving;
                 }
-                else if (GameCampaign.Player_Item_2 == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_2 : GameCampaign.Player2_Item_2) == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
                 {
                     state = HermesSandalsState.Idle;
 
@@ -76,7 +76,7 @@ namespace PattyPetitGiant
             }
             else if (state == HermesSandalsState.WindUp)
             {
-                if (GameCampaign.Player_Item_1 == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_1 : GameCampaign.Player2_Item_1) == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
                 {
                     state = HermesSandalsState.Idle;
 
@@ -85,7 +85,7 @@ namespace PattyPetitGiant
 
                     return;
                 }
-                else if (GameCampaign.Player_Item_2 == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_2 : GameCampaign.Player2_Item_2) == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
                 {
                     state = HermesSandalsState.Idle;
 
@@ -101,9 +101,17 @@ namespace PattyPetitGiant
 
                 if (windUpTime > windUpDuration)
                 {
-                    if (GameCampaign.Player_Ammunition >= 10.0f)
+                    if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= 10.0f)
                     {
-                        GameCampaign.Player_Ammunition -= 10.0f;
+                        if (parent.Index == InputDevice2.PPG_Player.Player_1)
+                        {
+                            GameCampaign.Player_Ammunition -= 10;
+                        }
+                        else
+                        {
+                            GameCampaign.Player2_Ammunition -= 10;
+                        }
+
                         state = HermesSandalsState.Running;
                     }
                     else
@@ -149,14 +157,7 @@ namespace PattyPetitGiant
 
         public void draw(Spine.SkeletonRenderer sb)
         {
-            if (state == HermesSandalsState.WindUp)
-            {
-                //building strings every frame like this is going to allocate a lot of garbage. don't do it on the Xbox 360
-                //later implementations will use some particle or sprite
-#if WINDOWS
-                //sb.DrawString(Game1.font, "charging", windUpDrawPosition, Color.HotPink, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.65f);
-#endif
-            }
+            //
         }
 
         public GlobalGameConstants.itemType ItemType()
