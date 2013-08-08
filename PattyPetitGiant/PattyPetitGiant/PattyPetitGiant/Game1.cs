@@ -168,6 +168,7 @@ namespace PattyPetitGiant
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
+
         }
 
         /// <summary>
@@ -217,7 +218,7 @@ namespace PattyPetitGiant
                 currentGameScreen = ScreenState.SwitchToNewScreen(currentGameScreen.nextLevelState());
             }
 
-            input_device.update();
+            input_device.update(); when i 
             InputDevice2.Update(gameTime);
 
             currentGameScreen.update(gameTime);
