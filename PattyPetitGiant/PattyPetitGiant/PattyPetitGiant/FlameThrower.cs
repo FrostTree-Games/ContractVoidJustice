@@ -75,7 +75,8 @@ namespace PattyPetitGiant
                     flamethrower_state = FlameThrowerState.Fire;
                     break;
                 case FlameThrowerState.Fire:
-                    
+                    parentWorld.Particles.pushFlame(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)parent.Direction_Facing * Math.PI / 2));
+
                     foreach (Entity en in parentWorld.EntityList)
                     {
                         if (en is Enemy)

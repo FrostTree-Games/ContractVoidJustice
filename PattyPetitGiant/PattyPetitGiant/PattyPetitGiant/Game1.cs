@@ -61,6 +61,7 @@ namespace PattyPetitGiant
         public static VideoPlayer videoPlayer = null;
         public static Video levelExitVideo = null;
         public static Video levelEnterVideo = null;
+        public static Video titleScreenVideo = null;
 
         private InputDeviceManager input_device = null;
 
@@ -149,6 +150,7 @@ namespace PattyPetitGiant
 
             levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
             levelEnterVideo = Content.Load<Video>("fmv/levelStart");
+            titleScreenVideo = Content.Load<Video>("fmv/menu.wmv");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();

@@ -41,7 +41,7 @@ namespace PattyPetitGiant
             time_explosion = 0.0f;
             bomb_state = Bomb_State.reset;
             bomb_damage = 5;
-            bombAnim = AnimationLib.getFrameAnimationSet("bombPic");
+            bombAnim = AnimationLib.getFrameAnimationSet("itemBomb");
             explosionAnim = AnimationLib.getFrameAnimationSet("rocketExplode");
             knockback_magnitude = 5.0f;
         }
@@ -148,7 +148,7 @@ namespace PattyPetitGiant
                 case Bomb_State.none:
                     break;
                 default:
-                    bombAnim = AnimationLib.getFrameAnimationSet("bombPic");
+                    bombAnim = AnimationLib.getFrameAnimationSet("itemBomb");
                     hitbox = hitbox_placed;
                     animation_time = 0.0f;
                     break;
