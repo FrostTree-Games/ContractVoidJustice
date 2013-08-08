@@ -39,7 +39,7 @@ namespace PattyPetitGiant
         private Entity entity_found = null;
         private Grenades grenade;
         private Vector2 flame_position;
-        private Vector2 melee_hitbox = new Vector2(48,48);
+        private Vector2 melee_hitbox = new Vector2(96,96);
         private Vector2 melee_position;
         private float angle;
         private float explode_timer;
@@ -97,7 +97,7 @@ namespace PattyPetitGiant
 
             tankAnim = AnimationLib.getFrameAnimationSet("tank");
             tankDeadAnim = AnimationLib.getFrameAnimationSet("tankDead");
-            plasmaExplode = AnimationLib.getFrameAnimationSet("plasmaExplode");
+            plasmaExplode = AnimationLib.getFrameAnimationSet("plasmaExplodeLong");
             tankTurretDeadAnim = AnimationLib.getFrameAnimationSet("tankTurretDead");
             rocketProjectile = AnimationLib.getFrameAnimationSet("rocketProjectile");
         }
@@ -169,7 +169,7 @@ namespace PattyPetitGiant
 
                         if (enemy_found)
                         {
-                            distance = Vector2.Distance(position, entity_found.Position);
+                            distance = Vector2.Distance(CenterPoint, entity_found.CenterPoint);
 
                             tank_hull_animation_time = 0.0f;
 
@@ -360,14 +360,15 @@ namespace PattyPetitGiant
 
                         if (direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Right)
                         {
-                            flame_displacement = new Vector2(120, 0);
+                            flame_displacement = new Vector2(tankAnim.FrameDimensions.X/2, 0);
                         }
                         else
                         {
-                            flame_displacement = new Vector2(0, 120);
+                            flame_displacement = new Vector2(0, tankAnim.FrameDimensions.X/2);
                         }
 
                         parentWorld.Particles.pushFlame(CenterPoint + ((direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Up)?-1*flame_displacement : flame_displacement), (float)((int)direction_facing * Math.PI/2));
+                        parentWorld.Particles.pushFlame(CenterPoint + ((direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Up) ? -1 * flame_displacement : flame_displacement), (float)((int)direction_facing * Math.PI / 2));
 
                         switch(direction_facing)
                         {
@@ -397,7 +398,7 @@ namespace PattyPetitGiant
                         }
 
                         velocity = Vector2.Zero;
-                        if (windup_timer > 500)
+                        if (windup_timer > 1500)
                         {
                             windup_timer = 0.0f;
                             melee_active = false;
@@ -685,7 +686,7 @@ namespace PattyPetitGiant
             }
             private const float max_active_time = 2000.0f;
             public float explosion_timer;
-            private const float max_explosion_timer = 1000.0f;
+            private const float max_explosion_timer = 700.0f;
             public Vector2 CenterPoint { get { return new Vector2(position.X + dimensions.X / 2, position.Y + dimensions.Y / 2); } }
             private Vector2 nextStep_temp;
             private bool on_wall;
