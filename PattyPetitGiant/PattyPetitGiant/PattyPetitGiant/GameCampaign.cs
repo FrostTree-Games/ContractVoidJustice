@@ -223,7 +223,7 @@ namespace PattyPetitGiant
             PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
-            Player_Item_1 = GlobalGameConstants.itemType.FlameThrower;
+            Player_Item_1 = GlobalGameConstants.itemType.BushidoBlade;
             Player_Item_2 = GlobalGameConstants.itemType.ShotGun;
 
             allegiance = 0.5f;

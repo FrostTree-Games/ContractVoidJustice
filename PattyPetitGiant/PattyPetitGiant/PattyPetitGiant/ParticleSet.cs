@@ -106,6 +106,44 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
             }
 
+            public static void NewDotParticle(ref Particle p, Vector2 position, Color c, float direction)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 300 + (float)Game1.rand.NextDouble() * 200f;
+                p.rotation = direction;
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("dotParticle");
+                p.color = c;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+                p.scale = new Vector2(1);
+
+                p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * 1;
+                p.acceleration = new Vector2(0, -5);
+            }
+
+            public static void NewDotParticle2(ref Particle p, Vector2 position, Color c, float direction, float speed)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 1000 + (float)Game1.rand.NextDouble() * 100f;
+                p.rotation = direction;
+                p.rotationSpeed = 0.1f;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("dotParticle");
+                p.color = c;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+                p.scale = new Vector2(1);
+
+                p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * speed;
+                p.acceleration = Vector2.Zero;
+            }
+
             public static void NewPistolFlash(ref Particle p, Vector2 position, Color c, GlobalGameConstants.Direction direction)
             {
                 p.active = true;
@@ -297,6 +335,28 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewFlame(ref particlePool[i], position, Color.White, direction);
+                return;
+            }
+        }
+
+        public void pushDotParticle(Vector2 position, float direction, Color c)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewDotParticle(ref particlePool[i], position, c, direction);
+                return;
+            }
+        }
+
+        public void pushDotParticle2(Vector2 position, float direction, Color c, float speed)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewDotParticle2(ref particlePool[i], position, c, direction, speed);
                 return;
             }
         }

@@ -63,6 +63,10 @@
       <Name>compassOverlay</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\frame\dotParticle.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>dotParticle</Name>
+    </None>
     <None Include="animation\frame\flame1.zpy">
       <Name>flame1</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
