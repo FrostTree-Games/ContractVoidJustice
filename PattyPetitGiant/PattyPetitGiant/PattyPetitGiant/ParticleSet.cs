@@ -296,7 +296,7 @@ namespace PattyPetitGiant
             {
                 if (particlePool[i].active) { continue; }
 
-                Particle.NewFlame(ref particlePool[i], position, Color.Lerp(new Color(255, 200, 0, 200), new Color(255, 100, 0, 200), (float)(Game1.rand.NextDouble())), direction);
+                Particle.NewFlame(ref particlePool[i], position, Color.White, direction);
                 return;
             }
         }
