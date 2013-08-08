@@ -224,7 +224,7 @@ namespace PattyPetitGiant
             PlayerFloorHeight = 1;
 
             Player_Item_1 = GlobalGameConstants.itemType.BushidoBlade;
-            Player_Item_2 = GlobalGameConstants.itemType.ShotGun;
+            Player_Item_2 = GlobalGameConstants.itemType.DungeonMap;
 
             allegiance = 0.5f;
 

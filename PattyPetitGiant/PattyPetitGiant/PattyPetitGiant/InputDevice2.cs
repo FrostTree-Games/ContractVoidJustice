@@ -341,7 +341,6 @@ namespace PattyPetitGiant
                 case PlayerPad.NoPad:
                 default:
                     throw new InvalidOperationException("No Xbox Gamepad index for " + bindings[(int)player].ToString());
-                    break;
             }
         }
 

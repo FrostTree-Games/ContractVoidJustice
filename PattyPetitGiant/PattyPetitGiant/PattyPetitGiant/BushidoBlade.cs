@@ -37,6 +37,10 @@ namespace PattyPetitGiant
         protected int sword_damage;
         protected float knockback_magnitude;
 
+        private float glowTime;
+
+        public static bool showedMessage = false;
+
         public BushidoBlade(Vector2 initial_position)
         {
             position = initial_position;
@@ -47,6 +51,7 @@ namespace PattyPetitGiant
             animation_time = 0.0f;
             bushidoAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
             knockback_magnitude = 1.0f;
+            glowTime = 0;
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -133,6 +138,20 @@ namespace PattyPetitGiant
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
+            if (showedMessage == false)
+            {
+                showedMessage = true;
+
+                parentWorld.pushMessage("The fabled Bushido Blade...");
+                parentWorld.pushMessage("...all strikes by this blade are perfect...");
+                parentWorld.pushMessage("...but one who disgraces its perfection shall die.");
+            }
+
+            glowTime += currentTime.ElapsedGameTime.Milliseconds;
+            parent.LoadAnimation.Skeleton.B = (float)(Math.Sin(glowTime / 500f) / 2 + 0.5);
+            parent.LoadAnimation.Skeleton.R = (float)((-1 * Math.Sin(glowTime / 500f)) / 10 + 0.9);
+            parent.LoadAnimation.Skeleton.G = (float)((-1 * Math.Sin(glowTime / 500f)) / 10 + 0.9);
+
             Vector2 parentVelocity = parent.Velocity * -1;
             if (parentVelocity == Vector2.Zero)
             {
@@ -168,6 +187,7 @@ namespace PattyPetitGiant
                 }
 
                 GameCampaign.Player_Health = 0;
+                parent.LoadAnimation.Skeleton.A = 0;
                 parent.Velocity = Vector2.Zero;
                 position = parent.CenterPoint - new Vector2(24.0f * 3.0f, 24.0f * 3.0f);
                 //animate bushido death

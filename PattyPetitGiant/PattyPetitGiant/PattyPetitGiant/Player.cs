@@ -584,7 +584,11 @@ namespace PattyPetitGiant
         }
 
         public void setAnimationWeapons(AnimationLib.SpineAnimationSet current_skeleton, GlobalGameConstants.Direction direction_facing)
-    {
+        {
+            current_skeleton.Skeleton.B = 1.0f;
+            current_skeleton.Skeleton.G = 1.0f;
+            current_skeleton.Skeleton.R = 1.0f;
+
             switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_1.ItemType() : player_item_2.ItemType())
             {
                 case GlobalGameConstants.itemType.Sword:
