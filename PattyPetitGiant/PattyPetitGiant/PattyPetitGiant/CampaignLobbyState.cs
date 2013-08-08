@@ -40,12 +40,17 @@ namespace PattyPetitGiant
         private bool player1UpPressed = false;
         private bool player1StartPressed = false;
         private bool player1CancelPressed = false;
+        private bool player1RenamePressed = false;
 
         private bool player2RightPressed = false;
         private bool player2LeftPressed = false;
         private bool player2DownPressed = false;
         private bool player2UpPressed = false;
         private bool player2CancelPressed = false;
+        private bool player2RenamePressed = false;
+
+        private IAsyncResult keyboardResult = null;
+        private IAsyncResult keyboard2Result = null;
 
         public static float lineOffset;
         public const float lineMoveSpeed = 0.01f;
@@ -90,7 +95,7 @@ namespace PattyPetitGiant
             {
                 if (slot1.InputDevice != InputDevice2.PlayerPad.NoPad)
                 {
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Cancel))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Cancel) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player1CancelPressed = true;
                     }
@@ -105,7 +110,7 @@ namespace PattyPetitGiant
 
                 if (slot2.InputDevice != InputDevice2.PlayerPad.NoPad)
                 {
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.Cancel))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.Cancel) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player2CancelPressed = true;
                     }
@@ -130,7 +135,7 @@ namespace PattyPetitGiant
 
                         InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, pressed);
                     }
-                    else if (slot2.InputDevice == InputDevice2.PlayerPad.NoPad)
+                    else if (slot2.InputDevice == InputDevice2.PlayerPad.NoPad && (keyboardResult == null && keyboard2Result == null))
                     {
                         if (pressed != slot1.InputDevice)
                         {
@@ -156,7 +161,7 @@ namespace PattyPetitGiant
             {
                 if (slot1.InputDevice != InputDevice2.PlayerPad.NoPad)
                 {
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.RightDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.RightDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player1RightPressed = true;
                     }
@@ -170,7 +175,7 @@ namespace PattyPetitGiant
                         if (slot1.Color == 0) { slot1.Color = 5; }
                     }
 
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player1LeftPressed = true;
                     }
@@ -184,7 +189,7 @@ namespace PattyPetitGiant
                         if (slot1.Color == 2) { slot1.Color = 3; }
                     }
 
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player1DownPressed = true;
                     }
@@ -198,7 +203,7 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player1UpPressed = true;
                     }
@@ -211,11 +216,55 @@ namespace PattyPetitGiant
                             slot1.Color -= 3;
                         }
                     }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem1) && (keyboardResult == null && keyboard2Result == null))
+                    {
+                        player1RenamePressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem1) && player1RenamePressed)
+                    {
+                        player1RenamePressed = false;
+
+                        if (keyboardResult == null)
+                        {
+                            bool noIndex = false;
+                            PlayerIndex p = PlayerIndex.One;
+
+                            try
+                            {
+                                p = InputDevice2.GetPlayerGamePadIndex(InputDevice2.PPG_Player.Player_1);
+                            }
+                            catch (Exception)
+                            {
+                                slot1.Name = randomNames[Game1.rand.Next() % randomNames.Length];
+                                noIndex = true;
+                            }
+
+                            if (!noIndex)
+                            {
+#if XBOX
+                                keyboardResult = Guide.BeginShowKeyboardInput(p, "Rename " + slot1.Name, "Enter a new name to reassign to the current character.", slot1.Name, null, null);
+# elif WINDOWS
+                                keyboardResult = Guide.BeginShowKeyboardInput(PlayerIndex.One, "Rename " + slot1.Name, "Enter a new name to reassign to the current character.", slot1.Name, null, null);
+#endif
+                            }
+                        }
+                    }
+
+                    if (keyboardResult != null && keyboardResult.IsCompleted)
+                    {
+                        string output = Guide.EndShowKeyboardInput(keyboardResult);
+                        if (output != null && output.Length > 0)
+                        {
+                            slot1.Name = output;
+                        }
+                        keyboardResult = null;
+                    }
                 }
 
                 if (slot2.InputDevice != InputDevice2.PlayerPad.NoPad)
                 {
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.RightDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.RightDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player2RightPressed = true;
                     }
@@ -229,7 +278,7 @@ namespace PattyPetitGiant
                         if (slot2.Color == 0) { slot2.Color = 5; }
                     }
 
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.LeftDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.LeftDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player2LeftPressed = true;
                     }
@@ -243,7 +292,7 @@ namespace PattyPetitGiant
                         if (slot2.Color == 2) { slot2.Color = 3; }
                     }
 
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.DownDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.DownDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player2DownPressed = true;
                     }
@@ -257,7 +306,7 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.UpDirection))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.UpDirection) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player2UpPressed = true;
                     }
@@ -270,6 +319,50 @@ namespace PattyPetitGiant
                             slot2.Color -= 3;
                         }
                     }
+
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.SwitchItem1) && (keyboardResult == null && keyboard2Result == null))
+                    {
+                        player2RenamePressed = true;
+                    }
+                    else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.SwitchItem1) && player2RenamePressed)
+                    {
+                        player2RenamePressed = false;
+
+                        if (keyboardResult == null)
+                        {
+                            bool noIndex = false;
+                            PlayerIndex p = PlayerIndex.Two;
+
+                            try
+                            {
+                                p = InputDevice2.GetPlayerGamePadIndex(InputDevice2.PPG_Player.Player_2);
+                            }
+                            catch (Exception)
+                            {
+                                slot1.Name = randomNames[Game1.rand.Next() % randomNames.Length];
+                                noIndex = true;
+                            }
+
+                            if (!noIndex)
+                            {
+#if XBOX
+                                keyboard2Result = Guide.BeginShowKeyboardInput(p, "Rename " + slot2.Name, "Enter a new name to reassign to the current character.", slot2.Name, null, null);
+# elif WINDOWS
+                                keyboard2Result = Guide.BeginShowKeyboardInput(PlayerIndex.One, "Rename " + slot2.Name, "Enter a new name to reassign to the current character.", slot2.Name, null, null);
+#endif
+                            }
+                        }
+                    }
+
+                    if (keyboard2Result != null && keyboard2Result.IsCompleted)
+                    {
+                        string output = Guide.EndShowKeyboardInput(keyboard2Result);
+                        if (output != null && output.Length > 0)
+                        {
+                            slot2.Name = output;
+                        }
+                        keyboard2Result = null;
+                    }
                 }
             }
 
@@ -277,7 +370,7 @@ namespace PattyPetitGiant
             {
                 if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad)
                 {
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Cancel))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Cancel) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player1CancelPressed = true;
                     }
@@ -296,7 +389,7 @@ namespace PattyPetitGiant
             {
                 if (slot1.InputDevice != InputDevice2.PlayerPad.NoPad)
                 {
-                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton))
+                    if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton) && (keyboardResult == null && keyboard2Result == null))
                     {
                         player1StartPressed = true;
                     }
@@ -389,17 +482,17 @@ namespace PattyPetitGiant
 
             if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad)
             {
-                sb.DrawString(Game1.tenbyFive14, addAPlayerMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(addAPlayerMessage) / 2, new Color(1, 1, 1, (float)Math.Abs(Math.Sin(timePassed / 600f))));
+                sb.DrawString(Game1.tenbyFive14, addAPlayerMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 550) - Game1.tenbyFive14.MeasureString(addAPlayerMessage) / 2, new Color(1, 1, 1, (float)Math.Abs(Math.Sin(timePassed / 600f))));
             }
             else
             {
                 if (slot1.InputDevice != InputDevice2.PlayerPad.Keyboard)
                 {
-                    sb.DrawString(Game1.tenbyFive14, pressStartToPlayMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(pressStartToPlayMessage) / 2, Color.White);
+                    sb.DrawString(Game1.tenbyFive14, pressStartToPlayMessage, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 550) - Game1.tenbyFive14.MeasureString(pressStartToPlayMessage) / 2, Color.White);
                 }
                 else
                 {
-                    sb.DrawString(Game1.tenbyFive14, pressEnterToPlayMessage + InputDevice2.KeyConfig.PauseButton.ToString() + ".", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 500) - Game1.tenbyFive14.MeasureString(pressEnterToPlayMessage + InputDevice2.KeyConfig.PauseButton.ToString() + ".") / 2, Color.White);
+                    sb.DrawString(Game1.tenbyFive14, pressEnterToPlayMessage + InputDevice2.KeyConfig.PauseButton.ToString() + ".", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 550) - Game1.tenbyFive14.MeasureString(pressEnterToPlayMessage + InputDevice2.KeyConfig.PauseButton.ToString() + ".") / 2, Color.White);
                 }
             }
 
@@ -445,9 +538,14 @@ namespace PattyPetitGiant
                 {
                     if (i == 3) { drawY += 80 + 8; }
                     drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 + 16 + 16) + ((80 + 8) * (i % 3)), drawY, 80, 80), i == slot2.Color ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);
-                    sb.Draw(Game1.whitePixel, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 + 16 + 16) + ((80 + 8) * (i % 3)) + 6, drawY + 8, 66, 66), i == slot1.Color ? getSquareColor(i) : Color.Lerp(getSquareColor(i), Color.Transparent, 0.75f));
+                    sb.Draw(Game1.whitePixel, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 + 16 + 16) + ((80 + 8) * (i % 3)) + 6, drawY + 8, 66, 66), i == slot2.Color ? getSquareColor(i) : Color.Lerp(getSquareColor(i), Color.Transparent, 0.75f));
                 }
             }
+
+#if XBOX
+            AnimationLib.getFrameAnimationSet("gamepadX").drawAnimationFrame(0, sb, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 442) - (Game1.tenbyFive14.MeasureString("Rename Character") * new Vector2(0.5f, 0)) - new Vector2(38, 6), new Vector2(0.75f), 0);
+            sb.DrawString(Game1.tenbyFive14, "Rename Character", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 442) - (Game1.tenbyFive14.MeasureString("Rename Character") * new Vector2(0.5f, 0)), Color.White);
+#endif
 
             sb.End();
         }
