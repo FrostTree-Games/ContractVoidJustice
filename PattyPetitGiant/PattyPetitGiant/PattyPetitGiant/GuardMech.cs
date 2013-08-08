@@ -38,6 +38,7 @@ namespace PattyPetitGiant
         private EnemyComponents component = null;
         private Entity entity_found = null;
         private Grenades grenade;
+        private Vector2 flame_position;
         private Vector2 melee_hitbox = new Vector2(48,48);
         private Vector2 melee_position;
         private float angle;
@@ -56,6 +57,7 @@ namespace PattyPetitGiant
             melee_position = Vector2.Zero;
             dimensions = new Vector2(96, 120);
             velocity = new Vector2(0.8f, 0.0f);
+            flame_position = Vector2.Zero;
 
             windup_timer = 0.0f;
             angle = 0.0f;
@@ -171,9 +173,9 @@ namespace PattyPetitGiant
 
                             tank_hull_animation_time = 0.0f;
 
-                            if (Math.Abs(distance) < 300)
+                            if (Math.Abs(distance) < range_distance)
                             {
-                                if (Math.Abs(distance) > 192 && Math.Abs(distance) < 600)
+                                if (Math.Abs(distance) > 192 && Math.Abs(distance) < range_distance)
                                 {
                                     mech_state = MechState.Firing;
                                 }
@@ -353,7 +355,20 @@ namespace PattyPetitGiant
                     case MechState.Melee:
                         //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
-                        
+
+                        Vector2 flame_displacement = Vector2.Zero;
+
+                        if (direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Right)
+                        {
+                            flame_displacement = new Vector2(120, 0);
+                        }
+                        else
+                        {
+                            flame_displacement = new Vector2(0, 120);
+                        }
+
+                        parentWorld.Particles.pushFlame(CenterPoint + ((direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Up)?-1*flame_displacement : flame_displacement), (float)((int)direction_facing * Math.PI/2));
+
                         switch(direction_facing)
                         {
                             case GlobalGameConstants.Direction.Right:
@@ -679,7 +694,7 @@ namespace PattyPetitGiant
             {
                 this.position = parent_position;
                 dimensions = new Vector2(16, 16);
-                velocity = new Vector2((float)(4*Math.Cos(angle)), (float)(4*Math.Sin(angle)));
+                velocity = new Vector2((float)(8*Math.Cos(angle)), (float)(8*Math.Sin(angle)));
                 state = GrenadeState.Travel;
 
                 active = false;

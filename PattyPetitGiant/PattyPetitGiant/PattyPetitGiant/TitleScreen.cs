@@ -15,6 +15,7 @@ namespace PattyPetitGiant
 
         private enum titleScreens
         {
+            introScreen,
             logoScreen,
             menuScreen,
             playScreen
@@ -90,6 +91,8 @@ namespace PattyPetitGiant
         private float model_rotation_y = 0.0f;
         private float model_rotation_x = 0.0f;
 
+        private Texture2D videoTexture;
+
         private int menu_item_selected = 0;
 
         private Model myModel;
@@ -134,7 +137,7 @@ namespace PattyPetitGiant
 
             screen = titleScreens.logoScreen;
 
-            fade_state = FadeState.stay;
+            fade_state = FadeState.fadeIn;
 
             myModel = model;
             ship_texture = texture;
@@ -160,31 +163,24 @@ namespace PattyPetitGiant
 
             switch(screen)
             {
-                /*case titleScreens.introScreen:
-                    if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.AnyButton) && !confirm_pressed)
+                case titleScreens.introScreen:
+                    if (fade > max_fade_timer)
                     {
-                        confirm_pressed = true;
                         fade = 0.0f;
-                        fade_state = FadeState.fadeOut;
-                    }
-                    else if(confirm_pressed)
-                    {
-                        if(fade > max_fade_timer)
+                        fade_state = (FadeState)(((int)fade_state + 1) % 3);
+                        if (fade_state == FadeState.stay)
                         {
                             fade = 0.0f;
-                            screen = titleScreens.logoScreen;
-                            confirm_pressed = false;
-                            fade_state = FadeState.fadeIn;
+                            screen = titleScreens.menuScreen;
                         }
                     }
-                    break;*/
+                    break;
                 /**************************************************************************************************************************/
                 case titleScreens.logoScreen:
                     if (fade > max_fade_timer)
                     {
                         fade = 0.0f;
                         fade_state = (FadeState)(((int)fade_state+1)%3);
-                        Console.WriteLine(fade_state);
                         if (fade_state == FadeState.fadeIn)
                         {
                             fade = 0.0f;
@@ -199,6 +195,13 @@ namespace PattyPetitGiant
                         BackGroundAudio.playSong("Menu", true);
                         music_playing = true;
                     }
+
+                    if (Game1.videoPlayer.State == Microsoft.Xna.Framework.Media.MediaState.Stopped)
+                    {
+                        Game1.videoPlayer.IsLooped = true;
+                        Game1.videoPlayer.Play(Game1.titleScreenVideo);
+                    }
+
 
                     if (fade > max_fade_menu_timer)
                     {
@@ -315,19 +318,32 @@ namespace PattyPetitGiant
             AnimationLib.GraphicsDevice.Clear(Color.Black);
             
             sb.Begin();
+            if (screen == titleScreens.menuScreen || screen == titleScreens.playScreen)
+            {
+                if (Game1.videoPlayer.State != Microsoft.Xna.Framework.Media.MediaState.Stopped)
+                {
+                    videoTexture = Game1.videoPlayer.GetTexture();
+                }
 
+                if (videoTexture != null)
+                {
+                    sb.Draw(videoTexture, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), fadeColour);
+                }
+            }
             //sb.Draw(Game1.whitePixel,new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f
             switch (screen)
             {
-                /*case titleScreens.introScreen:
-                    sb.DrawString(Game1.font, "PattyPetitGiant", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), fadeColour);
-                    sb.DrawString(Game1.font, "Press Any Key to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2 + 32), fadeColour);
-                    break;*/
+                case titleScreens.introScreen:
+                    sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    break;
                 case titleScreens.logoScreen:
                     sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     break;
                 case titleScreens.menuScreen:
-                    sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
+                    //sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
+
+                    
+
                     sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
                     
                     for (int i = 0; i < menu_list.Count(); i++)
@@ -366,7 +382,7 @@ namespace PattyPetitGiant
                     }*/
                     break;
                 default:
-                    sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
+                    //sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
                     sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
                     
                     for (int i = 0; i < menu_list.Count(); i++)
