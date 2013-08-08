@@ -151,10 +151,10 @@ namespace PattyPetitGiant
                 p.rotationSpeed = (float)(Game1.rand.NextDouble() * 0.01);
                 p.animationTime = 0;
                 p.color = c;
-                float offset = (float)(Game1.rand.NextDouble() * 1.41f - 0.75f);
+                float offset = (float)(Game1.rand.NextDouble() * 1.0f - 0.5f);
                 p.velocity = new Vector2((float)Math.Cos(direction + offset), (float)Math.Sin(direction + offset)) * flameInitalSpeed;
                 p.acceleration = Vector2.Zero;
-                p.scale = new Vector2(0.5f);
+                p.scale = new Vector2(0.7f);
             }
         }
 
@@ -296,7 +296,7 @@ namespace PattyPetitGiant
             {
                 if (particlePool[i].active) { continue; }
 
-                Particle.NewFlame(ref particlePool[i], position, Color.Lerp(Color.Red, Color.Orange, (float)(Game1.rand.NextDouble())), direction);
+                Particle.NewFlame(ref particlePool[i], position, Color.Lerp(new Color(255, 200, 0, 200), new Color(255, 100, 0, 200), (float)(Game1.rand.NextDouble())), direction);
                 return;
             }
         }
