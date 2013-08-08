@@ -126,7 +126,7 @@ namespace PattyPetitGiant
                 {
                     if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad)
                     {
-                        slot1 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], Game1.rand.Next() % CampaignLoadout.NumberOfColors);
+                        slot1 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], 0);
 
                         InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, pressed);
                     }
@@ -134,7 +134,7 @@ namespace PattyPetitGiant
                     {
                         if (pressed != slot1.InputDevice)
                         {
-                            slot2 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], Game1.rand.Next() % CampaignLoadout.NumberOfColors);
+                            slot2 = new CampaignLoadout(pressed, randomNames[Game1.rand.Next() % randomNames.Length], 0);
 
                             InputDevice2.LockController(InputDevice2.PPG_Player.Player_2, pressed);
                         }
@@ -334,6 +334,37 @@ namespace PattyPetitGiant
             drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
         }
 
+        private Color getSquareColor(int colorNumber)
+        {
+            Color squareColor = Color.White;
+
+            switch (colorNumber)
+            {
+                case 0:
+                    squareColor = Color.Green;
+                    break;
+                case 1:
+                    squareColor = Color.Red;
+                    break;
+                case 2:
+                    squareColor = Color.Purple;
+                    break;
+                case 3:
+                    squareColor = Color.Blue;
+                    break;
+                case 4:
+                    squareColor = Color.Cyan;
+                    break;
+                case 5:
+                    squareColor = Color.Brown;
+                    break;
+                default:
+                    break;
+            }
+
+            return squareColor;
+        }
+
         public override void render(SpriteBatch sb)
         {
             AnimationLib.GraphicsDevice.Clear(Color.Black);
@@ -390,8 +421,12 @@ namespace PattyPetitGiant
                 int drawY = 96 + 64;
                 for (int i = 0; i < CampaignLoadout.NumberOfColors; i++)
                 {
+                    Color squareColor = Color.White;
+                    //
+
                     if (i == 3) { drawY += 80 + 8; }
                     drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 306 + 16) + ((80 + 8) * (i % 3)), drawY, 80, 80), i == slot1.Color ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);
+                    sb.Draw(Game1.whitePixel, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 306 + 16) + ((80 + 8) * (i % 3)) + 6, drawY + 8, 66, 66), i == slot1.Color ? getSquareColor(i) : Color.Lerp(getSquareColor(i), Color.Transparent, 0.75f));
                 }
             }
 
@@ -410,6 +445,7 @@ namespace PattyPetitGiant
                 {
                     if (i == 3) { drawY += 80 + 8; }
                     drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 + 16 + 16) + ((80 + 8) * (i % 3)), drawY, 80, 80), i == slot2.Color ? Color.LightBlue : new Color(173, 216, 230, 80), 2.0f);
+                    sb.Draw(Game1.whitePixel, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 + 16 + 16) + ((80 + 8) * (i % 3)) + 6, drawY + 8, 66, 66), i == slot1.Color ? getSquareColor(i) : Color.Lerp(getSquareColor(i), Color.Transparent, 0.75f));
                 }
             }
 
