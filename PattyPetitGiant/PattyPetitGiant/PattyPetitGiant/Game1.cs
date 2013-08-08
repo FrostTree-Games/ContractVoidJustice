@@ -150,7 +150,7 @@ namespace PattyPetitGiant
 
             levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
             levelEnterVideo = Content.Load<Video>("fmv/levelStart");
-            titleScreenVideo = Content.Load<Video>("fmv/menu.wmv");
+            titleScreenVideo = Content.Load<Video>("fmv/menu");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
@@ -220,7 +220,7 @@ namespace PattyPetitGiant
                 currentGameScreen = ScreenState.SwitchToNewScreen(currentGameScreen.nextLevelState());
             }
 
-            input_device.update(); when i 
+            input_device.update(); 
             InputDevice2.Update(gameTime);
 
             currentGameScreen.update(gameTime);
