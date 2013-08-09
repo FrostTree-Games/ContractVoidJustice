@@ -186,6 +186,15 @@ namespace PattyPetitGiant
                     parentWorld.Particles.pushDotParticle2(parent.CenterPoint, (float)(Math.PI / 2), Color.YellowGreen, 5 + (i / 10.0f));
                 }
 
+                for (int i = 0; i < 10; i++)
+                {
+                    parentWorld.Particles.pushGib(parent.CenterPoint);
+
+                    parentWorld.Particles.pushBloodParticle(parent.CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(parent.CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(parent.CenterPoint);
+                }
+
                 GameCampaign.Player_Health = 0;
                 parent.LoadAnimation.Skeleton.A = 0;
                 parent.Velocity = Vector2.Zero;

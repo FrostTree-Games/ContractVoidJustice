@@ -242,11 +242,12 @@ namespace PattyPetitGiant
             double delta = currentTime.ElapsedGameTime.Milliseconds;
 
             /*
-            //flame particle testing
-            for (int i = 0; i < 3; i++)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                parentWorld.Particles.pushFlame(new Vector2(LoadAnimation.Skeleton.FindBone(Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, LoadAnimation.Skeleton.FindBone(Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)direction_facing * Math.PI / 2));
-            }*/
+                parentWorld.Particles.pushGib(CenterPoint);
+            }
+             */
+               
 
             if (index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Health <= 0.0f : GameCampaign.Player2_Health <= 0.0f)
             {
