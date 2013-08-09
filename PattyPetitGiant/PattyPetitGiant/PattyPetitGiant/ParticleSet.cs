@@ -33,6 +33,8 @@ namespace PattyPetitGiant
             public AnimationLib.FrameAnimationSet animation;
             public Color color;
             public Vector2 scale;
+            public bool isGib;
+            public Vector2 originalPosition;
 
             public static void NewBloodParticle(ref Particle p, Vector2 position)
             {
@@ -46,6 +48,8 @@ namespace PattyPetitGiant
                 p.position = position;
                 p.color = Color.White;
                 p.scale = new Vector2(1);
+                p.isGib = false;
+                p.originalPosition = p.position;
 
                 float direction = (float)((-Math.PI * 3 / 8) - (Game1.rand.NextDouble() * Math.PI / 4));
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
@@ -66,6 +70,8 @@ namespace PattyPetitGiant
                 p.velocity = Vector2.Zero;
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
+                p.isGib = false;
+                p.originalPosition = p.position;
             }
 
             public static void NewDirectedParticle(ref Particle p, Vector2 position, Color c, float direction)
@@ -82,6 +88,8 @@ namespace PattyPetitGiant
                 p.velocity = Vector2.Zero;
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
+                p.isGib = false;
+                p.originalPosition = p.position;
 
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
                 p.acceleration = Vector2.Zero;
@@ -101,8 +109,52 @@ namespace PattyPetitGiant
                 p.velocity = Vector2.Zero;
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
+                p.isGib = false;
+                p.originalPosition = p.position;
 
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
+                p.acceleration = Vector2.Zero;
+            }
+
+            public static void NewDotParticle(ref Particle p, Vector2 position, Color c, float direction)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 300 + (float)Game1.rand.NextDouble() * 200f;
+                p.rotation = direction;
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("dotParticle");
+                p.color = c;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+                p.scale = new Vector2(1);
+                p.isGib = false;
+                p.originalPosition = p.position;
+
+                p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * 1;
+                p.acceleration = new Vector2(0, -5);
+            }
+
+            public static void NewDotParticle2(ref Particle p, Vector2 position, Color c, float direction, float speed)
+            {
+                p.active = true;
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 1000 + (float)Game1.rand.NextDouble() * 100f;
+                p.rotation = direction;
+                p.rotationSpeed = 0.1f;
+                p.animationTime = 0;
+                p.animation = AnimationLib.getFrameAnimationSet("dotParticle");
+                p.color = c;
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+                p.scale = new Vector2(1);
+                p.isGib = false;
+                p.originalPosition = p.position;
+
+                p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * speed;
                 p.acceleration = Vector2.Zero;
             }
 
@@ -120,6 +172,8 @@ namespace PattyPetitGiant
                 p.velocity = Vector2.Zero;
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
+                p.isGib = false;
+                p.originalPosition = p.position;
 
                 switch (direction)
                 {
@@ -155,6 +209,27 @@ namespace PattyPetitGiant
                 p.velocity = new Vector2((float)Math.Cos(direction + offset), (float)Math.Sin(direction + offset)) * flameInitalSpeed;
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(0.7f);
+                p.isGib = false;
+                p.originalPosition = p.position;
+            }
+
+            public static void NewGib(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.animation = AnimationLib.getFrameAnimationSet(Game1.rand.Next() % 8 != 0 ? "GibSmallGeneric" : (Game1.rand.Next() % 2 == 0 ? "heartIdle" : "lungIdle"));
+                p.position = position - (p.animation.FrameDimensions * 0.7f) / 2;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 3000f;
+                p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+                p.rotationSpeed = (float)(Game1.rand.NextDouble() * 0.01);
+                p.animationTime = 0;
+                p.color = Color.White;
+                float offset = (float)(Game1.rand.NextDouble() * 1.0f - 0.5f);
+                p.velocity = new Vector2((float)(Game1.rand.NextDouble() * 150 - 75), -280f + (float)(Game1.rand.NextDouble() * 50));
+                p.acceleration = new Vector2(0, 500);
+                p.scale = new Vector2(0.7f);
+                p.isGib = true;
+                p.originalPosition = p.position;
             }
         }
 
@@ -166,11 +241,59 @@ namespace PattyPetitGiant
             particlePool = new Particle[particlePoolSize];
         }
 
+        private void updateGib(GameTime currentTime, ref Particle p)
+        {
+            p.timeAlive += currentTime.ElapsedGameTime.Milliseconds;
+            if (p.timeAlive > p.maxTimeAlive)
+            {
+                pushBloodParticle(p.position);
+                if (Game1.rand.Next() % 4 == 0)
+                {
+                    pushBloodParticle(p.position);
+                }
+
+                p.active = false;
+                return;
+            }
+
+            p.animationTime += currentTime.ElapsedGameTime.Milliseconds;
+
+            p.position += p.velocity * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+
+            if (p.velocity.Y > 0 && p.position.Y - p.originalPosition.Y > 0)
+            {
+                p.position -= p.velocity * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+                p.velocity.Y *= -0.5f;
+                p.velocity.X *= 0.8f;
+                p.position += p.velocity * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+
+                if (Game1.rand.Next() % 10 == 0)
+                {
+                    pushBloodParticle(p.position);
+                }
+            }
+
+            p.velocity += p.acceleration * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+
+            if (p.velocity.Length() < 30f && Math.Abs(p.position.Y - p.originalPosition.Y) < 2f)
+            {
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+            }
+        }
+
         public void update(GameTime currentTime)
         {
             for (int i = 0; i < particlePoolSize; i++)
             {
                 if (!particlePool[i].active) { continue; }
+
+                if (particlePool[i].isGib)
+                {
+                    updateGib(currentTime, ref particlePool[i]);
+
+                    continue;
+                }
 
                 particlePool[i].timeAlive += currentTime.ElapsedGameTime.Milliseconds;
                 if (particlePool[i].timeAlive > particlePool[i].maxTimeAlive)
@@ -297,6 +420,39 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewFlame(ref particlePool[i], position, Color.White, direction);
+                return;
+            }
+        }
+
+        public void pushDotParticle(Vector2 position, float direction, Color c)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewDotParticle(ref particlePool[i], position, c, direction);
+                return;
+            }
+        }
+
+        public void pushDotParticle2(Vector2 position, float direction, Color c, float speed)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewDotParticle2(ref particlePool[i], position, c, direction, speed);
+                return;
+            }
+        }
+
+        public void pushGib(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewGib(ref particlePool[i], position);
                 return;
             }
         }

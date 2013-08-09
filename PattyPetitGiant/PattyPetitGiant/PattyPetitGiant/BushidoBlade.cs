@@ -37,6 +37,10 @@ namespace PattyPetitGiant
         protected int sword_damage;
         protected float knockback_magnitude;
 
+        private float glowTime;
+
+        public static bool showedMessage = false;
+
         public BushidoBlade(Vector2 initial_position)
         {
             position = initial_position;
@@ -47,6 +51,7 @@ namespace PattyPetitGiant
             animation_time = 0.0f;
             bushidoAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
             knockback_magnitude = 1.0f;
+            glowTime = 0;
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
@@ -82,6 +87,11 @@ namespace PattyPetitGiant
                 }
                 if (item_state_time > delay)
                 {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        parentWorld.Particles.pushDotParticle(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lHand" : "rHand").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lHand" : "rHand").WorldY), (float)(Game1.rand.NextDouble() * 2 * Math.PI), Color.Lerp(Color.Yellow, Color.YellowGreen, (float)Game1.rand.NextDouble()));
+                    }
+
                     bushido_state = BushidoState.slash;
                     sword_swing = true;
                 }
@@ -93,6 +103,20 @@ namespace PattyPetitGiant
                         {
                             if (hitTest(en))
                             {
+                                Vector2 betweenVector = en.CenterPoint - parent.CenterPoint;
+                                Vector2 betweenVectorNormal = Vector2.Normalize(betweenVector);
+
+                                for (int i = 0; i < 6; i++)
+                                {
+                                    parentWorld.Particles.pushDirectedParticle2(parent.CenterPoint + (betweenVector / 2), Color.Yellow, (float)(Math.PI * 2 * (i / 6f)));
+                                }
+
+                                for (int i = 0; i < 30; i++)
+                                {
+                                    parentWorld.Particles.pushDotParticle2(parent.CenterPoint + (betweenVector / 2), (float)(Math.Atan2(betweenVector.Y, betweenVector.X) + Math.PI / 2), Color.YellowGreen, 5 + (i / 10.0f));
+                                    parentWorld.Particles.pushDotParticle2(parent.CenterPoint + (betweenVector / 2), (float)(Math.Atan2(betweenVector.Y, betweenVector.X) - Math.PI / 2), Color.YellowGreen, 5 + (i / 10.0f));
+                                }
+
                                 Vector2 direction = en.CenterPoint - parent.CenterPoint;
                                 en.knockBack(direction, knockback_magnitude, sword_damage, parent);
                                 enemy_explode = true;
@@ -114,6 +138,36 @@ namespace PattyPetitGiant
 
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
+            if (showedMessage == false)
+            {
+                showedMessage = true;
+
+                parentWorld.pushMessage("The fabled Bushido Blade...");
+                parentWorld.pushMessage("...all strikes by this blade are perfect...");
+                parentWorld.pushMessage("...but one who disgraces its perfection shall die.");
+            }
+
+            glowTime += currentTime.ElapsedGameTime.Milliseconds;
+            parent.LoadAnimation.Skeleton.B = (float)(Math.Sin(glowTime / 500f) / 2 + 0.5);
+            parent.LoadAnimation.Skeleton.R = (float)((-1 * Math.Sin(glowTime / 500f)) / 10 + 0.9);
+            parent.LoadAnimation.Skeleton.G = (float)((-1 * Math.Sin(glowTime / 500f)) / 10 + 0.9);
+
+            Vector2 parentVelocity = parent.Velocity * -1;
+            if (parentVelocity == Vector2.Zero)
+            {
+                parentVelocity = new Vector2(0, -1);
+            }
+            double randOffset = (Game1.rand.NextDouble() * Math.PI / 2) - (Math.PI / 4);
+
+            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_1 : GameCampaign.Player2_Item_1) == ItemType())
+            {
+                parentWorld.Particles.pushDotParticle(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lHand" : "rHand").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lHand" : "rHand").WorldY), (float)(Math.Atan2(parentVelocity.Y, parentVelocity.X) + randOffset), Color.Lerp(Color.Yellow, Color.YellowGreen, (float)Game1.rand.NextDouble()));
+            }
+            else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_2 : GameCampaign.Player2_Item_2) == ItemType())
+            {
+                parentWorld.Particles.pushDotParticle(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rHand" : "lHand").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rHand" : "lHand").WorldY), (float)(Math.Atan2(parentVelocity.Y, parentVelocity.X)), Color.Lerp(Color.Yellow, Color.YellowGreen, (float)Game1.rand.NextDouble()));
+            }
+
             if (GameCampaign.Player_Health != player_health && GameCampaign.Player_Health > 0)
             {
                 bushido_state = BushidoState.bushido;
@@ -121,7 +175,28 @@ namespace PattyPetitGiant
 
             if (bushido_state == BushidoState.bushido)
             {
+                for (int i = 0; i < 6; i++)
+                {
+                    parentWorld.Particles.pushDirectedParticle2(parent.CenterPoint, Color.Yellow, (float)(Math.PI * 2 * (i / 6f)));
+                }
+
+                for (int i = 0; i < 30; i++)
+                {
+                    parentWorld.Particles.pushDotParticle2(parent.CenterPoint, 0, Color.YellowGreen, 5 + (i / 10.0f));
+                    parentWorld.Particles.pushDotParticle2(parent.CenterPoint, (float)(Math.PI / 2), Color.YellowGreen, 5 + (i / 10.0f));
+                }
+
+                for (int i = 0; i < 10; i++)
+                {
+                    parentWorld.Particles.pushGib(parent.CenterPoint);
+
+                    parentWorld.Particles.pushBloodParticle(parent.CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(parent.CenterPoint);
+                    parentWorld.Particles.pushBloodParticle(parent.CenterPoint);
+                }
+
                 GameCampaign.Player_Health = 0;
+                parent.LoadAnimation.Skeleton.A = 0;
                 parent.Velocity = Vector2.Zero;
                 position = parent.CenterPoint - new Vector2(24.0f * 3.0f, 24.0f * 3.0f);
                 //animate bushido death

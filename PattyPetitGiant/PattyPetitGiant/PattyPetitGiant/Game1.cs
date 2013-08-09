@@ -82,6 +82,9 @@ namespace PattyPetitGiant
             //graphics.SynchronizeWithVerticalRetrace = false;
             //graphics.ApplyChanges();
 #endif 
+            // for onscreen keyboard and profiles
+            GamerServicesComponent GSC = new GamerServicesComponent(this);
+            Components.Add(GSC); 
 
             Content.RootDirectory = "Content";
         }

@@ -322,6 +322,28 @@ namespace PattyPetitGiant
             return false;
         }
 
+        /// <summary>
+        /// Returns the GamePad index for system calls.
+        /// </summary>
+        /// <param name="player">Player requested.</param>
+        /// <returns>PlayerIndex for specified player. Throws an exception for unindexed pads and the Keyboard.</returns>
+        public static PlayerIndex GetPlayerGamePadIndex(PPG_Player player)
+        {
+            switch (bindings[(int)player])
+            {
+                case PlayerPad.GamePad1:
+                case PlayerPad.GamePad2:
+                case PlayerPad.GamePad3:
+                case PlayerPad.GamePad4:
+                    return (PlayerIndex)bindings[(int)player];
+                    break;
+                case PlayerPad.Keyboard:
+                case PlayerPad.NoPad:
+                default:
+                    throw new InvalidOperationException("No Xbox Gamepad index for " + bindings[(int)player].ToString());
+            }
+        }
+
         public static GlobalGameConstants.Direction PlayerAnalogStickDirection(PPG_Player player)
         {
             if (bindings[(int)player] == PlayerPad.Keyboard)

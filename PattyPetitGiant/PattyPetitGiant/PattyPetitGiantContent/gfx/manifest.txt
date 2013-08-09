@@ -50,3 +50,7 @@ laser.png
 elevator/0.png
 pistolFlash.png
 flameSheet.png
+brainSheet.png
+GibSmallGenericSheet.png
+heartSheet.png
+lungSheet.png

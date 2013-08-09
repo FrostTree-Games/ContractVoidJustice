@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <name>dotParticle</name>
+  <sheetName>testParticles.png</sheetName>
+  <initalX>0</initalX>
+  <initalY>48</initalY>
+  <offsetX>0</offsetX>
+  <offsetY>0</offsetY>
+  <frameWidth>5</frameWidth>
+  <frameHeight>5</frameHeight>
+  <frameCount>9</frameCount>
+  <frameSpeed>70</frameSpeed>
+  <loop>true</loop>
+</SerializableAnimationData>

@@ -132,11 +132,98 @@ namespace PattyPetitGiant
 
             this.parentWorld = parentWorld;
 
+            if (index == InputDevice2.PPG_Player.Player_1)
+            {
+                if (GameCampaign.PlayerColor == 0)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp");
+                }
+                else if (GameCampaign.PlayerColor == 1)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_RED");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_RED");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_RED");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_RED");
+                }
+                else if (GameCampaign.PlayerColor == 2)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_PURPLE");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_PURPLE");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_PURPLE");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_PURPLE");
+                }
+                else if (GameCampaign.PlayerColor == 3)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_BLUE");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_BLUE");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_BLUE");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_BLUE");
+                }
+                else if (GameCampaign.PlayerColor == 4)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_CYAN");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_CYAN");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_CYAN");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_CYAN");
+                }
+                else if (GameCampaign.PlayerColor == 5)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_BROWN");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_BROWN");
+                }
+            }
+            else if (index == InputDevice2.PPG_Player.Player_2)
+            {
+                if (GameCampaign.Player2Color == 0)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp");
+                }
+                else if (GameCampaign.Player2Color == 1)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_RED");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_RED");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_RED");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_RED");
+                }
+                else if (GameCampaign.Player2Color == 2)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_PURPLE");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_PURPLE");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_PURPLE");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_PURPLE");
+                }
+                else if (GameCampaign.Player2Color == 3)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_BLUE");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_BLUE");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_BLUE");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_BLUE");
+                }
+                else if (GameCampaign.Player2Color == 4)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_CYAN");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_CYAN");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_CYAN");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_CYAN");
+                }
+                else if (GameCampaign.Player2Color == 5)
+                {
+                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_BROWN");
+                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
+                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
+                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_BROWN");
+                }
+            }
+
             remove_from_list = false;
-            walk_down = AnimationLib.loadNewAnimationSet("jensenDown");
-            walk_right = AnimationLib.loadNewAnimationSet("jensenRight");
-            walk_left = AnimationLib.loadNewAnimationSet("jensenRight");
-            walk_up = AnimationLib.loadNewAnimationSet("jensenUp");
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
@@ -155,11 +242,12 @@ namespace PattyPetitGiant
             double delta = currentTime.ElapsedGameTime.Milliseconds;
 
             /*
-            //flame particle testing
-            for (int i = 0; i < 3; i++)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                parentWorld.Particles.pushFlame(new Vector2(LoadAnimation.Skeleton.FindBone(Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, LoadAnimation.Skeleton.FindBone(Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)direction_facing * Math.PI / 2));
-            }*/
+                parentWorld.Particles.pushGib(CenterPoint);
+            }
+             */
+               
 
             if (index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Health <= 0.0f : GameCampaign.Player2_Health <= 0.0f)
             {
@@ -497,7 +585,11 @@ namespace PattyPetitGiant
         }
 
         public void setAnimationWeapons(AnimationLib.SpineAnimationSet current_skeleton, GlobalGameConstants.Direction direction_facing)
-    {
+        {
+            current_skeleton.Skeleton.B = 1.0f;
+            current_skeleton.Skeleton.G = 1.0f;
+            current_skeleton.Skeleton.R = 1.0f;
+
             switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_1.ItemType() : player_item_2.ItemType())
             {
                 case GlobalGameConstants.itemType.Sword:

@@ -73,3 +73,11 @@ pistolFlash
 flame1
 flame2
 flame3
+dotParticle
+brainDie
+brainIdle
+GibSmallGeneric
+heartDie
+heartIdle
+lungDie
+lungIdle
