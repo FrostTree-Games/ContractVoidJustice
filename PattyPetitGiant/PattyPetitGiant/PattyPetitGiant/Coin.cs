@@ -299,11 +299,11 @@ namespace PattyPetitGiant
                 }
                 else if (dropItem == DropItemType.MedDrop)
                 {
-                    medAnim.drawAnimationFrame(animationTime, sb, this.position,new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                    medAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, shadeColor);
                 }
                 else if (dropItem == DropItemType.AmmoDrop)
                 {
-                    ammoAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                    ammoAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, shadeColor);
                 }
             }
         }

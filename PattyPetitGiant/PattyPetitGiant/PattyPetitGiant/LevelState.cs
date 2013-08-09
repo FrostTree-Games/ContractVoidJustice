@@ -352,8 +352,8 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
 
-                        entityList.Add(new GuardMech(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-
+                        entityList.Add(new GuardMech(this, (currentRoomX + 12) * GlobalGameConstants.TileSize.X, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y));
+                        pushCoin(entityList[entityList.Count - 1]);
 
                         if (GameCampaign.IsATwoPlayerGame)
                         {

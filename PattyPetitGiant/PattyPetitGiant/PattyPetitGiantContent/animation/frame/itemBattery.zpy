@@ -4,10 +4,10 @@
   <sheetName>itemSheet.png</sheetName>
   <initalX>0</initalX>
   <initalY>95</initalY>
-  <offsetX>32</offsetX>
-  <offsetY>32</offsetY>
-  <frameWidth>48</frameWidth>
-  <frameHeight>22</frameHeight>
+  <offsetX>0</offsetX>
+  <offsetY>0</offsetY>
+  <frameWidth>32</frameWidth>
+  <frameHeight>32</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>
   <loop>false</loop>
