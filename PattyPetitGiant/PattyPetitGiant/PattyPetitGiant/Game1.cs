@@ -50,6 +50,10 @@ namespace PattyPetitGiant
         public static Texture2D backGroundPic = null;
         public static Texture2D heartPic = null;
         public static Texture2D laserPic = null;
+        public static Texture2D healthBar = null;
+        public static Texture2D healthColor = null;
+        public static Texture2D energyColor = null;
+        public static Texture2D energyOverlay = null;
         public static Random rand = new Random();
 
         private static bool gameIsRunningSlowly;
@@ -127,6 +131,10 @@ namespace PattyPetitGiant
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
             laserPic = Content.Load<Texture2D>("gfx/laser");
+            healthBar = Content.Load<Texture2D>("bg");
+            healthColor = Content.Load<Texture2D>("healthTexture");
+            energyColor = Content.Load<Texture2D>("ammoTexture");
+            energyOverlay = Content.Load<Texture2D>("overlay");
 
             shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
             heartPic = Content.Load<Texture2D>("heartSheet");
