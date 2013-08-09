@@ -242,6 +242,11 @@ namespace PattyPetitGiant
             public RoomColors colors;
 
             public List<string> attributes;
+
+            /// <summary>
+            /// this is filled in by tilemap depending on the name of the chunk
+            /// </summary>
+            public string chunkName;
         }
 
         private static int recurseDungeonIntensity(DungeonRoomClass room, int intensity)

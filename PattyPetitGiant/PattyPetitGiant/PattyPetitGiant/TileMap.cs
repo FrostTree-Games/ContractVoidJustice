@@ -177,6 +177,8 @@ namespace PattyPetitGiant
                                     }
                                 }
 
+                                room[i, j].chunkName = c.Name;
+
                                 if (room[i, j].attributes.Contains("start"))
                                 {
                                     int startX = 0;
