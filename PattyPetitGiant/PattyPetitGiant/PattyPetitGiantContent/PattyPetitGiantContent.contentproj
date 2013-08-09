@@ -74,7 +74,7 @@
     <None Include="animation\frame\dotParticle.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dotParticle</Name>
-	</None>
+    </None>
     <None Include="animation\frame\plasmaExplodeLong.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>plasmaExplodeLong</Name>
@@ -956,6 +956,26 @@
     </None>
     <None Include="chunk\endLevelM.ftc">
       <Name>endLevelM</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\eric1A.ftc">
+      <Name>eric1A</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\eric1D.ftc">
+      <Name>eric1D</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\eric1E.ftc">
+      <Name>eric1E</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\eric1G.ftc">
+      <Name>eric1G</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="chunk\eric1H.ftc">
+      <Name>eric1H</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="chunk\Isaac0A.ftc">

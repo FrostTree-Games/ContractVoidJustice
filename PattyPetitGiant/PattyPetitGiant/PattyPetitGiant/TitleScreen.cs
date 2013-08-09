@@ -313,6 +313,7 @@ namespace PattyPetitGiant
                     {
                         isComplete = true;
                         BackGroundAudio.stopAllSongs();
+                        Game1.videoPlayer.Stop();
                     }
                     break;
             }

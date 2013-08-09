@@ -117,3 +117,8 @@ pathways1D.ftc
 pathways2D.ftc
 pacmanE.ftc
 pathway2E.ftc
+eric1A.ftc
+eric1D.ftc
+eric1E.ftc
+eric1G.ftc
+eric1H.ftc
