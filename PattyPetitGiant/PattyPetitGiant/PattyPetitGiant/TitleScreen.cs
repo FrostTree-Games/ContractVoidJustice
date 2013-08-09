@@ -13,12 +13,13 @@ namespace PattyPetitGiant
 
        // private List<TitleMenuOption> 
 
-        private enum titleScreens
+        public enum titleScreens
         {
             introScreen,
             logoScreen,
             menuScreen,
-            playScreen
+            playScreen,
+            optionScreen
         }
 
         private class TitleMenuOptions
@@ -126,7 +127,8 @@ namespace PattyPetitGiant
             }
         }
 
-        public TitleScreen(Model model, float aspectRatio, Texture2D texture)
+        //public TitleScreen(Model model, float aspectRatio, Texture2D texture)
+        public TitleScreen(titleScreens screen_state)
         {
             menu_list = new List<TitleMenuOptions>(3);
             menu_list.Add(new TitleMenuOptions("START"));
@@ -135,14 +137,14 @@ namespace PattyPetitGiant
 
             menu_item_selected = 0;
 
-            screen = titleScreens.logoScreen;
+            screen = screen_state;
 
             fade_state = FadeState.fadeIn;
 
-            myModel = model;
+            /*myModel = model;
             ship_texture = texture;
             this.aspectRatio = aspectRatio;
-            rasterizer_state.CullMode = CullMode.None;
+            rasterizer_state.CullMode = CullMode.None;*/
         }
 
         private const int width = 32;
@@ -279,6 +281,9 @@ namespace PattyPetitGiant
                                 fade = 0.0f;
                                 break;
                             case "OPTIONS":
+                                screen = titleScreens.optionScreen;
+                                fade_state = FadeState.fadeOut;
+                                fade = 0.0f;
                                 break;
                             case "QUIT":
                                 break;
@@ -340,10 +345,6 @@ namespace PattyPetitGiant
                     sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     break;
                 case titleScreens.menuScreen:
-                    //sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
-
-                    
-
                     sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
                     
                     for (int i = 0; i < menu_list.Count(); i++)
@@ -402,7 +403,14 @@ namespace PattyPetitGiant
 
         public override ScreenStateType nextLevelState()
         {
-            return ScreenStateType.GameSetupMenu;
+            if (screen == titleScreens.playScreen)
+            {
+                return ScreenStateType.GameSetupMenu;
+            }
+            else
+            {
+                return ScreenStateType.OptionsMenu;
+            }
         }
     }
 }

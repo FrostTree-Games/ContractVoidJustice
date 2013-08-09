@@ -122,6 +122,8 @@ namespace PattyPetitGiant
 
         private bool player1ConfirmPressed = false;
 
+        private bool inGame = false;
+
         public static void InitalizeHighScores()
         {
             if (highScores == null)
@@ -161,6 +163,8 @@ namespace PattyPetitGiant
             InitalizeHighScores();
 
             HighScoreValue newScore = new HighScoreValue(GameCampaign.PlayerName, GameCampaign.Player_Coin_Amount, GameCampaign.ElapsedCampaignTime, GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight);
+
+            this.inGame = inGame;
 
             if (inGame)
             {
@@ -315,7 +319,14 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
- 	        return ScreenStateType.GameSetupMenu;
+            if (inGame)
+            {
+                return ScreenStateType.GameSetupMenu;
+            }
+            else
+            {
+                return ScreenStateType.OptionsMenu;
+            }
         }
     }
 }
