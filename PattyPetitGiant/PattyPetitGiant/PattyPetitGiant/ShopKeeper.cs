@@ -117,9 +117,13 @@ namespace PattyPetitGiant
 
             //test shop data for now
             {
-                itemsForSale[0] = GlobalGameConstants.itemType.HermesSandals;
-                itemsForSale[1] = GlobalGameConstants.itemType.ShotGun;
-                itemsForSale[2] = GlobalGameConstants.itemType.WandOfGyges;
+                for (int i = 0; i < 3; i++)
+                {
+                    int rValue = Game1.rand.Next() % 14;
+                    if (rValue == 9) { rValue = 4; } // casting an int to item enum; no index for 9
+
+                    itemsForSale[i] = (GlobalGameConstants.itemType)rValue;
+                }
 
                 for (int i = 0; i < 3; i++)
                 {

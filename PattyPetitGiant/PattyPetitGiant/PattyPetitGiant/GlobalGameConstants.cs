@@ -93,7 +93,7 @@ namespace PattyPetitGiant
                 weaponInfo[(int)itemType.Compass] = new WeaponInformation(55, "Solar Compass", "A magical tool that always seems to direct you toward the exit on this floor of the ship.", "itemCompass", 0);
                 weaponInfo[(int)itemType.HermesSandals] = new WeaponInformation(130, "Velocity Distortion Gem", "Enables you to run at extreme speeds, but at the price of vulnerability.", "itemHermes", 1);
                 weaponInfo[(int)itemType.WaveMotionGun] = new WeaponInformation(80, "Sine Motion Gun", "A strange weapon that fires in an ecclectic motion. Somewhat impractical.", "itemRayGun", 5);
-                weaponInfo[(int)itemType.BushidoBlade] = new WeaponInformation(90, "Bushido Blade", "This weapon will allow you to slay almost any foe perfectly, but brings an honorable death to the imperfect warrior.", "gunPic", 0);
+                weaponInfo[(int)itemType.BushidoBlade] = new WeaponInformation(90, "Bushido Blade", "This weapon will allow you to slay almost any foe perfectly, but brings an honorable death to the imperfect warrior.", "itemSword", 0);
                 weaponInfo[(int)itemType.RocketLauncher] = new WeaponInformation(120, "Rocket Launcher", "A one-handed device that fires rockets that combust on explosion. Avoid shooting it in close quarters.", "itemRocket", 20);
                 weaponInfo[(int)itemType.ShotGun] = new WeaponInformation(170, "Shotgun", "Formely used by space mobsters when performing bank robbery. It's signed!", "itemShotgun", 5);
                 weaponInfo[(int)itemType.DungeonMap] = new WeaponInformation(45, "Level Map", "Allows you to view the corridors of the current floor of the ship.", "itemMap", 0);
