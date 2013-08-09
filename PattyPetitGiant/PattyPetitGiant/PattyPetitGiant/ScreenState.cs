@@ -21,6 +21,7 @@ namespace PattyPetitGiant
             LevelReviewState = 6,
             FMV_ELEVATOR_EXIT = 7,
             FMV_ELEVATOR_ENTER = 8,
+            HighScoresStateOptions = 9,
         }
 
         protected bool pause = false;
@@ -59,11 +60,11 @@ namespace PattyPetitGiant
                 case ScreenStateType.LevelSelectState:
                     return new LevelSelectState();
                 case ScreenStateType.TitleScreen:
-                    //return new TitleScreen();
+                    return new TitleScreen(TitleScreen.titleScreens.menuScreen);
                 case ScreenStateType.HighScoresState:
                     return new HighScoresState(true);
                 case ScreenStateType.OptionsMenu:
-                    return null;
+                    return new OptionsMenu();
                 case ScreenStateType.LevelReviewState:
                     return new LevelReviewState();
                 case ScreenStateType.GameSetupMenu:
@@ -72,6 +73,8 @@ namespace PattyPetitGiant
                     return new CutsceneVideoState(Game1.levelExitVideo, ScreenStateType.LevelReviewState);
                 case ScreenStateType.FMV_ELEVATOR_ENTER:
                     return new CutsceneVideoState(Game1.levelEnterVideo, ScreenStateType.LevelState);
+                case ScreenStateType.HighScoresStateOptions:
+                    return new HighScoresState(false);
                 default:
                     return null;
             }

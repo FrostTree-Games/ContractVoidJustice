@@ -21,6 +21,11 @@ namespace PattyPetitGiant
 
             private float z_distance = 0.0f;
 
+            public float zDistance
+            {
+                get { return z_distance; }
+            }
+
             public optionsMenuOptions(string text)
             {
                 this.text = text;
@@ -75,15 +80,17 @@ namespace PattyPetitGiant
         
         private int menu_item_select = 0;
 
+        private Vector2 text_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 128, GlobalGameConstants.GameResolutionHeight / 2 - 128);
+
         public OptionsMenu()
         {
             options_list = new List<optionsMenuOptions>(3);
-            options_list.Add(new optionsMenuOptions("High Score"));
-            options_list.Add(new optionsMenuOptions("Erase High Score"));
-            options_list.Add(new optionsMenuOptions("Back"));
+            options_list.Add(new optionsMenuOptions("HIGH SCORE"));
+            options_list.Add(new optionsMenuOptions("ERASE HIGH SCORE"));
+            options_list.Add(new optionsMenuOptions("BACK"));
         }
 
-        public override void doUpdate(GameTime currentTime)
+        protected override void doUpdate(GameTime currentTime)
         {
             if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
             {
@@ -111,7 +118,7 @@ namespace PattyPetitGiant
                 }
             }
 
-            if(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection)
+            if(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection))
             {
                 if(!up_pressed)
                     button_pressed_timer = 0.0f;
@@ -122,7 +129,7 @@ namespace PattyPetitGiant
             if((up_pressed && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection)) || (up_pressed && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.UpDirection) && button_pressed_timer > max_button_pressed_timer))
             {
                 button_pressed_timer = 0.0f;
-                down_pressed = false;
+                up_pressed = false;
 
                 menu_item_select--;
 
@@ -135,16 +142,65 @@ namespace PattyPetitGiant
                     menu_item_select += options_list.Count();
                 }
             }
+
+            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.Confirm))
+            {
+                confirm_pressed = true;
+            }
+            else if (confirm_pressed)
+            {
+                confirm_pressed = false;
+
+                switch (options_list[menu_item_select].text)
+                {
+                    case "HIGH SCORE":
+                        isComplete = true;
+                        break;
+                    case "ERASE HIGH SCORE":
+                        break;
+                    case "BACK":
+                        isComplete = true;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            for (int i = 0; i<options_list.Count(); i++)
+            {
+                if (i == menu_item_select)
+                    options_list[menu_item_select].select = true;
+                else
+                    options_list[i].select = false;
+
+                options_list[i].update(currentTime);
+            }
         }
 
         public override void render(SpriteBatch sb)
         {
-            throw new NotImplementedException();
+            AnimationLib.GraphicsDevice.Clear(Color.Black);
+
+            sb.Begin();
+
+            for (int i = 0; i < options_list.Count(); i++)
+            {
+                sb.DrawString(Game1.font, options_list[i].text, text_position + new Vector2((25 * options_list[i].zDistance), 32 * i), Color.White, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+            }
+
+            sb.End();
         }
 
         public override ScreenStateType nextLevelState()
         {
-            throw new NotImplementedException();
+            if (options_list[menu_item_select].text == "HIGH SCORE")
+            {
+                return ScreenStateType.HighScoresStateOptions;
+            }
+            else
+            {
+                return ScreenStateType.TitleScreen;
+            }
         }
     }
 }
