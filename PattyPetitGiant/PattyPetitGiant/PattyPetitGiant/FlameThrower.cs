@@ -48,7 +48,7 @@ namespace PattyPetitGiant
             switch (flamethrower_state)
             {
                 case FlameThrowerState.Neutral:
-                    if (((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_1 : GameCampaign.Player2_Item_1) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_2 : GameCampaign.Player2_Item_2) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
+                    if (((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Right_Item : GameCampaign.Player2_Item_1) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Left_Item : GameCampaign.Player2_Item_2) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
                     {
                         position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
                         switch (parent.Direction_Facing)
@@ -102,7 +102,7 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    if ((GameCampaign.Player_Item_1 == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || (GameCampaign.Player_Item_2 == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || GameCampaign.Player_Ammunition < 1)
+                    if ((GameCampaign.Player_Right_Item == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || (GameCampaign.Player_Left_Item == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || GameCampaign.Player_Ammunition < 1)
                     {
                         flamethrower_state = FlameThrowerState.Neutral;
                         parent.State = Player.playerState.Moving;

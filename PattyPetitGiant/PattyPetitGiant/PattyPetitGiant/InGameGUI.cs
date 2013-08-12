@@ -293,16 +293,16 @@ namespace PattyPetitGiant
         {
             Color textColor = Game1.GameIsRunningSlowly ? Color.Red : Color.White;
 
-            AnimationLib.FrameAnimationSet player_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Item_1].pickupImage;
-            AnimationLib.FrameAnimationSet player_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Item_2].pickupImage;
+            AnimationLib.FrameAnimationSet player_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Right_Item].pickupImage;
+            AnimationLib.FrameAnimationSet player_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Left_Item].pickupImage;
 
             //sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
 
             string player_health_display = "H: ";
             string ammunition_amount_display = "A: ";
             string coin_amount_display = "Coin: " + GameCampaign.Player_Coin_Amount;
-            string player_item_1 = "R: ";
-            string player_item_2 = "L: ";
+            string Player_Right_Item = "R: ";
+            string Player_Left_Item = "L: ";
 
             for (int i = 0; i < prices.Length; i++)
             {
@@ -327,8 +327,8 @@ namespace PattyPetitGiant
                     sb.DrawString(Game1.font, player_health_display, new Vector2(140, 80) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(140, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     sb.DrawString(Game1.font, coin_amount_display, new Vector2(140, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, player_item_1, new Vector2(320, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, player_item_2, new Vector2(235, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, Player_Right_Item, new Vector2(320, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, Player_Left_Item, new Vector2(235, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
                     player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(255, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
                     player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(340, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
@@ -348,10 +348,10 @@ namespace PattyPetitGiant
 
             sb.DrawString(Game1.font, coin_amount_display, new Vector2(140, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
 
-            sb.DrawString(Game1.font, player_item_1, new Vector2(320, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            sb.DrawString(Game1.font, Player_Right_Item, new Vector2(320, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
             player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(340, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
             
-            sb.DrawString(Game1.font, player_item_2, new Vector2(235, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            sb.DrawString(Game1.font, Player_Left_Item, new Vector2(235, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
             player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(255, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
 
             if (GameCampaign.IsATwoPlayerGame)

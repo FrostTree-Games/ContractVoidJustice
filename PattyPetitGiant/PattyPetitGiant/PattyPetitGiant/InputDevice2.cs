@@ -156,11 +156,11 @@ namespace PattyPetitGiant
                         break;
                     case PlayerButton.UseItem2:
                         if (xInputControllers[i].Buttons.A == ButtonState.Pressed || xInputControllers[i].Triggers.Left > 0.01f) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
-                        if (keyboardController.IsKeyDown(keyConfig.UseItem1)) { return PlayerPad.Keyboard; }
+                        if (keyboardController.IsKeyDown(keyConfig.UseLeftItem)) { return PlayerPad.Keyboard; }
                         break;
                     case PlayerButton.UseItem1:
                         if (xInputControllers[i].Buttons.B == ButtonState.Pressed || xInputControllers[i].Triggers.Right > 0.01f) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
-                        if (keyboardController.IsKeyDown(keyConfig.UseItem2)) { return PlayerPad.Keyboard; }
+                        if (keyboardController.IsKeyDown(keyConfig.UseRightItem)) { return PlayerPad.Keyboard; }
                         break;
                     case PlayerButton.SwitchItem1:
                         if (xInputControllers[i].Buttons.X == ButtonState.Pressed || xInputControllers[i].Buttons.RightShoulder == ButtonState.Pressed) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
@@ -249,10 +249,10 @@ namespace PattyPetitGiant
                         if (keyboardController.IsKeyDown(keyConfig.BackButton)) { return true; }
                         break;
                     case PlayerButton.UseItem2:
-                        if (keyboardController.IsKeyDown(keyConfig.UseItem1)) { return true; }
+                        if (keyboardController.IsKeyDown(keyConfig.UseLeftItem)) { return true; }
                         break;
                     case PlayerButton.UseItem1:
-                        if (keyboardController.IsKeyDown(keyConfig.UseItem2)) { return true; }
+                        if (keyboardController.IsKeyDown(keyConfig.UseRightItem)) { return true; }
                         break;
                     case PlayerButton.SwitchItem1:
                         if (keyboardController.IsKeyDown(keyConfig.SwitchItem1)) { return true; }
@@ -414,8 +414,8 @@ namespace PattyPetitGiant
     {
         public Keys Confirm;
         public Keys Cancel;
-        public Keys UseItem1;
-        public Keys UseItem2;
+        public Keys UseLeftItem;
+        public Keys UseRightItem;
         public Keys SwitchItem1;
         public Keys SwitchItem2;
         public Keys UpDirection;
@@ -435,10 +435,10 @@ namespace PattyPetitGiant
 
             def.Confirm = Keys.Enter;
             def.Cancel = Keys.Back;
-            def.UseItem1 = Keys.A;
-            def.UseItem2 = Keys.S;
-            def.SwitchItem1 = Keys.Q;
-            def.SwitchItem2 = Keys.W;
+            def.UseLeftItem = Keys.A;
+            def.UseRightItem = Keys.S;
+            def.SwitchItem1 = Keys.W;
+            def.SwitchItem2 = Keys.Q;
             def.UpDirection = Keys.Up;
             def.DownDirection = Keys.Down;
             def.LeftDirection = Keys.Left;

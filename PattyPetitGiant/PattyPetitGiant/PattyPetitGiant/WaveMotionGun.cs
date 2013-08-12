@@ -88,7 +88,7 @@ namespace PattyPetitGiant
 
                     Vector2 bulletPos = Vector2.Zero;
 
-                    if (GameCampaign.Player_Item_1 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                    if (GameCampaign.Player_Right_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
                     {
                         if (parent.Index == InputDevice2.PPG_Player.Player_1)
                         {
@@ -101,7 +101,7 @@ namespace PattyPetitGiant
                         parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lRayGun" : "rRayGun");
                         bulletPos = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
                     }
-                    else if (GameCampaign.Player_Item_2 == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                    else if (GameCampaign.Player_Left_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
                     { 
                         GameCampaign.Player_Ammunition -= ammo_consumption;
                         parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rRayGun" : "lRayGun");

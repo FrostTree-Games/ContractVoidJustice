@@ -159,11 +159,11 @@ namespace PattyPetitGiant
             }
             double randOffset = (Game1.rand.NextDouble() * Math.PI / 2) - (Math.PI / 4);
 
-            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_1 : GameCampaign.Player2_Item_1) == ItemType())
+            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Right_Item : GameCampaign.Player2_Item_1) == ItemType())
             {
                 parentWorld.Particles.pushDotParticle(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lHand" : "rHand").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lHand" : "rHand").WorldY), (float)(Math.Atan2(parentVelocity.Y, parentVelocity.X) + randOffset), Color.Lerp(Color.Yellow, Color.YellowGreen, (float)Game1.rand.NextDouble()));
             }
-            else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Item_2 : GameCampaign.Player2_Item_2) == ItemType())
+            else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Left_Item : GameCampaign.Player2_Item_2) == ItemType())
             {
                 parentWorld.Particles.pushDotParticle(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rHand" : "lHand").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rHand" : "lHand").WorldY), (float)(Math.Atan2(parentVelocity.Y, parentVelocity.X)), Color.Lerp(Color.Yellow, Color.YellowGreen, (float)Game1.rand.NextDouble()));
             }

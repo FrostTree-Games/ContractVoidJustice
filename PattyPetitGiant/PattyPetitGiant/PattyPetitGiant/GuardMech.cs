@@ -213,6 +213,7 @@ namespace PattyPetitGiant
                         {
                             if (grenade.active == false)
                             {
+                                AudioLib.playSoundEffect("tankFire");
                                 rocket_angle = (float)Math.Atan2(entity_found.CenterPoint.Y - current_skeleton.Skeleton.FindBone("muzzle").WorldY, entity_found.CenterPoint.X - current_skeleton.Skeleton.FindBone("muzzle").WorldX);
                                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
                                 grenade = new Grenades(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), angle);
@@ -751,6 +752,7 @@ namespace PattyPetitGiant
                                 else
                                 {
                                     state = GrenadeState.Explosion;
+                                    AudioLib.playSoundEffect("testExplosion");
                                     active_timer = 0.0f;
                                     dimensions = new Vector2(96, 96);
                                     position = position - (dimensions / 2);
@@ -772,6 +774,7 @@ namespace PattyPetitGiant
                                     active_timer = 0.0f;
                                     dimensions = new Vector2(96, 96);
                                     position = position - (dimensions / 2);
+                                    AudioLib.playSoundEffect("testExplosion");
                                     break;
                                 }
                             }

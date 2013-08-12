@@ -13,3 +13,7 @@ waveShot
 waveHit
 shotgun
 missionFailed
+bombBeep
+chargerImpact
+tankFire
+molotovExplode

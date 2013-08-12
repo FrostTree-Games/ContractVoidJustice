@@ -26,6 +26,9 @@ namespace PattyPetitGiant
         private float windup_timer;
         private float charge_timer;
         private float alert_timer;
+        private float sound_timer;
+        private bool play_sound; 
+
         private float angle;
         private Entity entity_found = null;
 
@@ -49,6 +52,8 @@ namespace PattyPetitGiant
             charge_timer = 0.0f;
             alert_timer = 0.0f;
             range_distance = 600f;
+            sound_timer = 0.0f;
+            play_sound = true;
 
             prob_item_drop = 0.5;
             number_drop_items = 5;
@@ -79,7 +84,12 @@ namespace PattyPetitGiant
         public override void update(GameTime currentTime)
         {
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
+            sound_timer += currentTime.ElapsedGameTime.Milliseconds;
 
+            if (sound_timer > 250f)
+            {
+                play_sound = true;
+            }
 
             if (sound_alert && state == ChargerState.search && entity_found == null)
             {
@@ -271,6 +281,13 @@ namespace PattyPetitGiant
                                     continue;
                                 if (hitTest(parentWorld.EntityList[i]))
                                 {
+                                    if (play_sound)
+                                    {
+                                        AudioLib.playSoundEffect("chargerImpact");
+                                        sound_timer = 0.0f;
+                                        play_sound = false;
+                                    }
+
                                     Vector2 direction = parentWorld.EntityList[i].CenterPoint - CenterPoint;
                                     parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, enemy_damage);
                                 }

@@ -28,7 +28,7 @@ namespace PattyPetitGiant
         private float throwingTimer;
         private const float throwDuration = 500f;
         private Vector2 throwPosition = Vector2.Zero;
-        private const float throwVelocity = 0.5f;
+        private const float throwVelocity = 1.0f;
 
         private float alert_timer = 0.0f;
 
@@ -383,6 +383,8 @@ namespace PattyPetitGiant
                 {
                     animation_time = 0.0f;
 
+                    AudioLib.playSoundEffect("molotovExplode");
+
                     flame = new MolotovFlame(throwPosition);
 
                     molotovState = MolotovState.Alert;
@@ -577,7 +579,7 @@ namespace PattyPetitGiant
             }
 
             public float timeAlive;
-            private const float flameDuration = 4000f;
+            private const float flameDuration = 2400f;
 
             public MolotovFlame(Vector2 position)
             {

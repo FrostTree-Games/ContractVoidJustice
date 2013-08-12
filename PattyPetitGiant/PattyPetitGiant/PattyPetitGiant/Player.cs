@@ -26,15 +26,15 @@ namespace PattyPetitGiant
             public GlobalGameConstants.itemType item2;
         }
 
-        private Item player_item_1 = null;
-        private Item player_item_2 = null;
+        private Item Player_Right_Item = null;
+        private Item Player_Left_Item = null;
         public PlayerItems CurrentItemTypes
         {
             get
             {
                 PlayerItems p = new PlayerItems();
-                p.item1 = player_item_1.ItemType();
-                p.item2 = player_item_2.ItemType();
+                p.item1 = Player_Right_Item.ItemType();
+                p.item2 = Player_Left_Item.ItemType();
                 return p;
             }
         }
@@ -115,13 +115,13 @@ namespace PattyPetitGiant
 
             if (index == InputDevice2.PPG_Player.Player_1)
             {
-                player_item_1 = getItemWhenLoading(GameCampaign.Player_Item_1);
-                player_item_2 = getItemWhenLoading(GameCampaign.Player_Item_2);
+                Player_Right_Item = getItemWhenLoading(GameCampaign.Player_Right_Item);
+                Player_Left_Item = getItemWhenLoading(GameCampaign.Player_Left_Item);
             }
             else if (index == InputDevice2.PPG_Player.Player_2)
             {
-                player_item_1 = getItemWhenLoading(GameCampaign.Player2_Item_1);
-                player_item_2 = getItemWhenLoading(GameCampaign.Player2_Item_2);
+                Player_Right_Item = getItemWhenLoading(GameCampaign.Player2_Item_1);
+                Player_Left_Item = getItemWhenLoading(GameCampaign.Player2_Item_2);
             }
 
             state = playerState.Moving;
@@ -304,49 +304,49 @@ namespace PattyPetitGiant
                     disable_movement_time = 0;
                 }
 
-                if (player_item_1 != null)
+                if (Player_Right_Item != null)
                 {
-                    player_item_1.daemonupdate(this, currentTime, parentWorld);
+                    Player_Right_Item.daemonupdate(this, currentTime, parentWorld);
                 }
-                if (player_item_2 != null)
+                if (Player_Left_Item != null)
                 {
-                    player_item_2.daemonupdate(this, currentTime, parentWorld);
+                    Player_Left_Item.daemonupdate(this, currentTime, parentWorld);
                 }
             }
             else
             {
                 if (state == playerState.Item1)
                 {
-                    if (player_item_1 == null)
+                    if (Player_Right_Item == null)
                     {
                         state = playerState.Moving;
                     }
                     else
                     {
-                        player_item_1.update(this, currentTime, parentWorld);
+                        Player_Right_Item.update(this, currentTime, parentWorld);
                     }
 
 
-                    if (player_item_2 != null)
+                    if (Player_Left_Item != null)
                     {
-                        player_item_2.daemonupdate(this, currentTime, parentWorld);
+                        Player_Left_Item.daemonupdate(this, currentTime, parentWorld);
                     }
 
                 }
                 else if (state == playerState.Item2)
                 {
-                    if (player_item_2 == null)
+                    if (Player_Left_Item == null)
                     {
                         state = playerState.Moving;
                     }
                     else
                     {
-                        player_item_2.update(this, currentTime, parentWorld);
+                        Player_Left_Item.update(this, currentTime, parentWorld);
                     }
 
-                    if (player_item_1 != null)
+                    if (Player_Right_Item != null)
                     {
-                        player_item_1.daemonupdate(this, currentTime, parentWorld);
+                        Player_Right_Item.daemonupdate(this, currentTime, parentWorld);
                     }
                 }
                 else if (state == playerState.Moving)
@@ -450,15 +450,15 @@ namespace PattyPetitGiant
                                 {
                                     item1_switch_button_down = false;
 
-                                    player_item_1 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_1, currentTime);
+                                    Player_Right_Item = ((Pickup)parentWorld.EntityList[i]).assignItem(Player_Right_Item, currentTime);
 
                                     if (index == InputDevice2.PPG_Player.Player_1)
                                     {
-                                        GameCampaign.Player_Item_2 = player_item_2.ItemType();
+                                        GameCampaign.Player_Right_Item = Player_Right_Item.ItemType();
                                     }
                                     else if (index == InputDevice2.PPG_Player.Player_2)
                                     {
-                                        GameCampaign.Player2_Item_1 = player_item_1.ItemType();
+                                        GameCampaign.Player2_Item_1 = Player_Right_Item.ItemType();
                                     }
 
                                     setAnimationWeapons(walk_down, GlobalGameConstants.Direction.Right);
@@ -475,15 +475,15 @@ namespace PattyPetitGiant
                                 {
                                     item2_switch_button_down = false;
 
-                                    player_item_2 = ((Pickup)parentWorld.EntityList[i]).assignItem(player_item_2, currentTime);
+                                    Player_Left_Item = ((Pickup)parentWorld.EntityList[i]).assignItem(Player_Left_Item, currentTime);
 
                                     if (index == InputDevice2.PPG_Player.Player_1)
                                     {
-                                        GameCampaign.Player_Item_2 = player_item_2.ItemType();
+                                        GameCampaign.Player_Left_Item = Player_Left_Item.ItemType();
                                     }
                                     else if (index == InputDevice2.PPG_Player.Player_2)
                                     {
-                                        GameCampaign.Player2_Item_2 = player_item_2.ItemType();
+                                        GameCampaign.Player2_Item_2 = Player_Left_Item.ItemType();
                                     }
 
                                     setAnimationWeapons(walk_down, GlobalGameConstants.Direction.Right);
@@ -502,13 +502,13 @@ namespace PattyPetitGiant
                         item2_switch_button_down = false;
                     }
 
-                    if (player_item_1 != null)
+                    if (Player_Right_Item != null)
                     {
-                        player_item_1.daemonupdate(this, currentTime, parentWorld);
+                        Player_Right_Item.daemonupdate(this, currentTime, parentWorld);
                     }
-                    if (player_item_2 != null)
+                    if (Player_Left_Item != null)
                     {
-                        player_item_2.daemonupdate(this, currentTime, parentWorld);
+                        Player_Left_Item.daemonupdate(this, currentTime, parentWorld);
                     }
                 }
             }
@@ -525,13 +525,13 @@ namespace PattyPetitGiant
 
         public override void draw(Spine.SkeletonRenderer sb)
         {
-            if (player_item_1 != null)
+            if (Player_Right_Item != null)
             {
-                player_item_1.draw(sb);
+                Player_Right_Item.draw(sb);
             }
-            if (player_item_2 != null)
+            if (Player_Left_Item != null)
             {
-                player_item_2.draw(sb);
+                Player_Left_Item.draw(sb);
             }
         }
 
@@ -590,7 +590,7 @@ namespace PattyPetitGiant
             current_skeleton.Skeleton.G = 1.0f;
             current_skeleton.Skeleton.R = 1.0f;
 
-            switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_1.ItemType() : player_item_2.ItemType())
+            switch (direction_facing == GlobalGameConstants.Direction.Left ? Player_Right_Item.ItemType() : Player_Left_Item.ItemType())
             {
                 case GlobalGameConstants.itemType.Sword:
                     current_skeleton.Skeleton.SetAttachment("lWeapon", "lSword");
@@ -639,7 +639,7 @@ namespace PattyPetitGiant
                     break;
             }
 
-            switch (direction_facing == GlobalGameConstants.Direction.Left ? player_item_2.ItemType() : player_item_1.ItemType())
+            switch (direction_facing == GlobalGameConstants.Direction.Left ? Player_Left_Item.ItemType() : Player_Right_Item.ItemType())
             {
                 case GlobalGameConstants.itemType.Sword:
                     current_skeleton.Skeleton.SetAttachment("rWeapon", "rSword");

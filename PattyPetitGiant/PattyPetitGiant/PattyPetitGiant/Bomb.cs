@@ -34,6 +34,7 @@ namespace PattyPetitGiant
         private float animation_time;
         private float knockback_magnitude;
         private const float ammo_consumption = 10;
+        private float bomb_timer = 0.0f;
 
         public Bomb()
         {
@@ -41,7 +42,7 @@ namespace PattyPetitGiant
             time_explosion = 0.0f;
             bomb_state = Bomb_State.reset;
             bomb_damage = 5;
-            bombAnim = AnimationLib.getFrameAnimationSet("itemBomb");
+            bombAnim = AnimationLib.getFrameAnimationSet("bombArmed");
             explosionAnim = AnimationLib.getFrameAnimationSet("rocketExplode");
             knockback_magnitude = 5.0f;
         }
@@ -64,12 +65,20 @@ namespace PattyPetitGiant
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             time_explosion += currentTime.ElapsedGameTime.Milliseconds;
-
+            bomb_timer += currentTime.ElapsedGameTime.Milliseconds;
+            
             switch (bomb_state)
             {
                 case Bomb_State.placed:
+                    animation_time += currentTime.ElapsedGameTime.Milliseconds;
                     if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= 10)
                     {
+                        if (bomb_timer > 1500f / time_explosion * 50.0f)
+                        {
+                            bomb_timer = 0.0f;
+                            AudioLib.playSoundEffect("bombBeep");
+                        }
+                        
                         if (time_explosion > 1500)
                         {
                             if (parent.Index == InputDevice2.PPG_Player.Player_1)
@@ -85,7 +94,8 @@ namespace PattyPetitGiant
                             position = new Vector2(center_placed_bomb.X - hitbox.X / 2, center_placed_bomb.Y - hitbox.Y / 2);
                             bomb_state = Bomb_State.exploded;
                             time_explosion = 0.0f;
-                            bombAnim = AnimationLib.getFrameAnimationSet("bombExplosion");
+                            AudioLib.playSoundEffect("testExplosion");
+                            animation_time = 0.0f;
                         }
                     }
                     else
@@ -148,7 +158,6 @@ namespace PattyPetitGiant
                 case Bomb_State.none:
                     break;
                 default:
-                    bombAnim = AnimationLib.getFrameAnimationSet("itemBomb");
                     hitbox = hitbox_placed;
                     animation_time = 0.0f;
                     break;

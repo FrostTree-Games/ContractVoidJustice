@@ -3,9 +3,9 @@
   <name>bombArmed</name>
   <sheetName>projectileSheet.png</sheetName>
   <initalX>0</initalX>
-  <initalY>0</initalY>
+  <initalY>48</initalY>
   <offsetX>0</offsetX>
-  <offsetY>-48</offsetY>
+  <offsetY>0</offsetY>
   <frameWidth>32</frameWidth>
   <frameHeight>27</frameHeight>
   <frameCount>2</frameCount>

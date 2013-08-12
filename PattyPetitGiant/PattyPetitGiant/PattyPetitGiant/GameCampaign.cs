@@ -158,8 +158,8 @@ namespace PattyPetitGiant
             }
         }
 
-        public static GlobalGameConstants.itemType Player_Item_1;
-        public static GlobalGameConstants.itemType Player_Item_2;
+        public static GlobalGameConstants.itemType Player_Right_Item;
+        public static GlobalGameConstants.itemType Player_Left_Item;
 
         public static GlobalGameConstants.itemType Player2_Item_1;
         public static GlobalGameConstants.itemType Player2_Item_2;
@@ -223,8 +223,8 @@ namespace PattyPetitGiant
             PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
-            Player_Item_1 = GlobalGameConstants.itemType.MachineGun;
-            Player_Item_2 = GlobalGameConstants.itemType.RocketLauncher;
+            Player_Right_Item = GlobalGameConstants.itemType.Sword;
+            Player_Left_Item = GlobalGameConstants.itemType.ShotGun;
 
             allegiance = 0.5f;
 

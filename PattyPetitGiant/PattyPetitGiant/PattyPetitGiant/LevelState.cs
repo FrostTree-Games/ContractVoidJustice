@@ -352,7 +352,7 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
 
-                        entityList.Add(new GuardMech(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
+                        entityList.Add(new MolotovEnemy(this, new Vector2((currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
 
 
                         if (GameCampaign.IsATwoPlayerGame)
