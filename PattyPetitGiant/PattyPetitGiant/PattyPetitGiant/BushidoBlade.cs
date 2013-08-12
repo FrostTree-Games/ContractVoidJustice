@@ -65,8 +65,17 @@ namespace PattyPetitGiant
             {
                 case BushidoState.preslash:
                     parent.Animation_Time = 0.0f;
-                    parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation("rSlash");
-                    switch (item_direction)
+
+                    if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Right_Item : GameCampaign.Player2_Item_1) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
+                    {
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lSlash" : "rSlash");
+                    }
+                    else if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Left_Item : GameCampaign.Player2_Item_2) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2))
+                    {
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rSlash" : "lSlash");
+                    }
+
+                switch (item_direction)
                 {
                     case GlobalGameConstants.Direction.Right:
                         position.X = parent.Position.X + parent.Dimensions.X;

@@ -223,7 +223,7 @@ namespace PattyPetitGiant
             PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
-            Player_Right_Item = GlobalGameConstants.itemType.Sword;
+            Player_Right_Item = GlobalGameConstants.itemType.MachineGun;
             Player_Left_Item = GlobalGameConstants.itemType.ShotGun;
 
             allegiance = 0.5f;
