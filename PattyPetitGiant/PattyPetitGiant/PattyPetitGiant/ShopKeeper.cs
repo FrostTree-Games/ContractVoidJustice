@@ -40,7 +40,7 @@ namespace PattyPetitGiant
             {
                 this.position = position;
                 this.startPosition = position;
-                hitbox = GlobalGameConstants.TileSize;
+                hitbox = new Vector2(32);
                 this.direction = direction;
                 timeAlive = 0.0f;
                 active = true;
@@ -110,16 +110,20 @@ namespace PattyPetitGiant
 
             switchItemPressed = false;
 
-            shopKeeperFrameAnimationTest = AnimationLib.getFrameAnimationSet("shopKeeper");
+            shopKeeperFrameAnimationTest = AnimationLib.getFrameAnimationSet("fireball");
             buyPic = AnimationLib.getFrameAnimationSet("buyPic");
             leftBuyButton = AnimationLib.getFrameAnimationSet("gamepadLB");
             rightBuyButton = AnimationLib.getFrameAnimationSet("gamepadRB");
 
             //test shop data for now
             {
-                itemsForSale[0] = GlobalGameConstants.itemType.HermesSandals;
-                itemsForSale[1] = GlobalGameConstants.itemType.ShotGun;
-                itemsForSale[2] = GlobalGameConstants.itemType.WandOfGyges;
+                for (int i = 0; i < 3; i++)
+                {
+                    int rValue = Game1.rand.Next() % 14;
+                    if (rValue == 9) { rValue = 4; } // casting an int to item enum; no index for 9
+
+                    itemsForSale[i] = (GlobalGameConstants.itemType)rValue;
+                }
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -274,6 +278,9 @@ namespace PattyPetitGiant
                             projectile = new FireBall(position, (float)Math.Atan2(attackPoint.Y - position.Y, attackPoint.X - position.X));
                             windingUp = false;
                             fireballDelayPassed = 0;
+
+                            parentWorld.Particles.pushDotParticle2(position, (float)Math.Atan2(attackPoint.Y - position.Y, attackPoint.X - position.X) + 0.2f, Color.OrangeRed, 5.0f);
+                            parentWorld.Particles.pushDotParticle2(position, (float)Math.Atan2(attackPoint.Y - position.Y, attackPoint.X - position.X) - 0.2f, Color.OrangeRed, 5.0f);
                         }
                         else if (fireballDelayPassed > attackPointSetDelay && attackPoint == new Vector2(-1, -1))
                         {
@@ -348,8 +355,11 @@ namespace PattyPetitGiant
                                 }
                                 else
                                 {
-                                    InGameGUI.prices[i].price = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].priceString;
-                                    InGameGUI.prices[i].position = position + new Vector2((-3 * GlobalGameConstants.TileSize.X) + (i * 3f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y)) - (Game1.tenbyFive14.MeasureString(InGameGUI.prices[i].price) / 2) + new Vector2(0, 16);
+                                    if ((int)itemsForSale[i] >= 0)
+                                    {
+                                        InGameGUI.prices[i].price = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)itemsForSale[i]].priceString;
+                                        InGameGUI.prices[i].position = position + new Vector2((-3 * GlobalGameConstants.TileSize.X) + (i * 3f * GlobalGameConstants.TileSize.X), (2.5f * GlobalGameConstants.TileSize.Y)) - (Game1.tenbyFive14.MeasureString(InGameGUI.prices[i].price) / 2) + new Vector2(0, 16);
+                                    }
                                 }
                             }
                         }
@@ -444,7 +454,7 @@ namespace PattyPetitGiant
 
             if (projectile.active)
             {
-                shopKeeperFrameAnimationTest.drawAnimationFrame(0.0f, sb, projectile.position, new Vector2(3), 0.5f, 0.0f, Vector2.Zero, Color.Yellow);
+                shopKeeperFrameAnimationTest.drawAnimationFrame(animationTime * 1000f, sb, projectile.position, new Vector2(1), 0.5f, projectile.direction, Vector2.Zero, Color.White);
             }
         }
 

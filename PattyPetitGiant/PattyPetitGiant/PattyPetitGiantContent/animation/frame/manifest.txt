@@ -82,3 +82,4 @@ heartIdle
 lungDie
 lungIdle
 plasmaExplodeLong
+fireball

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <name>itemRayGun</name>
+  <name>itemHealth</name>
   <sheetName>itemSheet.png</sheetName>
-  <initalX>64</initalX>
-  <initalY>0</initalY>
+  <initalX>33</initalX>
+  <initalY>63</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>48</frameWidth>
-  <frameHeight>22</frameHeight>
+  <frameWidth>30</frameWidth>
+  <frameHeight>32</frameHeight>
   <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>
   <loop>false</loop>

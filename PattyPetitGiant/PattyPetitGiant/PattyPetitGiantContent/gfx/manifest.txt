@@ -54,3 +54,4 @@ brainSheet.png
 GibSmallGenericSheet.png
 heartSheet.png
 lungSheet.png
+fireball3.png

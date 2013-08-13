@@ -268,7 +268,7 @@ namespace PattyPetitGiant
             ResetPlayerValues(player1Name, player1Color);
 
             Player2_Item_1 = GlobalGameConstants.itemType.FlameThrower;
-            Player2_Item_2 = GlobalGameConstants.itemType.Gun;
+            Player2_Item_2 = GlobalGameConstants.itemType.ShotGun;
 
             player2Name = Player2Name;
             player2Color = Player2Color;

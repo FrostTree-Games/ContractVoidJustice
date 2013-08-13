@@ -296,6 +296,9 @@ namespace PattyPetitGiant
             AnimationLib.FrameAnimationSet player_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Right_Item].pickupImage;
             AnimationLib.FrameAnimationSet player_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Left_Item].pickupImage;
 
+            AnimationLib.FrameAnimationSet player2_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player2_Item_1].pickupImage;
+            AnimationLib.FrameAnimationSet player2_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player2_Item_2].pickupImage;
+
             //sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
 
             string player_health_display = "H: ";
@@ -359,11 +362,11 @@ namespace PattyPetitGiant
                 //player 2 GUI
                 sb.Draw(Game1.whitePixel, new Vector2(600, 83), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(160, 16), SpriteEffects.None, 0.5f);
                 sb.Draw(Game1.whitePixel, new Vector2(600, 83), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Health * 1.6f, 16), SpriteEffects.None, 0.51f);
-                player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(805, 113), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                player2_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(805, 113), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
 
                 sb.Draw(Game1.whitePixel, new Vector2(600, 113), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(160, 16), SpriteEffects.None, 0.5f);
                 sb.Draw(Game1.whitePixel, new Vector2(600, 113), null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Ammunition * 1.6f, 16), SpriteEffects.None, 0.51f);
-                player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(805, 80), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                player2_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(805, 80), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
             
             /*sb.Draw(Game1.whitePixel, new Vector2(499, 31), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(66, 26), SpriteEffects.None, 0.0f);
