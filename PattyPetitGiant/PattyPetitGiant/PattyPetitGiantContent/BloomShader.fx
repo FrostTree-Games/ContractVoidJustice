@@ -3,6 +3,14 @@ sampler s0;
 Texture halfResMap;
 Texture quarterResMap;
 
+Texture prev;
+Texture halfResMapPrev;
+Texture quarterResMapPrev;
+
+float2 cameraDelta;
+
+bool MotionBlur;
+
 sampler halfSampler = sampler_state
 {
 	Texture = <halfResMap>;
@@ -16,6 +24,16 @@ sampler halfSampler = sampler_state
 sampler quarterSampler = sampler_state
 {
 	Texture = <quarterResMap>;
+	MinFilter = Linear;
+	MagFilter = Linear;
+	MipFilter = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+sampler prevSampler = sampler_state
+{
+	Texture = <prev>;
 	MinFilter = Linear;
 	MagFilter = Linear;
 	MipFilter = Linear;
@@ -62,7 +80,19 @@ float4 PixelShaderFunction(float2 coords: TEXCOORD0) : COLOR0
 	float4 halfColor = blur5Cutoff(tex2D(halfSampler, coords), tex2D(halfSampler, coords + float2(BlurDistanceX, 0)), tex2D(halfSampler, coords + float2(-BlurDistanceX, 0)), tex2D(halfSampler, coords + float2(0, BlurDistanceY)), tex2D(halfSampler, coords + float2(0, -BlurDistanceY)));
 	float4 quarterColor = blur5Cutoff(tex2D(quarterSampler, coords), tex2D(quarterSampler, coords + float2(BlurDistanceX, 0)), tex2D(quarterSampler, coords + float2(-BlurDistanceX, 0)), tex2D(quarterSampler, coords + float2(0, BlurDistanceY)), tex2D(quarterSampler, coords + float2(0, -BlurDistanceY)));
 
-	return color + halfColor + quarterColor;
+	float4 outColor = color + halfColor + quarterColor;
+
+	if (MotionBlur)
+	{
+		coords += cameraDelta;
+		outColor += tex2D(prevSampler, coords);
+		coords += cameraDelta;
+		outColor += tex2D(prevSampler, coords);
+
+		return outColor / 3;
+	}
+
+	return outColor;
 
 }
 

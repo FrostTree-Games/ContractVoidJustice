@@ -77,12 +77,24 @@ namespace PattyPetitGiant
         private ParticleSet particleSet = null;
         public ParticleSet Particles { get { return particleSet; } }
 
-        private RenderTarget2D textureScreen = null;
-        private RenderTarget2D halfTextureScreen = null;
-        private RenderTarget2D quarterTextureScreen = null;
-        private Texture2D screenResult = null;
-        private Texture2D halfSizeTexture = null;
-        private Texture2D quarterSizeTexture = null;
+        private bool renderToA = false;
+        private Vector2 previousCameraSpot;
+
+        //render surfaces for first frame
+        private RenderTarget2D textureScreenA = null;
+        private RenderTarget2D halfTextureScreenA = null;
+        private RenderTarget2D quarterTextureScreenA = null;
+        private Texture2D screenResultA = null;
+        private Texture2D halfSizeTextureA = null;
+        private Texture2D quarterSizeTextureA = null;
+
+        //render surfaces for second frame
+        private RenderTarget2D textureScreenB = null;
+        private RenderTarget2D halfTextureScreenB = null;
+        private RenderTarget2D quarterTextureScreenB = null;
+        private Texture2D screenResultB = null;
+        private Texture2D halfSizeTextureB = null;
+        private Texture2D quarterSizeTextureB = null;
 
         private float fadeOutTime;
         private const float fadeOutDuration = 5000f;
@@ -107,9 +119,12 @@ namespace PattyPetitGiant
             messageQueueState = PushMessageQueueState.Wait;
 
             PresentationParameters pp = AnimationLib.GraphicsDevice.PresentationParameters;
-            textureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
-            halfTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 2, pp.BackBufferHeight / 2, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
-            quarterTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            textureScreenA = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            halfTextureScreenA = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 2, pp.BackBufferHeight / 2, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            quarterTextureScreenA = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            textureScreenB = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            halfTextureScreenB = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 2, pp.BackBufferHeight / 2, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
+            quarterTextureScreenB = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
 
             new Thread(loadLevel).Start();
         }
@@ -467,6 +482,8 @@ namespace PattyPetitGiant
                 }
             }
 
+            previousCameraSpot = cameraFocus.CenterPoint;
+
             for (int i = 0; i < entityList.Count; i++)
             {
                 if (Vector2.Distance(cameraFocus.CenterPoint, entityList[i].CenterPoint) < 800)
@@ -565,31 +582,73 @@ namespace PattyPetitGiant
 
         private void renderGameStuff(SpriteBatch sb)
         {
-            AnimationLib.GraphicsDevice.SetRenderTarget(textureScreen);
-            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
-            AnimationLib.GraphicsDevice.SetRenderTarget(null);
-            screenResult = (Texture2D)textureScreen;
+            renderToA = !renderToA;
 
-            AnimationLib.GraphicsDevice.SetRenderTarget(halfTextureScreen);
-            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.5f), entityList, cameraFocus, map, particleSet);
-            AnimationLib.GraphicsDevice.SetRenderTarget(null);
-            halfSizeTexture = (Texture2D)halfTextureScreen;
+            if (renderToA)
+            {
+                AnimationLib.GraphicsDevice.SetRenderTarget(textureScreenA);
+                AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
+                AnimationLib.GraphicsDevice.SetRenderTarget(null);
+                screenResultA = (Texture2D)textureScreenA;
 
-            AnimationLib.GraphicsDevice.SetRenderTarget(quarterTextureScreen);
-            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.25f), entityList, cameraFocus, map, particleSet);
-            AnimationLib.GraphicsDevice.SetRenderTarget(null);
-            quarterSizeTexture = (Texture2D)quarterTextureScreen;
+                AnimationLib.GraphicsDevice.SetRenderTarget(halfTextureScreenA);
+                AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.5f), entityList, cameraFocus, map, particleSet);
+                AnimationLib.GraphicsDevice.SetRenderTarget(null);
+                halfSizeTextureA = (Texture2D)halfTextureScreenA;
+
+                AnimationLib.GraphicsDevice.SetRenderTarget(quarterTextureScreenA);
+                AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.25f), entityList, cameraFocus, map, particleSet);
+                AnimationLib.GraphicsDevice.SetRenderTarget(null);
+                quarterSizeTextureA = (Texture2D)quarterTextureScreenA;
+            }
+            else
+            {
+                AnimationLib.GraphicsDevice.SetRenderTarget(textureScreenB);
+                AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
+                AnimationLib.GraphicsDevice.SetRenderTarget(null);
+                screenResultB = (Texture2D)textureScreenB;
+
+                AnimationLib.GraphicsDevice.SetRenderTarget(halfTextureScreenB);
+                AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.5f), entityList, cameraFocus, map, particleSet);
+                AnimationLib.GraphicsDevice.SetRenderTarget(null);
+                halfSizeTextureB = (Texture2D)halfTextureScreenB;
+
+                AnimationLib.GraphicsDevice.SetRenderTarget(quarterTextureScreenB);
+                AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.25f), entityList, cameraFocus, map, particleSet);
+                AnimationLib.GraphicsDevice.SetRenderTarget(null);
+                quarterSizeTextureB = (Texture2D)quarterTextureScreenB;
+            }
 
             AnimationLib.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.Transparent, 1.0f, 0);
 
-            Game1.BloomFilter.Parameters["halfResMap"].SetValue(halfSizeTexture);
-            Game1.BloomFilter.Parameters["quarterResMap"].SetValue(quarterSizeTexture);
+            if (renderToA)
+            {
+                Game1.BloomFilter.Parameters["halfResMap"].SetValue(halfSizeTextureA);
+                Game1.BloomFilter.Parameters["quarterResMap"].SetValue(quarterSizeTextureA);
+
+                Game1.BloomFilter.Parameters["prev"].SetValue(textureScreenB);
+                Game1.BloomFilter.Parameters["halfResMapPrev"].SetValue(halfSizeTextureB);
+                Game1.BloomFilter.Parameters["quarterResMapPrev"].SetValue(quarterSizeTextureB);
+            }
+            else
+            {
+                Game1.BloomFilter.Parameters["halfResMap"].SetValue(halfSizeTextureB);
+                Game1.BloomFilter.Parameters["quarterResMap"].SetValue(quarterSizeTextureB);
+
+                Game1.BloomFilter.Parameters["prev"].SetValue(textureScreenA);
+                Game1.BloomFilter.Parameters["halfResMapPrev"].SetValue(halfSizeTextureA);
+                Game1.BloomFilter.Parameters["quarterResMapPrev"].SetValue(quarterSizeTextureA);
+            }
+            Game1.BloomFilter.Parameters["MotionBlur"].SetValue(true);
+            Vector2 delta = (cameraFocus.CenterPoint - previousCameraSpot) / new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight);
+            Console.WriteLine(delta);
+            Game1.BloomFilter.Parameters["cameraDelta"].SetValue(delta / 10);
             Game1.BloomFilter.Parameters["Threshold"].SetValue(0.7f);
             Game1.BloomFilter.Parameters["BlurDistanceX"].SetValue(0.0005f);
             Game1.BloomFilter.Parameters["BlurDistanceY"].SetValue(0.0005f);
 
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, Game1.BloomFilter, Matrix.Identity);
-            sb.Draw(screenResult, new Vector2(0), Color.White);
+            sb.Draw(renderToA ? screenResultA : screenResultB, new Vector2(0), Color.White);
             sb.End();
 
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.Identity);
