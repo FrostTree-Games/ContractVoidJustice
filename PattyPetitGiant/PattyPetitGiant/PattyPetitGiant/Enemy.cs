@@ -93,6 +93,19 @@ namespace PattyPetitGiant
         protected float damage_player_time = 0.0f;
 
         protected float enemy_speed = 2.0f;
+
+        protected float sight_angle1 = 0.523f;
+        public float Sight_Angle1
+        {
+            get { return sight_angle1; }
+        }
+
+        protected float sight_angle2 = 2.617f;
+        public float Sight_Angle2
+        {
+            get { return sight_angle2; }
+        }
+
         public float Enemy_Speed
         {
             get { return enemy_speed; }

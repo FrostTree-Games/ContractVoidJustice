@@ -21,6 +21,9 @@ namespace PattyPetitGiant
         private float alert_timer;
         private Vector2 ball_coordinate;
         private Entity entity_found;
+
+        private float sound_timer = 0.0f;
+        private bool play_sound = true;
         
         private AnimationLib.FrameAnimationSet chain_ball;
 
@@ -242,6 +245,12 @@ namespace PattyPetitGiant
                 case mutantBallState.Agressive:
                     agressive_timer += currentTime.ElapsedGameTime.Milliseconds;
                     current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
+                    sound_timer += currentTime.ElapsedGameTime.Milliseconds;
+
+                    if (sound_timer > 30)
+                    {
+                        play_sound = true;
+                    }
 
                     float angle_from_entity = (float)Math.Atan2(entity_found.CenterPoint.Y - CenterPoint.Y, entity_found.CenterPoint.X - CenterPoint.X);
 
@@ -318,6 +327,12 @@ namespace PattyPetitGiant
                                 continue;
                             else if (parentWorld.EntityList[i].Death == false && hitTestBall(parentWorld.EntityList[i], ball_coordinate.X, ball_coordinate.Y))
                             {
+                                if (play_sound)
+                                {
+                                    AudioLib.playSoundEffect("chargerImpact");
+                                    play_sound = false;
+                                    sound_timer = 0.0f;
+                                }
                                 float distance = Vector2.Distance(ball_coordinate, CenterPoint);
                                 Vector2 direction = new Vector2(distance * (float)(Math.Cos(angle)), distance * (float)(Math.Sin(angle)));
 

@@ -43,7 +43,6 @@ namespace PattyPetitGiant
         private float alert_timer = 0.0f;
 
         private bool loop = true;
-        private bool death = false;
         private string[] deathAnims = { "die", "die2", "die3" };
 
         public static AnimationLib.FrameAnimationSet bulletPic = AnimationLib.getFrameAnimationSet("testBullet");
@@ -98,8 +97,6 @@ namespace PattyPetitGiant
 
         public override void update(GameTime currentTime)
         {
-
-
             if (bullet_number > 0)
             {
                 bullet_inactive_number = 0;
@@ -125,6 +122,12 @@ namespace PattyPetitGiant
             if (sound_alert && state == SquadLeaderState.Patrol && entity_found == null)
             {
                 state = SquadLeaderState.Alert;
+            }
+
+            if (death)
+            {
+                velocity = Vector2.Zero;
+                return;
             }
 
             if (death == false)
@@ -201,7 +204,7 @@ namespace PattyPetitGiant
 
                             if (enemy_found)
                             {
-                                if (squad_mates[0] != null && squad_mates[1] != null)
+                                if ((squad_mates[0] != null && !squad_mates[0].Death) || (squad_mates[1] != null && !squad_mates[1].Death))
                                 {
                                     state = SquadLeaderState.Direct;
 
@@ -410,6 +413,11 @@ namespace PattyPetitGiant
                                 state = SquadLeaderState.Alert;
                             }
 
+                            if ((squad_mates[0] != null && squad_mates[1] != null && squad_mates[0].Death == true && squad_mates[1].Death == true))
+                            {
+                                state = SquadLeaderState.Alert;
+                            }
+
                             float distance_from_enemy = Vector2.Distance(position, entity_found.Position);
                             break;
                         case SquadLeaderState.WindUp:
@@ -424,13 +432,15 @@ namespace PattyPetitGiant
                             break;
                         case SquadLeaderState.Fight:
                             //firing bullet
+                            animation_time = 0.0f;
                             time_between_shots += currentTime.ElapsedGameTime.Milliseconds;
                             reset_timer += currentTime.ElapsedGameTime.Milliseconds;
-                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
-                            loop = false;
+                            current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idleAim");
 
                             if (bullet_number < max_number_bullets && time_between_shots > time_between_shots_threshold)
                             {
+                                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
+                                loop = false;
                                 Vector2 bullet_velocity;
                                 switch (direction_facing)
                                 {
@@ -447,6 +457,9 @@ namespace PattyPetitGiant
                                         bullet_velocity = new Vector2(0, -10);
                                         break;
                                 }
+
+                                AudioLib.playSoundEffect("magnum");
+
                                 bullets[bullet_number] = new Bullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), bullet_velocity);
                                 bullet_number++;
                                 time_between_shots = 0.0f;
@@ -477,20 +490,17 @@ namespace PattyPetitGiant
                                 }
                             }
                             break;
-                        case SquadLeaderState.Dying:
-                            velocity = Vector2.Zero;
-                            break;
                         default:
                             break;
                     }
                 }
             }
 
-            if (squad_mates[0] != null && squad_mates[0].Remove_From_List == true)
+            if (squad_mates[0] != null && squad_mates[0].Death == false)
             {
                 squad_mates[0].Follow_Point = follow_point_1;
             }
-            if (squad_mates[1] != null && squad_mates[1].Remove_From_List == true)
+            if (squad_mates[1] != null && squad_mates[1].Death == false)
             {
                 squad_mates[1].Follow_Point = follow_point_2;
             }
