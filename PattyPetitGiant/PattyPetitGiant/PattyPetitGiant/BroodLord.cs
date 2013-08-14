@@ -46,7 +46,7 @@ namespace PattyPetitGiant
 
             broodState = BroodLordState.Idle;
 
-            enemy_life = 5;
+            enemy_life = 25;
             enemy_type = EnemyType.Alien;
 
             prob_item_drop = 0.45;

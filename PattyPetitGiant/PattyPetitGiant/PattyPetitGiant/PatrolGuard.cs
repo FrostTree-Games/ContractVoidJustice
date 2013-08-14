@@ -527,6 +527,7 @@ namespace PattyPetitGiant
                         if (!(bullets[i].active))
                         {
                             AudioLib.playSoundEffect("pistolTEST");
+                            parentWorld.Particles.pushBulletCasing(new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("gun").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("gun").WorldY));
                             Vector2 muzzleLocation = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("muzzle").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("muzzle").WorldY);
                             bullets[i] = new GunBullet(muzzleLocation, direction_facing, this);
 

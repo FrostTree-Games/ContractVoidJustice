@@ -63,6 +63,9 @@ namespace PattyPetitGiant
 
             konamiAlert = AnimationLib.getFrameAnimationSet("konamiPic");
 
+            number_drop_items = 4;
+            prob_item_drop = 0.3f;
+
             directionAnims = new AnimationLib.SpineAnimationSet[4];
             directionAnims[(int)GlobalGameConstants.Direction.Up] = AnimationLib.loadNewAnimationSet("alienChaserUp");
             directionAnims[(int)GlobalGameConstants.Direction.Down] = AnimationLib.loadNewAnimationSet("alienChaserDown");
@@ -201,6 +204,7 @@ namespace PattyPetitGiant
                 if (enemy_life < 1)
                 {
                     chaserState = SlowChaserState.Dying;
+                    parentWorld.pushCoin(this);
                     animation_time = 0;
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(Game1.rand.Next() % 2 == 0 ? "die" : Game1.rand.Next() % 2 == 0 ? "die2" : "die3");
 

@@ -212,7 +212,6 @@ namespace PattyPetitGiant
             {
                 if (sound_alert && entity_found == null)
                 {
-                    Console.WriteLine(animation_time);
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("run");
 
                     if (!parentWorld.Map.soundInSight(this, sound_position))

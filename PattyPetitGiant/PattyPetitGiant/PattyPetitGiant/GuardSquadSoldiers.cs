@@ -295,6 +295,7 @@ namespace PattyPetitGiant
                                 if (!bullets[i].active)
                                 {
                                     AudioLib.playSoundEffect("machineGun");
+                                    parentWorld.Particles.pushBulletCasing(new Vector2(current_skeleton.Skeleton.FindBone("gun").WorldX, current_skeleton.Skeleton.FindBone("gun").WorldY));
                                     bullets[i] = new SquadBullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), angle);
 
                                     bullets[i].velocity = new Vector2((float)(12.0 * Math.Cos(angle)), (float)(12.0 * Math.Sin(angle)));

@@ -103,7 +103,7 @@ namespace PattyPetitGiant
         private float fireTimer;
         private const float durationBetweenShots = 100;
 
-        private const int ammo_consumption = 1;
+        private const float ammo_consumption = 0.5f;
 
         public const string machineGunSoundEffect = "machineGun";
 
@@ -164,6 +164,7 @@ namespace PattyPetitGiant
 
                         fireTimer = 0;
                         parent.Animation_Time = 0;
+                        parentWorld.Particles.pushBulletCasing(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGun" : "rGun").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGun" : "rGun").WorldY));
                         pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
                         parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lMGun" : "rMGun");
                         parent.Velocity = Vector2.Zero;
@@ -186,6 +187,7 @@ namespace PattyPetitGiant
 
                         fireTimer = 0;
                         parent.Animation_Time = 0;
+                        parentWorld.Particles.pushBulletCasing(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGun" : "rGun").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGun" : "rGun").WorldY));
                         pushBullet(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (float)((int)(parent.Direction_Facing) * (Math.PI / 2)));
                         parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rMGun" : "lMGun");
                         parent.Velocity = Vector2.Zero;

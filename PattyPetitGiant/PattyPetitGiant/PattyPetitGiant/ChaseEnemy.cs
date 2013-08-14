@@ -38,6 +38,8 @@ namespace PattyPetitGiant
         private EnemyComponents chaseComponent = null;
         private EnemyComponents searchComponent = null;
 
+        private bool play_sound;
+
         private Entity chase_target;
 
         public ChaseEnemy(LevelState parentWorld, float initial_x, float initial_y)
@@ -59,6 +61,7 @@ namespace PattyPetitGiant
             enemy_found = false;
             player_in_range = false;
             chase_target = null;
+            play_sound = true;
 
             enemy_type = EnemyType.Prisoner;
             enemy_damage = 1;
@@ -191,16 +194,24 @@ namespace PattyPetitGiant
                     {
                         Vector2 direction = chase_target.CenterPoint - CenterPoint;
 
-                        AudioLib.playSoundEffect("swordHit");
-
+                        if (play_sound)
+                        {
+                            AudioLib.playSoundEffect("swordHit");
+                            play_sound = false;
+                        }
                         chase_target.knockBack(direction, knockback_magnitude, enemy_damage);
                     }
                     else
                     {
-                        AudioLib.playSoundEffect("testSword");
+                        if (play_sound)
+                        {
+                            AudioLib.playSoundEffect("testSword");
+                            play_sound = false;
+                        }
                     }
                     if (wind_anim > 500)
                     {
+                        play_sound = true;
                         dimensions = new Vector2(48f, 48f);
                         wind_anim = 0.0f;
                         animation_time = 0.0f;

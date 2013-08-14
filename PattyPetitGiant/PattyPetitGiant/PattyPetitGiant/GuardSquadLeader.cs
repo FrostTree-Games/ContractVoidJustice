@@ -127,7 +127,6 @@ namespace PattyPetitGiant
             if (death)
             {
                 velocity = Vector2.Zero;
-                return;
             }
 
             if (death == false)
@@ -459,7 +458,7 @@ namespace PattyPetitGiant
                                 }
 
                                 AudioLib.playSoundEffect("magnum");
-
+                                parentWorld.Particles.pushBulletCasing(new Vector2(current_skeleton.Skeleton.FindBone("gun").WorldX, current_skeleton.Skeleton.FindBone("gun").WorldY));
                                 bullets[bullet_number] = new Bullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), bullet_velocity);
                                 bullet_number++;
                                 time_between_shots = 0.0f;

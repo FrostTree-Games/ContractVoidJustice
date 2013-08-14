@@ -34,6 +34,7 @@ namespace PattyPetitGiant
             public Color color;
             public Vector2 scale;
             public bool isGib;
+            public bool isCasing;
             public Vector2 originalPosition;
 
             public static void NewBloodParticle(ref Particle p, Vector2 position)
@@ -49,6 +50,7 @@ namespace PattyPetitGiant
                 p.color = Color.White;
                 p.scale = new Vector2(1);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
 
                 float direction = (float)((-Math.PI * 3 / 8) - (Game1.rand.NextDouble() * Math.PI / 4));
@@ -71,6 +73,7 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
             }
 
@@ -89,6 +92,7 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
 
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
@@ -110,6 +114,7 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
 
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * bloodInitialSpeed;
@@ -131,6 +136,7 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
 
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * 1;
@@ -152,6 +158,7 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
 
                 p.velocity = new Vector2((float)(Math.Cos(direction)), (float)(Math.Sin(direction))) * speed;
@@ -173,6 +180,7 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
 
                 switch (direction)
@@ -210,6 +218,7 @@ namespace PattyPetitGiant
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(0.7f);
                 p.isGib = false;
+                p.isCasing = false;
                 p.originalPosition = p.position;
             }
 
@@ -229,6 +238,7 @@ namespace PattyPetitGiant
                 p.acceleration = new Vector2(0, 500);
                 p.scale = new Vector2(0.7f);
                 p.isGib = true;
+                p.isCasing = false;
                 p.originalPosition = p.position;
             }
 
@@ -253,7 +263,68 @@ namespace PattyPetitGiant
                     p.acceleration = new Vector2(-500, 0);
                 p.scale = new Vector2(1.0f);
                 p.isGib = true;
+                p.isCasing = false;
                 p.originalPosition = p.position + new Vector2(0, 360);
+            }
+
+            public static void newBulletCasing(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.animation = AnimationLib.getFrameAnimationSet("casing");
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 3000f;
+                p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+                p.rotationSpeed = (float)(Game1.rand.NextDouble() * 0.01);
+                p.animationTime = 0;
+                p.color = Color.White;
+                float offset = (float)(Game1.rand.NextDouble() * 1.0f - 0.5f);
+                p.velocity = new Vector2((float)(Game1.rand.NextDouble() * 75 - 75), -280f + (float)(Game1.rand.NextDouble() * 50));
+                p.acceleration = new Vector2(0, 500);
+                p.scale = new Vector2(0.7f);
+                p.isGib = false;
+                p.isCasing = true;
+                p.originalPosition = p.position + new Vector2(0, 32f);
+            }
+
+            public static void newShotGunCasing(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.animation = AnimationLib.getFrameAnimationSet("casing");
+                p.position = position - (p.animation.FrameDimensions * 0.7f) / 2;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 3000f;
+                p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+                p.rotationSpeed = (float)(Game1.rand.NextDouble() * 0.01);
+                p.animationTime = 0;
+                p.color = Color.White;
+                float offset = (float)(Game1.rand.NextDouble() * 1.0f - 0.5f);
+                p.velocity = new Vector2((float)(Game1.rand.NextDouble() * 75 - 75), -280f + (float)(Game1.rand.NextDouble() * 50));
+                p.acceleration = new Vector2(0, 700);
+                p.scale = new Vector2(1.0f);
+                p.isGib = false;
+                p.isCasing = true;
+                p.originalPosition = p.position + new Vector2(0, 32f);
+            }
+
+            public static void newRocketCasing(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.animation = AnimationLib.getFrameAnimationSet("casing");
+                p.position = position - (p.animation.FrameDimensions * 0.7f) / 2;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 3000f;
+                p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+                p.rotationSpeed = (float)(Game1.rand.NextDouble() * 0.01);
+                p.animationTime = 0;
+                p.color = Color.White;
+                float offset = (float)(Game1.rand.NextDouble() * 1.0f - 0.5f);
+                p.velocity = new Vector2((float)(Game1.rand.NextDouble() * 75 - 75), -280f + (float)(Game1.rand.NextDouble() * 50));
+                p.acceleration = new Vector2(0, 900);
+                p.scale = new Vector2(10.0f);
+                p.isGib = false;
+                p.isCasing = true;
+                p.originalPosition = p.position + new Vector2(0, 32f);
             }
         }
 
@@ -306,6 +377,37 @@ namespace PattyPetitGiant
             }
         }
 
+        private void updateCasing(GameTime currentTime, ref Particle p)
+        {
+            p.timeAlive += currentTime.ElapsedGameTime.Milliseconds;
+            if (p.timeAlive > p.maxTimeAlive)
+            {
+                p.active = false;
+                return;
+            }
+
+            p.animationTime += currentTime.ElapsedGameTime.Milliseconds;
+
+            p.position += p.velocity * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+
+            if (p.velocity.Y > 0 && p.position.Y - p.originalPosition.Y > 0)
+            {
+                p.position -= p.velocity * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+                p.velocity.Y *= -0.5f;
+                p.velocity.X *= 0.8f;
+                p.position += p.velocity * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+
+            }
+
+            p.velocity += p.acceleration * (currentTime.ElapsedGameTime.Milliseconds / 1000f);
+
+            if (p.velocity.Length() < 30f && Math.Abs(p.position.Y - p.originalPosition.Y) < 2f)
+            {
+                p.velocity = Vector2.Zero;
+                p.acceleration = Vector2.Zero;
+            }
+        }
+
         public void update(GameTime currentTime)
         {
             for (int i = 0; i < particlePoolSize; i++)
@@ -316,6 +418,12 @@ namespace PattyPetitGiant
                 {
                     updateGib(currentTime, ref particlePool[i]);
 
+                    continue;
+                }
+
+                if (particlePool[i].isCasing)
+                {
+                    updateCasing(currentTime, ref particlePool[i]);
                     continue;
                 }
 
@@ -488,6 +596,39 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewExplosiveGib(ref particlePool[i], position);
+                return;
+            }
+        }
+
+        public void pushBulletCasing(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.newShotGunCasing(ref particlePool[i], position);
+                return;
+            }
+        }
+
+        public void pushShotGunCasing(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.newShotGunCasing(ref particlePool[i], position);
+                return;
+            }
+        }
+
+        public void pushRocketCasing(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.newShotGunCasing(ref particlePool[i], position);
                 return;
             }
         }

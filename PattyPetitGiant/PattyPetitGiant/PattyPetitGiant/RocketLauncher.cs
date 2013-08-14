@@ -30,7 +30,7 @@ namespace PattyPetitGiant
         private const float shootDuration = 500f;
         private const float coolDownDuration = 0;
 
-        private const int ammo_consumption = 20;
+        private const int ammo_consumption = 10;
 
         private static AnimationLib.FrameAnimationSet explosionAnim = null;
 
@@ -136,6 +136,8 @@ namespace PattyPetitGiant
                     state = RocketLauncherState.Shooting;
 
                     AudioLib.playSoundEffect(rocketSound);
+
+                    parentWorld.Particles.pushRocketCasing(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGun" : "lGun").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGun" : "lGun").WorldY));
 
                     if (slot1)
                     {
@@ -303,7 +305,7 @@ namespace PattyPetitGiant
                         float knockback_magnitude = 5 / rocket_knockback_power;
                                                                         
 
-                        en.knockBack(en.CenterPoint - centerPoint, knockback_magnitude, 5, parent);
+                        en.knockBack(en.CenterPoint - centerPoint, knockback_magnitude, 15, parent);
                     }
                 }
             }

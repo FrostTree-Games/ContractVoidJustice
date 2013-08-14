@@ -595,7 +595,7 @@ namespace PattyPetitGiant
                                         }
                                         else if (en is Player)
                                         {
-                                            //GameCampaign.Player_Health -= acid_damage;
+                                            GameCampaign.Player_Health -= acid_damage;
                                         }
                                     }
                                 }
@@ -628,7 +628,7 @@ namespace PattyPetitGiant
                                     }
                                     else if (en is Player)
                                     {
-                                        //GameCampaign.Player_Health -= acid_damage;
+                                        GameCampaign.Player_Health -= acid_damage;
                                     }
                                 }
                             }
@@ -666,7 +666,7 @@ namespace PattyPetitGiant
                                         }
                                         else if (en is Player)
                                         {
-                                            //GameCampaign.Player_Health -= acid_damage;
+                                            GameCampaign.Player_Health -= acid_damage;
                                         }
                                     }
                                 }

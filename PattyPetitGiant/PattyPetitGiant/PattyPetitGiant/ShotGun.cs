@@ -99,6 +99,7 @@ namespace PattyPetitGiant
                 }
 
                 AudioLib.playSoundEffect(shot_gun_sound);
+                parentWorld.Particles.pushShotGunCasing(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGun" : "lGun").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGun" : "lGun").WorldY));
 
                 for (int i = 0; i < max_pellets; i++)
                 {

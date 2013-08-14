@@ -230,13 +230,18 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new MolotovEnemy(this, spawnPos));
                     }
+
+                    else if (randomSpawnValue < 0.35)
+                    {
+                        entityList.Add(new HookPrisonerEnemy(this, spawnPos.X, spawnPos.Y));
+                    }
                     else if (randomSpawnValue < 0.5)
                     {
                         entityList.Add(new ChargerMutantEnemy(this, spawnPos));
                     }
                     else
                     {
-                        //entityList.Add(new ChaseEnemy(this, spawnPos.X, spawnPos.Y));
+                        entityList.Add(new ChaseEnemy(this, spawnPos.X, spawnPos.Y));
                     }
                 }
                 else if (faction == Entity.EnemyType.Guard)
@@ -248,6 +253,13 @@ namespace PattyPetitGiant
                     else if (randomSpawnValue < 0.2)
                     {
                         entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
+                    }
+                    else if (randomSpawnValue < 0.4)
+                    {
+                        entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 0)));
+                        entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 1)));
+                        entityList.Add(new AntiFairy(this, spawnPos + new Vector2(0, 1)));
+                        entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, -1)));
                     }
                     else
                     {
@@ -354,7 +366,7 @@ namespace PattyPetitGiant
 
                         //entityList.Add(new GuardSquadLeader(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
 
-                        entityList.Add(new BroodLord(this, new Vector2((currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
+                        //entityList.Add(new BroodLord(this, new Vector2((currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
 
                         if (GameCampaign.IsATwoPlayerGame)
                         {
