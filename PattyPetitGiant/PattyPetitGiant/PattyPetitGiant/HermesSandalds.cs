@@ -19,7 +19,7 @@ namespace PattyPetitGiant
 
         private HermesSandalsState state;
 
-        private const float hermesRunSpeed = 9f;
+        private const float hermesRunSpeed = 15f;
 
         private float windUpTime;
         private const float windUpDuration = 450f;

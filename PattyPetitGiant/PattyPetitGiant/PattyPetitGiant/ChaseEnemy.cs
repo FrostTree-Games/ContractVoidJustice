@@ -191,7 +191,13 @@ namespace PattyPetitGiant
                     {
                         Vector2 direction = chase_target.CenterPoint - CenterPoint;
 
+                        AudioLib.playSoundEffect("swordHit");
+
                         chase_target.knockBack(direction, knockback_magnitude, enemy_damage);
+                    }
+                    else
+                    {
+                        AudioLib.playSoundEffect("testSword");
                     }
                     if (wind_anim > 500)
                     {

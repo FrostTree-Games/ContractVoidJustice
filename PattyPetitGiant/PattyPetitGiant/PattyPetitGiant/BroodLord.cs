@@ -46,7 +46,7 @@ namespace PattyPetitGiant
 
             broodState = BroodLordState.Idle;
 
-            enemy_life = 25;
+            enemy_life = 5;
             enemy_type = EnemyType.Alien;
 
             prob_item_drop = 0.45;
@@ -186,6 +186,11 @@ namespace PattyPetitGiant
                 if (enemy_life < 1)
                 {
                     broodState = BroodLordState.Dying;
+
+                    for (int i = 0; i < 50; i++)
+                    {
+                        parentWorld.Particles.pushGib(CenterPoint);
+                    }
                     parentWorld.pushCoin(this);
                 }
 

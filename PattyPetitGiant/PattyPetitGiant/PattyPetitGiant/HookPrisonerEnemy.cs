@@ -203,6 +203,7 @@ namespace PattyPetitGiant
                     else
                     {
                         directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
+                        AudioLib.playSoundEffect("chargerImpact");
                         if (en_chained != null)
                         {
                             Vector2 direction = en_chained.CenterPoint - CenterPoint;

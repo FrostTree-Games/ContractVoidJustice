@@ -3,143 +3,143 @@ img.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-muzzle1
-  rotate: false
-  xy: 1, 7
-  size: 80, 56
-  orig: 80, 56
-  offset: 0, 0
-  index: -1
-muzzle2
-  rotate: false
-  xy: 83, 7
-  size: 80, 56
-  orig: 80, 56
-  offset: 0, 0
-  index: -1
-torso
-  rotate: false
-  xy: 165, 18
-  size: 49, 45
-  orig: 49, 45
-  offset: 0, 0
-  index: -1
-sword
-  rotate: false
-  xy: 216, 46
-  size: 64, 17
-  orig: 64, 17
-  offset: 0, 0
-  index: -1
 blood
   rotate: false
-  xy: 216, 28
-  size: 48, 16
+  xy: 217, 28
+  size: 48, 11
   orig: 48, 16
-  offset: 0, 0
-  index: -1
-pelvis
-  rotate: false
-  xy: 165, 1
-  size: 21, 15
-  orig: 21, 15
   offset: 0, 0
   index: -1
 head
   rotate: false
-  xy: 188, 1
+  xy: 460, 43
   size: 19, 15
   orig: 19, 15
   offset: 0, 0
   index: -1
-lFoot
-  rotate: false
-  xy: 209, 1
-  size: 14, 15
-  orig: 14, 15
-  offset: 0, 0
-  index: -1
-lThigh
-  rotate: false
-  xy: 282, 33
-  size: 19, 30
-  orig: 19, 30
-  offset: 0, 0
-  index: -1
-rThigh
-  rotate: false
-  xy: 303, 33
-  size: 19, 30
-  orig: 19, 30
-  offset: 0, 0
-  index: -1
-rShoulder
-  rotate: false
-  xy: 324, 34
-  size: 18, 29
-  orig: 18, 29
-  offset: 0, 0
-  index: -1
-lShoulder
-  rotate: false
-  xy: 344, 31
-  size: 15, 32
-  orig: 15, 32
-  offset: 0, 0
-  index: -1
 lCalf
-  rotate: false
-  xy: 266, 21
+  rotate: true
+  xy: 412, 44
   size: 14, 23
   orig: 14, 23
   offset: 0, 0
   index: -1
 rCalf
-  rotate: false
-  xy: 266, 21
+  rotate: true
+  xy: 412, 44
   size: 14, 23
   orig: 14, 23
   offset: 0, 0
   index: -1
-rFoot
+lFoot
   rotate: false
-  xy: 361, 48
-  size: 14, 15
-  orig: 14, 15
-  offset: 0, 0
-  index: -1
-rForearm
-  rotate: false
-  xy: 361, 31
+  xy: 481, 43
   size: 14, 15
   orig: 14, 15
   offset: 0, 0
   index: -1
 lForearm
   rotate: false
-  xy: 377, 48
+  xy: 497, 43
   size: 10, 15
   orig: 10, 15
   offset: 0, 0
   index: -1
 lHand
   rotate: false
-  xy: 216, 18
+  xy: 166, 3
   size: 6, 8
   orig: 6, 8
   offset: 0, 0
   index: -1
-rHand
+lShoulder
+  rotate: true
+  xy: 283, 43
+  size: 15, 32
+  orig: 15, 32
+  offset: 0, 0
+  index: -1
+lThigh
+  rotate: true
+  xy: 317, 39
+  size: 19, 30
+  orig: 19, 30
+  offset: 0, 0
+  index: -1
+muzzle1
   rotate: false
-  xy: 282, 22
-  size: 10, 9
-  orig: 10, 9
+  xy: 2, 2
+  size: 80, 56
+  orig: 80, 56
+  offset: 0, 0
+  index: -1
+muzzle2
+  rotate: false
+  xy: 84, 2
+  size: 80, 56
+  orig: 80, 56
   offset: 0, 0
   index: -1
 null
   rotate: false
-  xy: 1, 1
-  size: 4, 4
-  orig: 4, 4
+  xy: 509, 57
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+pelvis
+  rotate: false
+  xy: 437, 43
+  size: 21, 15
+  orig: 21, 15
+  offset: 0, 0
+  index: -1
+rFoot
+  rotate: true
+  xy: 217, 12
+  size: 14, 15
+  orig: 14, 15
+  offset: 0, 0
+  index: -1
+rForearm
+  rotate: true
+  xy: 234, 12
+  size: 14, 15
+  orig: 14, 15
+  offset: 0, 0
+  index: -1
+rHand
+  rotate: false
+  xy: 267, 30
+  size: 10, 9
+  orig: 10, 9
+  offset: 0, 0
+  index: -1
+rShoulder
+  rotate: true
+  xy: 381, 40
+  size: 18, 29
+  orig: 18, 29
+  offset: 0, 0
+  index: -1
+rThigh
+  rotate: true
+  xy: 349, 39
+  size: 19, 30
+  orig: 19, 30
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 217, 41
+  size: 64, 17
+  orig: 64, 17
+  offset: 0, 0
+  index: -1
+torso
+  rotate: false
+  xy: 166, 13
+  size: 49, 45
+  orig: 49, 45
   offset: 0, 0
   index: -1

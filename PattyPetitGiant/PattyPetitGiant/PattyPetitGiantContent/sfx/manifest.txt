@@ -17,3 +17,4 @@ bombBeep
 chargerImpact
 tankFire
 molotovExplode
+magnum

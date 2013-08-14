@@ -53,9 +53,9 @@ namespace PattyPetitGiant
         private float bullet_timer = 0.0f;
         private float firing_timer = 0.0f;
         private float move_timer = 0.0f;
-        private bool death = false;
         private bool loop = true;
 
+        public static AnimationLib.FrameAnimationSet bulletPic = AnimationLib.getFrameAnimationSet("testBullet");
 
         private Entity entity_found = null;
         public Entity Entity_Found
@@ -88,6 +88,9 @@ namespace PattyPetitGiant
             bullet_count = 0;
             bullet_timer = 0.0f;
             firing_timer = 0.0f;
+            sight_angle1 = 1.047f;
+            sight_angle2 = 2.094f;
+
             reset_state_flag = false;
             this.parentWorld = parentWorld;
             change_direction_time_threshold = 4000.0f;
@@ -119,7 +122,12 @@ namespace PattyPetitGiant
             }
             else
             {
-                
+                if (leader.Death == true && (state == SquadSoldierState.Patrol || state == SquadSoldierState.MoveIntoPosition))
+                {
+                    state = SquadSoldierState.IndividualPatrol;
+                }
+
+
                 switch (state)
                 {
                     case SquadSoldierState.Patrol:
@@ -130,7 +138,7 @@ namespace PattyPetitGiant
                         {
                             direction_facing = Leader.Direction_Facing;
                         }
-                
+                                                
                         switch (direction_facing)
                         {
                             case GlobalGameConstants.Direction.Up:
@@ -208,7 +216,7 @@ namespace PattyPetitGiant
                         angle = (float)(Math.Atan2(follow_point.Y - CenterPoint.Y, follow_point.X - CenterPoint.X));
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         move_timer += currentTime.ElapsedGameTime.Milliseconds;
-
+                        
                         if ((int)distance_from_follow_pt > 5 || move_timer < 1000)
                         {
                             velocity = new Vector2(distance_from_follow_pt * (float)(Math.Cos(angle)) / 100.0f, distance_from_follow_pt * (float)(Math.Sin(angle)) / 100.0f);
@@ -286,9 +294,10 @@ namespace PattyPetitGiant
                             {
                                 if (!bullets[i].active)
                                 {
-                                    bullets[i] = new SquadBullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY));
+                                    AudioLib.playSoundEffect("machineGun");
+                                    bullets[i] = new SquadBullet(new Vector2(current_skeleton.Skeleton.FindBone("muzzle").WorldX, current_skeleton.Skeleton.FindBone("muzzle").WorldY), angle);
 
-                                    bullets[i].velocity = new Vector2((float)(8.0 * Math.Cos(angle)), (float)(8.0 * Math.Sin(angle)));
+                                    bullets[i].velocity = new Vector2((float)(12.0 * Math.Cos(angle)), (float)(12.0 * Math.Sin(angle)));
                                     bullet_timer = 0.0f;
                                     break;
                                 }
@@ -340,6 +349,19 @@ namespace PattyPetitGiant
                                 }
                             }
                         }
+
+                        switch (direction_facing)
+                        {
+                            case GlobalGameConstants.Direction.Up:
+                                current_skeleton = walk_up;
+                                break;
+                            case GlobalGameConstants.Direction.Down:
+                                current_skeleton = walk_down;
+                                break;
+                            default:
+                                current_skeleton = walk_right;
+                                break;
+                        }
                         break;
                     case SquadSoldierState.Dying:
                         velocity = Vector2.Zero;
@@ -356,13 +378,7 @@ namespace PattyPetitGiant
 
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
             current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, loop);
-
-            if (leader != null && leader.Remove_From_List && death == false)
-            {
-                state = SquadSoldierState.IndividualPatrol;
-                leader = null;
-            }
-
+            
             for (int i = 0; i < max_bullet_count; i++)
             {
                 if (bullets[i].active)
@@ -389,7 +405,8 @@ namespace PattyPetitGiant
             {
                 if (bullets[i].active)
                 {
-                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].position, Color.White, 0.0f, new Vector2(10.0f, 10.0f));
+                    //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), bullets[i].position, Color.White, 0.0f, new Vector2(10.0f, 10.0f));
+                    bulletPic.drawAnimationFrame(0.0f, sb, bullets[i].position - (bulletPic.FrameDimensions / 2), new Vector2(1f), 0.5f, bullets[i].Bullet_Angle, bullets[i].CenterPoint, Color.White);
                 }
             }
         }
@@ -492,12 +509,18 @@ namespace PattyPetitGiant
                 get { return position + (dimensions / 2); }
             }
 
+            private float bullet_angle;
+            public float Bullet_Angle
+            {
+                get { return bullet_angle; }
+            }
+
             public float time_alive;
             private const float max_time_alive = 1000f;
             private int bullet_damage;
             private float knockback_magnitude;
             
-            public SquadBullet(Vector2 position)
+            public SquadBullet(Vector2 position, float angle)
             {
                 this.position = position;
                 active = true;
@@ -505,6 +528,8 @@ namespace PattyPetitGiant
                 this.velocity = Vector2.Zero;
 
                 nextStep_temp = Vector2.Zero;
+
+                bullet_angle = angle;
 
                 bullet_damage = 5;
                 knockback_magnitude = 2.0f;
@@ -534,12 +559,16 @@ namespace PattyPetitGiant
                         Vector2 direction = parentWorld.EntityList[i].Position - position;
                         parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, bullet_damage, parent);
                         active = false;
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
+
                         return;
                     }
                 }
 
                 if (time_alive > max_time_alive)
                 {
+                    parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
+
                     active = false;
                 }
                 else
@@ -573,6 +602,8 @@ namespace PattyPetitGiant
                     }
                     else
                     {
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
+
                         active = false;
                         time_alive = 0.0f;
                         break;

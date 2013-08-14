@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.GamerServices;
 
 namespace PattyPetitGiant
 {
@@ -71,6 +72,8 @@ namespace PattyPetitGiant
 
         private List<optionsMenuOptions> options_list;
 
+        private List<string> MBOPTIONS = new List<string>();
+
         private bool down_pressed;
         private bool up_pressed;
         private bool confirm_pressed;
@@ -88,6 +91,8 @@ namespace PattyPetitGiant
             options_list.Add(new optionsMenuOptions("HIGH SCORE"));
             options_list.Add(new optionsMenuOptions("ERASE HIGH SCORE"));
             options_list.Add(new optionsMenuOptions("BACK"));
+
+            MBOPTIONS.Add("OK");
         }
 
         protected override void doUpdate(GameTime currentTime)
@@ -157,6 +162,7 @@ namespace PattyPetitGiant
                         isComplete = true;
                         break;
                     case "ERASE HIGH SCORE":
+                        Guide.BeginShowMessageBox("Blah", "Hello", MBOPTIONS, 0, MessageBoxIcon.Warning, null, null);
                         break;
                     case "BACK":
                         isComplete = true;
