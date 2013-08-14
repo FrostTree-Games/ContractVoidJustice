@@ -187,7 +187,12 @@ namespace PattyPetitGiant
                 {
                     broodState = BroodLordState.Dying;
 
-                    for (int i = 0; i < 50; i++)
+                    for (int i = 0; i < 20; i++)
+                    {
+                        parentWorld.Particles.pushExplosiveGib(CenterPoint);
+                    }
+
+                    for (int i = 0; i < 10; i++)
                     {
                         parentWorld.Particles.pushGib(CenterPoint);
                     }

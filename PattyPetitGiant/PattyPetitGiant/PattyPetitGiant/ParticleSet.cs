@@ -231,6 +231,30 @@ namespace PattyPetitGiant
                 p.isGib = true;
                 p.originalPosition = p.position;
             }
+
+            public static void NewExplosiveGib(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.animation = AnimationLib.getFrameAnimationSet(Game1.rand.Next() % 8 != 0 ? "GibSmallGeneric" : (Game1.rand.Next() % 2 == 0 ? "heartIdle" : "lungIdle"));
+                p.position = position - (p.animation.FrameDimensions * 0.7f) / 2;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 500f;
+                p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
+                p.rotationSpeed = (float)(Game1.rand.NextDouble() * 0.01);
+                p.animationTime = 0;
+                p.color = Color.White;
+                float offset = (float)(Game1.rand.NextDouble() * 1.0f - 0.5f);
+
+                p.velocity = new Vector2((float)((Game1.rand.NextDouble()-0.5) * 1000), 1000f *(float)(Game1.rand.NextDouble()- 0.5));
+
+                if (p.velocity.X < 0.0f)
+                    p.acceleration = new Vector2(500, 0);
+                else
+                    p.acceleration = new Vector2(-500, 0);
+                p.scale = new Vector2(1.0f);
+                p.isGib = true;
+                p.originalPosition = p.position + new Vector2(0, 360);
+            }
         }
 
         private const int particlePoolSize = 300;
@@ -453,6 +477,17 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.NewGib(ref particlePool[i], position);
+                return;
+            }
+        }
+
+        public void pushExplosiveGib(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewExplosiveGib(ref particlePool[i], position);
                 return;
             }
         }
