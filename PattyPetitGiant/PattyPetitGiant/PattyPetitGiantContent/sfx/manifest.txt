@@ -18,3 +18,5 @@ chargerImpact
 tankFire
 molotovExplode
 magnum
+ammoPickup
+heathSound

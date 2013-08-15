@@ -455,7 +455,7 @@ namespace PattyPetitGiant
                 if (!particlePool[i].active) { continue; }
                 if (Vector2.Distance(cameraPosition, particlePool[i].position) > 750f) { continue; }
 
-                particlePool[i].animation.drawAnimationFrame(particlePool[i].animationTime, sb, particlePool[i].position - cameraPosition + new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) / 2, new Vector2(1), depthOffset, particlePool[i].rotation, particlePool[i].animation.FrameDimensions / 2, particlePool[i].color);
+                particlePool[i].animation.drawAnimationFrame(particlePool[i].animationTime, sb, particlePool[i].position - cameraPosition + new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) / 2, particlePool[i].scale, depthOffset, particlePool[i].rotation, particlePool[i].animation.FrameDimensions / 2, particlePool[i].color);
             }
         }
 

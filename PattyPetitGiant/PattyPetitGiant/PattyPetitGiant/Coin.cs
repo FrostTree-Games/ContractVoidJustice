@@ -163,6 +163,7 @@ namespace PattyPetitGiant
 
                             if (hitTest(parentWorld.EntityList[i]))
                             {
+                                AudioLib.playSoundEffect("ammoPickup");
                                 if (ammo_value == AmmoValue.fullAmmo)
                                 {
                                     if (playerIndex == InputDevice2.PPG_Player.Player_1)

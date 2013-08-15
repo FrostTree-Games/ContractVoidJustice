@@ -358,6 +358,10 @@ namespace PattyPetitGiant
                 dyingTimer += currentTime.ElapsedGameTime.Milliseconds;
                 if (dyingTimer > dyingDuration)
                 {
+                    for (int i = 0; i < 11; i++)
+                    {
+                        parentWorld.Particles.pushExplosiveGib(CenterPoint);
+                    }
                     minionState = BroodLingState.Dead;
                 }
             }

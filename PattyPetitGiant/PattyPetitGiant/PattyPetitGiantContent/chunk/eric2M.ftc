@@ -583,5 +583,8 @@
     <ChunkAttribute>
       <AttributeName>east</AttributeName>
     </ChunkAttribute>
+    <ChunkAttribute>
+      <AttributeName>pickup</AttributeName>
+    </ChunkAttribute>
   </Attributes>
 </Chunk>

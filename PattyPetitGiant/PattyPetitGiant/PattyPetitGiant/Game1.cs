@@ -54,6 +54,7 @@ namespace PattyPetitGiant
         public static Texture2D healthColor = null;
         public static Texture2D energyColor = null;
         public static Texture2D energyOverlay = null;
+        public static Texture2D popUpBackground = null;
         public static Random rand = new Random();
 
         private static bool gameIsRunningSlowly;
@@ -135,6 +136,7 @@ namespace PattyPetitGiant
             healthColor = Content.Load<Texture2D>("healthTexture");
             energyColor = Content.Load<Texture2D>("ammoTexture");
             energyOverlay = Content.Load<Texture2D>("overlay");
+            popUpBackground = Content.Load<Texture2D>("popUpBackground");
 
             shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
             heartPic = Content.Load<Texture2D>("heartSheet");
@@ -178,9 +180,9 @@ namespace PattyPetitGiant
 
             // lol so many game screens
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            currentGameScreen = new CampaignLobbyState();
+            //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
         }
