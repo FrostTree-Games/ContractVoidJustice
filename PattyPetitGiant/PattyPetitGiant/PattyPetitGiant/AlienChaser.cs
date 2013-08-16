@@ -115,6 +115,7 @@ namespace PattyPetitGiant
                         timer = 0;
                         chaseIteration = 0;
                         chaserState = SlowChaserState.WindUp;
+                        AudioLib.playSoundEffect("alienChaserAlert");
                     }
                     else if (targetEntity != null && aggressionTime <= maxAggressionTime)
                     {
@@ -207,7 +208,7 @@ namespace PattyPetitGiant
                     parentWorld.pushCoin(this);
                     animation_time = 0;
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation(Game1.rand.Next() % 2 == 0 ? "die" : Game1.rand.Next() % 2 == 0 ? "die2" : "die3");
-
+                    AudioLib.playSoundEffect("alienChaserDie");
                     return;
                 }
 

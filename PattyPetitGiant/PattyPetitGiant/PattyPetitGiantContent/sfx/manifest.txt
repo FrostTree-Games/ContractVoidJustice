@@ -20,3 +20,6 @@ molotovExplode
 magnum
 ammoPickup
 heathSound
+alienChaserAlert
+alienChaserDie
+acidSpit

@@ -186,7 +186,7 @@ namespace PattyPetitGiant
                 if (enemy_life < 1)
                 {
                     broodState = BroodLordState.Dying;
-
+                    AudioLib.playSoundEffect("alienChaserDie");
                     for (int i = 0; i < 20; i++)
                     {
                         parentWorld.Particles.pushExplosiveGib(CenterPoint);

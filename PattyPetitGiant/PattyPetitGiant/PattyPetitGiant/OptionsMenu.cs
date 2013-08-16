@@ -223,7 +223,6 @@ namespace PattyPetitGiant
                             isComplete = true;
                             break;
                         case "ERASE HIGH SCORE":
-                            //Guide.BeginShowMessageBox("Blah", "Hello", MBOPTIONS, 0, MessageBoxIcon.Warning, null, null);
                             pop_up_menu = true;
                             popup_item_selected = 0;
                             break;

@@ -97,6 +97,7 @@ namespace PattyPetitGiant
             {
                 velocity = Vector2.Zero;
                 death = true;
+                AudioLib.playSoundEffect("alienChaserDie");
                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(deathAnim[Game1.rand.Next() % 3]);
                 state = mutantBallState.Death;
                 animation_time = 0.0f;
