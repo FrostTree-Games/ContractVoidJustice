@@ -223,6 +223,7 @@ namespace PattyPetitGiant
             }
             else if (chaserState == SlowChaserState.Dying)
             {
+                this.dimensions = new Vector2(2);
                 this.velocity = Vector2.Zero;
                 this.death = true;
             }

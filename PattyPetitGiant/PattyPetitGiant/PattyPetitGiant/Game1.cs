@@ -58,6 +58,10 @@ namespace PattyPetitGiant
         public static Texture2D greyBar = null;
         public static Random rand = new Random();
 
+        private Texture2D pleaseWaitDialog = null;
+        private bool dialogShown = false;
+        private bool assetsLoaded = false;
+
         private static bool gameIsRunningSlowly;
         public static bool GameIsRunningSlowly { get { return gameIsRunningSlowly; } }
 
@@ -128,6 +132,13 @@ namespace PattyPetitGiant
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
+
+            dialogShown = false;
+        }
+
+        private void loadContent2()
+        {
             whitePixel = Content.Load<Texture2D>("whitePixel");
             backGroundPic = Content.Load<Texture2D>("titleScreenPic");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
@@ -182,11 +193,10 @@ namespace PattyPetitGiant
 
             // lol so many game screens
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            currentGameScreen = new CampaignLobbyState();
+            //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
-
         }
 
         /// <summary>
@@ -233,6 +243,19 @@ namespace PattyPetitGiant
                 this.Exit();
 #endif
 #endif
+            if (!dialogShown)
+            {
+                return;
+            }
+            else
+            {
+                if (!assetsLoaded)
+                {
+                    loadContent2();
+                }
+
+                assetsLoaded = true;
+            }
 
             gameIsRunningSlowly = gameTime.IsRunningSlowly;
 
@@ -255,6 +278,21 @@ namespace PattyPetitGiant
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            if (!dialogShown)
+            {
+                GraphicsDevice.Clear(Color.Black);
+
+                spriteBatch.Begin();
+
+                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2, Color.White);
+
+                spriteBatch.End();
+
+                dialogShown = true;
+
+                return;
+            }
+
             currentGameScreen.render(spriteBatch);
 
 #if PROFILE

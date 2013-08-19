@@ -223,8 +223,8 @@ namespace PattyPetitGiant
             PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
-            Player_Right_Item = GlobalGameConstants.itemType.MachineGun;
-            Player_Left_Item = GlobalGameConstants.itemType.RocketLauncher;
+            Player_Right_Item = GlobalGameConstants.itemType.Sword;
+            Player_Left_Item = GlobalGameConstants.itemType.Gun;
 
             allegiance = 0.5f;
 
@@ -267,8 +267,8 @@ namespace PattyPetitGiant
         {
             ResetPlayerValues(player1Name, player1Color);
 
-            Player2_Item_1 = GlobalGameConstants.itemType.FlameThrower;
-            Player2_Item_2 = GlobalGameConstants.itemType.ShotGun;
+            Player2_Item_1 = GlobalGameConstants.itemType.Sword;
+            Player2_Item_2 = GlobalGameConstants.itemType.Gun;
 
             player2Name = Player2Name;
             player2Color = Player2Color;
