@@ -16,6 +16,7 @@ namespace PattyPetitGiant
         {
             AnimateIn = 0,
             Idle = 1,
+            AnimateOut = 2,
         }
 
         public struct LevelData
@@ -81,6 +82,8 @@ namespace PattyPetitGiant
         private Texture2D quarterSizeTexture = null;
         SpriteBatch sb2 = null;
 
+        private LevelSelectStateState state = LevelSelectStateState.AnimateIn;
+
         private bool openingSoundMade;
 
         private const float lineMoveSpeed = 0.01f;
@@ -130,58 +133,68 @@ namespace PattyPetitGiant
                 openingSoundMade = true;
             }
 
-            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && !downPressed)
+            if (state == LevelSelectStateState.AnimateIn && cursorAnimationTime > 500f)
             {
-                downPressed = true;
+                state = LevelSelectStateState.Idle;
             }
-            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && downPressed)
-            {
-                downPressed = false;
 
-                if (selectedLevelY < GameCampaign.levelMap.GetLength(1) - 1 && GameCampaign.levelMap[selectedLevelX, selectedLevelY + 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight < 1)
+            if (state == LevelSelectStateState.Idle)
+            {
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && !downPressed)
                 {
-                    selectedLevelY++;
-                    AudioLib.playSoundEffect(menuBlipSound);
+                    downPressed = true;
                 }
-            }
-
-            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && !upPressed)
-            {
-                upPressed = true;
-            }
-            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && upPressed)
-            {
-                upPressed = false;
-
-                if (selectedLevelY > 0 && GameCampaign.levelMap[selectedLevelX, selectedLevelY - 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight > -1)
+                else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && downPressed)
                 {
-                    selectedLevelY--;
-                    AudioLib.playSoundEffect(menuBlipSound);
+                    downPressed = false;
+
+                    if (selectedLevelY < GameCampaign.levelMap.GetLength(1) - 1 && GameCampaign.levelMap[selectedLevelX, selectedLevelY + 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight < 1)
+                    {
+                        selectedLevelY++;
+                        AudioLib.playSoundEffect(menuBlipSound);
+                    }
                 }
-            }
 
-            selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && !upPressed)
+                {
+                    upPressed = true;
+                }
+                else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && upPressed)
+                {
+                    upPressed = false;
 
-            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && !confirmPressed)
-            {
-                confirmPressed = true;
-            }
-            else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && confirmPressed)
-            {
-                confirmPressed = false;
+                    if (selectedLevelY > 0 && GameCampaign.levelMap[selectedLevelX, selectedLevelY - 1].visible && selectedLevelY - GameCampaign.PlayerFloorHeight > -1)
+                    {
+                        selectedLevelY--;
+                        AudioLib.playSoundEffect(menuBlipSound);
+                    }
+                }
 
-                GameCampaign.CurrentAlienRate = GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates;
-                GameCampaign.CurrentGuardRate = GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates;
-                GameCampaign.CurrentPrisonerRate = GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates;
+                selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
 
-                GameCampaign.currentContract = GameCampaign.levelMap[selectedLevelX, selectedLevelY].contract;
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && !confirmPressed)
+                {
+                    confirmPressed = true;
+                }
+                else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && confirmPressed)
+                {
+                    confirmPressed = false;
 
-                GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
-                GameCampaign.PlayerFloorHeight = selectedLevelY;
+                    GameCampaign.CurrentAlienRate = GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates;
+                    GameCampaign.CurrentGuardRate = GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates;
+                    GameCampaign.CurrentPrisonerRate = GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates;
 
-                GameCampaign.floorProgress[GameCampaign.PlayerLevelProgress] = GameCampaign.PlayerFloorHeight;
+                    GameCampaign.currentContract = GameCampaign.levelMap[selectedLevelX, selectedLevelY].contract;
 
-                isComplete = true;
+                    GameCampaign.PlayerLevelProgress = GameCampaign.PlayerLevelProgress + 1;
+                    GameCampaign.PlayerFloorHeight = selectedLevelY;
+
+                    GameCampaign.floorProgress[GameCampaign.PlayerLevelProgress] = GameCampaign.PlayerFloorHeight;
+
+                    state = LevelSelectStateState.AnimateOut;
+
+                    isComplete = true;
+                }
             }
 
             double cursorDir = Math.Atan2(((selectedLevelY * 96) + drawMapTestOffset.Y) - cursorPosition.Y, ((selectedLevelX * 128) + drawMapTestOffset.X) - cursorPosition.X);
@@ -266,7 +279,10 @@ namespace PattyPetitGiant
                 }
             }
 
-            drawLine(sb, drawMapTestOffset + new Vector2(24) + new Vector2(GameCampaign.PlayerLevelProgress * 128, GameCampaign.PlayerFloorHeight * 96), GameCampaign.PlayerFloorHeight == selectedLevelY ? 128f : 155f, 0.85f * (float)((-Math.PI / 2) + Math.Atan2(selectedLevelX - GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight - selectedLevelY)), Color.Gray, 3.5f);
+            if (state == LevelSelectStateState.Idle)
+            {
+                drawLine(sb, drawMapTestOffset + new Vector2(24) + new Vector2(GameCampaign.PlayerLevelProgress * 128, GameCampaign.PlayerFloorHeight * 96), GameCampaign.PlayerFloorHeight == selectedLevelY ? 128f : 155f, 0.85f * (float)((-Math.PI / 2) + Math.Atan2(selectedLevelX - GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight - selectedLevelY)), Color.Gray, 3.5f);
+            }
 
             sb.Draw(tex, cursorPosition + new Vector2(24), new Rectangle(0, 0, 48, 48), Color.Red, 0.0f, new Vector2(24), 1 + (0.2f * (float)Math.Sin(cursorAnimationTime / 250f)), SpriteEffects.None, 0.5f);
 
