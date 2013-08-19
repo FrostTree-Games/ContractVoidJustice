@@ -37,6 +37,12 @@ namespace PattyPetitGiant
 
         private bool pauseButtonDown = false;
         private float pauseDialogMinimumTime;
+        private int pauseMenuItem = 0;
+        private bool returnToTitle = false;
+
+        private bool player1DownPressed = false;
+        private bool player1UpPressed = false;
+        private bool player1ConfirmPressed = false;
 
         private InGameGUI gui = null;
         public InGameGUI GUI { get { return gui; } }
@@ -428,10 +434,12 @@ namespace PattyPetitGiant
 
         private void gameLogicUpdate(Microsoft.Xna.Framework.GameTime currentTime)
         {
-            if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton) && !player1Dead)
+            if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton) && !player1Dead)
             {
                 state = LoadingState.LevelPaused;
                 pauseDialogMinimumTime = 0;
+                pauseMenuItem = 0;
+                AudioLib.playSoundEffect("monitorOpening");
             }
 
             if (GameCampaign.Player_Ammunition < 0)
@@ -545,11 +553,56 @@ namespace PattyPetitGiant
         {
             pauseDialogMinimumTime += currentTime.ElapsedGameTime.Milliseconds;
 
-            if (!pauseButtonDown && InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton))
+            if (!player1DownPressed && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection))
+            {
+                player1DownPressed = true;
+            }
+            else if (player1DownPressed && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection))
+            {
+                player1DownPressed = false;
+
+                pauseMenuItem = (pauseMenuItem + 1) % 2;
+                AudioLib.playSoundEffect("menuSelect");
+            }
+
+            if (!player1UpPressed && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection))
+            {
+                player1UpPressed = true;
+            }
+            else if (player1UpPressed && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection))
+            {
+                player1UpPressed = false;
+
+                pauseMenuItem--;
+                if (pauseMenuItem < 0) { pauseMenuItem = 1; }
+                AudioLib.playSoundEffect("menuSelect");
+            }
+
+            if (!player1ConfirmPressed && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm))
+            {
+                player1ConfirmPressed = true;
+            }
+            else if (player1ConfirmPressed && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm))
+            {
+                player1ConfirmPressed = false;
+
+                if (pauseMenuItem == 0)
+                {
+                    state = LoadingState.LevelRunning;
+                }
+                else if (pauseMenuItem == 1)
+                {
+                    returnToTitle = true;
+
+                    isComplete = true;
+                }
+            }
+
+            if (!pauseButtonDown && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton))
             {
                 pauseButtonDown = true;
             }
-            else if (pauseButtonDown && !InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.PauseButton))
+            else if (pauseButtonDown && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.PauseButton))
             {
                 pauseButtonDown = false;
 
@@ -635,9 +688,15 @@ namespace PattyPetitGiant
 
         private void renderPauseOverlay(SpriteBatch sb)
         {
-            sb.Begin(SpriteSortMode.FrontToBack, BlendState.AlphaBlend);
+            sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
-            sb.DrawString(Game1.font, "PAUSED HOMIE\n\nCHUNK NAME: " + nodeMap[((int)(cameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide), ((int)(cameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh)].chunkName + "\n\nAllegiance: " + GameCampaign.PlayerAllegiance + "\nName: " + GameCampaign.PlayerName + "\nContract: " + GameCampaign.currentContract.type + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, (float)(Math.Sin(pauseDialogMinimumTime / 1000f))));
+            sb.Draw(Game1.whitePixel, Vector2.Zero, null, new Color(0, 0, 0, 0.25f), 0.0f, Vector2.Zero, new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), SpriteEffects.None, 0.0f);
+
+            sb.DrawString(Game1.tenbyFive72, "PAUSED", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive72.MeasureString("PAUSED").X / 2, 200), Color.White, 0.0f, new Vector2(0, 0), new Vector2(1.0f, pauseDialogMinimumTime > 250 ? 1.0f : (pauseDialogMinimumTime / 250)), SpriteEffects.None, 0.0f);
+            sb.DrawString(Game1.tenbyFive24, "Resume", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive24.MeasureString("Resume").X / 2, 300), pauseMenuItem == 0 ? Color.White : new Color(1, 1, 1, 0.19f));
+            sb.DrawString(Game1.tenbyFive24, "Quit to Title", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive24.MeasureString("Quit to Title").X / 2, 330), pauseMenuItem == 1 ? Color.White : new Color(1, 1, 1, 0.19f));
+
+            //sb.DrawString(Game1.font, "PAUSED HOMIE\n\nCHUNK NAME: " + nodeMap[((int)(cameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide), ((int)(cameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh)].chunkName + "\n\nAllegiance: " + GameCampaign.PlayerAllegiance + "\nName: " + GameCampaign.PlayerName + "\nContract: " + GameCampaign.currentContract.type + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, (float)(Math.Sin(pauseDialogMinimumTime / 1000f))));
 
             sb.End();
         }
@@ -674,7 +733,11 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            if (endFlagReached)
+            if (returnToTitle)
+            {
+                return ScreenStateType.TitleScreen;
+            }
+            else if (endFlagReached)
             {
                 return ScreenStateType.FMV_ELEVATOR_EXIT;
             }
