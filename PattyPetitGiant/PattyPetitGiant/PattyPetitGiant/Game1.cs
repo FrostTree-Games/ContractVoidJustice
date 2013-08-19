@@ -225,9 +225,14 @@ namespace PattyPetitGiant
                 return;
             }
 #endif
-            // Allows the game to exit
+
+#if WINDOWS
+#if DEBUG
+            // Allows the game to exit; win32 only
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+#endif
+#endif
 
             gameIsRunningSlowly = gameTime.IsRunningSlowly;
 
