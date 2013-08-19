@@ -242,18 +242,40 @@ namespace PattyPetitGiant
                                 AudioLib.playSoundEffect("healthSound");
                                 if (med_value == MedValue.fullPack)
                                 {
-                                    GameCampaign.Player_Health = 100;
-                                }
-                                else
-                                {
-                                    float health = GameCampaign.Player_Health + (int)med_value;
-                                    if (health > 100)
+                                    if (((Player)parentWorld.EntityList[i]).Index == InputDevice2.PPG_Player.Player_1)
                                     {
                                         GameCampaign.Player_Health = 100;
                                     }
                                     else
                                     {
-                                        GameCampaign.Player_Health += (int)med_value;
+                                        GameCampaign.Player2_Health = 100;
+                                    }
+                                }
+                                else
+                                {
+                                    if (((Player)parentWorld.EntityList[i]).Index == InputDevice2.PPG_Player.Player_1)
+                                    {
+                                        float health = GameCampaign.Player_Health + (int)med_value;
+                                        if (health > 100)
+                                        {
+                                            GameCampaign.Player_Health = 100;
+                                        }
+                                        else
+                                        {
+                                            GameCampaign.Player_Health += (int)med_value;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        float health = GameCampaign.Player2_Health + (int)med_value;
+                                        if (health > 100)
+                                        {
+                                            GameCampaign.Player2_Health = 100;
+                                        }
+                                        else
+                                        {
+                                            GameCampaign.Player2_Health += (int)med_value;
+                                        }
                                     }
                                 }
                                 state = DropState.Inactive;
