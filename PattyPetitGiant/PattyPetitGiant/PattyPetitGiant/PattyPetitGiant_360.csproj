@@ -125,6 +125,7 @@
     <Compile Include="ReturnChaseEnemy.cs" />
     <Compile Include="RiotShield.cs" />
     <Compile Include="RocketLauncher.cs" />
+    <Compile Include="SaveGameModule.cs" />
     <Compile Include="ScreenState.cs" />
     <Compile Include="ShopKeeper.cs" />
     <Compile Include="ShotGun.cs" />
@@ -194,6 +195,7 @@
     <Reference Include="Microsoft.Xna.Framework.Graphics">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="mscorlib">
       <Private>False</Private>
