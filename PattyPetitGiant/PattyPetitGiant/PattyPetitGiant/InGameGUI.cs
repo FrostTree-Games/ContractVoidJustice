@@ -291,7 +291,8 @@ namespace PattyPetitGiant
 
         public void render(SpriteBatch sb)
         {
-            Color textColor = Game1.GameIsRunningSlowly ? Color.Red : Color.White;
+            Color textColor = Color.Lerp(CampaignLobbyState.getSquareColor(GameCampaign.PlayerColor), Color.White, (float)(Math.Sin(flickerTime / 500f) + 1.0f) / 2);
+            Color text2Color = Color.Lerp(CampaignLobbyState.getSquareColor(GameCampaign.Player2Color), Color.White, (float)(Math.Sin(flickerTime / 500f) + 1.0f) / 2);
 
             AnimationLib.FrameAnimationSet player_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Right_Item].pickupImage;
             AnimationLib.FrameAnimationSet player_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player_Left_Item].pickupImage;
@@ -299,7 +300,7 @@ namespace PattyPetitGiant
             AnimationLib.FrameAnimationSet player2_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player2_Item_1].pickupImage;
             AnimationLib.FrameAnimationSet player2_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player2_Item_2].pickupImage;
 
-            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
+            //sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
 
             string player_health_display = "H: ";
             string ammunition_amount_display = "A: ";
@@ -351,6 +352,9 @@ namespace PattyPetitGiant
 
             // allegiance meter
             sb.Draw(Game1.healthBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5, 0), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((1 - GameCampaign.PlayerAllegiance) * 160f, 1), SpriteEffects.None, 0.51f);
+            sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5 + ((1 - GameCampaign.PlayerAllegiance) * 160f), 0), null, Color.Cyan, 0.0f, Vector2.Zero, new Vector2(GameCampaign.PlayerAllegiance * 160f, 1), SpriteEffects.None, 0.51f);
+            sb.Draw(Game1.energyOverlay, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
             //player 1 GUI
             sb.DrawString(Game1.font, player_health_display, new Vector2(140, 80), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
@@ -363,7 +367,7 @@ namespace PattyPetitGiant
             sb.Draw(Game1.energyColor, new Vector2(165, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.energyOverlay, new Vector2(160, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2, textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
 
             sb.DrawString(Game1.font, Player_Right_Item, new Vector2(245, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
             player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(265, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
@@ -373,20 +377,20 @@ namespace PattyPetitGiant
 
             if (GameCampaign.IsATwoPlayerGame)
             {
-                sb.DrawString(Game1.font, player_health_display, new Vector2(955, 80), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                sb.DrawString(Game1.font, player_health_display, new Vector2(955, 80), text2Color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
                 sb.Draw(Game1.healthBar, new Vector2(972, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
                 sb.Draw(Game1.healthColor, new Vector2(977, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Health * 1.6f, 1), SpriteEffects.None, 0.51f);
                 sb.Draw(Game1.energyOverlay, new Vector2(972, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-                sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(955, 110), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(955, 110), text2Color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
                 sb.Draw(Game1.healthBar, new Vector2(972, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
                 sb.Draw(Game1.energyColor, new Vector2(977, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
                 sb.Draw(Game1.energyOverlay, new Vector2(972, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-                sb.DrawString(Game1.font, Player_Left_Item, new Vector2(972, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                sb.DrawString(Game1.font, Player_Left_Item, new Vector2(972, 140), text2Color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
                 player2_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(980 + 16, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
 
-                sb.DrawString(Game1.font, Player_Right_Item, new Vector2(1057, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                sb.DrawString(Game1.font, Player_Right_Item, new Vector2(1057, 140), text2Color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
                 player2_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(1070 + 16, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
             

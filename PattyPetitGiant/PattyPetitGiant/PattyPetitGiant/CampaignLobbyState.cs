@@ -427,7 +427,7 @@ namespace PattyPetitGiant
             drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
         }
 
-        private Color getSquareColor(int colorNumber)
+        public static Color getSquareColor(int colorNumber)
         {
             Color squareColor = Color.White;
 

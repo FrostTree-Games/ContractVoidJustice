@@ -55,6 +55,7 @@ namespace PattyPetitGiant
         public static Texture2D energyColor = null;
         public static Texture2D energyOverlay = null;
         public static Texture2D popUpBackground = null;
+        public static Texture2D greyBar = null;
         public static Random rand = new Random();
 
         private static bool gameIsRunningSlowly;
@@ -137,6 +138,7 @@ namespace PattyPetitGiant
             energyColor = Content.Load<Texture2D>("ammoTexture");
             energyOverlay = Content.Load<Texture2D>("overlay");
             popUpBackground = Content.Load<Texture2D>("popUpBackground");
+            greyBar = Content.Load<Texture2D>("grayTexture");
 
             shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
             heartPic = Content.Load<Texture2D>("heartSheet");
