@@ -239,6 +239,7 @@ namespace PattyPetitGiant
                         {
                             if (hitTest(parentWorld.EntityList[i]))
                             {
+                                AudioLib.playSoundEffect("healthSound");
                                 if (med_value == MedValue.fullPack)
                                 {
                                     GameCampaign.Player_Health = 100;
@@ -286,7 +287,6 @@ namespace PattyPetitGiant
                 break;
                 default:
                 throw new System.InvalidOperationException("invalid DropItem state");
-                break;
                 }
         }
 

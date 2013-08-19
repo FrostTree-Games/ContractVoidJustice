@@ -300,6 +300,7 @@ namespace PattyPetitGiant
                         {
                             if (!projectile[i].active)
                             {
+                                AudioLib.playSoundEffect("acidSpit");
                                 projectile[i] = new SpitProjectile(new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("head").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("head").WorldY), angle);
                                 spit_fired = true;
                                 break;

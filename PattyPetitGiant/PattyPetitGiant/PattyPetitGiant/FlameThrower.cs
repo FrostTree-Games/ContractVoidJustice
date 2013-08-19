@@ -72,7 +72,7 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    if ((parent.Index == InputDevice2.PPG_Player.Player_1) ? GameCampaign.Player_Ammunition >= 1 : GameCampaign.Player2_Ammunition >= 1)
+                    if ((parent.Index == InputDevice2.PPG_Player.Player_1) ? GameCampaign.Player_Ammunition >= 0.5 : GameCampaign.Player2_Ammunition >= 0.5)
                     {
                         flamethrower_state = FlameThrowerState.Fire;
                         parent.Velocity = Vector2.Zero;
@@ -90,11 +90,11 @@ namespace PattyPetitGiant
 
                     if (parent.Index == InputDevice2.PPG_Player.Player_1)
                     {
-                        GameCampaign.Player_Ammunition -= 1f;
+                        GameCampaign.Player_Ammunition -= 0.5f;
                     }
                     else if (parent.Index == InputDevice2.PPG_Player.Player_2)
                     {
-                        GameCampaign.Player2_Ammunition -= 1f;
+                        GameCampaign.Player2_Ammunition -= 0.5f;
                     }
 
                     foreach (Entity en in parentWorld.EntityList)

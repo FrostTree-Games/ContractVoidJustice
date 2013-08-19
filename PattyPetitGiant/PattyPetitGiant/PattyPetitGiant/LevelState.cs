@@ -256,11 +256,11 @@ namespace PattyPetitGiant
                     {
                         entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.2)
+                    else if (randomSpawnValue < 0.25)
                     {
                         entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.4)
+                    else if (randomSpawnValue < 0.15)
                     {
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 0)));
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 1)));
@@ -277,6 +277,10 @@ namespace PattyPetitGiant
                     if (randomSpawnValue < 0.15)
                     {
                         entityList.Add(new BroodLord(this, spawnPos));
+                    }
+                    else if (randomSpawnValue < 0.25)
+                    {
+                        entityList.Add(new BallMutant(this, spawnPos.X, spawnPos.Y));
                     }
                     else if (randomSpawnValue < 0.4)
                     {

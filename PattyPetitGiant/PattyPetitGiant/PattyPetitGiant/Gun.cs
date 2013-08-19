@@ -105,7 +105,7 @@ namespace PattyPetitGiant
 
         private float fireTimer;
         private const float durationBetweenShots = 200;
-        private const int energy_consumption = 1;
+        private const float energy_consumption = 0.5f;
 
         public Gun()
         {
@@ -143,7 +143,7 @@ namespace PattyPetitGiant
         {
             updateBullets(parent, currentTime, parentWorld);
 
-            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= 1.0)
+            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= 0.5)
             {
                 if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Right_Item : GameCampaign.Player2_Item_1) == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1))
                 {
