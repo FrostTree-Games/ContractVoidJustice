@@ -159,8 +159,9 @@ namespace PattyPetitGiant
         private int popup_item_selected = 0;
 
         private bool pop_up_menu = false;
+        private bool pop_up_screen = false;
 
-        private Vector2 text_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 128, GlobalGameConstants.GameResolutionHeight / 2 - 128);
+        private Vector2 text_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 128, GlobalGameConstants.GameResolutionHeight / 2 - 96);
         private Vector2 popup_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 64, GlobalGameConstants.GameResolutionHeight / 2);
 
         public OptionsMenu()
@@ -173,6 +174,7 @@ namespace PattyPetitGiant
             popup_options = new List<popUpMenu>(2);
             popup_options.Add(new popUpMenu("YES"));
             popup_options.Add(new popUpMenu("NO"));
+            zoom_state = popUpZoomState.zoomStay;
         }
 
         protected override void doUpdate(GameTime currentTime)
@@ -185,6 +187,7 @@ namespace PattyPetitGiant
                 case popUpZoomState.zoomIn:
                     if (zoom > zoom_duration)
                     {
+                        pop_up_menu = true;
                         zoom_state = popUpZoomState.zoomStay;
                         zoom = 0.0f;
                     }
@@ -196,6 +199,8 @@ namespace PattyPetitGiant
                     if (zoom > zoom_duration)
                     {
                         zoom_state = popUpZoomState.zoomStay;
+                        pop_up_menu = false;
+                        pop_up_screen = false;
                         zoom = 0.0f;
                     }
                     break;
@@ -244,7 +249,7 @@ namespace PattyPetitGiant
 
                     menu_item_select--;
 
-                    if (menu_item_select > -0)
+                    if (menu_item_select > 0)
                     {
                         menu_item_select = menu_item_select % options_list.Count();
                     }
@@ -268,7 +273,7 @@ namespace PattyPetitGiant
                             isComplete = true;
                             break;
                         case "ERASE HIGH SCORE":
-                            pop_up_menu = true;
+                            pop_up_screen = true;
                             popup_item_selected = 0;
                             zoom_state = popUpZoomState.zoomIn;
                             break;
@@ -355,10 +360,10 @@ namespace PattyPetitGiant
                     switch (popup_options[popup_item_selected].text)
                     {
                         case "NO":
-                            pop_up_menu = false;
+                            zoom_state = popUpZoomState.zoomOut;
                             break;
                         case "YES":
-                            pop_up_menu = false;
+                            zoom_state = popUpZoomState.zoomOut;
                             break;
                         default:
                             break;
@@ -387,9 +392,9 @@ namespace PattyPetitGiant
             {
                 sb.DrawString(Game1.tenbyFive24, options_list[i].text, text_position + new Vector2((25 * options_list[i].zDistance), 32 * i), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
             }
-            if (pop_up_menu)
+            if (pop_up_screen)
             {
-                sb.Draw(Game1.popUpBackground, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), null/*new Rectangle(0, 0, 640, 360)*/, Color.White, 0.0f, new Vector2(Game1.popUpBackground.Width / 2, Game1.popUpBackground.Height / 2), popUpZoom, SpriteEffects.None, 0.51f);
+                sb.Draw(Game1.popUpBackground, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), null, Color.White, 0.0f, new Vector2(Game1.popUpBackground.Width / 2, Game1.popUpBackground.Height / 2), popUpZoom, SpriteEffects.None, 0.51f);
                 sb.DrawString(Game1.tenbyFive14, popup_message, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), Color.White, 0.0f, Game1.tenbyFive14.MeasureString(popup_message)/2 + new Vector2(0f,96f), popUpZoom, SpriteEffects.None, 0.51f);
                 
                 for (int i = 0; i < popup_options.Count(); i++)
