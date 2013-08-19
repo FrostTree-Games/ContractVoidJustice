@@ -596,7 +596,14 @@ namespace PattyPetitGiant
                                         }
                                         else if (en is Player)
                                         {
-                                            GameCampaign.Player_Health -= acid_damage;
+                                            if (((Player)en).Index == InputDevice2.PPG_Player.Player_1)
+                                            {
+                                                GameCampaign.Player_Health -= acid_damage;
+                                            }
+                                            else if (((Player)en).Index == InputDevice2.PPG_Player.Player_2)
+                                            {
+                                                GameCampaign.Player2_Health -= acid_damage;
+                                            }
                                         }
                                     }
                                 }
