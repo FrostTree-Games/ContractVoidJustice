@@ -372,15 +372,11 @@ namespace PattyPetitGiant
                     }
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
-                        entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-
-                        //entityList.Add(new GuardSquadLeader(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-
-                        //entityList.Add(new BroodLord(this, new Vector2((currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
+                        entityList.Add(new Player(this, (currentRoomX + 12) * GlobalGameConstants.TileSize.X, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
 
                         if (GameCampaign.IsATwoPlayerGame)
                         {
-                            entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2));
+                            entityList.Add(new Player(this, (currentRoomX + 14) * GlobalGameConstants.TileSize.X, (currentRoomY + 14) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2));
                         }
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
@@ -453,6 +449,15 @@ namespace PattyPetitGiant
             if (GameCampaign.Player2_Ammunition < 0)
             {
                 GameCampaign.Player2_Ammunition = 0;
+            }
+
+            if (GameCampaign.Player_Ammunition > 100)
+            {
+                GameCampaign.Player_Ammunition = 100;
+            }
+            if (GameCampaign.Player2_Ammunition > 100)
+            {
+                GameCampaign.Player2_Ammunition = 100;
             }
 
             if (messageQueueState == PushMessageQueueState.Wait)
