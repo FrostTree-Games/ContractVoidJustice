@@ -324,7 +324,7 @@ namespace PattyPetitGiant
             AnimationLib.GraphicsDevice.Clear(Color.Black);
             
             sb.Begin();
-            if (screen == titleScreens.menuScreen || screen == titleScreens.playScreen)
+            if (screen == titleScreens.menuScreen || screen == titleScreens.playScreen || screen == titleScreens.optionScreen)
             {
                 if (Game1.videoPlayer.State != Microsoft.Xna.Framework.Media.MediaState.Stopped)
                 {
@@ -346,8 +346,6 @@ namespace PattyPetitGiant
                     sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     break;
                 case titleScreens.menuScreen:
-                    sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
-                    
                     for (int i = 0; i < menu_list.Count(); i++)
                     {
                         sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
@@ -385,7 +383,7 @@ namespace PattyPetitGiant
                     break;
                 default:
                     //sb.Draw(Game1.backGroundPic, Vector2.Zero, null, fadeColour, 0.0f, Vector2.Zero, 0.8f, SpriteEffects.None, 0.5f);
-                    sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
+                    //sb.Draw(Game1.whitePixel, new Vector2(3 * GlobalGameConstants.GameResolutionWidth / 4.0f, 3 * GlobalGameConstants.GameResolutionHeight / 4), null, fadeColour, 0.0f, Vector2.Zero, 150.0f, SpriteEffects.None, 0.5f);
                     
                     for (int i = 0; i < menu_list.Count(); i++)
                     {

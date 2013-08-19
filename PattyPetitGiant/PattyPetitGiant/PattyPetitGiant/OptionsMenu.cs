@@ -76,7 +76,7 @@ namespace PattyPetitGiant
             public bool select;
 
             private const float min_z_distance = 0.0f;
-            private const float max_z_distance = 1.5f;
+            private const float max_z_distance = 1.0f;
             private const float z_text_speed = 0.1f;
 
             private float z_distance = 0.0f;
@@ -123,8 +123,27 @@ namespace PattyPetitGiant
 
         }
 
+        private enum popUpZoomState
+        {
+            zoomIn = 0,
+            zoomStay = 1,
+            zoomOut = 2,
+        }
+
+        private popUpZoomState zoom_state;
+
+        public float popUpZoom
+        {
+            get
+            {
+                return((zoom_state == popUpZoomState.zoomIn)?(float)(zoom/zoom_duration):(zoom_state == popUpZoomState.zoomOut)?(float)(1.0f - zoom/zoom_duration) : 1.0f);
+            }
+        }
+
         private List<optionsMenuOptions> options_list;
         private List<popUpMenu> popup_options;
+
+        private string popup_message = "ARE YOU SURE YOU WANT TO ERASE YOUR HIGHSCORE?";
 
         private bool down_pressed;
         private bool up_pressed;
@@ -133,13 +152,16 @@ namespace PattyPetitGiant
         private float button_pressed_timer = 0.0f;
         private const float max_button_pressed_timer = 200.0f;
         
+        private float zoom = 0.0f;
+        private const float zoom_duration = 500.0f;
+
         private int menu_item_select = 0;
         private int popup_item_selected = 0;
 
         private bool pop_up_menu = false;
 
         private Vector2 text_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 128, GlobalGameConstants.GameResolutionHeight / 2 - 128);
-        private Vector2 popup_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 64, GlobalGameConstants.GameResolutionHeight / 2 - 96);
+        private Vector2 popup_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 64, GlobalGameConstants.GameResolutionHeight / 2);
 
         public OptionsMenu()
         {
@@ -156,6 +178,29 @@ namespace PattyPetitGiant
         protected override void doUpdate(GameTime currentTime)
         {
             button_pressed_timer += currentTime.ElapsedGameTime.Milliseconds;
+            zoom += currentTime.ElapsedGameTime.Milliseconds;
+
+            switch(zoom_state)
+            {
+                case popUpZoomState.zoomIn:
+                    if (zoom > zoom_duration)
+                    {
+                        zoom_state = popUpZoomState.zoomStay;
+                        zoom = 0.0f;
+                    }
+                    break;
+                case popUpZoomState.zoomStay:
+                    zoom = 0.0f;
+                    break;
+                case popUpZoomState.zoomOut:
+                    if (zoom > zoom_duration)
+                    {
+                        zoom_state = popUpZoomState.zoomStay;
+                        zoom = 0.0f;
+                    }
+                    break;
+            }
+
             if (!pop_up_menu)
             {
                 if (InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.DownDirection))
@@ -225,6 +270,7 @@ namespace PattyPetitGiant
                         case "ERASE HIGH SCORE":
                             pop_up_menu = true;
                             popup_item_selected = 0;
+                            zoom_state = popUpZoomState.zoomIn;
                             break;
                         case "BACK":
                             isComplete = true;
@@ -339,15 +385,16 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < options_list.Count(); i++)
             {
-                sb.DrawString(Game1.font, options_list[i].text, text_position + new Vector2((25 * options_list[i].zDistance), 32 * i), Color.White, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+                sb.DrawString(Game1.tenbyFive24, options_list[i].text, text_position + new Vector2((25 * options_list[i].zDistance), 32 * i), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
             }
             if (pop_up_menu)
             {
-                sb.Draw(Game1.popUpBackground, new Vector2(GlobalGameConstants.GameResolutionWidth * 0.30f, GlobalGameConstants.GameResolutionHeight * 0.2f), new Rectangle(0,0, 640, 360), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-                sb.DrawString(Game1.font, "ARE YOU SURE YOU WANT TO ERASE YOUR HIGHSCORE?", text_position - new Vector2(96, 0), Color.White, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.51f);
+                sb.Draw(Game1.popUpBackground, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), null/*new Rectangle(0, 0, 640, 360)*/, Color.White, 0.0f, new Vector2(Game1.popUpBackground.Width / 2, Game1.popUpBackground.Height / 2), popUpZoom, SpriteEffects.None, 0.51f);
+                sb.DrawString(Game1.tenbyFive14, popup_message, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight / 2), Color.White, 0.0f, Game1.tenbyFive14.MeasureString(popup_message)/2 + new Vector2(0f,96f), popUpZoom, SpriteEffects.None, 0.51f);
+                
                 for (int i = 0; i < popup_options.Count(); i++)
                 {
-                    sb.DrawString(Game1.font, popup_options[i].text, popup_position + new Vector2(128 * i, 32), Color.White, 0.0f, Vector2.Zero, popup_options[i].zDistance + 1.0f, SpriteEffects.None, 0.51f);
+                    sb.DrawString((popup_options[i].select) ? Game1.tenbyFive24 : Game1.font, popup_options[i].text, popup_position + new Vector2(128*i, 32), Color.White, 0.0f, (popup_options[i].select) ? Game1.tenbyFive24.MeasureString(popup_options[i].text)/2 : Game1.font.MeasureString(popup_options[i].text)/2, popUpZoom, SpriteEffects.None, 0.51f);
                 }
             }
             sb.End();
