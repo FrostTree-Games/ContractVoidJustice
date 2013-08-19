@@ -111,8 +111,7 @@ namespace PattyPetitGiant
             }
         }
 
-        private static List<HighScoreValue> highScores = null;
-        private static HighScoreValue mostCoin = null;
+        public static List<HighScoreValue> highScores = null;
 
         private int newlyAddedScoreIndex = -2;
 
@@ -141,16 +140,6 @@ namespace PattyPetitGiant
                 highScores.Add(new HighScoreValue("lolololol", 2020, 333, 1, 0));
                 highScores.Add(new HighScoreValue("quinten", 20202, 9981, 1, 1));
                 highScores.Add(new HighScoreValue("Zippy", 200, 000, 5, 1));
-
-                //find the high score value with the most coin collected
-                mostCoin = highScores[0];
-                for (int i = 1; i < highScores.Count; i++)
-                {
-                    if (highScores[i].coinCollected > mostCoin.coinCollected)
-                    {
-                        mostCoin = highScores[i];
-                    }
-                }
             }
         }
 
