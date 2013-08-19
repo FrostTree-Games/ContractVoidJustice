@@ -19,7 +19,7 @@ tankFire
 molotovExplode
 magnum
 ammoPickup
-heathSound
+healthSound
 alienChaserAlert
 alienChaserDie
 acidSpit

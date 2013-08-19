@@ -93,13 +93,7 @@ namespace PattyPetitGiant
 
                 parentWorld.pushCoin(this);
             }
-
-            /*if (Math.Abs(velocity.X) > 7 || Math.Abs(velocity.Y) > 7)
-            {
-                Console.WriteLine(velocity);
-                Console.WriteLine(state);
-            }*/
-
+            
             switch (state)
             {
                 case ChaseState.search:
@@ -120,7 +114,6 @@ namespace PattyPetitGiant
                                 component = chaseComponent;
                                 state = ChaseState.chase;
                                 animation_time = 0.0f;
-                                current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("chase");
                                 chase_target = parentWorld.EntityList[i];
                                 break;
                             }
@@ -137,7 +130,6 @@ namespace PattyPetitGiant
                     if (distance > 300.0f || chase_target.Death)
                     {
                         state = ChaseState.search;
-                        current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
                         component = searchComponent;
                         enemy_found = false;
                         wind_anim = 0.0f;
@@ -189,7 +181,6 @@ namespace PattyPetitGiant
                 case ChaseState.attack:
                     wind_anim += currentTime.ElapsedGameTime.Milliseconds;
                     current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
-                    //animation_time = 0.0f;
                     if (swordSlashHitTest(chase_target))
                     {
                         Vector2 direction = chase_target.CenterPoint - CenterPoint;
@@ -227,9 +218,9 @@ namespace PattyPetitGiant
                         current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("hurt");
                         if (disable_movement_time > 300)
                         {
-                                state = ChaseState.search;
-                                velocity = Vector2.Zero;
-                                component = searchComponent;
+                            state = ChaseState.search;
+                            velocity = Vector2.Zero;
+                            component = searchComponent;
                             disable_movement = false;
                             disable_movement_time = 0;
                             animation_time = 0.0f;
