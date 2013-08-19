@@ -299,7 +299,7 @@ namespace PattyPetitGiant
             AnimationLib.FrameAnimationSet player2_first_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player2_Item_1].pickupImage;
             AnimationLib.FrameAnimationSet player2_second_weapon = GlobalGameConstants.WeaponDictionary.weaponInfo[(int)GameCampaign.Player2_Item_2].pickupImage;
 
-            //sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
+            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.6f));
 
             string player_health_display = "H: ";
             string ammunition_amount_display = "A: ";
@@ -329,14 +329,28 @@ namespace PattyPetitGiant
                     Vector2 offset = new Vector2(i, j);
                     sb.DrawString(Game1.font, player_health_display, new Vector2(140, 80) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(140, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, coin_amount_display, new Vector2(140, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, Player_Right_Item, new Vector2(320, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, Player_Left_Item, new Vector2(235, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2 + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, Player_Right_Item, new Vector2(245, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    sb.DrawString(Game1.font, Player_Left_Item, new Vector2(160, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
-                    player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(255, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
-                    player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(340, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
+                    player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(180, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
+                    player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(265, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
+
+                    if (GameCampaign.IsATwoPlayerGame)
+                    {
+                        sb.DrawString(Game1.font, player_health_display, new Vector2(955, 80) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                        sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(955, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                        sb.DrawString(Game1.font, Player_Right_Item, new Vector2(1057, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                        sb.DrawString(Game1.font, Player_Left_Item, new Vector2(972, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+
+                        player2_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(1070 + 16, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
+                        player2_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(980 + 16, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.Black);
+                    }
                 }
             }
+
+            // allegiance meter
+            sb.Draw(Game1.healthBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
 
             //player 1 GUI
             sb.DrawString(Game1.font, player_health_display, new Vector2(140, 80), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
@@ -349,24 +363,31 @@ namespace PattyPetitGiant
             sb.Draw(Game1.energyColor, new Vector2(165, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.energyOverlay, new Vector2(160, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(140, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2, textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
 
-            sb.DrawString(Game1.font, Player_Right_Item, new Vector2(320, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(340, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            sb.DrawString(Game1.font, Player_Right_Item, new Vector2(245, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(265, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
             
-            sb.DrawString(Game1.font, Player_Left_Item, new Vector2(235, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(255, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            sb.DrawString(Game1.font, Player_Left_Item, new Vector2(160, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+            player_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(180, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
 
             if (GameCampaign.IsATwoPlayerGame)
             {
-                //player 2 GUI
-                sb.Draw(Game1.whitePixel, new Vector2(600, 83), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(160, 16), SpriteEffects.None, 0.5f);
-                sb.Draw(Game1.whitePixel, new Vector2(600, 83), null, Color.Red, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Health * 1.6f, 16), SpriteEffects.None, 0.51f);
-                player2_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(805, 113), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                sb.DrawString(Game1.font, player_health_display, new Vector2(955, 80), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                sb.Draw(Game1.healthBar, new Vector2(972, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+                sb.Draw(Game1.healthColor, new Vector2(977, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Health * 1.6f, 1), SpriteEffects.None, 0.51f);
+                sb.Draw(Game1.energyOverlay, new Vector2(972, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-                sb.Draw(Game1.whitePixel, new Vector2(600, 113), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(160, 16), SpriteEffects.None, 0.5f);
-                sb.Draw(Game1.whitePixel, new Vector2(600, 113), null, Color.Blue, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Ammunition * 1.6f, 16), SpriteEffects.None, 0.51f);
-                player2_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(805, 80), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(955, 110), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                sb.Draw(Game1.healthBar, new Vector2(972, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+                sb.Draw(Game1.energyColor, new Vector2(977, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
+                sb.Draw(Game1.energyOverlay, new Vector2(972, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
+
+                sb.DrawString(Game1.font, Player_Left_Item, new Vector2(972, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                player2_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(980 + 16, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+
+                sb.DrawString(Game1.font, Player_Right_Item, new Vector2(1057, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                player2_second_weapon.drawAnimationFrame(0.0f, sb, new Vector2(1070 + 16, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
             }
             
             /*sb.Draw(Game1.whitePixel, new Vector2(499, 31), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(66, 26), SpriteEffects.None, 0.0f);

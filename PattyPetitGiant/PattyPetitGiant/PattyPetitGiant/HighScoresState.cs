@@ -213,11 +213,11 @@ namespace PattyPetitGiant
 
             if (stateTimer > 1500f)
             {
-                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && !player1ConfirmPressed)
+                if ((InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad) && !player1ConfirmPressed)
                 {
                     player1ConfirmPressed = true;
                 }
-                else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm) && player1ConfirmPressed)
+                else if (!(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad) && player1ConfirmPressed)
                 {
                     player1ConfirmPressed = false;
 
@@ -308,11 +308,23 @@ namespace PattyPetitGiant
                 }
             }
 
+            if (stateTimer > 1500f)
+            {
+
 #if XBOX
-            sb.DrawString(Game1.tenbyFive24, "Press (A) to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press (A) to Continue") / 2, new Color(1, 1, 1, (float)(Math.Sin(stateTimer / 300f) / 2) + 0.5f));
+                sb.DrawString(Game1.tenbyFive24, "Press (A) to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press (A) to Continue") / 2, new Color(1, 1, 1, (float)(Math.Sin(stateTimer / 300f) / 2) + 0.5f));
 #elif WINDOWS
-            sb.DrawString(Game1.tenbyFive24, "Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue") / 2, new Color(1, 1, 1, (float)(Math.Sin(stateTimer / 300f) / 2) + 0.5f));
+                sb.DrawString(Game1.tenbyFive24, "Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue") / 2, new Color(1, 1, 1, (float)(Math.Sin(stateTimer / 300f) / 2) + 0.5f));
 #endif
+            }
+            else if (stateTimer > 1300f)
+            {
+#if XBOX
+                sb.DrawString(Game1.tenbyFive24, "Press (A) to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press (A) to Continue") / 2, Color.Lerp(Color.Transparent, Color.White, (stateTimer - 1300)/200));
+#elif WINDOWS
+                sb.DrawString(Game1.tenbyFive24, "Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 600) - Game1.tenbyFive24.MeasureString("Press " + InputDevice2.KeyConfig.Confirm.ToString() + " to Continue") / 2, Color.Lerp(Color.Transparent, Color.White, (stateTimer - 1300)/200));
+#endif
+            }
 
             sb.End();
         }
