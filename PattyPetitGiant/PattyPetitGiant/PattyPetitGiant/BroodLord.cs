@@ -358,10 +358,6 @@ namespace PattyPetitGiant
                 dyingTimer += currentTime.ElapsedGameTime.Milliseconds;
                 if (dyingTimer > dyingDuration)
                 {
-                    for (int i = 0; i < 11; i++)
-                    {
-                        parentWorld.Particles.pushExplosiveGib(CenterPoint);
-                    }
                     minionState = BroodLingState.Dead;
                 }
             }
@@ -384,6 +380,12 @@ namespace PattyPetitGiant
 
                     if (enemy_life < 1)
                     {
+                        for (int i = 0; i < 11; i++)
+                        {
+                            parentWorld.Particles.pushExplosiveGib(CenterPoint);
+                            AudioLib.playSoundEffect("fleshyKnockBack");
+                        }
+
                         minionState = BroodLingState.Dying;
                         dyingTimer = 0;
                     }

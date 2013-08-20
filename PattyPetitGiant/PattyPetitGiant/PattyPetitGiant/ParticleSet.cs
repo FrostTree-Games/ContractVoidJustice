@@ -248,7 +248,7 @@ namespace PattyPetitGiant
                 p.animation = AnimationLib.getFrameAnimationSet(Game1.rand.Next() % 8 != 0 ? "GibSmallGeneric" : (Game1.rand.Next() % 2 == 0 ? "heartIdle" : "lungIdle"));
                 p.position = position - (p.animation.FrameDimensions * 0.7f) / 2;
                 p.timeAlive = 0;
-                p.maxTimeAlive = 500f;
+                p.maxTimeAlive = 200f;
                 p.rotation = (float)(Game1.rand.NextDouble() * Math.PI * 2);
                 p.rotationSpeed = (float)(Game1.rand.NextDouble() * 0.01);
                 p.animationTime = 0;
