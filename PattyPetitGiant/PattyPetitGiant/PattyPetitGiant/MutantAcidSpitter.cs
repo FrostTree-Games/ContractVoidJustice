@@ -364,8 +364,8 @@ namespace PattyPetitGiant
                 {
                     if(projectile[i].Projectile_State == SpitProjectile.ProjectileState.Travel)
                     {
-                        sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
-                        //acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].position, new Vector2(1.0f), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
+                        //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
+                        acid_pool.drawAnimationFrame(0.0f, sb, projectile[i].position - new Vector2(64), new Vector2(0.23f), 0.5f, projectile[i].alive_timer, Vector2.Zero, Color.White);
                     }
                 }
             }
@@ -575,7 +575,7 @@ namespace PattyPetitGiant
                             {
                                 foreach (Entity en in parentWorld.EntityList)
                                 {
-                                    if (en == parent)
+                                    if (en == parent || (en.Enemy_Type == EnemyType.Alien))
                                         continue;
                                     else if (spitHitTest(en))
                                     {
@@ -601,7 +601,7 @@ namespace PattyPetitGiant
                                 {
                                     if (spitHitTest(en))
                                     {
-                                        if (en is Enemy)
+                                        if (en is Enemy && !(en is MutantAcidSpitter))
                                         {
                                             ((Enemy)en).Enemy_Life -= acid_damage;
                                         }
@@ -641,13 +641,20 @@ namespace PattyPetitGiant
                             {
                                 if (spitHitTest(en))
                                 {
-                                    if (en is Enemy)
+                                    if (en is Enemy && !(en is MutantAcidSpitter))
                                     {
                                         ((Enemy)en).Enemy_Life -= acid_damage;
                                     }
                                     else if (en is Player)
                                     {
-                                        GameCampaign.Player_Health -= acid_damage;
+                                        if (((Player)en).Index == InputDevice2.PPG_Player.Player_1)
+                                        {
+                                            GameCampaign.Player_Health -= acid_damage;
+                                        }
+                                        else if (((Player)en).Index == InputDevice2.PPG_Player.Player_2)
+                                        {
+                                            GameCampaign.Player2_Health -= acid_damage;
+                                        }
                                     }
                                 }
                             }
@@ -679,13 +686,20 @@ namespace PattyPetitGiant
                                 {
                                     if (spitHitTest(en))
                                     {
-                                        if (en is Enemy)
+                                        if (en is Enemy && !(en is MutantAcidSpitter))
                                         {
                                             ((Enemy)en).Enemy_Life -= acid_damage;
                                         }
                                         else if (en is Player)
                                         {
-                                            GameCampaign.Player_Health -= acid_damage;
+                                            if (((Player)en).Index == InputDevice2.PPG_Player.Player_1)
+                                            {
+                                                GameCampaign.Player_Health -= acid_damage;
+                                            }
+                                            else if (((Player)en).Index == InputDevice2.PPG_Player.Player_2)
+                                            {
+                                                GameCampaign.Player2_Health -= acid_damage;
+                                            }
                                         }
                                     }
                                 }
