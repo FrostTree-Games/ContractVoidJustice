@@ -146,7 +146,7 @@ namespace PattyPetitGiant
                         {
                             if (parentWorld.EntityList[i] is Enemy)
                             {
-                                if (((Enemy)parentWorld.EntityList[i]).Enemy_Type == Enemy.EnemyType.Prisoner && ((Enemy)parentWorld.EntityList[i]).Enemy_Type == Enemy.EnemyType.NoType)
+                                if (((Enemy)parentWorld.EntityList[i]).Enemy_Type == Enemy.EnemyType.Prisoner)
                                 {
                                     continue;
                                 }
