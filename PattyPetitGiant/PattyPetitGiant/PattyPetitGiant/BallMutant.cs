@@ -71,9 +71,9 @@ namespace PattyPetitGiant
             prob_item_drop = 0.4;
             number_drop_items = 4;
 
-            walk_down = AnimationLib.getSkeleton("ballMutantUp");
-            walk_right = AnimationLib.getSkeleton("ballMutantRight");
-            walk_up = AnimationLib.getSkeleton("ballMutantUp");
+            walk_down = AnimationLib.loadNewAnimationSet("ballMutantUp");
+            walk_right = AnimationLib.loadNewAnimationSet("ballMutantRight");
+            walk_up = AnimationLib.loadNewAnimationSet("ballMutantUp");
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
             current_skeleton.Skeleton.FlipX = false;
@@ -82,7 +82,7 @@ namespace PattyPetitGiant
 
             entity_found = null;
 
-            chain_ball = AnimationLib.getFrameAnimationSet("hook");
+            chain_ball = AnimationLib.getFrameAnimationSet("snakeB");
         }
 
         public override void update(GameTime currentTime)
@@ -170,7 +170,7 @@ namespace PattyPetitGiant
                             break;
                     }
                     break;
-                case mutantBallState.Alert:
+                /*case mutantBallState.Alert:
                     if (sound_alert && entity_found == null)
                     {
                         //if false then sound didn't hit a wall
@@ -242,7 +242,7 @@ namespace PattyPetitGiant
                             animation_time = 0.0f;
                         }
                     }
-                    break;
+                    break;*/
                 case mutantBallState.Agressive:
                     agressive_timer += currentTime.ElapsedGameTime.Milliseconds;
                     current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("attack");
@@ -390,7 +390,7 @@ namespace PattyPetitGiant
             {
                 float interpolate = Vector2.Distance(ball_coordinate, CenterPoint);
 
-                for (int i = 0; i <= (int)(interpolate); i += 16)
+                for (int i = 0; i <= (int)(interpolate); i += 3)
                 {
                     chain_ball.drawAnimationFrame(0.0f, sb, new Vector2(current_skeleton.Skeleton.FindBone("head").WorldX, current_skeleton.Skeleton.FindBone("head").WorldY) +  new Vector2(i * (float)(Math.Cos(angle)), i * (float)(Math.Sin(angle))), new Vector2(1.0f), 0.5f, angle, CenterPoint, Color.White);
                 }

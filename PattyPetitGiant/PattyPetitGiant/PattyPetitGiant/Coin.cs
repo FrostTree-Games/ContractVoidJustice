@@ -177,23 +177,24 @@ namespace PattyPetitGiant
                                 }
                                 else
                                 {
-                                    float ammo = GameCampaign.Player_Ammunition + (int)ammo_value;
-                                    if (ammo > 100)
+                                    if (playerIndex == InputDevice2.PPG_Player.Player_1)
                                     {
-                                        if (playerIndex == InputDevice2.PPG_Player.Player_1)
+                                        float ammo = GameCampaign.Player_Ammunition + (int)ammo_value;
+                                        if (ammo > 100)
                                         {
                                             GameCampaign.Player_Ammunition = 100;
                                         }
                                         else
                                         {
-                                            GameCampaign.Player2_Ammunition = 100;
+                                            GameCampaign.Player_Ammunition += (int)ammo_value;
                                         }
                                     }
                                     else
                                     {
-                                        if (playerIndex == InputDevice2.PPG_Player.Player_1)
+                                        float ammo = GameCampaign.Player_Ammunition + (int)ammo_value;
+                                        if (ammo > 100)
                                         {
-                                            GameCampaign.Player_Ammunition += (int)ammo_value;
+                                            GameCampaign.Player2_Ammunition = 100;
                                         }
                                         else
                                         {
@@ -239,6 +240,7 @@ namespace PattyPetitGiant
                         {
                             if (hitTest(parentWorld.EntityList[i]))
                             {
+                                InputDevice2.PPG_Player playerIndex = ((Player)parentWorld.EntityList[i]).Index;
                                 AudioLib.playSoundEffect("healthSound");
                                 if (med_value == MedValue.fullPack)
                                 {
@@ -277,6 +279,7 @@ namespace PattyPetitGiant
                                             GameCampaign.Player2_Health += (int)med_value;
                                         }
                                     }
+                                    
                                 }
                                 state = DropState.Inactive;
                             }

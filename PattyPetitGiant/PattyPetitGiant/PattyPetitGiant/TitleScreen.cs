@@ -74,7 +74,7 @@ namespace PattyPetitGiant
 
         private Texture2D ship_texture;
 
-        private Vector2 text_position = new Vector2(960, 420);
+        private Vector2 text_position = new Vector2(960, 514);
         private Vector3 model_position = Vector3.Zero;
         private Vector3 camera_Position = new Vector3(0.0f, 0, 5000.0f);
 

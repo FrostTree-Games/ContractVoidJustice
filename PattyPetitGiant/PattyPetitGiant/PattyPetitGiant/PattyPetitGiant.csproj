@@ -110,6 +110,7 @@
     <Compile Include="ChunkManager.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="Compass.cs" />
+    <Compile Include="CreditsScreen.cs" />
     <Compile Include="CutsceneVideoState.cs" />
     <Compile Include="DungeonGenerator.cs" />
     <Compile Include="DungeonMap.cs" />

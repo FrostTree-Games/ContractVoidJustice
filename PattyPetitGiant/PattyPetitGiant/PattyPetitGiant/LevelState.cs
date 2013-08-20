@@ -190,6 +190,9 @@ namespace PattyPetitGiant
             player1Dead = false;
             end_flag_placed = false;
 
+            BackGroundAudio.playSong("RPG Game", true);
+            BackGroundAudio.changeVolume(1.0f);
+
             state = LoadingState.LevelRunning;
         }
 
@@ -382,7 +385,11 @@ namespace PattyPetitGiant
                     }
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
-                        entityList.Add(new Player(this, (currentRoomX + 12) * GlobalGameConstants.TileSize.X, (currentRoomY + 12) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
+                        entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
+
+                        //entityList.Add(new BallMutant(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
+
+                        //entityList.Add(new BroodLord(this, new Vector2((currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
 
                         if (GameCampaign.IsATwoPlayerGame)
                         {
@@ -548,6 +555,7 @@ namespace PattyPetitGiant
 
                 if (fadeOutTime >= fadeOutDuration)
                 {
+                    BackGroundAudio.stopAllSongs();
                     isComplete = true;
                 }
             }
@@ -737,9 +745,11 @@ namespace PattyPetitGiant
             switch (state)
             {
                 case LoadingState.LevelRunning:
+                    BackGroundAudio.changeVolume(1.0f);
                     renderGameStuff(sb);
                     break;
                 case LoadingState.LevelPaused:
+                    BackGroundAudio.changeVolume(0.4f);
                     renderGameStuff(sb);
                     renderPauseOverlay(sb);
                     break;
