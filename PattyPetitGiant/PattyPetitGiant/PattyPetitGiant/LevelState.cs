@@ -103,6 +103,8 @@ namespace PattyPetitGiant
         private PushMessageQueueState messageQueueState;
         private float queueTimer;
 
+        private List<MutantAcidSpitter> acidSpitters = null;
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -156,6 +158,7 @@ namespace PattyPetitGiant
             Thread.Sleep(250);
 
             entityList = new List<Entity>();
+            acidSpitters = new List<MutantAcidSpitter>();
 
             coinPool = new Coin[coinPoolSize];
             freeCoinIndex = 0;
@@ -293,7 +296,9 @@ namespace PattyPetitGiant
                     }
                     else
                     {
-                        entityList.Add(new MutantAcidSpitter(this, spawnPos.X, spawnPos.Y));
+                        MutantAcidSpitter spitter = new MutantAcidSpitter(this, spawnPos.X, spawnPos.Y);
+                        entityList.Add(spitter);
+                        acidSpitters.Add(spitter);
                     }
                 }
             }
@@ -521,6 +526,7 @@ namespace PattyPetitGiant
             entityList.RemoveAll(en => en.Remove_From_List == true);
 #elif XBOX
             XboxTools.RemoveAll(entityList, XboxTools.IsEntityToBeRemoved);
+            XboxTools.RemoveAll(acidSpitters, XboxTools.IsEntityToBeRemoved);
 #endif
 
             if (cameraFocus != null)
@@ -649,17 +655,17 @@ namespace PattyPetitGiant
         private void renderGameStuff(SpriteBatch sb)
         {
             AnimationLib.GraphicsDevice.SetRenderTarget(textureScreen);
-            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet);
+            AnimationLib.renderSpineEntities(camera, entityList, cameraFocus, map, particleSet, acidSpitters);
             AnimationLib.GraphicsDevice.SetRenderTarget(null);
             screenResult = (Texture2D)textureScreen;
 
             AnimationLib.GraphicsDevice.SetRenderTarget(halfTextureScreen);
-            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.5f), entityList, cameraFocus, map, particleSet);
+            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.5f), entityList, cameraFocus, map, particleSet, acidSpitters);
             AnimationLib.GraphicsDevice.SetRenderTarget(null);
             halfSizeTexture = (Texture2D)halfTextureScreen;
 
             AnimationLib.GraphicsDevice.SetRenderTarget(quarterTextureScreen);
-            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.25f), entityList, cameraFocus, map, particleSet);
+            AnimationLib.renderSpineEntities(camera * Matrix.CreateScale(0.25f), entityList, cameraFocus, map, particleSet, acidSpitters);
             AnimationLib.GraphicsDevice.SetRenderTarget(null);
             quarterSizeTexture = (Texture2D)quarterTextureScreen;
 

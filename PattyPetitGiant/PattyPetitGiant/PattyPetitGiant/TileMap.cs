@@ -360,7 +360,7 @@ namespace PattyPetitGiant
             }
         }
 
-        public void renderSPINEBATCHTEST(Spine.SkeletonRenderer sb, float depth)
+        public void renderSPINEBATCHTEST(Spine.SkeletonRenderer sb, float depth, List<MutantAcidSpitter> spitters)
         {
             int focusTileX = (int)(parent.CameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X);
             int focusTileY = (int)(parent.CameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y);
@@ -409,6 +409,11 @@ namespace PattyPetitGiant
                         }
                     }
                 }
+            }
+
+            for (int i = 0; i < spitters.Count; i++)
+            {
+                spitters[i].drawAcidSplotches(sb);
             }
 
             for (int j = Math.Max(0, focusTileY - 8); j < Math.Min(size.y, focusTileY + 9); j++)

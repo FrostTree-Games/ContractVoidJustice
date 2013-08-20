@@ -10,7 +10,7 @@ using Spine;
 
 namespace PattyPetitGiant
 {
-    class Enemy : Entity, SpineEntity
+    public class Enemy : Entity, SpineEntity
     {
         public enum EnemyState
         {

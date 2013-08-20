@@ -10,7 +10,7 @@ using Spine;
 
 namespace PattyPetitGiant
 {
-    class MutantAcidSpitter : Enemy
+    public class MutantAcidSpitter : Enemy
     {
         private enum SpitterState
         {
@@ -367,10 +367,21 @@ namespace PattyPetitGiant
                         sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
                         //acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].position, new Vector2(1.0f), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
                     }
-                    else
+                }
+            }
+
+            //drawAcidSplotches(sb);
+        }
+
+        public void drawAcidSplotches(Spine.SkeletonRenderer sb)
+        {
+            for (int i = 0; i < size_of_spit_array; i++)
+            {
+                if (projectile[i].active)
+                {
+                    if (projectile[i].Projectile_State != SpitProjectile.ProjectileState.Travel)
                     {
-                        //sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), projectile[i].position, Color.Pink, 0.0f, projectile[i].dimensions);
-                       acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].CenterPoint - acid_pool.FrameDimensions/2, new Vector2(projectile[i].scale), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
+                        acid_pool.drawAnimationFrame(projectile[i].alive_timer, sb, projectile[i].CenterPoint - acid_pool.FrameDimensions / 2, new Vector2(projectile[i].scale), 0.5f, 0.0f, projectile[i].CenterPoint, Color.White);
                     }
                 }
             }
