@@ -189,6 +189,7 @@ namespace PattyPetitGiant
 
             GlobalGameConstants.WeaponDictionary.InitalizePriceData();
 
+            GameCampaign.InitalizeCampaignData();
             GameCampaign.ResetPlayerValues("INIT", 0);
 
             // lol so many game screens

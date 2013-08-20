@@ -176,6 +176,18 @@ namespace PattyPetitGiant
         }
         private static int playerLevelProgress = 0;
 
+        private static List<Type> availableEntityTypes = null;
+        /// <summary>
+        /// A list of entity types to choose from when loading a level.
+        /// </summary>
+        public static List<Type> AvailableEntityTypes { get { return availableEntityTypes; } }
+
+        private static Type[][] campaignIntroductionValues = null;
+        /// <summary>
+        /// A two-dimensional, jagged array that indicates which enemy types should become available as the game progresses.
+        /// </summary>
+        public static Type[][] CampaignIntroductionValues { get { return campaignIntroductionValues; } }
+
         /// <summary>
         /// Indicates which of the three floors of the ship the player is on in the campaign.
         /// </summary>
@@ -211,12 +223,29 @@ namespace PattyPetitGiant
         private static bool isATwoPlayerGame;
         public static bool IsATwoPlayerGame { get { return isATwoPlayerGame; } set { isATwoPlayerGame = value; } }
 
+        public static void InitalizeCampaignData()
+        {
+            if (campaignIntroductionValues == null)
+            {
+                campaignIntroductionValues = new Type[6][];
+
+                campaignIntroductionValues[0] = new Type[2] { typeof(ChaseEnemy), typeof(PatrolGuard) };
+                campaignIntroductionValues[1] = new Type[2] { typeof(HookPrisonerEnemy), typeof(GuardSquadLeader) };
+                campaignIntroductionValues[2] = new Type[2] { typeof(ChargerMutantEnemy), typeof(GuardMech) };
+                campaignIntroductionValues[3] = new Type[3] { typeof(MutantAcidSpitter), typeof(BroodLord), typeof(AlienChaser) };
+                campaignIntroductionValues[4] = new Type[2] { typeof(MolotovEnemy), typeof(AntiFairy) };
+                campaignIntroductionValues[5] = new Type[0] { };
+            }
+        }
+
         public static void ResetPlayerValues(string player1Name, int player1Color)
         {
             if (floorProgress == null)
             {
                 floorProgress = new int[numberOfLevels];
             }
+
+            availableEntityTypes = new List<Type>();
 
             for (int i = 0; i < numberOfLevels; i++) { floorProgress[i] = -1; }
 
