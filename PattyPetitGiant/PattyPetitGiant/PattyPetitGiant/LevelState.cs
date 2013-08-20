@@ -122,6 +122,11 @@ namespace PattyPetitGiant
 
         private void loadLevel()
         {
+            for (int i = 0; i < GameCampaign.CampaignIntroductionValues[GameCampaign.PlayerLevelProgress].Length; i++)
+            {
+                GameCampaign.AvailableEntityTypes.Add(GameCampaign.CampaignIntroductionValues[GameCampaign.PlayerLevelProgress][i]);
+            }
+
             nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
