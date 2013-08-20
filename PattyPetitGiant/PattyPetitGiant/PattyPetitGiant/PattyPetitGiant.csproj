@@ -81,6 +81,7 @@
     <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
     <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86" />
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
     <Reference Include="mscorlib" />
     <Reference Include="System" />
@@ -109,6 +110,7 @@
     <Compile Include="ChunkManager.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="Compass.cs" />
+    <Compile Include="CreditsScreen.cs" />
     <Compile Include="CutsceneVideoState.cs" />
     <Compile Include="DungeonGenerator.cs" />
     <Compile Include="DungeonMap.cs" />

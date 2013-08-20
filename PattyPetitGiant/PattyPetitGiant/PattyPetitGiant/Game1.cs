@@ -151,6 +151,7 @@ namespace PattyPetitGiant
             BackGroundAudio music = new BackGroundAudio(Content);
 
             music.addSong("Menu");
+            music.addSong("RPG Game");
 
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadFromManifest();
@@ -182,9 +183,9 @@ namespace PattyPetitGiant
 
             // lol so many game screens
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            //currentGameScreen = new CampaignLobbyState();
+            currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
         }

@@ -11,128 +11,90 @@ namespace PattyPetitGiant
 {
     class LazerGun : Item
     {
-        private enum LazerState
-        {
-            Neutral,
-            Charging,
-            Fire,
-            Reset
-        }
-        private LazerState lazer_state = LazerState.Neutral;
-        private Vector2 dimensions = Vector2.Zero;
+        
         private Vector2 position = Vector2.Zero;
         private GlobalGameConstants.Direction item_direction = GlobalGameConstants.Direction.Right;
         private GlobalGameConstants.itemType item_type = GlobalGameConstants.itemType.LazerGun;
 
-        private const float lazer_range_multiplier = 5.0f;
-        private const float lazer_damage_multiplier = 1.015f;
-        private const float max_lazer_range = 500.0f;
-        private const float dimensions_reset = 10.0f;
-        private const float damage_reset = 3.0f;
-        private const float max_fire_timer = 300.0f;
-        
-        private float lazer_range = 0.0f;
-        private float damage = 3.0f;
-        private float knockback_magnitude = 3.0f;
+        private laserProjectile[] laser_projectile = new laserProjectile[3];
+
+        private const float cool_down = 1500;
         private float fire_timer = 0.0f;
 
-        private Vector2 start_point = Vector2.Zero;
+        private bool fire_projectile = true;
+
+        private float ammo_consumption = 15;
 
         private AnimationLib.FrameAnimationSet laserAnim = AnimationLib.getFrameAnimationSet("laser");
 
         public LazerGun()
         {
-            dimensions = new Vector2(10, 10);
-            position = Vector2.Zero;
-
-            damage = 3;
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             item_direction = parent.Direction_Facing;
-            parent.Velocity = Vector2.Zero;
-            switch (lazer_state)
+            if (fire_projectile)
             {
-                case LazerState.Neutral:
-                    if ((GameCampaign.Player_Right_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)))
+                for (int i = 0; i < laser_projectile.Count(); i++)
+                {
+                    if (laser_projectile[i].active)
+                        continue;
+                    else
                     {
-                        position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY);
-                        lazer_state = LazerState.Charging;
-                    }
-                    else if((GameCampaign.Player_Left_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
-                    {
-                        position = new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY);
-
-                        lazer_state = LazerState.Charging;
-                    }
-                    break;
-                case LazerState.Charging:
-                    if (lazer_range < 300)
-                    {
-                        switch (parent.Direction_Facing)
+                        if ((GameCampaign.Player_Right_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)))
                         {
-                            case GlobalGameConstants.Direction.Right:
-                                dimensions += new Vector2(lazer_range_multiplier, 0);                                
-                                break;
-                            case GlobalGameConstants.Direction.Left:
-                                dimensions += new Vector2(lazer_range_multiplier, 0);
-                                position -= new Vector2(lazer_range_multiplier, 0);
-                                break;
-                            case GlobalGameConstants.Direction.Up:
-                                dimensions += new Vector2(0, lazer_range_multiplier);
-                                position -= new Vector2(0, lazer_range_multiplier);
-                                break;
-                            default:
-                                dimensions += new Vector2(0, lazer_range_multiplier);
-                                break;
-                        }
-                        lazer_range += lazer_range_multiplier;
-                        damage = damage * lazer_damage_multiplier;
-                    }
-
-                    if ((GameCampaign.Player_Right_Item == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)) || (GameCampaign.Player_Left_Item == ItemType() && !InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
-                    {
-                        lazer_state = LazerState.Fire;
-                    }
-                    break;
-                case LazerState.Fire:
-                    fire_timer += currentTime.ElapsedGameTime.Milliseconds;
-                    foreach(Entity en in parentWorld.EntityList)
-                    {
-                        if (en == parent)
-                            continue;
-                        else if (en is Enemy)
-                        {
-                            if (hitTest(en))
+                            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= ammo_consumption)
                             {
-                                Vector2 direction = en.CenterPoint - parent.CenterPoint;
-                                en.knockBack(direction, knockback_magnitude, (int)damage, parent);
+                                laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -10) : new Vector2(0, 10));
+                                if (parent.Index == InputDevice2.PPG_Player.Player_1)
+                                {
+                                    GameCampaign.Player_Ammunition -= ammo_consumption;
+                                }
+                                else
+                                {
+                                    GameCampaign.Player2_Ammunition -= ammo_consumption;
+                                }
                             }
                         }
-                    }
-
-                    if(fire_timer>max_fire_timer)
-                    {
-                        lazer_state = LazerState.Reset;
+                        else if ((GameCampaign.Player_Left_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
+                        {
+                            laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -15) : new Vector2(0, 15));
+                            if (parent.Index == InputDevice2.PPG_Player.Player_1)
+                            {
+                                GameCampaign.Player_Ammunition -= ammo_consumption;
+                            }
+                            else
+                            {
+                                GameCampaign.Player2_Ammunition -= ammo_consumption;
+                            }
+                        }
+                        parent.State = Player.playerState.Moving;
                         fire_timer = 0.0f;
+                        fire_projectile = false;
+                        return;
                     }
-                    break;
-                case LazerState.Reset:
-                    dimensions = new Vector2(dimensions_reset, dimensions_reset);
-                    position = Vector2.Zero;
-                    damage = damage_reset;
-                    lazer_state = LazerState.Neutral;
-                    parent.State = Player.playerState.Moving;
-                    lazer_range = 0.0f;
-                    break;
-                default:
-                    break;
+                }
+            }
+            else
+            {
+                parent.State = Player.playerState.Moving;
             }
         }
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
-            return;
+            fire_timer += currentTime.ElapsedGameTime.Milliseconds;
+
+            if (fire_timer > cool_down)
+            {
+                fire_projectile = true;
+            }
+
+            for (int i = 0; i < laser_projectile.Count(); i++)
+            {
+                if (laser_projectile[i].active)
+                    laser_projectile[i].update(parentWorld, currentTime, parent);
+            }
         }
         public GlobalGameConstants.itemType ItemType()
         {
@@ -145,18 +107,121 @@ namespace PattyPetitGiant
         public void draw(Spine.SkeletonRenderer sb)
         {
             //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
-            sb.DrawSpriteToSpineVertexArray(Game1.laserPic, new Rectangle(1,1,0,0), position, Color.White, 0.0f, dimensions);
+            for (int i = 0; i < laser_projectile.Count(); i++)
+            {
+                if (laser_projectile[i].active)
+                {
+                    sb.DrawSpriteToSpineVertexArray(Game1.laserPic, new Rectangle(1, 1, 0, 0), laser_projectile[i].position, Color.White, 0.0f, laser_projectile[i].dimensions);
+                }
+            }
+            
             //laserAnim.drawAnimationFrame(0.0f, sb, position, dimensions, 0.5f, 0.0f, Vector2.Zero, Color.White);
         }
 
-        public bool hitTest(Entity other)
+        private struct laserProjectile
         {
-            if (position.X > other.Position.X + other.Dimensions.X || position.X + dimensions.X < other.Position.X || position.Y > other.Position.Y + other.Dimensions.Y || position.Y + dimensions.Y < other.Position.Y)
+            public bool active;
+
+            public Vector2 position;
+            public Vector2 dimensions;
+            private Vector2 velocity;
+            private float time_passed;
+
+            public Vector2 nextStep_temp;
+            public Vector2 CenterPoint
             {
-                return false;
+                get { return position + (dimensions / 2); }
             }
 
-            return true;
+            private float knockback_magnitude;
+            private int bullet_damage;
+
+            private const float max_bullet_time = 1500f;
+
+            public laserProjectile(Vector2 position, Vector2 velocity)
+            {
+                this.position = position;
+                dimensions = new Vector2(8, 8);
+                active = true;
+                this.velocity = velocity;
+
+                knockback_magnitude = 10;
+                bullet_damage = 25;
+                time_passed = 0.0f;
+
+                nextStep_temp = Vector2.Zero; 
+            }
+
+            public bool hitTestEntity(Entity other)
+            {
+                if (position.X > other.Position.X + other.Dimensions.X || position.X + dimensions.X < other.Position.X || position.Y > other.Position.Y + other.Dimensions.Y || position.Y + dimensions.Y < other.Position.Y)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            public void update(LevelState parentWorld, GameTime currentTime, Entity parent)
+            {
+                time_passed += currentTime.ElapsedGameTime.Milliseconds;
+
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
+                {
+                    if (parentWorld.EntityList[i] == parent)
+                        continue;
+                    if (hitTestEntity(parentWorld.EntityList[i]))
+                    {
+                        Vector2 direction = parentWorld.EntityList[i].CenterPoint - position;
+                        parentWorld.EntityList[i].knockBack(direction, knockback_magnitude, bullet_damage, parent);
+                    }
+                }
+
+                if (time_passed > max_bullet_time)
+                {
+                    parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
+                    time_passed = 0.0f;
+                    active = false;
+                }
+                else
+                {
+                    nextStep_temp = new Vector2(position.X - (dimensions.X / 2) + velocity.X, (position.Y + velocity.X));
+                }
+
+                bool on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                int check_corners = 0;
+                while (check_corners != 4)
+                {
+                    if (on_wall == false)
+                    {
+                        if (check_corners == 0)
+                        {
+                            nextStep_temp = new Vector2(position.X + (dimensions.X / 2) + velocity.X, position.Y + velocity.Y);
+                        }
+                        else if (check_corners == 1)
+                        {
+                            nextStep_temp = new Vector2(position.X + velocity.X, position.Y - (dimensions.Y / 2) + velocity.Y);
+                        }
+                        else if (check_corners == 2)
+                        {
+                            nextStep_temp = new Vector2(position.X + velocity.X, position.Y + dimensions.Y + velocity.Y);
+                        }
+                        else
+                        {
+                            position += velocity;
+                        }
+                        on_wall = parentWorld.Map.hitTestWall(nextStep_temp);
+                    }
+                    else
+                    {
+                        parentWorld.Particles.pushImpactEffect(position - new Vector2(24), Color.White);
+
+                        active = false;
+                        time_passed = 0.0f;
+                    }
+                    check_corners++;
+                }
+            }
         }
     }
 }

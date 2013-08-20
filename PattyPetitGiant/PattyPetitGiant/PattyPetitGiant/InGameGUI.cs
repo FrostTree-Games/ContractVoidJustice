@@ -28,7 +28,7 @@ namespace PattyPetitGiant
 
         private BoxWindow testWin;
 
-        private string deathMessage = "FISSION MAILED";
+        private string deathMessage = "WHAT'S GUCCI MY NIGGA!";
 
         private float blackFadeOverlay;
         public float BlackFadeOverlay { get { return blackFadeOverlay; } set { blackFadeOverlay = value; } }
@@ -36,6 +36,10 @@ namespace PattyPetitGiant
         private Texture2D mapIcon = null;
 
         private float flickerTime;
+
+        private AnimationLib.FrameAnimationSet coinAnim = null;
+        private AnimationLib.FrameAnimationSet medAnim = null;
+        private AnimationLib.FrameAnimationSet ammoAnim = null;
 
         public struct PriceDisplay
         {
@@ -141,6 +145,10 @@ namespace PattyPetitGiant
 
             keyFoundPic = AnimationLib.getFrameAnimationSet("keyPic");
             keyNotFoundPic = AnimationLib.getFrameAnimationSet("keyEmptyPic");
+
+            coinAnim = AnimationLib.getFrameAnimationSet("testCoin");
+            medAnim = AnimationLib.getFrameAnimationSet("itemHealth");
+            ammoAnim = AnimationLib.getFrameAnimationSet("itemBattery");
 
             mapIcon = TextureLib.getLoadedTexture("mapPda.png");
 
@@ -328,8 +336,10 @@ namespace PattyPetitGiant
                     }
 
                     Vector2 offset = new Vector2(i, j);
-                    sb.DrawString(Game1.font, player_health_display, new Vector2(140, 80) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                    sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(140, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    //sb.DrawString(Game1.font, player_health_display, , Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    medAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 80) + offset, new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    //sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(140, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    ammoAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 110) + offset, new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
                     sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2 + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     sb.DrawString(Game1.font, Player_Right_Item, new Vector2(245, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     sb.DrawString(Game1.font, Player_Left_Item, new Vector2(160, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
@@ -339,8 +349,10 @@ namespace PattyPetitGiant
 
                     if (GameCampaign.IsATwoPlayerGame)
                     {
-                        sb.DrawString(Game1.font, player_health_display, new Vector2(955, 80) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                        sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(955, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                        //sb.DrawString(Game1.font, player_health_display, new Vector2(955, 80) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                        medAnim.drawAnimationFrame(0.0f, sb, new Vector2(945, 80) + offset, new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                        //sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(955, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                        ammoAnim.drawAnimationFrame(0.0f, sb, new Vector2(945, 110) + offset, new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
                         sb.DrawString(Game1.font, Player_Right_Item, new Vector2(1057, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                         sb.DrawString(Game1.font, Player_Left_Item, new Vector2(972, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
@@ -357,15 +369,15 @@ namespace PattyPetitGiant
             sb.Draw(Game1.energyOverlay, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
             //player 1 GUI
-            sb.DrawString(Game1.font, player_health_display, new Vector2(140, 80), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            sb.Draw(Game1.healthBar, new Vector2(160, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.healthColor, new Vector2(165, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Health * 1.6f, 1), SpriteEffects.None, 0.51f);
-            sb.Draw(Game1.energyOverlay, new Vector2(160, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
+            medAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 80), new Vector2(0.75f), 0.51f, 0.0f, Vector2.Zero, Color.White); 
+            sb.Draw(Game1.healthBar, new Vector2(167, 85), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.healthColor, new Vector2(172, 85), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Health * 1.6f, 1), SpriteEffects.None, 0.51f);
+            sb.Draw(Game1.energyOverlay, new Vector2(167, 85), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-            sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(140, 110), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-            sb.Draw(Game1.healthBar, new Vector2(160, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.energyColor, new Vector2(165, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
-            sb.Draw(Game1.energyOverlay, new Vector2(160, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
+            ammoAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 110), new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            sb.Draw(Game1.healthBar, new Vector2(167, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.energyColor, new Vector2(172, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
+            sb.Draw(Game1.energyOverlay, new Vector2(167, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
             sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
 
@@ -377,12 +389,12 @@ namespace PattyPetitGiant
 
             if (GameCampaign.IsATwoPlayerGame)
             {
-                sb.DrawString(Game1.font, player_health_display, new Vector2(955, 80), text2Color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                medAnim.drawAnimationFrame(0.0f, sb, new Vector2(945, 80), new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
                 sb.Draw(Game1.healthBar, new Vector2(972, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
                 sb.Draw(Game1.healthColor, new Vector2(977, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Health * 1.6f, 1), SpriteEffects.None, 0.51f);
                 sb.Draw(Game1.energyOverlay, new Vector2(972, 83), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-                sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(955, 110), text2Color, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
+                ammoAnim.drawAnimationFrame(0.0f, sb, new Vector2(945, 110), new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
                 sb.Draw(Game1.healthBar, new Vector2(972, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
                 sb.Draw(Game1.energyColor, new Vector2(977, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player2_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
                 sb.Draw(Game1.energyOverlay, new Vector2(972, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
