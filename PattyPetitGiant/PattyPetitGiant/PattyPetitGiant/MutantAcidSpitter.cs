@@ -521,6 +521,11 @@ namespace PattyPetitGiant
 
             public void update(LevelState parentWorld, GameTime currentTime, Entity parent)
             {
+                if (active)
+                {
+                    parentWorld.Particles.pushDotParticle(position + new Vector2((float)Game1.rand.NextDouble() * dimensions.X, (float)Game1.rand.NextDouble() * dimensions.Y), (float)(1.5 * Math.PI), Color.DarkGreen);
+                }
+
                 switch(projectile_state) 
                 {
                     case ProjectileState.Travel:
