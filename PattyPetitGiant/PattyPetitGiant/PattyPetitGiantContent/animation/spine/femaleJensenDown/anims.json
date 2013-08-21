@@ -67,7 +67,8 @@
 			"shotgunMuzzle1": { "x": 29.65, "y": 0.04, "rotation": 2.81, "width": 80, "height": 56 },
 			"shotgunMuzzle2": { "x": 27.5, "y": -1.82, "rotation": 2.81, "width": 80, "height": 56 }
 		},
-                "lWeapon": {
+		
+		"lWeapon": {
 			"lBomb": { "name": "bomb", "x": 17.71, "y": 3.19, "rotation": 1.81, "width": 32, "height": 27 },
 			"lCompass": { "name": "compass", "x": 14.1, "y": 3.07, "rotation": 1.81, "width": 24, "height": 31 },
 			"lFlamethrower": { "name": "flamethrower", "x": 10.53, "y": -3.39, "scaleY": -1, "rotation": -9.01, "width": 48, "height": 24 },
@@ -108,7 +109,7 @@
 			"lCalf": { "x": 2.19, "y": -0.27, "rotation": 88.59, "width": 7, "height": 21 }
 		},
 		"up/lFoot": {
-			"lFoot": { "x": 3.55, "y": 1.57, "rotation": 74.99, "width": 7, "height": 7 }
+			"lFoot": { "x": 3.61, "y": 0.5, "scaleX": 0.734, "rotation": 55.84, "width": 7, "height": 7 }
 		},
 		"up/lForeArm": {
 			"lForearm": { "x": 6.74, "y": 0.55, "rotation": 32.39, "width": 12, "height": 8 }
@@ -129,7 +130,7 @@
 			"rCalf": { "x": 3.05, "y": -0.24, "rotation": 95.76, "width": 7, "height": 21 }
 		},
 		"up/rFoot": {
-			"rFoot": { "x": 3.88, "y": -0.27, "rotation": 102.45, "width": 7, "height": 7 }
+			"rFoot": { "x": 3.38, "y": 0.38, "scaleX": 0.73, "rotation": 117.86, "width": 7, "height": 7 }
 		},
 		"up/rForearm": {
 			"rForearm": { "x": 4.98, "y": 0.61, "rotation": 137.59, "width": 10, "height": 10 }
