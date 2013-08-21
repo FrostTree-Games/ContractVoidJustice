@@ -2784,13 +2784,20 @@
       <Name>pleaseWait</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-	  </Compile>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bgm\RPG Game.mp3">
       <Name>RPG Game</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="EndCredits.png">
+      <Name>EndCredits</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

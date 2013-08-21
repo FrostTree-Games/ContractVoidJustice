@@ -106,7 +106,6 @@ namespace PattyPetitGiant
         }
         public void draw(Spine.SkeletonRenderer sb)
         {
-            //sb.Draw(Game1.whitePixel, position, null, Color.Pink, 0.0f, Vector2.Zero, dimensions, SpriteEffects.None, 0.5f);
             for (int i = 0; i < laser_projectile.Count(); i++)
             {
                 if (laser_projectile[i].active)
@@ -114,8 +113,6 @@ namespace PattyPetitGiant
                     sb.DrawSpriteToSpineVertexArray(Game1.laserPic, new Rectangle(1, 1, 0, 0), laser_projectile[i].position, Color.White, 0.0f, laser_projectile[i].dimensions);
                 }
             }
-            
-            //laserAnim.drawAnimationFrame(0.0f, sb, position, dimensions, 0.5f, 0.0f, Vector2.Zero, Color.White);
         }
 
         private struct laserProjectile
@@ -136,7 +133,7 @@ namespace PattyPetitGiant
             private float knockback_magnitude;
             private int bullet_damage;
 
-            private const float max_bullet_time = 1500f;
+            private const float max_bullet_time = 1000f;
 
             public laserProjectile(Vector2 position, Vector2 velocity)
             {
