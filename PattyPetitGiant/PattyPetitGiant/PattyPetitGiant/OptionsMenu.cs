@@ -161,6 +161,8 @@ namespace PattyPetitGiant
         private bool pop_up_menu = false;
         private bool pop_up_screen = false;
 
+        private const string menuBlipSound = "menuSelect";
+
         private Vector2 text_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 128, GlobalGameConstants.GameResolutionHeight / 2 - 96);
         private Vector2 popup_position = new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 64, GlobalGameConstants.GameResolutionHeight / 2);
 
@@ -222,7 +224,7 @@ namespace PattyPetitGiant
                 {
                     button_pressed_timer = 0.0f;
                     down_pressed = false;
-
+                    AudioLib.playSoundEffect(menuBlipSound);
                     menu_item_select++;
 
                     if (menu_item_select >= options_list.Count())
@@ -247,7 +249,7 @@ namespace PattyPetitGiant
                 {
                     button_pressed_timer = 0.0f;
                     up_pressed = false;
-
+                    AudioLib.playSoundEffect(menuBlipSound);
                     menu_item_select--;
 
                     if (menu_item_select > 0)
