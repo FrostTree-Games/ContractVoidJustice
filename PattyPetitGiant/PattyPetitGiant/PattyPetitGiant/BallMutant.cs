@@ -66,7 +66,7 @@ namespace PattyPetitGiant
 
             enemy_damage = 5;
             enemy_life = 5;
-            enemy_type = EnemyType.Prisoner;
+            enemy_type = EnemyType.Alien;
 
             prob_item_drop = 0.4;
             number_drop_items = 4;
