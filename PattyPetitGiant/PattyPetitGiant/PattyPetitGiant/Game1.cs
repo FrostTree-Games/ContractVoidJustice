@@ -1,4 +1,5 @@
-//#define PROFILE
+#define PROFILE
+//#define CONTROLLER_DATA
 
 using System;
 using System.Collections.Generic;
@@ -73,8 +74,6 @@ namespace PattyPetitGiant
         public static Video levelEnterVideo = null;
         public static Video titleScreenVideo = null;
 
-        private InputDeviceManager input_device = null;
-
 #if PROFILE
         private int frameCounter = 0;
         private int frameRate = 0;
@@ -118,7 +117,6 @@ namespace PattyPetitGiant
         {
             // Create a new SpriteBatch, which can be used to draw textures.
 
-            input_device = new InputDeviceManager(graphics.GraphicsDevice);
             InputDevice2.Initalize();
 
             HighScoresState.InitalizeHighScores();
@@ -266,7 +264,6 @@ namespace PattyPetitGiant
                 currentGameScreen = ScreenState.SwitchToNewScreen(currentGameScreen.nextLevelState());
             }
 
-            input_device.update(); 
             InputDevice2.Update(gameTime);
 
             currentGameScreen.update(gameTime);
@@ -296,6 +293,30 @@ namespace PattyPetitGiant
             }
 
             currentGameScreen.render(spriteBatch);
+
+#if CONTROLLER_DATA
+            spriteBatch.Begin();
+
+            try
+            {
+                spriteBatch.DrawString(Game1.tenbyFive14, "Player1: " + InputDevice2.GetPlayerGamePadIndex(InputDevice2.PPG_Player.Player_1).ToString(), new Vector2(32), Color.White);
+            }
+            catch (Exception)
+            {
+                spriteBatch.DrawString(Game1.tenbyFive14, "Player1: none", new Vector2(32), Color.White);
+            }
+
+            try
+            {
+                spriteBatch.DrawString(Game1.tenbyFive14, "Player2: " + InputDevice2.GetPlayerGamePadIndex(InputDevice2.PPG_Player.Player_2).ToString(), new Vector2(32, 64), Color.White);
+            }
+            catch (Exception)
+            {
+                spriteBatch.DrawString(Game1.tenbyFive14, "Player2: none", new Vector2(32, 64), Color.White);
+            }
+
+            spriteBatch.End();
+#endif
 
 #if PROFILE
             frameCounter++;

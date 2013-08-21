@@ -370,7 +370,7 @@ namespace PattyPetitGiant
                 {
                     switchItemPressed = true;
                 }
-                else if (!(InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem1) || InputDeviceManager.isButtonDown(InputDeviceManager.PlayerButton.SwitchItem2)) && switchItemPressed)
+                else if (!(InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem1) || InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.SwitchItem2)) && switchItemPressed)
                 {
                     switchItemPressed = false;
                 }
