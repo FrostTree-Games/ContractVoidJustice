@@ -16,6 +16,9 @@ jensenUp_PURPLE
 jensenDown_RED
 jensenRight_RED
 jensenUp_RED
+femaleJensenDown
+femaleJensenRight
+femaleJensenUp
 zippyDown
 zippyRight
 zippyUp

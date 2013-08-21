@@ -179,6 +179,12 @@ namespace PattyPetitGiant
             }
             else if (index == InputDevice2.PPG_Player.Player_2)
             {
+                walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown");
+                walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight");
+                walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight");
+                walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp");
+
+                /*
                 if (GameCampaign.Player2Color == 0)
                 {
                     walk_down = AnimationLib.loadNewAnimationSet("jensenDown");
@@ -220,7 +226,7 @@ namespace PattyPetitGiant
                     walk_right = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
                     walk_left = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
                     walk_up = AnimationLib.loadNewAnimationSet("jensenUp_BROWN");
-                }
+                }*/
             }
 
             remove_from_list = false;
