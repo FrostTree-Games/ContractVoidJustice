@@ -3,115 +3,143 @@ img.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
-head
+muzzle1
   rotate: false
-  xy: 167, 16
-  size: 10, 15
-  orig: 10, 15
+  xy: 1, 7
+  size: 80, 56
+  orig: 80, 56
   offset: 0, 0
   index: -1
-lCalf
+muzzle2
   rotate: false
-  xy: 145, 14
-  size: 9, 17
-  orig: 9, 17
+  xy: 83, 7
+  size: 80, 56
+  orig: 80, 56
   offset: 0, 0
   index: -1
-lFoot
+sword
   rotate: false
-  xy: 1, 1
-  size: 7, 11
-  orig: 7, 11
+  xy: 165, 46
+  size: 64, 17
+  orig: 64, 17
   offset: 0, 0
   index: -1
-lForearm
+blood
   rotate: false
-  xy: 179, 18
-  size: 9, 13
-  orig: 9, 13
+  xy: 165, 28
+  size: 48, 16
+  orig: 48, 16
   offset: 0, 0
   index: -1
-lHand
+torso
   rotate: false
-  xy: 19, 3
-  size: 6, 9
-  orig: 6, 9
+  xy: 231, 35
+  size: 19, 28
+  orig: 19, 28
   offset: 0, 0
   index: -1
 lShoulder
   rotate: false
-  xy: 88, 15
+  xy: 215, 28
   size: 14, 16
   orig: 14, 16
   offset: 0, 0
   index: -1
-lThigh
-  rotate: false
-  xy: 119, 13
-  size: 11, 18
-  orig: 11, 18
-  offset: 0, 0
-  index: -1
-pelvis
-  rotate: false
-  xy: 99, 1
-  size: 17, 9
-  orig: 17, 9
-  offset: 0, 0
-  index: -1
-rCalf
-  rotate: false
-  xy: 156, 14
-  size: 9, 17
-  orig: 9, 17
-  offset: 0, 0
-  index: -1
-rFoot
-  rotate: false
-  xy: 10, 1
-  size: 7, 11
-  orig: 7, 11
-  offset: 0, 0
-  index: -1
-rForearm
-  rotate: false
-  xy: 88, 1
-  size: 9, 12
-  orig: 9, 12
-  offset: 0, 0
-  index: -1
-rHand
-  rotate: false
-  xy: 190, 23
-  size: 6, 8
-  orig: 6, 8
-  offset: 0, 0
-  index: -1
 rShoulder
   rotate: false
-  xy: 104, 14
+  xy: 165, 9
   size: 13, 17
   orig: 13, 17
   offset: 0, 0
   index: -1
 rThigh
   rotate: false
-  xy: 132, 12
+  xy: 252, 44
   size: 11, 19
   orig: 11, 19
   offset: 0, 0
   index: -1
-sword
+lThigh
   rotate: false
-  xy: 1, 14
-  size: 64, 17
-  orig: 64, 17
+  xy: 265, 45
+  size: 11, 18
+  orig: 11, 18
   offset: 0, 0
   index: -1
-torso
+lCalf
   rotate: false
-  xy: 67, 3
-  size: 19, 28
-  orig: 19, 28
+  xy: 180, 9
+  size: 9, 17
+  orig: 9, 17
+  offset: 0, 0
+  index: -1
+pelvis
+  rotate: false
+  xy: 278, 54
+  size: 17, 9
+  orig: 17, 9
+  offset: 0, 0
+  index: -1
+rCalf
+  rotate: false
+  xy: 191, 9
+  size: 9, 17
+  orig: 9, 17
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 202, 11
+  size: 10, 15
+  orig: 10, 15
+  offset: 0, 0
+  index: -1
+lForearm
+  rotate: false
+  xy: 214, 13
+  size: 9, 13
+  orig: 9, 13
+  offset: 0, 0
+  index: -1
+rForearm
+  rotate: false
+  xy: 297, 51
+  size: 9, 12
+  orig: 9, 12
+  offset: 0, 0
+  index: -1
+lFoot
+  rotate: false
+  xy: 308, 52
+  size: 7, 11
+  orig: 7, 11
+  offset: 0, 0
+  index: -1
+rFoot
+  rotate: false
+  xy: 317, 52
+  size: 7, 11
+  orig: 7, 11
+  offset: 0, 0
+  index: -1
+lHand
+  rotate: false
+  xy: 326, 54
+  size: 6, 9
+  orig: 6, 9
+  offset: 0, 0
+  index: -1
+null
+  rotate: false
+  xy: 1, 1
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+rHand
+  rotate: false
+  xy: 202, 1
+  size: 6, 8
+  orig: 6, 8
   offset: 0, 0
   index: -1

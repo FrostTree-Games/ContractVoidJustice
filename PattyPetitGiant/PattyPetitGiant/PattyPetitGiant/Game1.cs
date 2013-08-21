@@ -57,6 +57,7 @@ namespace PattyPetitGiant
         public static Texture2D energyOverlay = null;
         public static Texture2D popUpBackground = null;
         public static Texture2D greyBar = null;
+        public static Texture2D creditImage = null;
         public static Random rand = new Random();
 
         private Texture2D pleaseWaitDialog = null;
@@ -148,6 +149,7 @@ namespace PattyPetitGiant
             energyOverlay = Content.Load<Texture2D>("overlay");
             popUpBackground = Content.Load<Texture2D>("popUpBackground");
             greyBar = Content.Load<Texture2D>("grayTexture");
+            creditImage = Content.Load<Texture2D>("EndCredits");
 
             shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
             heartPic = Content.Load<Texture2D>("heartSheet");

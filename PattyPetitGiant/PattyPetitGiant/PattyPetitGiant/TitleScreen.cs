@@ -83,10 +83,10 @@ namespace PattyPetitGiant
         private const float max_button_pressed_timer = 200.0f;
         private float fade = 0.0f;
         private float fade_duration = 0.0f;
+
         private const float max_fade_timer = 750f;
+        private const float logo_stay_timer = 2000.0f;
         private const float max_fade_menu_timer = 1000f;
-        private float model_rotation_y = 0.0f;
-        private float model_rotation_x = 0.0f;
 
         private Texture2D videoTexture;
 
@@ -178,14 +178,25 @@ namespace PattyPetitGiant
                     break;
                 /**************************************************************************************************************************/
                 case titleScreens.logoScreen:
-                    if (fade > max_fade_timer)
+                    if (fade > fade_duration)
                     {
                         fade = 0.0f;
                         fade_state = (FadeState)(((int)fade_state+1)%3);
+
                         if (fade_state == FadeState.fadeIn)
                         {
                             fade = 0.0f;
                             screen = titleScreens.menuScreen;
+                        }
+                        else if (fade_state == FadeState.stay)
+                        {
+                            fade = 0.0f;
+                            fade_duration = logo_stay_timer;
+                        }
+                        else if (fade_state == FadeState.fadeOut)
+                        {
+                            fade = 0.0f;
+                            fade_duration = max_fade_timer;
                         }
                     }
                     break;

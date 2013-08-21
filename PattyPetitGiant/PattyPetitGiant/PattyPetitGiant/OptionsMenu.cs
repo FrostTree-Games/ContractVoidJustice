@@ -169,6 +169,7 @@ namespace PattyPetitGiant
             options_list = new List<optionsMenuOptions>(3);
             options_list.Add(new optionsMenuOptions("HIGH SCORE"));
             options_list.Add(new optionsMenuOptions("ERASE HIGH SCORE"));
+            options_list.Add(new optionsMenuOptions("CREDITS"));
             options_list.Add(new optionsMenuOptions("BACK"));
 
             popup_options = new List<popUpMenu>(2);
@@ -276,6 +277,9 @@ namespace PattyPetitGiant
                             pop_up_screen = true;
                             popup_item_selected = 0;
                             zoom_state = popUpZoomState.zoomIn;
+                            break;
+                        case "CREDITS":
+                            isComplete = true;
                             break;
                         case "BACK":
                             isComplete = true;
@@ -410,6 +414,10 @@ namespace PattyPetitGiant
             if (options_list[menu_item_select].text == "HIGH SCORE")
             {
                 return ScreenStateType.HighScoresStateOptions;
+            }
+            if (options_list[menu_item_select].text == "CREDITS")
+            {
+                return ScreenStateType.CreditsOptionsState;
             }
             else
             {

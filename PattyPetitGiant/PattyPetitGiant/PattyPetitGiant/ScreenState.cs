@@ -22,6 +22,8 @@ namespace PattyPetitGiant
             FMV_ELEVATOR_EXIT = 7,
             FMV_ELEVATOR_ENTER = 8,
             HighScoresStateOptions = 9,
+            CreditsOptionsState = 10,
+            CreditsEndGameState = 11,
         }
 
         protected bool pause = false;
@@ -75,6 +77,10 @@ namespace PattyPetitGiant
                     return new CutsceneVideoState(Game1.levelEnterVideo, ScreenStateType.LevelState);
                 case ScreenStateType.HighScoresStateOptions:
                     return new HighScoresState(false);
+                case ScreenStateType.CreditsOptionsState:
+                    return new CreditsScreen(false);
+                case ScreenStateType.CreditsEndGameState:
+                    return new CreditsScreen(true);
                 default:
                     return null;
             }

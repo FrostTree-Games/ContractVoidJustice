@@ -549,11 +549,6 @@ namespace PattyPetitGiant
                     }
                     //sb.Draw(Game1.whitePixel, grenade.Position, null, Color.Blue, 0.0f, Vector2.Zero, grenade.Dimensions, SpriteEffects.None, 0.5f);
                 }
-                if (melee_active)
-                {
-                    sb.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), melee_position, Color.Blue, 0.0f, melee_hitbox);
-                    //sb.Draw(Game1.whitePixel, melee_position, null, Color.Blue, 0.0f, Vector2.Zero, melee_hitbox, SpriteEffects.None, 0.5f);
-                }
             }
         }
 
