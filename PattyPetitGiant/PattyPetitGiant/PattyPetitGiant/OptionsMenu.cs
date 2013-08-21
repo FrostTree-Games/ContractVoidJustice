@@ -208,7 +208,7 @@ namespace PattyPetitGiant
 
             if (!pop_up_menu)
             {
-                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad)
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection))
                 {
                     if (!down_pressed)
                     {
@@ -217,7 +217,7 @@ namespace PattyPetitGiant
                     down_pressed = true;
                 }
 
-                if ((down_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad)) || (down_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
+                if ((down_pressed && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection)) || (down_pressed && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.DownDirection) && button_pressed_timer > max_button_pressed_timer))
                 {
                     button_pressed_timer = 0.0f;
                     down_pressed = false;
@@ -234,7 +234,7 @@ namespace PattyPetitGiant
                     }
                 }
 
-                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad)
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection))
                 {
                     if (!up_pressed)
                         button_pressed_timer = 0.0f;
@@ -242,7 +242,7 @@ namespace PattyPetitGiant
                     up_pressed = true;
                 }
 
-                if ((up_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad)) || (up_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
+                if ((up_pressed && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection)) || (up_pressed && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.UpDirection) && button_pressed_timer > max_button_pressed_timer))
                 {
                     button_pressed_timer = 0.0f;
                     up_pressed = false;
@@ -259,7 +259,7 @@ namespace PattyPetitGiant
                     }
                 }
 
-                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm))
                 {
                     confirm_pressed = true;
                 }
@@ -298,7 +298,7 @@ namespace PattyPetitGiant
             /*************************************************************************************************************/
             else
             {
-                if ((InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.LeftDirection) != InputDevice2.PlayerPad.NoPad))
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection))
                 {
                     if (!down_pressed)
                     {
@@ -307,7 +307,7 @@ namespace PattyPetitGiant
                     down_pressed = true;
                 }
 
-                if ((down_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.LeftDirection) != InputDevice2.PlayerPad.NoPad)) || (down_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.LeftDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
+                if ((down_pressed && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection)) || (down_pressed && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.LeftDirection) && button_pressed_timer > max_button_pressed_timer))
                 {
                     button_pressed_timer = 0.0f;
                     down_pressed = false;
@@ -324,7 +324,7 @@ namespace PattyPetitGiant
                     }
                 }
 
-                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.RightDirection) != InputDevice2.PlayerPad.NoPad)
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.RightDirection))
                 {
                     if (!up_pressed)
                         button_pressed_timer = 0.0f;
@@ -332,7 +332,7 @@ namespace PattyPetitGiant
                     up_pressed = true;
                 }
 
-                if ((up_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.RightDirection) != InputDevice2.PlayerPad.NoPad)) || (up_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.RightDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
+                if ((up_pressed && !InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.RightDirection)) || (up_pressed && InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.RightDirection) && button_pressed_timer > max_button_pressed_timer))
                 {
                     button_pressed_timer = 0.0f;
                     up_pressed = false;
@@ -349,7 +349,7 @@ namespace PattyPetitGiant
                     }
                 }
 
-                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
+                if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_1, InputDevice2.PlayerButton.Confirm))
                 {
                     confirm_pressed = true;
                 }

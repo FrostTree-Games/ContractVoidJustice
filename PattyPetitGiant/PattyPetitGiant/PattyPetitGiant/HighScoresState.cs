@@ -123,6 +123,8 @@ namespace PattyPetitGiant
 
         private bool inGame = false;
 
+        private bool isSignedIn = false;
+
         public static void InitalizeHighScores()
         {
             if (highScores == null)

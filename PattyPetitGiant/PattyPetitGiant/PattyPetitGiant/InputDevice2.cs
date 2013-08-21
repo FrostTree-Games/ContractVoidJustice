@@ -175,7 +175,7 @@ namespace PattyPetitGiant
                         if (keyboardController.IsKeyDown(keyConfig.DownDirection)) { return PlayerPad.Keyboard; }
                         break;
                     case PlayerButton.UpDirection:
-                        if (xInputControllers[i].DPad.Down == ButtonState.Pressed || xInputControllers[i].ThumbSticks.Left.Y > 0) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
+                        if (xInputControllers[i].DPad.Up == ButtonState.Pressed || xInputControllers[i].ThumbSticks.Left.Y > 0) { return GamePadIndexToPlayerPad((PlayerIndex)i); }
                         if (keyboardController.IsKeyDown(keyConfig.UpDirection)) { return PlayerPad.Keyboard; }
                         break;
                     case PlayerButton.LeftDirection:

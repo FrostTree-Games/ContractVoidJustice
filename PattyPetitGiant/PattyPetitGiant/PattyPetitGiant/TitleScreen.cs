@@ -103,6 +103,11 @@ namespace PattyPetitGiant
 
         private const string menuBlipSound = "menuSelect";
 
+        /// <summary>
+        /// Used to determine which device pressed the confirm button on the title screen.
+        /// </summary>
+        private InputDevice2.PlayerPad whoPressedConfirm;
+
         private enum FadeState
         {
             fadeIn = 0,
@@ -140,6 +145,8 @@ namespace PattyPetitGiant
             screen = screen_state;
 
             fade_state = FadeState.fadeIn;
+
+            InputDevice2.UnlockAllControllers();
 
             /*myModel = model;
             ship_texture = texture;
@@ -268,6 +275,8 @@ namespace PattyPetitGiant
                     if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
                     {
                         confirm_pressed = true;
+
+                        whoPressedConfirm = InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm);
                     }
                     else if (confirm_pressed)
                     {
@@ -281,6 +290,7 @@ namespace PattyPetitGiant
                                 fade = 0.0f;
                                 break;
                             case "OPTIONS":
+                                InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, whoPressedConfirm);
                                 screen = titleScreens.optionScreen;
                                 fade_state = FadeState.fadeOut;
                                 fade = 0.0f;
