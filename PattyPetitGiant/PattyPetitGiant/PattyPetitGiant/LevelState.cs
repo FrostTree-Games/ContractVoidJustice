@@ -562,6 +562,7 @@ namespace PattyPetitGiant
 
             if (endFlagReached)
             {
+                BackGroundAudio.stopAllSongs();
                 isComplete = true;
             }
 
