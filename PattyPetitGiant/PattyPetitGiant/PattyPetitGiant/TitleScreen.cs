@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
 
 namespace PattyPetitGiant
@@ -95,6 +96,8 @@ namespace PattyPetitGiant
 
         private const string menuBlipSound = "menuSelect";
 
+        private bool storageDevicePrompted;
+
         /// <summary>
         /// Used to determine which device pressed the confirm button on the title screen.
         /// </summary>
@@ -138,12 +141,9 @@ namespace PattyPetitGiant
 
             fade_state = FadeState.fadeIn;
 
-            InputDevice2.UnlockAllControllers();
+            storageDevicePrompted = false;
 
-            /*myModel = model;
-            ship_texture = texture;
-            this.aspectRatio = aspectRatio;
-            rasterizer_state.CullMode = CullMode.None;*/
+            InputDevice2.UnlockAllControllers();
         }
 
         private const int width = 32;
@@ -215,98 +215,115 @@ namespace PattyPetitGiant
                         }
                     }
 
-                    if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad)
+                    if (storageDevicePrompted)
                     {
-                        if(!down_pressed)
+                        if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad)
+                        {
+                            if (!down_pressed)
+                                button_pressed_timer = 0.0f;
+
+                            down_pressed = true;
+                        }
+
+                        if ((down_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad)) || (down_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
+                        {
+                            down_pressed = false;
                             button_pressed_timer = 0.0f;
-                
-                        down_pressed = true;
-                    }
 
-                    if ((down_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad)) || (down_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.DownDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
-                    {
-                        down_pressed = false;
-                        button_pressed_timer = 0.0f;
-
-                        menu_item_selected++;
-                        AudioLib.playSoundEffect(menuBlipSound);
-                        if (menu_item_selected >= menu_list.Count())
-                        {
-                            menu_item_selected = menu_item_selected % menu_list.Count();
+                            menu_item_selected++;
+                            AudioLib.playSoundEffect(menuBlipSound);
+                            if (menu_item_selected >= menu_list.Count())
+                            {
+                                menu_item_selected = menu_item_selected % menu_list.Count();
+                            }
+                            else if (menu_item_selected < 0)
+                            {
+                                menu_item_selected += menu_list.Count();
+                            }
                         }
-                        else if (menu_item_selected < 0)
-                        {
-                            menu_item_selected += menu_list.Count();
-                        }
-                    }
 
-                    if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad)
-                    {
-                        if (!up_pressed)
+                        if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad)
+                        {
+                            if (!up_pressed)
+                                button_pressed_timer = 0.0f;
+                            up_pressed = true;
+                        }
+
+                        if ((up_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad)) || (up_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
+                        {
+                            up_pressed = false;
                             button_pressed_timer = 0.0f;
-                        up_pressed = true;
-                    }
 
-                    if ((up_pressed && !(InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad)) || (up_pressed && (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.UpDirection) != InputDevice2.PlayerPad.NoPad) && button_pressed_timer > max_button_pressed_timer))
+                            menu_item_selected--;
+                            AudioLib.playSoundEffect(menuBlipSound);
+                            if (menu_item_selected >= menu_list.Count())
+                            {
+                                menu_item_selected = menu_item_selected % menu_list.Count();
+                            }
+                            else if (menu_item_selected < 0)
+                            {
+                                menu_item_selected += menu_list.Count();
+                            }
+                        }
+
+                        if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
+                        {
+                            confirm_pressed = true;
+
+                            whoPressedConfirm = InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm);
+                        }
+                        else if (confirm_pressed)
+                        {
+                            confirm_pressed = false;
+
+                            switch (menu_list[menu_item_selected].text)
+                            {
+                                case "START":
+                                    screen = titleScreens.playScreen;
+                                    fade_state = FadeState.fadeOut;
+                                    fade = 0.0f;
+                                    break;
+                                case "OPTIONS":
+                                    InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, whoPressedConfirm);
+                                    screen = titleScreens.optionScreen;
+                                    fade_state = FadeState.fadeOut;
+                                    fade = 0.0f;
+                                    break;
+                                case "QUIT":
+                                    break;
+                            }
+                        }
+
+                        for (int i = 0; i < menu_list.Count(); i++)
+                        {
+                            if (i == menu_item_selected)
+                            {
+                                menu_list[menu_item_selected].selected = true;
+                            }
+                            else
+                            {
+                                menu_list[i].selected = false;
+                            }
+                            menu_list[i].update(currentTime);
+                        }
+                    }
+                    else
                     {
-                        up_pressed = false;
-                        button_pressed_timer = 0.0f;
-
-                        menu_item_selected--;
-                        AudioLib.playSoundEffect(menuBlipSound);
-                        if (menu_item_selected >= menu_list.Count())
+                        if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
                         {
-                            menu_item_selected = menu_item_selected % menu_list.Count();
+                            confirm_pressed = true;
+
+                            whoPressedConfirm = InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm);
                         }
-                        else if (menu_item_selected < 0)
+                        else if (confirm_pressed)
                         {
-                            menu_item_selected += menu_list.Count();
-                        }
-                    }
+                            confirm_pressed = false;
 
-                    if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
-                    {
-                        confirm_pressed = true;
+                            SaveGameModule.selectStorageDevice((PlayerIndex)whoPressedConfirm);
 
-                        whoPressedConfirm = InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm);
-                    }
-                    else if (confirm_pressed)
-                    {
-                        confirm_pressed = false;
-
-                        switch(menu_list[menu_item_selected].text)
-                        {
-                            case "START":
-                                screen = titleScreens.playScreen;
-                                fade_state = FadeState.fadeOut;
-                                fade = 0.0f;
-                                break;
-                            case "OPTIONS":
-                                InputDevice2.LockController(InputDevice2.PPG_Player.Player_1, whoPressedConfirm);
-                                screen = titleScreens.optionScreen;
-                                fade_state = FadeState.fadeOut;
-                                fade = 0.0f;
-                                break;
-                            case "QUIT":
-                                break;
+                            storageDevicePrompted = true;
                         }
                     }
-
-                    for (int i = 0; i < menu_list.Count(); i++)
-                    {
-                        if (i == menu_item_selected)
-                        {
-                            menu_list[menu_item_selected].selected = true;
-                        }
-                        else
-                        {
-                            menu_list[i].selected = false;
-                        }
-                        menu_list[i].update(currentTime);
-                    }
-
-                    model_rotation_x += (float)currentTime.ElapsedGameTime.TotalMilliseconds * MathHelper.ToRadians(0.01f);
-                    model_rotation_y += (float)currentTime.ElapsedGameTime.TotalMilliseconds * MathHelper.ToRadians(0.002f);
 
                     break;
                 /*****************************************************************************************************/
@@ -348,9 +365,16 @@ namespace PattyPetitGiant
                     sb.Draw(Game1.frostTreeLogo, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.frostTreeLogo.Width / 2), (GlobalGameConstants.GameResolutionHeight / 2) - (Game1.frostTreeLogo.Height / 2)), null, fadeColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     break;
                 case titleScreens.menuScreen:
-                    for (int i = 0; i < menu_list.Count(); i++)
+                    if (storageDevicePrompted)
                     {
-                        sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+                        for (int i = 0; i < menu_list.Count(); i++)
+                        {
+                            sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+                        }
+                    }
+                    else
+                    {
+                        sb.DrawString(Game1.tenbyFive24, "Press (A)", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 514) - (Game1.tenbyFive24.MeasureString("Press (A)") / 2), fadeTextColour);
                     }
                     break;
                 default:

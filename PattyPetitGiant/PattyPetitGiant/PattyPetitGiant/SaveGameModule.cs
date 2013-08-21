@@ -20,6 +20,8 @@ namespace PattyPetitGiant
 
         private const string filename = "pattypetitgiant.sav";
 
+        public static PlayerIndex StorageDeviceSelectIndex;
+
         private static bool saving = false;
         public static bool TouchingStorageDevice
         {
@@ -29,8 +31,10 @@ namespace PattyPetitGiant
             }
         }
 
-        public static void selectStorageDevice()
+        public static void selectStorageDevice(PlayerIndex index)
         {
+            StorageDeviceSelectIndex = index;
+
             new Thread(do_selectStorageDevice).Start();
         }
 
@@ -41,7 +45,7 @@ namespace PattyPetitGiant
             {
                 deviceFound = false;
 
-                result = StorageDevice.BeginShowSelector(InputDevice2.GetPlayerGamePadIndex(InputDevice2.PPG_Player.Player_1), null, null);
+                result = StorageDevice.BeginShowSelector(StorageDeviceSelectIndex, null, null);
 
                 result.AsyncWaitHandle.WaitOne();
 
