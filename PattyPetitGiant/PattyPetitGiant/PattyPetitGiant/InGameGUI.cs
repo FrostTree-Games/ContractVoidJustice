@@ -28,7 +28,7 @@ namespace PattyPetitGiant
 
         private BoxWindow testWin;
 
-        private string deathMessage = "WHAT'S GUCCI MY NIGGA!";
+        private string deathMessage = "You've Died for Great Justice!";
 
         private float blackFadeOverlay;
         public float BlackFadeOverlay { get { return blackFadeOverlay; } set { blackFadeOverlay = value; } }
@@ -312,7 +312,7 @@ namespace PattyPetitGiant
 
             string player_health_display = "H: ";
             string ammunition_amount_display = "A: ";
-            string coin_amount_display = "Coin: " + GameCampaign.Player_Coin_Amount;
+            string coin_amount_display = GameCampaign.Player_Coin_Amount.ToString();
             string Player_Right_Item = "R: ";
             string Player_Left_Item = "L: ";
 
@@ -340,7 +340,8 @@ namespace PattyPetitGiant
                     medAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 80) + offset, new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
                     //sb.DrawString(Game1.font, ammunition_amount_display, new Vector2(140, 110) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     ammoAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 110) + offset, new Vector2(0.75f), 0.5f, 0.0f, Vector2.Zero, Color.White);
-                    sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2 + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    coinAnim.drawAnimationFrame(0.0f, sb, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2 + offset, new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 32, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2 + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     sb.DrawString(Game1.font, Player_Right_Item, new Vector2(245, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     sb.DrawString(Game1.font, Player_Left_Item, new Vector2(160, 140) + offset, Color.Black, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
 
@@ -379,8 +380,9 @@ namespace PattyPetitGiant
             sb.Draw(Game1.energyColor, new Vector2(172, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(GameCampaign.Player_Ammunition * 1.6f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.energyOverlay, new Vector2(167, 113), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
 
-            sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
-
+            coinAnim.drawAnimationFrame(0.0f, sb, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2, new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
+            sb.DrawString(Game1.font, coin_amount_display, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 + 32, 70) - new Vector2(Game1.font.MeasureString(coin_amount_display).X, 0) / 2, Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                    
             sb.DrawString(Game1.font, Player_Right_Item, new Vector2(245, 140), textColor, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.51f);
             player_first_weapon.drawAnimationFrame(0.0f, sb, new Vector2(265, 140), new Vector2(1.0f), 0.5f, 0.0f, Vector2.Zero, Color.White);
             

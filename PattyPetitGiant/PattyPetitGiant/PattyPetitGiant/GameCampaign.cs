@@ -249,11 +249,11 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < numberOfLevels; i++) { floorProgress[i] = -1; }
 
-            PlayerLevelProgress = 2;
+            PlayerLevelProgress = 4;
             PlayerFloorHeight = 1;
 
-            Player_Right_Item = GlobalGameConstants.itemType.Sword;
-            Player_Left_Item = GlobalGameConstants.itemType.Gun;
+            Player_Right_Item = GlobalGameConstants.itemType.MachineGun;
+            Player_Left_Item = GlobalGameConstants.itemType.LazerGun;
 
             allegiance = 0.5f;
 
