@@ -185,7 +185,7 @@ namespace PattyPetitGiant
             introCutScene = Content.Load<Video>("fmv/intro");
             introCutSceneCoop = Content.Load<Video>("fmv/intro COOP");
             levelEnterVideoCoop = Content.Load<Video>("fmv/levelStartCOOP");
-            levelExitVideoCoop = Content.Load<Video>("fmv/levelExitCOOP");
+            levelExitVideoCoop = Content.Load<Video>("fmv/elevatorExitCOOP");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
