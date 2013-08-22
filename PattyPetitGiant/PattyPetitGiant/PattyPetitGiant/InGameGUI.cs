@@ -28,7 +28,7 @@ namespace PattyPetitGiant
 
         private BoxWindow testWin;
 
-        private string deathMessage = "WHAT'S GUCCI MY NIGGA!";
+        private string deathMessage = "MISSION FAILED";
 
         private float blackFadeOverlay;
         public float BlackFadeOverlay { get { return blackFadeOverlay; } set { blackFadeOverlay = value; } }
@@ -461,7 +461,7 @@ namespace PattyPetitGiant
 
             if (parent.Player1Dead)
             {
-                sb.DrawString(Game1.testComputerFont, deathMessage, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - Game1.testComputerFont.MeasureString(deathMessage)) / 2, Color.LightGray);
+                sb.DrawString(Game1.tenbyFive72, deathMessage, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - Game1.tenbyFive72.MeasureString(deathMessage)) / 2, Color.LightGray);
             }
         }
     }

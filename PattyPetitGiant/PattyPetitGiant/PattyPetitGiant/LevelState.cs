@@ -715,6 +715,19 @@ namespace PattyPetitGiant
             sb.End();
         }
 
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
+        {
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, width), SpriteEffects.None, 0.5f);
+        }
+
+        private void drawBox(SpriteBatch sb, Rectangle rect, Color clr, float lineWidth)
+        {
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X - lineWidth, rect.Y + rect.Height), rect.Width + lineWidth, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+        }
+
         private void renderPauseOverlay(SpriteBatch sb)
         {
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
