@@ -270,6 +270,72 @@ namespace PattyPetitGiant
             }
         }
 
+        public static void cacheAtlasFiles()
+        {
+            if (spineManifestLoaded || spineDict == null)
+            {
+                return;
+            }
+
+#if WINDOWS
+            string[] spineAnims = File.ReadAllLines(spineManifestFile);
+
+            foreach (string line in spineAnims)
+            {
+                loadAtlas(line);
+            }
+
+#elif XBOX
+            String xboxLine;
+            int counter = 0;
+
+            StreamReader file = new StreamReader(spineManifestFile);
+
+            while ((xboxLine = file.ReadLine()) != null)
+            {
+                loadAtlas(xboxLine);
+
+                counter++;
+            }
+
+            file.Close();
+
+#endif
+        }
+
+        public static void cacheSpineJSON()
+        {
+            if (spineManifestLoaded || spineDict == null)
+            {
+                return;
+            }
+
+#if WINDOWS
+            string[] spineAnims = File.ReadAllLines(spineManifestFile);
+
+            foreach (string line in spineAnims)
+            {
+                loadSpineJSon(line);
+            }
+
+#elif XBOX
+            String xboxLine;
+            int counter = 0;
+
+            StreamReader file = new StreamReader(spineManifestFile);
+
+            while ((xboxLine = file.ReadLine()) != null)
+            {
+                loadSpineJSon(xboxLine);
+
+                counter++;
+            }
+
+            file.Close();
+
+#endif
+        }
+
         public static void loadSpineFromManifest()
         {
             if (spineManifestLoaded || spineDict == null)
@@ -347,6 +413,24 @@ namespace PattyPetitGiant
             spineDict.Add(animationName, s);
 
             return true;
+        }
+
+        private static void loadAtlas(string animationName)
+        {
+            if (!atlasDataLib.ContainsKey(spineAnimationDirectory + animationName + "/parts.atlas"))
+            {
+                atlasDataLib.Add(spineAnimationDirectory + animationName + "/parts.atlas", new Atlas(spineAnimationDirectory + animationName + "/parts.atlas", textureLoader));
+            }
+        }
+
+        private static void loadSpineJSon(string animationName)
+        {
+            if (!skeletonDataLib.ContainsKey(spineAnimationDirectory + animationName + "/anims.json"))
+            {
+                SkeletonJson json = new SkeletonJson(atlasDataLib[spineAnimationDirectory + animationName + "/parts.atlas"]);
+                SkeletonData skeletonData = json.ReadSkeletonData(spineAnimationDirectory + animationName + "/anims.json");
+                skeletonDataLib.Add(spineAnimationDirectory + animationName + "/anims.json", skeletonData);
+            }
         }
 
         public static bool loadFrameAnimation(string animationName)

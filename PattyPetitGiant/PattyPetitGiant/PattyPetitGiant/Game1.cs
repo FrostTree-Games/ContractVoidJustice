@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -23,16 +23,6 @@ namespace PattyPetitGiant
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
-        
-        private static Model myModel;
-        public static Model MyModel
-        {
-            get
-            {
-                return myModel;
-            }
-        }
 
         public static SpriteFont font;
         public static SpriteFont testComputerFont;
@@ -47,7 +37,6 @@ namespace PattyPetitGiant
         public static Texture2D whitePixel = null;
         public static Texture2D frostTreeLogo = null;
         public static Texture2D testArrow = null;
-        public static Texture2D shipTexture = null;
         public static Texture2D backGroundPic = null;
         public static Texture2D heartPic = null;
         public static Texture2D laserPic = null;
@@ -61,8 +50,7 @@ namespace PattyPetitGiant
         public static Random rand = new Random();
 
         private Texture2D pleaseWaitDialog = null;
-        private bool dialogShown = false;
-        private bool assetsLoaded = false;
+        private bool preloadedAssets = false;
 
         private static bool gameIsRunningSlowly;
         public static bool GameIsRunningSlowly { get { return gameIsRunningSlowly; } }
@@ -78,6 +66,10 @@ namespace PattyPetitGiant
         public static Video titleScreenVideo = null;
         public static Video introCutScene = null;
         public static Video introCutSceneCoop = null;
+
+        private float loadBarValue;
+        private string currentLoadingValue = "NULL";
+        private SpriteFont debugFont = null;
 
 #if PROFILE
         private int frameCounter = 0;
@@ -135,14 +127,26 @@ namespace PattyPetitGiant
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
+            AnimationLib.cacheAtlasFiles();
+
+            
+
+            debugFont = Content.Load<SpriteFont>("testFont");
+            whitePixel = Content.Load<Texture2D>("whitePixel");
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
 
-            dialogShown = false;
+            loadBarValue = 0;
+
+            new Thread(loadContent2).Start();
         }
 
         private void loadContent2()
         {
-            whitePixel = Content.Load<Texture2D>("whitePixel");
+#if XBOX
+            Thread.CurrentThread.SetProcessorAffinity(5);
+#endif
+            currentLoadingValue = "textures";
             backGroundPic = Content.Load<Texture2D>("titleScreenPic");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
@@ -154,11 +158,13 @@ namespace PattyPetitGiant
             popUpBackground = Content.Load<Texture2D>("popUpBackground");
             greyBar = Content.Load<Texture2D>("grayTexture");
             creditImage = Content.Load<Texture2D>("EndCredits");
-
-            shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
             heartPic = Content.Load<Texture2D>("heartSheet");
+            TextureLib ts = new TextureLib(GraphicsDevice);
+            TextureLib.loadFromManifest();
 
-            myModel = Content.Load<Model>("model3D/PPG");
+            loadBarValue = 0.2f;
+            currentLoadingValue = "music and effects";
+
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
             bloomFilter = Content.Load<Effect>("BloomShader");
@@ -167,9 +173,7 @@ namespace PattyPetitGiant
 
             music.addSong("Menu");
             music.addSong("RPG Game");
-
-            TextureLib ts = new TextureLib(GraphicsDevice);
-            TextureLib.loadFromManifest();
+            AudioLib lb = new AudioLib();
 
             tenbyFive8 = Content.Load<SpriteFont>("tenbyFive/tenbyFive8");
             tenbyFive10 = Content.Load<SpriteFont>("tenbyFive/tenbyFive10");
@@ -178,6 +182,9 @@ namespace PattyPetitGiant
             tenbyFive72 = Content.Load<SpriteFont>("tenbyFive/tenbyFive72");
             font = tenbyFive14;
             testComputerFont = tenbyFive24;
+
+            loadBarValue = 0.4f;
+            currentLoadingValue = "video files and chunks";
 
             levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
             levelEnterVideo = Content.Load<Video>("fmv/levelStart");
@@ -190,11 +197,16 @@ namespace PattyPetitGiant
 
             ChunkLib cs = new ChunkLib();
 
-            AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
-            AnimationLib.loadSpineFromManifest();
-            AnimationLib.loadFrameFromManifest();
+            loadBarValue = 0.6f;
+            currentLoadingValue = "JSON files";
 
-            AudioLib lb = new AudioLib();
+            AnimationLib.cacheSpineJSON();
+
+            loadBarValue = 0.7f;
+            currentLoadingValue = "frame XML";
+
+            AnimationLib.loadFrameFromManifest();
+            loadBarValue = 0.8f;
 
             GlobalGameConstants.WeaponDictionary.InitalizePriceData();
 
@@ -207,6 +219,11 @@ namespace PattyPetitGiant
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
+
+            loadBarValue = 1.0f;
+            currentLoadingValue = "done";
+
+            preloadedAssets = true;
         }
 
         /// <summary>
@@ -253,18 +270,11 @@ namespace PattyPetitGiant
                 this.Exit();
 #endif
 #endif
-            if (!dialogShown)
+            if (!preloadedAssets)
             {
-                return;
-            }
-            else
-            {
-                if (!assetsLoaded)
-                {
-                    loadContent2();
-                }
+                //loading screen update logic
 
-                assetsLoaded = true;
+                return;
             }
 
             gameIsRunningSlowly = gameTime.IsRunningSlowly;
@@ -287,17 +297,19 @@ namespace PattyPetitGiant
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (!dialogShown)
+            if (!preloadedAssets)
             {
                 GraphicsDevice.Clear(Color.Black);
 
-                spriteBatch.Begin();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2, Color.White);
+                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2 , Color.White);
+
+                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.Gray, 0.0f, Vector2.Zero, new Vector2(600, 100), SpriteEffects.None, 0.5f);
+                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.White, 0.0f, Vector2.Zero, new Vector2(600 * loadBarValue, 100), SpriteEffects.None, 0.5f);
+                spriteBatch.DrawString(debugFont, currentLoadingValue, new Vector2(640, 600), Color.White);
 
                 spriteBatch.End();
-
-                dialogShown = true;
 
                 return;
             }
