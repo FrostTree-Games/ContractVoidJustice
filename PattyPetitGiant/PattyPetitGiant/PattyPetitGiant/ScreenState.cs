@@ -77,9 +77,9 @@ namespace PattyPetitGiant
                 case ScreenStateType.GameSetupMenu:
                     return new CampaignLobbyState();
                 case ScreenStateType.FMV_ELEVATOR_EXIT:
-                    return new CutsceneVideoState(Game1.levelExitVideo, ScreenStateType.LevelReviewState);
+                    return new CutsceneVideoState((GameCampaign.IsATwoPlayerGame)? Game1.levelExitVideoCoop:Game1.levelExitVideo, ScreenStateType.LevelReviewState);
                 case ScreenStateType.FMV_ELEVATOR_ENTER:
-                    return new CutsceneVideoState(Game1.levelEnterVideo, ScreenStateType.LevelState);
+                    return new CutsceneVideoState((GameCampaign.IsATwoPlayerGame)?Game1.levelEnterVideoCoop:Game1.levelEnterVideo, ScreenStateType.LevelState);
                 case ScreenStateType.HighScoresStateOptions:
                     return new HighScoresState(false);
                 case ScreenStateType.CreditsOptionsState:

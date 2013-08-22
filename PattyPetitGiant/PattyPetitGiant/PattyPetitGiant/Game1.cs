@@ -73,6 +73,8 @@ namespace PattyPetitGiant
         public static VideoPlayer videoPlayer = null;
         public static Video levelExitVideo = null;
         public static Video levelEnterVideo = null;
+        public static Video levelExitVideoCoop = null;
+        public static Video levelEnterVideoCoop = null;
         public static Video titleScreenVideo = null;
         public static Video introCutScene = null;
         public static Video introCutSceneCoop = null;
@@ -182,6 +184,8 @@ namespace PattyPetitGiant
             titleScreenVideo = Content.Load<Video>("fmv/menu");
             introCutScene = Content.Load<Video>("fmv/intro");
             introCutSceneCoop = Content.Load<Video>("fmv/intro COOP");
+            levelEnterVideoCoop = Content.Load<Video>("fmv/levelStartCOOP");
+            levelExitVideoCoop = Content.Load<Video>("fmv/levelExitCOOP");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
