@@ -24,6 +24,11 @@ namespace PattyPetitGiant
             HighScoresStateOptions = 9,
             CreditsOptionsState = 10,
             CreditsEndGameState = 11,
+            IntroCutScene = 12,
+            PrisonerEnding = 13,
+            AlienEnding = 14,
+            GuardEnding = 15,
+            IntroCutSceneCoop = 16,
         }
 
         protected bool pause = false;
@@ -81,6 +86,10 @@ namespace PattyPetitGiant
                     return new CreditsScreen(false);
                 case ScreenStateType.CreditsEndGameState:
                     return new CreditsScreen(true);
+                case ScreenStateType.IntroCutScene:
+                    return new CutsceneVideoState(Game1.introCutScene, ScreenStateType.LevelSelectState);
+                case ScreenState.ScreenStateType.IntroCutSceneCoop:
+                    return new CutsceneVideoState(Game1.introCutSceneCoop, ScreenStateType.LevelSelectState);
                 default:
                     return null;
             }

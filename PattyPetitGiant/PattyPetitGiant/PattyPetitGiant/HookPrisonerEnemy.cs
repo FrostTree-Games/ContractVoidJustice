@@ -32,6 +32,7 @@ namespace PattyPetitGiant
         private float windup_timer = 0.0f;
         private Vector2 chain_velocity;
         private Vector2 chain_position;
+        private Vector2 chain_position_start;
         private Vector2 chain_dimensions;
         private Entity en_chained;
         private Entity target;
@@ -53,7 +54,7 @@ namespace PattyPetitGiant
             disable_movement_time = 0.0f;
             knockback_magnitude = 10.0f;
             enemy_damage = 20;
-            enemy_life = 15;
+            enemy_life = 25;
             enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
@@ -132,31 +133,34 @@ namespace PattyPetitGiant
                 case ChainState.WindUp:
                     windup_timer += currentTime.ElapsedGameTime.Milliseconds;
                     directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("windUp");
-                    if (windup_timer > 650)
+                    if (windup_timer > 670)
                     {
                         state = ChainState.Throw;
                         angle = (float)Math.Atan2(target.CenterPoint.Y - directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY, target.CenterPoint.X - directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX);
-                        distance = Vector2.Distance(CenterPoint, target.CenterPoint);
+                        distance = Vector2.Distance(new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY), target.CenterPoint);
+
+                        chain_position_start = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
 
                         switch (direction_facing)
                         {
                             case GlobalGameConstants.Direction.Right:
-                                chain_velocity = new Vector2(8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.08f), (float)(distance * Math.Sin(angle)) * 0.08f);
+                                Console.WriteLine("Chain Velocity " + chain_velocity);
                                 chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
                                 chain_speed = chain_velocity.X;
                                 break;
                             case GlobalGameConstants.Direction.Left:
-                                chain_velocity = new Vector2(-8.0f, (float)(distance * Math.Sin(angle)) * 0.04f);
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle)) * 0.08f, (float)(distance * Math.Sin(angle)) * 0.08f);
                                 chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
                                 chain_speed = Math.Abs(chain_velocity.X);
                                 break;
                             case GlobalGameConstants.Direction.Up:
-                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), -8.0f);
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.08f), (float)(distance * Math.Sin(angle)) * 0.08f);
                                 chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
                                 chain_speed = Math.Abs(chain_velocity.Y);
                                 break;
                             default:
-                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.04f), 8.0f);
+                                chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.08f), (float)(distance * Math.Sin(angle)) * 0.08f);
                                 chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
                                 chain_speed = Math.Abs(chain_velocity.Y);
                                 break;
@@ -255,10 +259,18 @@ namespace PattyPetitGiant
         
         public bool hitTestChain(Entity other, float x, float y)
         {
+            if (other is Player)
+            {
+                Console.WriteLine(other.Position + " " + other.Position + other.Dimensions + " " + x + " " + y);
+                Console.WriteLine("Current hand position " + new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY));
+                Console.WriteLine("original position " + new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY));
+            }
             if (x > other.Position.X + other.Dimensions.X || x < other.Position.X  || y > other.Position.Y + other.Dimensions.Y || y < other.Position.Y)
             {
+                Console.WriteLine("Chain didn't hit");
                 return false;
             }
+            Console.WriteLine("Chain did hit");
             return true;
         }
 
