@@ -139,6 +139,9 @@ namespace PattyPetitGiant
 
         private void loadContent2()
         {
+#if XBOX
+            Thread.CurrentThread.SetProcessorAffinity(5);
+#endif
             currentLoadingValue = "textures";
             backGroundPic = Content.Load<Texture2D>("titleScreenPic");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
