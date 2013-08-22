@@ -183,7 +183,8 @@ namespace PattyPetitGiant
             ChunkLib cs = new ChunkLib();
 
             AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
-            AnimationLib.loadSpineFromManifest();
+            AnimationLib.cacheAtlasFiles();
+            AnimationLib.cacheSpineJSON();
             AnimationLib.loadFrameFromManifest();
 
             AudioLib lb = new AudioLib();
