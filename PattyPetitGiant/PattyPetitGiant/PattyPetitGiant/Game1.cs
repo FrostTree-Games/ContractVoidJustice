@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Diagnostics;
 using System.Threading;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -62,6 +62,10 @@ namespace PattyPetitGiant
         public static Video levelExitVideo = null;
         public static Video levelEnterVideo = null;
         public static Video titleScreenVideo = null;
+
+        private float loadBarValue;
+        private string currentLoadingValue = "NULL";
+        private SpriteFont debugFont = null;
 
 #if PROFILE
         private int frameCounter = 0;
@@ -122,17 +126,20 @@ namespace PattyPetitGiant
             AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
             AnimationLib.cacheAtlasFiles();
 
-            TextureLib ts = new TextureLib(GraphicsDevice);
-            TextureLib.loadFromManifest();
+            
 
+            debugFont = Content.Load<SpriteFont>("testFont");
+            whitePixel = Content.Load<Texture2D>("whitePixel");
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
+
+            loadBarValue = 0;
 
             new Thread(loadContent2).Start();
         }
 
         private void loadContent2()
         {
-            whitePixel = Content.Load<Texture2D>("whitePixel");
+            currentLoadingValue = "textures";
             backGroundPic = Content.Load<Texture2D>("titleScreenPic");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
@@ -145,6 +152,11 @@ namespace PattyPetitGiant
             greyBar = Content.Load<Texture2D>("grayTexture");
             creditImage = Content.Load<Texture2D>("EndCredits");
             heartPic = Content.Load<Texture2D>("heartSheet");
+            TextureLib ts = new TextureLib(GraphicsDevice);
+            TextureLib.loadFromManifest();
+
+            loadBarValue = 0.2f;
+            currentLoadingValue = "music and effects";
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
@@ -154,6 +166,7 @@ namespace PattyPetitGiant
 
             music.addSong("Menu");
             music.addSong("RPG Game");
+            AudioLib lb = new AudioLib();
 
             tenbyFive8 = Content.Load<SpriteFont>("tenbyFive/tenbyFive8");
             tenbyFive10 = Content.Load<SpriteFont>("tenbyFive/tenbyFive10");
@@ -163,6 +176,9 @@ namespace PattyPetitGiant
             font = tenbyFive14;
             testComputerFont = tenbyFive24;
 
+            loadBarValue = 0.4f;
+            currentLoadingValue = "video files and chunks";
+
             levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
             levelEnterVideo = Content.Load<Video>("fmv/levelStart");
             titleScreenVideo = Content.Load<Video>("fmv/menu");
@@ -170,10 +186,16 @@ namespace PattyPetitGiant
 
             ChunkLib cs = new ChunkLib();
 
-            AnimationLib.cacheSpineJSON();
-            AnimationLib.loadFrameFromManifest();
+            loadBarValue = 0.6f;
+            currentLoadingValue = "JSON files";
 
-            AudioLib lb = new AudioLib();
+            AnimationLib.cacheSpineJSON();
+
+            loadBarValue = 0.7f;
+            currentLoadingValue = "frame XML";
+
+            AnimationLib.loadFrameFromManifest();
+            loadBarValue = 0.8f;
 
             GlobalGameConstants.WeaponDictionary.InitalizePriceData();
 
@@ -186,6 +208,9 @@ namespace PattyPetitGiant
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
+
+            loadBarValue = 1.0f;
+            currentLoadingValue = "done";
 
             preloadedAssets = true;
         }
@@ -265,9 +290,13 @@ namespace PattyPetitGiant
             {
                 GraphicsDevice.Clear(Color.Black);
 
-                spriteBatch.Begin();
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2 + new Vector2(Game1.rand.Next() % 100), Color.White);
+                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2 , Color.White);
+
+                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.Gray, 0.0f, Vector2.Zero, new Vector2(600, 100), SpriteEffects.None, 0.5f);
+                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.White, 0.0f, Vector2.Zero, new Vector2(600 * loadBarValue, 100), SpriteEffects.None, 0.5f);
+                spriteBatch.DrawString(debugFont, currentLoadingValue, new Vector2(640, 600), Color.White);
 
                 spriteBatch.End();
 
