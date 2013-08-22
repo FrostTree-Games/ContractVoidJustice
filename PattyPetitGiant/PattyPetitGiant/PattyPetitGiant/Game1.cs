@@ -23,16 +23,6 @@ namespace PattyPetitGiant
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        
-        
-        private static Model myModel;
-        public static Model MyModel
-        {
-            get
-            {
-                return myModel;
-            }
-        }
 
         public static SpriteFont font;
         public static SpriteFont testComputerFont;
@@ -47,7 +37,6 @@ namespace PattyPetitGiant
         public static Texture2D whitePixel = null;
         public static Texture2D frostTreeLogo = null;
         public static Texture2D testArrow = null;
-        public static Texture2D shipTexture = null;
         public static Texture2D backGroundPic = null;
         public static Texture2D heartPic = null;
         public static Texture2D laserPic = null;
@@ -61,8 +50,7 @@ namespace PattyPetitGiant
         public static Random rand = new Random();
 
         private Texture2D pleaseWaitDialog = null;
-        private bool dialogShown = false;
-        private bool assetsLoaded = false;
+        private bool preloadedAssets = false;
 
         private static bool gameIsRunningSlowly;
         public static bool GameIsRunningSlowly { get { return gameIsRunningSlowly; } }
@@ -131,9 +119,15 @@ namespace PattyPetitGiant
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
+            AnimationLib.cacheAtlasFiles();
+
+            TextureLib ts = new TextureLib(GraphicsDevice);
+            TextureLib.loadFromManifest();
+
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
 
-            dialogShown = false;
+            new Thread(loadContent2).Start();
         }
 
         private void loadContent2()
@@ -150,11 +144,8 @@ namespace PattyPetitGiant
             popUpBackground = Content.Load<Texture2D>("popUpBackground");
             greyBar = Content.Load<Texture2D>("grayTexture");
             creditImage = Content.Load<Texture2D>("EndCredits");
-
-            shipTexture = Content.Load<Texture2D>("Textures/PPG_Sheet");
             heartPic = Content.Load<Texture2D>("heartSheet");
 
-            myModel = Content.Load<Model>("model3D/PPG");
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
             bloomFilter = Content.Load<Effect>("BloomShader");
@@ -163,9 +154,6 @@ namespace PattyPetitGiant
 
             music.addSong("Menu");
             music.addSong("RPG Game");
-
-            TextureLib ts = new TextureLib(GraphicsDevice);
-            TextureLib.loadFromManifest();
 
             tenbyFive8 = Content.Load<SpriteFont>("tenbyFive/tenbyFive8");
             tenbyFive10 = Content.Load<SpriteFont>("tenbyFive/tenbyFive10");
@@ -182,8 +170,6 @@ namespace PattyPetitGiant
 
             ChunkLib cs = new ChunkLib();
 
-            AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
-            AnimationLib.cacheAtlasFiles();
             AnimationLib.cacheSpineJSON();
             AnimationLib.loadFrameFromManifest();
 
@@ -200,6 +186,8 @@ namespace PattyPetitGiant
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
+
+            preloadedAssets = true;
         }
 
         /// <summary>
@@ -246,18 +234,11 @@ namespace PattyPetitGiant
                 this.Exit();
 #endif
 #endif
-            if (!dialogShown)
+            if (!preloadedAssets)
             {
-                return;
-            }
-            else
-            {
-                if (!assetsLoaded)
-                {
-                    loadContent2();
-                }
+                //loading screen update logic
 
-                assetsLoaded = true;
+                return;
             }
 
             gameIsRunningSlowly = gameTime.IsRunningSlowly;
@@ -280,17 +261,15 @@ namespace PattyPetitGiant
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (!dialogShown)
+            if (!preloadedAssets)
             {
                 GraphicsDevice.Clear(Color.Black);
 
                 spriteBatch.Begin();
 
-                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2, Color.White);
+                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2 + new Vector2(Game1.rand.Next() % 100), Color.White);
 
                 spriteBatch.End();
-
-                dialogShown = true;
 
                 return;
             }
