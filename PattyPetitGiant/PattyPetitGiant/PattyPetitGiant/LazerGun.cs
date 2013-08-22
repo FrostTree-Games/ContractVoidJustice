@@ -42,10 +42,12 @@ namespace PattyPetitGiant
                         continue;
                     else
                     {
+                        
                         if ((GameCampaign.Player_Right_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)))
                         {
                             if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= ammo_consumption)
                             {
+                                AudioLib.playSoundEffect("lazorFire");
                                 laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -10) : new Vector2(0, 10));
                                 if (parent.Index == InputDevice2.PPG_Player.Player_1)
                                 {
@@ -59,17 +61,22 @@ namespace PattyPetitGiant
                         }
                         else if ((GameCampaign.Player_Left_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem2)))
                         {
-                            laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -15) : new Vector2(0, 15));
-                            if (parent.Index == InputDevice2.PPG_Player.Player_1)
+                            if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= ammo_consumption)
                             {
-                                GameCampaign.Player_Ammunition -= ammo_consumption;
-                            }
-                            else
-                            {
-                                GameCampaign.Player2_Ammunition -= ammo_consumption;
+                                AudioLib.playSoundEffect("lazorFire");
+                                laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -15) : new Vector2(0, 15));
+                                if (parent.Index == InputDevice2.PPG_Player.Player_1)
+                                {
+                                    GameCampaign.Player_Ammunition -= ammo_consumption;
+                                }
+                                else
+                                {
+                                    GameCampaign.Player2_Ammunition -= ammo_consumption;
+                                }
                             }
                         }
                         parent.State = Player.playerState.Moving;
+                        parent.LoadAnimation.Animation = parent.LoadAnimation.Skeleton.Data.FindAnimation(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lLaser" : "rLaser");
                         fire_timer = 0.0f;
                         fire_projectile = false;
                         return;
