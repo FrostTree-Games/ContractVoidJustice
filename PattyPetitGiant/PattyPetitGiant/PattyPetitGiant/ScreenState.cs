@@ -24,6 +24,11 @@ namespace PattyPetitGiant
             HighScoresStateOptions = 9,
             CreditsOptionsState = 10,
             CreditsEndGameState = 11,
+            IntroCutScene = 12,
+            PrisonerEnding = 13,
+            AlienEnding = 14,
+            GuardEnding = 15,
+            IntroCutSceneCoop = 16,
         }
 
         protected bool pause = false;
@@ -72,15 +77,19 @@ namespace PattyPetitGiant
                 case ScreenStateType.GameSetupMenu:
                     return new CampaignLobbyState();
                 case ScreenStateType.FMV_ELEVATOR_EXIT:
-                    return new CutsceneVideoState(Game1.levelExitVideo, ScreenStateType.LevelReviewState);
+                    return new CutsceneVideoState((GameCampaign.IsATwoPlayerGame)? Game1.levelExitVideoCoop:Game1.levelExitVideo, ScreenStateType.LevelReviewState);
                 case ScreenStateType.FMV_ELEVATOR_ENTER:
-                    return new CutsceneVideoState(Game1.levelEnterVideo, ScreenStateType.LevelState);
+                    return new CutsceneVideoState((GameCampaign.IsATwoPlayerGame)?Game1.levelEnterVideoCoop:Game1.levelEnterVideo, ScreenStateType.LevelState);
                 case ScreenStateType.HighScoresStateOptions:
                     return new HighScoresState(false);
                 case ScreenStateType.CreditsOptionsState:
                     return new CreditsScreen(false);
                 case ScreenStateType.CreditsEndGameState:
                     return new CreditsScreen(true);
+                case ScreenStateType.IntroCutScene:
+                    return new CutsceneVideoState(Game1.introCutScene, ScreenStateType.LevelSelectState);
+                case ScreenState.ScreenStateType.IntroCutSceneCoop:
+                    return new CutsceneVideoState(Game1.introCutSceneCoop, ScreenStateType.LevelSelectState);
                 default:
                     return null;
             }

@@ -73,7 +73,11 @@ namespace PattyPetitGiant
         public static VideoPlayer videoPlayer = null;
         public static Video levelExitVideo = null;
         public static Video levelEnterVideo = null;
+        public static Video levelExitVideoCoop = null;
+        public static Video levelEnterVideoCoop = null;
         public static Video titleScreenVideo = null;
+        public static Video introCutScene = null;
+        public static Video introCutSceneCoop = null;
 
 #if PROFILE
         private int frameCounter = 0;
@@ -178,6 +182,10 @@ namespace PattyPetitGiant
             levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
             levelEnterVideo = Content.Load<Video>("fmv/levelStart");
             titleScreenVideo = Content.Load<Video>("fmv/menu");
+            introCutScene = Content.Load<Video>("fmv/intro");
+            introCutSceneCoop = Content.Load<Video>("fmv/intro COOP");
+            levelEnterVideoCoop = Content.Load<Video>("fmv/levelStartCOOP");
+            levelExitVideoCoop = Content.Load<Video>("fmv/elevatorExitCOOP");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
@@ -195,9 +203,9 @@ namespace PattyPetitGiant
 
             // lol so many game screens
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            //currentGameScreen = new CampaignLobbyState();
+            currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
         }
 

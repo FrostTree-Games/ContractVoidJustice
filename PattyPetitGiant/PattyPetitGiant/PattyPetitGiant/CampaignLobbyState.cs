@@ -397,15 +397,15 @@ namespace PattyPetitGiant
                     {
                         player1StartPressed = false;
 
-                        nextState = ScreenStateType.LevelSelectState;
-
                         if (slot2.InputDevice == InputDevice2.PlayerPad.NoPad)
                         {
                             GameCampaign.ResetPlayerValues(slot1.Name, slot1.Color);
+                            nextState = ScreenStateType.IntroCutScene;
                         }
                         else
                         {
                             GameCampaign.ResetPlayerValues(slot1.Name, slot1.Color, slot2.Name, slot2.Color);
+                            nextState = ScreenStateType.IntroCutSceneCoop;
                         }
 
                         isComplete = true;
@@ -552,6 +552,7 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
+            
             return nextState;
         }
 

@@ -70,7 +70,7 @@ namespace PattyPetitGiant
         private List<TitleMenuOptions> menu_list;
         private titleScreens screen;
 
-        private Vector2 text_position = new Vector2(960, 514);
+        private Vector2 text_position = new Vector2(GlobalGameConstants.GameResolutionWidth/2 - 48, 514);
         private Vector3 model_position = Vector3.Zero;
         private Vector3 camera_Position = new Vector3(0.0f, 0, 5000.0f);
 
@@ -84,8 +84,8 @@ namespace PattyPetitGiant
         private float fade = 0.0f;
         private float fade_duration = 0.0f;
 
-        private const float max_fade_timer = 750f;
-        private const float logo_stay_timer = 2000.0f;
+        private const float max_fade_timer = 1500f;
+        private const float logo_stay_timer = 4000f;
         private const float max_fade_menu_timer = 1000f;
 
         private Texture2D videoTexture;
@@ -354,6 +354,9 @@ namespace PattyPetitGiant
             AnimationLib.GraphicsDevice.Clear(Color.Black);
             
             sb.Begin();
+
+            Console.WriteLine("Rendering Screen");
+
             if (screen == titleScreens.menuScreen || screen == titleScreens.playScreen || screen == titleScreens.optionScreen)
             {
                 if (Game1.videoPlayer.State != Microsoft.Xna.Framework.Media.MediaState.Stopped)
@@ -380,7 +383,7 @@ namespace PattyPetitGiant
                     {
                         for (int i = 0; i < menu_list.Count(); i++)
                         {
-                            sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+                            sb.DrawString(Game1.tenbyFive24, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                         }
                     }
                     else
