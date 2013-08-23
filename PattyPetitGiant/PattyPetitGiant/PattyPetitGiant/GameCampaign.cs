@@ -252,7 +252,7 @@ namespace PattyPetitGiant
             PlayerLevelProgress = 4;
             PlayerFloorHeight = 1;
 
-            Player_Right_Item = GlobalGameConstants.itemType.MachineGun;
+            Player_Right_Item = GlobalGameConstants.itemType.FlameThrower;
             Player_Left_Item = GlobalGameConstants.itemType.LazerGun;
 
             allegiance = 0.5f;

@@ -19,6 +19,13 @@ namespace PattyPetitGiant
         private static Dictionary<string, SoundEffect> sfxLib = null;
         private static bool sfxManifestLoaded = false;
 
+        private static SoundEffectInstance flamethrower_sfxi = null;
+        public SoundEffectInstance FlameThrowerInstance
+        {
+            set { flamethrower_sfxi = value; }
+            get { return flamethrower_sfxi; }
+        }
+
         public AudioLib()
         {
             if (sfxLib == null)
@@ -30,6 +37,9 @@ namespace PattyPetitGiant
             {
                 loadManifest();
             }
+
+            flamethrower_sfxi = sfxLib["flameThrower"].CreateInstance();
+            flamethrower_sfxi.IsLooped = true;
         }
 
         private static bool loadSFX(string url)
@@ -95,6 +105,25 @@ namespace PattyPetitGiant
         public static void playSoundEffect(string sfxName)
         {
             sfxLib[sfxName].Play();
+        }
+
+        public static void playFlameSoundEffect(bool play_sfx)
+        {
+            if (play_sfx && flamethrower_sfxi.State == SoundState.Stopped)
+            {
+                //sfxLib[sfxName].Play();
+                
+                flamethrower_sfxi.Play();
+            }
+            else if (!play_sfx && flamethrower_sfxi.State == SoundState.Playing)
+            {
+                flamethrower_sfxi.Stop();
+            }
+        }
+
+        public static void stopFlameSoundEffect()
+        {
+            flamethrower_sfxi.Stop();
         }
 
         /// <summary>
