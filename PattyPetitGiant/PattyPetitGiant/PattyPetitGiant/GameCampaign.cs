@@ -131,7 +131,7 @@ namespace PattyPetitGiant
         /// <remarks>Ranged between 0.0f and 1.0f. 0.0f represents the player siding with the prisoners. 1.0f represents the player siding with the guards.</remarks>
         public static float PlayerAllegiance { get { return allegiance; } }
 
-        public const int numberOfLevels = -1;
+        public const int numberOfLevels = 6;
         public static int[] floorProgress = null;
 
         /// <summary>
@@ -249,7 +249,7 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < numberOfLevels; i++) { floorProgress[i] = -1; }
 
-            PlayerLevelProgress = 1;
+            PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
             Player_Right_Item = GlobalGameConstants.itemType.Sword;
