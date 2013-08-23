@@ -732,11 +732,16 @@ namespace PattyPetitGiant
         {
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
-            sb.Draw(Game1.whitePixel, Vector2.Zero, null, new Color(0, 0, 0, 0.25f), 0.0f, Vector2.Zero, new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), SpriteEffects.None, 0.0f);
+            sb.Draw(Game1.whitePixel, Vector2.Zero, null, new Color(0, 0, 0, pauseDialogMinimumTime < 250 ? (pauseDialogMinimumTime / 250) * 0.35f : 0.35f), 0.0f, Vector2.Zero, new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), SpriteEffects.None, 0.0f);
 
-            sb.DrawString(Game1.tenbyFive72, "PAUSED", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive72.MeasureString("PAUSED").X / 2, 200), Color.White, 0.0f, new Vector2(0, 0), new Vector2(1.0f, pauseDialogMinimumTime > 250 ? 1.0f : (pauseDialogMinimumTime / 250)), SpriteEffects.None, 0.0f);
-            sb.DrawString(Game1.tenbyFive24, "Resume", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive24.MeasureString("Resume").X / 2, 300), pauseMenuItem == 0 ? Color.White : new Color(1, 1, 1, 0.19f));
-            sb.DrawString(Game1.tenbyFive24, "Quit to Title", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive24.MeasureString("Quit to Title").X / 2, 330), pauseMenuItem == 1 ? Color.White : new Color(1, 1, 1, 0.19f));
+            sb.DrawString(Game1.tenbyFive72, "PAUSED", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive72.MeasureString("PAUSED").X / 2, 150), Color.White, 0.0f, new Vector2(0, 0), new Vector2(1.0f, pauseDialogMinimumTime > 250 ? 1.0f : (pauseDialogMinimumTime / 250)), SpriteEffects.None, 0.0f);
+            sb.DrawString(Game1.tenbyFive24, "Resume", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive24.MeasureString("Resume").X / 2, 250), pauseMenuItem == 0 ? Color.White : new Color(1, 1, 1, 0.19f));
+            sb.DrawString(Game1.tenbyFive24, "Quit to Title", new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive24.MeasureString("Quit to Title").X / 2, 280), pauseMenuItem == 1 ? Color.White : new Color(1, 1, 1, 0.19f));
+
+            sb.Draw(Game1.whitePixel, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 275), 350, 550, 200), new Color(0, 0, 0, 0.4f));
+            drawBox(sb, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 275), 350, 550, 200), Color.White, 2);
+            sb.DrawString(Game1.tenbyFive24, "Contract", new Vector2((GlobalGameConstants.GameResolutionWidth / 2 - Game1.tenbyFive24.MeasureString("Contract").X / 2), 350), Color.White);
+            sb.DrawString(Game1.tenbyFive14, GameCampaign.levelMap[GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight].contract.contractMessage, new Vector2((GlobalGameConstants.GameResolutionWidth / 4) + 55, 385), Color.White);
 
             //sb.DrawString(Game1.font, "PAUSED HOMIE\n\nCHUNK NAME: " + nodeMap[((int)(cameraFocus.CenterPoint.X / GlobalGameConstants.TileSize.X) / GlobalGameConstants.TilesPerRoomWide), ((int)(cameraFocus.CenterPoint.Y / GlobalGameConstants.TileSize.Y) / GlobalGameConstants.TilesPerRoomHigh)].chunkName + "\n\nAllegiance: " + GameCampaign.PlayerAllegiance + "\nName: " + GameCampaign.PlayerName + "\nContract: " + GameCampaign.currentContract.type + "\nSeed: " + currentSeed, new Vector2((GlobalGameConstants.GameResolutionWidth / 2) - (Game1.font.MeasureString("PAUSED HOMIE\nSeed: " + currentSeed).X / 2), GlobalGameConstants.GameResolutionHeight / 2), Color.Lerp(Color.Pink, Color.Turquoise, (float)(Math.Sin(pauseDialogMinimumTime / 1000f))));
 
