@@ -331,6 +331,7 @@ namespace PattyPetitGiant
                             confirm_pressed = false;
 
                             SaveGameModule.selectStorageDevice((PlayerIndex)whoPressedConfirm);
+                            SaveGameModule.loadGame();
 
                             storageDevicePrompted = true;
                         }

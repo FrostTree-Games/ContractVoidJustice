@@ -164,7 +164,7 @@ namespace PattyPetitGiant
 
                             container.Dispose();
                         }
-                        catch (Exception)
+                        catch (FileNotFoundException)
                         {
                             saving = false;
                             return;

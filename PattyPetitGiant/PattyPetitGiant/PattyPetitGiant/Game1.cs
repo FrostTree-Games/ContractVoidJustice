@@ -67,6 +67,8 @@ namespace PattyPetitGiant
         public static Video introCutScene = null;
         public static Video introCutSceneCoop = null;
 
+        private static Texture2D saveIcon = null;
+
         private float loadBarValue;
         private string currentLoadingValue = "NULL";
         private SpriteFont debugFont = null;
@@ -130,8 +132,8 @@ namespace PattyPetitGiant
             AnimationLib al = new AnimationLib(GraphicsDevice, spriteBatch);
             AnimationLib.cacheAtlasFiles();
 
-            
-
+            //some of these assets are critical to render anything to the screen, and thus are not stored in a seperate thread
+            saveIcon = Content.Load<Texture2D>("gfx/saveIcon");
             debugFont = Content.Load<SpriteFont>("testFont");
             whitePixel = Content.Load<Texture2D>("whitePixel");
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
@@ -215,9 +217,9 @@ namespace PattyPetitGiant
 
             // lol so many game screens
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            currentGameScreen = new CampaignLobbyState();
+            //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
             loadBarValue = 1.0f;
@@ -315,6 +317,13 @@ namespace PattyPetitGiant
             }
 
             currentGameScreen.render(spriteBatch);
+
+            if (SaveGameModule.TouchingStorageDevice)
+            {
+                spriteBatch.Begin();
+                spriteBatch.Draw(saveIcon, new Rectangle(0, 0, 54, 59), new Rectangle(3, 28, 54, 59), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+                spriteBatch.End();
+            }
 
 #if CONTROLLER_DATA
             spriteBatch.Begin();

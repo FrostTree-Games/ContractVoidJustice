@@ -19,7 +19,7 @@ namespace PattyPetitGiant
             IdleWait,
         }
 
-        public class HighScoreValue
+        public struct HighScoreValue
         {
             public string playerName;
             public int coinCollected;
@@ -126,23 +126,21 @@ namespace PattyPetitGiant
 
         private bool isSignedIn = false;
 
+        private static void ResetHighScores()
+        {
+            highScores = new List<HighScoreValue>(10);
+
+            for (int i = 0; i < 6; i++)
+            {
+                highScores.Add(new HighScoreValue(CampaignLobbyState.randomNames[Game1.rand.Next() % CampaignLobbyState.randomNames.Length], 200 + 100 * i, (200 + (Game1.rand.Next() % 200) * i), i / 2, (i == 0) ? 1 : Game1.rand.Next() % 3));
+            }
+        }
+
         public static void InitalizeHighScores()
         {
             if (highScores == null)
             {
-                highScores = new List<HighScoreValue>(10);
-
-                //test values to punch in; load from card later
-                highScores.Add(new HighScoreValue("Wilson", 6969, 83939, 2, 2));
-                highScores.Add(new HighScoreValue("Eric", 999999, 123, 3, 0));
-                highScores.Add(new HighScoreValue("Daniel", 123456, 123, 1, 1));
-                highScores.Add(new HighScoreValue("Ivan", 1000, 345, 0, 1));
-                //highScores.Add(new HighScoreValue("Alyosha", 1000, 345, 0, 1));
-                //highScores.Add(new HighScoreValue("Dmitri", 1500, 43567, 4, 2, true));
-                //highScores.Add(new HighScoreValue("Gunther", 2233, 2332, 2, 1));
-                highScores.Add(new HighScoreValue("lolololol", 2020, 333, 1, 0));
-                highScores.Add(new HighScoreValue("quinten", 20202, 9981, 1, 1));
-                highScores.Add(new HighScoreValue("Zippy", 200, 000, 5, 1));
+                ResetHighScores();
             }
         }
 
@@ -194,11 +192,13 @@ namespace PattyPetitGiant
 
                 for (int i = 0; i < highScores.Count; i++)
                 {
-                    if (highScores[i] == newScore)
+                    if (highScores[i].playerName == newScore.playerName && highScores[i].secondsElapsed == newScore.secondsElapsed && highScores[i].floorDiedOn == newScore.floorDiedOn)
                     {
                         newlyAddedScoreIndex = i;
                     }
                 }
+
+                SaveGameModule.saveGame();
             }
             else
             {
@@ -207,6 +207,11 @@ namespace PattyPetitGiant
             }
 
             stateTimer = 0;
+
+            if (isSignedIn)
+            {
+                SaveGameModule.loadGame();
+            }
         }
 
         protected override void doUpdate(GameTime currentTime)
