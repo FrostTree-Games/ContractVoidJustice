@@ -139,7 +139,6 @@ namespace PattyPetitGiant
         public void daemonupdate(Player parent, GameTime currentTime, LevelState parentWorld)
         {
             play_sfx = false;
-            AudioLib.playFlameSoundEffect(play_sfx);
         }
 
         public GlobalGameConstants.itemType ItemType()

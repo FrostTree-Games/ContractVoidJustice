@@ -20,11 +20,7 @@ namespace PattyPetitGiant
         private static bool sfxManifestLoaded = false;
 
         private static SoundEffectInstance flamethrower_sfxi = null;
-        public SoundEffectInstance FlameThrowerInstance
-        {
-            set { flamethrower_sfxi = value; }
-            get { return flamethrower_sfxi; }
-        }
+        private static SoundEffectInstance tankflamethrower_sfxi = null;
 
         public AudioLib()
         {
@@ -40,6 +36,8 @@ namespace PattyPetitGiant
 
             flamethrower_sfxi = sfxLib["flameThrower"].CreateInstance();
             flamethrower_sfxi.IsLooped = true;
+            tankflamethrower_sfxi = sfxLib["flameThrower"].CreateInstance();
+            tankflamethrower_sfxi.IsLooped = true;
         }
 
         private static bool loadSFX(string url)
@@ -111,8 +109,6 @@ namespace PattyPetitGiant
         {
             if (play_sfx && flamethrower_sfxi.State == SoundState.Stopped)
             {
-                //sfxLib[sfxName].Play();
-                
                 flamethrower_sfxi.Play();
             }
             else if (!play_sfx && flamethrower_sfxi.State == SoundState.Playing)
@@ -121,9 +117,23 @@ namespace PattyPetitGiant
             }
         }
 
+        public static void playTankFlameSoundEffect(bool play_sfx)
+        {
+            if (play_sfx && tankflamethrower_sfxi.State == SoundState.Stopped)
+            {
+                
+                tankflamethrower_sfxi.Play();
+            }
+        }
+
         public static void stopFlameSoundEffect()
         {
             flamethrower_sfxi.Stop();
+        }
+
+        public static void stopTankFlameSoundEffect()
+        {
+            tankflamethrower_sfxi.Stop();
         }
 
         /// <summary>
