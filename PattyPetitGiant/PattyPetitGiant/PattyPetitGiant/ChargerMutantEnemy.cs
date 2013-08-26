@@ -37,7 +37,7 @@ namespace PattyPetitGiant
         public ChargerMutantEnemy(LevelState parentWorld, Vector2 position)
         {
             this.position = position;
-            dimensions = new Vector2(48.0f, 48.0f);
+            dimensions = new Vector2(32f, 96.0f);
             velocity = Vector2.Zero;
 
             disable_movement = false;

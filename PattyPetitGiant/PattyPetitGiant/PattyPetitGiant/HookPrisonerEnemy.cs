@@ -44,7 +44,7 @@ namespace PattyPetitGiant
         public HookPrisonerEnemy(LevelState parentWorld, float initial_x, float initial_y)
         {
             position = new Vector2(initial_x, initial_y);
-            dimensions = new Vector2(48.0f, 48.0f);
+            dimensions = new Vector2(32f, 90.0f);
             velocity = Vector2.Zero;
             chain_velocity = Vector2.Zero;
             chain_dimensions = new Vector2(10.0f, 10.0f);
@@ -100,16 +100,16 @@ namespace PattyPetitGiant
                     change_direction_time += currentTime.ElapsedGameTime.Milliseconds;
                     if(enemy_found == false)
                     {
-                        foreach (Entity en in parentWorld.EntityList)
+                        for(int i = 0; i < parentWorld.EntityList.Count(); i++)
                         {
-                            if (en == this || (en is Player && GameCampaign.PlayerAllegiance < 0.3))
+                            if (parentWorld.EntityList[i] == this || (parentWorld.EntityList[i] is Player && GameCampaign.PlayerAllegiance < 0.3))
                                 continue;
-                            else if (en.Enemy_Type != enemy_type && en.Enemy_Type != EnemyType.NoType && en.Death == false)
+                            else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
                             {
-                                component.update(this, en, currentTime, parentWorld);
+                                component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
                                 if (enemy_found)
                                 {
-                                    target = en;
+                                    target = parentWorld.EntityList[i];
                                     break;
                                 }
                             }
@@ -207,9 +207,9 @@ namespace PattyPetitGiant
                     else
                     {
                         directionAnims[(int)direction_facing].Animation = directionAnims[(int)direction_facing].Skeleton.Data.FindAnimation("attack");
-                        AudioLib.playSoundEffect("chargerImpact");
                         if (en_chained != null)
                         {
+                            AudioLib.playSoundEffect("chargerImpact");
                             Vector2 direction = en_chained.CenterPoint - CenterPoint;
                             en_chained.Disable_Movement_Time = 0.0f;
                             en_chained.Disable_Movement = false;
@@ -259,18 +259,10 @@ namespace PattyPetitGiant
         
         public bool hitTestChain(Entity other, float x, float y)
         {
-            if (other is Player)
-            {
-                Console.WriteLine(other.Position + " " + other.Position + other.Dimensions + " " + x + " " + y);
-                Console.WriteLine("Current hand position " + new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY));
-                Console.WriteLine("original position " + new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY));
-            }
             if (x > other.Position.X + other.Dimensions.X || x < other.Position.X  || y > other.Position.Y + other.Dimensions.Y || y < other.Position.Y)
             {
-                Console.WriteLine("Chain didn't hit");
                 return false;
             }
-            Console.WriteLine("Chain did hit");
             return true;
         }
 
