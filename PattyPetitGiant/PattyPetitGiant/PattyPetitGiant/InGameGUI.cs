@@ -368,6 +368,8 @@ namespace PattyPetitGiant
             sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5, 0), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((1 - GameCampaign.PlayerAllegiance) * 160f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5 + ((1 - GameCampaign.PlayerAllegiance) * 160f), 0), null, Color.Cyan, 0.0f, Vector2.Zero, new Vector2(GameCampaign.PlayerAllegiance * 160f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.energyOverlay, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
+            sb.Draw(Game1.prisonerIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2 + 32, 20), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.guardIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) + new Vector2(Game1.healthBar.Width / 2 + 12, -12), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
 
             //player 1 GUI
             medAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 80), new Vector2(0.75f), 0.51f, 0.0f, Vector2.Zero, Color.White); 
