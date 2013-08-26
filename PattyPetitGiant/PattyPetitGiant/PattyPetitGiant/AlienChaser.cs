@@ -54,7 +54,7 @@ namespace PattyPetitGiant
             this.dimensions = GlobalGameConstants.TileSize;
 
             enemy_type = EnemyType.Alien;
-            enemy_life = 10;
+            enemy_life = 15;
             chaserState = SlowChaserState.Idle;
 
             direction_facing = GlobalGameConstants.Direction.Down;

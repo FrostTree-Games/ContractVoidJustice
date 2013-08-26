@@ -641,7 +641,7 @@ namespace PattyPetitGiant
 
                     if (!death && enemy_life < 1 && attacker != null & attacker is Player)
                     {
-                        GameCampaign.AlterAllegiance(-0.015f);
+                        GameCampaign.AlterAllegiance(-0.01f);
                     }
                 }
 
