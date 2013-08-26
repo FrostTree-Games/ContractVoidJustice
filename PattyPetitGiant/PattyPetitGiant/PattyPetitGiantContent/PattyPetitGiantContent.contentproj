@@ -75,6 +75,10 @@
       <Name>compassOverlay</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\frame\contractParticle.zpy">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>contractParticle</Name>
+    </None>
     <None Include="animation\frame\dotParticle.zpy">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Name>dotParticle</Name>
