@@ -356,8 +356,6 @@ namespace PattyPetitGiant
             
             sb.Begin();
 
-            Console.WriteLine("Rendering Screen");
-
             if (screen == titleScreens.menuScreen || screen == titleScreens.playScreen || screen == titleScreens.optionScreen)
             {
                 if (Game1.videoPlayer.State != Microsoft.Xna.Framework.Media.MediaState.Stopped)
@@ -384,7 +382,7 @@ namespace PattyPetitGiant
                     {
                         for (int i = 0; i < menu_list.Count(); i++)
                         {
-                            sb.DrawString(Game1.tenbyFive24, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), Color.White, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                            sb.DrawString(Game1.tenbyFive24, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                         }
                     }
                     else
@@ -395,7 +393,7 @@ namespace PattyPetitGiant
                 default:
                     for (int i = 0; i < menu_list.Count(); i++)
                     {
-                        sb.DrawString(Game1.font, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.3f, SpriteEffects.None, 0.5f);
+                        sb.DrawString(Game1.tenbyFive24, menu_list[i].text, text_position + new Vector2((25 * menu_list[i].z_distance), 32 * i), fadeTextColour, 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
                     }
                     break;
             }
