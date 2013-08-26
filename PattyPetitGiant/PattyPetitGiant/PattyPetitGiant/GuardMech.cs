@@ -185,6 +185,60 @@ namespace PattyPetitGiant
                                 }
                             }
                         }
+
+                        int corner_check = 0;
+                        bool is_on_wall = false;
+
+                        while (corner_check != 4)
+                        {
+                            if (corner_check == 0)
+                            {
+                                is_on_wall = parentWorld.Map.hitTestWall(position);
+                            }
+                            else if (corner_check == 1)
+                            {
+                                is_on_wall = parentWorld.Map.hitTestWall(position + new Vector2(dimensions.X, 0));
+                            }
+                            else if (corner_check == 2)
+                            {
+                                is_on_wall = parentWorld.Map.hitTestWall(position + new Vector2(0, dimensions.Y));
+                            }
+                            else if (corner_check == 3)
+                            {
+                                is_on_wall = parentWorld.Map.hitTestWall(position + dimensions);
+                            }
+
+                            if (is_on_wall)
+                            {
+                                if (direction_facing == GlobalGameConstants.Direction.Right || direction_facing == GlobalGameConstants.Direction.Left)
+                                {
+                                    dimensions = new Vector2(96,120);
+                                    if (Game1.rand.NextDouble() > 0.5)
+                                    {
+                                        direction_facing = GlobalGameConstants.Direction.Up;
+                                    }
+                                    else
+                                    {
+                                        direction_facing = GlobalGameConstants.Direction.Down;
+                                    }
+                                }
+                                else
+                                {
+                                    dimensions = new Vector2(120, 96);
+                                    if (Game1.rand.NextDouble() > 0.5)
+                                    {
+                                        direction_facing = GlobalGameConstants.Direction.Right;
+                                    }
+                                    else
+                                    {
+                                        direction_facing = GlobalGameConstants.Direction.Left;
+                                    }
+                                }
+                                break;
+                            }
+                            corner_check++;
+                        }
+
                         break;
                     case MechState.Firing:
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;

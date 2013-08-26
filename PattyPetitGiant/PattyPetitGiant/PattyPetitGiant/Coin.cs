@@ -321,15 +321,15 @@ namespace PattyPetitGiant
             {
                 if (dropItem == DropItemType.CoinDrop)
                 {
-                    coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1.5f), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                    coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1)/*new Vector2((float)((int)value/2))*/, 0.5f, 0.0f, Vector2.Zero, Color.White);
                 }
                 else if (dropItem == DropItemType.MedDrop)
                 {
-                    medAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                    medAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1)/*new Vector2((float)((int)med_value / 50))*/, 0.5f, 0.0f, Vector2.Zero, Color.White);
                 }
                 else if (dropItem == DropItemType.AmmoDrop)
                 {
-                    ammoAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1), 0.5f, 0.0f, Vector2.Zero, shadeColor);
+                    ammoAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1)/*new Vector2((float)((int)ammo_value / 50))*/, 0.5f, 0.0f, Vector2.Zero, Color.White);
                 }
             }
         }
@@ -423,25 +423,6 @@ namespace PattyPetitGiant
                 isKnockedBack = false;
                 float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
                 knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
-                switch (med_value)
-                {
-                    case MedValue.smallPack:
-                        shadeColor = Color.Red;
-                        break;
-                    case MedValue.mediumPack:
-                        shadeColor = Color.Yellow;
-                        break;
-                    case MedValue.fullPack:
-                        shadeColor = Color.Blue;
-                        break;
-                    case MedValue.largePack:
-                        shadeColor = Color.Green;
-                        break;
-                    default:
-                        shadeColor = Color.Blue;
-                        med_value = MedValue.smallPack;
-                        break;
-                }
             }
             else if (drop_type == DropItemType.AmmoDrop)
             {

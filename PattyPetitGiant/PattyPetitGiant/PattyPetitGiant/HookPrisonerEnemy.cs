@@ -145,7 +145,6 @@ namespace PattyPetitGiant
                         {
                             case GlobalGameConstants.Direction.Right:
                                 chain_velocity = new Vector2((float)(distance * Math.Cos(angle) * 0.08f), (float)(distance * Math.Sin(angle)) * 0.08f);
-                                Console.WriteLine("Chain Velocity " + chain_velocity);
                                 chain_position = new Vector2(directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldX, directionAnims[(int)direction_facing].Skeleton.FindBone("rHand").WorldY);
                                 chain_speed = chain_velocity.X;
                                 break;
