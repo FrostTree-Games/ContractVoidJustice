@@ -338,8 +338,8 @@ namespace PattyPetitGiant
                 p.rotationSpeed = 0;
                 p.animationTime = 0;
                 p.color = Color.White;
-                float randDir = (float)(Math.PI * 1.35 + Game1.rand.Next() * 0.15);
-                float velo = (float)(-3.5 * Game1.rand.NextDouble());
+                float randDir = (float)(Math.PI * 1.2 + Game1.rand.Next() * 0.3);
+                float velo = (float)(-10 * Game1.rand.NextDouble());
                 p.velocity = new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir) + velo);
                 p.acceleration = Vector2.Zero;
                 p.scale = new Vector2(1);

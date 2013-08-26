@@ -813,6 +813,12 @@ namespace PattyPetitGiant
 
             if (parent.Enemy_Type == GameCampaign.currentContract.killTarget)
             {
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+
                 total_coin_count = GameCampaign.currentContract.goldPerKill;
                 drop_type = Coin.DropItemType.CoinDrop;
 
