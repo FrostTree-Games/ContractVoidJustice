@@ -23,3 +23,5 @@ healthSound
 alienChaserAlert
 alienChaserDie
 acidSpit
+lazorFire
+flameThrower

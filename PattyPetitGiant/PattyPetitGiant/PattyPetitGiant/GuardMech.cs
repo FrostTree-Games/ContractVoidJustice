@@ -357,6 +357,8 @@ namespace PattyPetitGiant
                         //current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("idle");
                         windup_timer += currentTime.ElapsedGameTime.Milliseconds;
 
+                        AudioLib.playTankFlameSoundEffect(true);
+
                         Vector2 flame_displacement = Vector2.Zero;
 
                         if (direction_facing == GlobalGameConstants.Direction.Left || direction_facing == GlobalGameConstants.Direction.Right)
@@ -416,9 +418,8 @@ namespace PattyPetitGiant
                             {
                                 mech_state = MechState.MeleeWindUp;
                             }
+                            AudioLib.stopTankFlameSoundEffect();
                         }
-
-                        
                         break;
                     case MechState.Reset:
                         windup_timer = 0.0f;
@@ -470,7 +471,7 @@ namespace PattyPetitGiant
             //tankAnim.drawAnimationFrame(0.0f, sb, CenterPoint, new Vector2(1, 1), 0.5f, tank_hull_angle, new Vector2(48f,69.5f));
 
             Vector2 offset = new Vector2(19, 0);
-
+            
             if(mech_state == MechState.Death)
             {
                 if (explode_timer > 30)
@@ -559,6 +560,7 @@ namespace PattyPetitGiant
                 if (disable_movement_time == 0.0)
                 {
                     disable_movement = true;
+                    AudioLib.stopFlameSoundEffect();
                     if (Math.Abs(direction.X) > (Math.Abs(direction.Y)))
                     {
                         if (direction.X < 0)

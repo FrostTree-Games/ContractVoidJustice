@@ -543,6 +543,11 @@ namespace PattyPetitGiant
 
         public override void knockBack(Vector2 direction, float magnitude, int damage, Entity attacker)
         {
+            if (Player_Left_Item.ItemType() == GlobalGameConstants.itemType.FlameThrower || Player_Right_Item.ItemType() == GlobalGameConstants.itemType.FlameThrower)
+            {
+                AudioLib.stopFlameSoundEffect();
+            }
+
             if (state == playerState.Item1 || state == playerState.Item2)
             {
                 state = playerState.Moving;

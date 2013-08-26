@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <name>testCoin</name>
-  <sheetName>derek.png</sheetName>
+  <sheetName>youtubeMONEY.png</sheetName>
   <initalX>0</initalX>
-  <initalY>160</initalY>
+  <initalY>0</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>16</frameWidth>
-  <frameHeight>16</frameHeight>
-  <frameCount>4</frameCount>
+  <frameWidth>24</frameWidth>
+  <frameHeight>24</frameHeight>
+  <frameCount>1</frameCount>
   <frameSpeed>100</frameSpeed>
-  <loop>true</loop>
+  <loop>false</loop>
 </SerializableAnimationData>

@@ -49,6 +49,8 @@ namespace PattyPetitGiant
         private bool player2CancelPressed = false;
         private bool player2RenamePressed = false;
 
+        private bool playerCancelPressed = false;
+
         private IAsyncResult keyboardResult = null;
         private IAsyncResult keyboard2Result = null;
 
@@ -112,6 +114,7 @@ namespace PattyPetitGiant
                 {
                     if (InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.Cancel) && (keyboardResult == null && keyboard2Result == null))
                     {
+
                         player2CancelPressed = true;
                     }
                     else if (!InputDevice2.IsPlayerButtonDown(InputDevice2.PPG_Player.Player_2, InputDevice2.PlayerButton.Cancel) && player2CancelPressed)
@@ -408,6 +411,24 @@ namespace PattyPetitGiant
                             nextState = ScreenStateType.IntroCutSceneCoop;
                         }
 
+                        isComplete = true;
+                    }
+                }
+            }
+
+            // pressing B will go back to title screen
+            {
+                if (slot1.InputDevice == InputDevice2.PlayerPad.NoPad && slot2.InputDevice == InputDevice2.PlayerPad.NoPad)
+                {
+                    InputDevice2.PlayerPad pressed = InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Cancel);
+                    if (pressed != InputDevice2.PlayerPad.NoPad && (keyboardResult == null && keyboard2Result == null) && !playerCancelPressed)
+                    {
+                        playerCancelPressed = true;
+                    }
+                    else if (pressed == InputDevice2.PlayerPad.NoPad && playerCancelPressed)
+                    {
+                        playerCancelPressed = false;
+                        nextState = ScreenStateType.TitleScreen;
                         isComplete = true;
                     }
                 }

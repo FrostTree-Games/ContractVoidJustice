@@ -45,7 +45,7 @@ namespace PattyPetitGiant
             windup_timer = 0.0f;
             knockback_magnitude = 8.0f;
             enemy_damage = 20;
-            enemy_life = 35;
+            enemy_life = 25;
             enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;
@@ -55,7 +55,7 @@ namespace PattyPetitGiant
             sound_timer = 0.0f;
             play_sound = true;
 
-            prob_item_drop = 0.5;
+            prob_item_drop = 0.6;
             number_drop_items = 5;
 
             entity_found = null;
@@ -342,7 +342,7 @@ namespace PattyPetitGiant
             {
                 if (disable_movement_time == 0.0)
                 {
-                    if (state != ChargerState.windUp || state != ChargerState.charge)
+                    if (state != ChargerState.windUp && state != ChargerState.charge)
                     {
                         disable_movement = true;
                         animation_time = 0;
