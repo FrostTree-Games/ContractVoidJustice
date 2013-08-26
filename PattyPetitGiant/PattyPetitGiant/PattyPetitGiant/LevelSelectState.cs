@@ -228,6 +228,7 @@ namespace PattyPetitGiant
         private void renderGUI(Microsoft.Xna.Framework.Graphics.SpriteBatch sb, float scale)
         {
             Texture2D tex = TextureLib.getLoadedTexture("wireFramePieces.png");
+            Texture2D tex2 = TextureLib.getLoadedTexture("roguefakewireframe.png");
 
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
             sb.Draw(Game1.whitePixel, new Vector2(-99999, -99999) / 2, null, Color.Black, 0.0f, Vector2.Zero, new Vector2(99999, 99999), SpriteEffects.None, 0.0f);
@@ -245,6 +246,7 @@ namespace PattyPetitGiant
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied, SamplerState.PointClamp, null, null, null, Matrix.CreateTranslation(-575, -100, 0) * Matrix.CreateScale(1.0f, cursorAnimationTime > 500f ? 1.0f : (cursorAnimationTime / 500f), 1.0f) * Matrix.CreateScale(scale));
 
             sb.Draw(wireframe, new Vector2(-150, 0), null, Color.Lerp(Color.DarkCyan, Color.Black, 0.375f + (0.025f * (float)Math.Sin(cursorAnimationTime / 10))), 0.0f, Vector2.Zero, new Vector2(1), SpriteEffects.FlipHorizontally, 0.0f);
+            sb.Draw(tex2, new Vector2(575, 100) + new Vector2(130, 220), null, Color.White, 0.0f, Vector2.Zero, new Vector2(0.046f, 0.0666f), SpriteEffects.None, 0.0f);
 
             for (int i = 0; i < GameCampaign.levelMap.GetLength(0); i++)
             {
