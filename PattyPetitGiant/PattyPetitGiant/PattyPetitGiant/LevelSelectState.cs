@@ -121,6 +121,8 @@ namespace PattyPetitGiant
             cursorPosition = new Vector2(((GameCampaign.PlayerLevelProgress * 128) + drawMapTestOffset.X), ((GameCampaign.PlayerFloorHeight * 96) + drawMapTestOffset.Y));
             cursorAnimationTime = 0;
 
+            state = LevelSelectStateState.AnimateIn;
+
             openingSoundMade = false;
         }
 
@@ -294,10 +296,19 @@ namespace PattyPetitGiant
 
             sb.Draw(Game1.whitePixel, rx, new Color(0.0f, 0.75f, 1.0f, 0.1f));
 
-            drawBox(sb, new Rectangle(755, 500, 305, 200), Color.Cyan, 2);
-            sb.DrawString(Game1.testComputerFont, "\n\nPrisoner Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Orange);
-            sb.DrawString(Game1.testComputerFont, "\n\n\n\nAlien Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Red);
-            sb.DrawString(Game1.testComputerFont, "\n\n\nGuard Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.LightBlue);
+            if (GameCampaign.PlayerLevelProgress >= GlobalGameConstants.LevelAliensAppearAt - 1)
+            {
+                drawBox(sb, new Rectangle(755, 500, 305, 200), Color.Cyan, 2);
+                sb.DrawString(Game1.testComputerFont, "\n\nPrisoner Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Orange);
+                sb.DrawString(Game1.testComputerFont, "\n\n\n\nAlien Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.Red);
+                sb.DrawString(Game1.testComputerFont, "\n\n\nGuard Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff, Color.LightBlue);
+            }
+            else
+            {
+                drawBox(sb, new Rectangle(755, 500, 305, 200), Color.Cyan, 2);
+                sb.DrawString(Game1.testComputerFont, "\n\nPrisoner Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff + (Game1.testComputerFont.MeasureString("Alien Rates") * new Vector2(0, 0.5f)), Color.Orange);
+                sb.DrawString(Game1.testComputerFont, "\n\n\nGuard Rates: " + Math.Round(100 * (GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates))) + "%", testDetailStuff + (Game1.testComputerFont.MeasureString("Alien Rates") * new Vector2(0, 0.5f)), Color.LightBlue);
+            }
 
             sb.Draw(Game1.whitePixel, new Vector2(75, 0) + testDetailStuff - new Vector2(1, 1), null, Color.Black, 0.0f, Vector2.Zero, new Vector2(127, 34), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.whitePixel, new Vector2(75, 0) + testDetailStuff, null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((float)(GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates / (GameCampaign.levelMap[selectedLevelX, selectedLevelY].prisonerRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].guardRates + GameCampaign.levelMap[selectedLevelX, selectedLevelY].alienRates)) * 125, 32), SpriteEffects.None, 0.5f);
