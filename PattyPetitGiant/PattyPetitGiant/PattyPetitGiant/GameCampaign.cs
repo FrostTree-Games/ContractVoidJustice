@@ -249,7 +249,7 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < numberOfLevels; i++) { floorProgress[i] = -1; }
 
-            PlayerLevelProgress = 2;
+            PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
             Player_Right_Item = GlobalGameConstants.itemType.Sword;
@@ -280,7 +280,14 @@ namespace PattyPetitGiant
             {
                 for (int j = 0; j < levelMap.GetLength(1); j++)
                 {
-                    levelMap[i, j] = new LevelSelectState.LevelData(Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble());
+                    if (i >= GlobalGameConstants.LevelAliensAppearAt)
+                    {
+                        levelMap[i, j] = new LevelSelectState.LevelData(Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble(), Game1.rand.NextDouble());
+                    }
+                    else
+                    {
+                        levelMap[i, j] = new LevelSelectState.LevelData(Game1.rand.NextDouble(), Game1.rand.NextDouble(), 0.0, Game1.rand.NextDouble());
+                    }
                 }
             }
 

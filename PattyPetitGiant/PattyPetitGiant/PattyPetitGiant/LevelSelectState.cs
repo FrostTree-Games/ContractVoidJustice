@@ -90,7 +90,7 @@ namespace PattyPetitGiant
 
         public LevelSelectState()
         {
-            GameCampaign.levelMap = new LevelData[6, 3];
+            //GameCampaign.levelMap = new LevelData[6, 3];
 
             wireframe = TextureLib.getLoadedTexture("shipWireframe.png");
 
@@ -100,6 +100,7 @@ namespace PattyPetitGiant
             quarterTextureScreen = new RenderTarget2D(AnimationLib.GraphicsDevice, pp.BackBufferWidth / 4, pp.BackBufferHeight / 4, false, AnimationLib.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24);
             sb2 = new SpriteBatch(AnimationLib.GraphicsDevice);
 
+            /*
             for (int i = 0; i < GameCampaign.levelMap.GetLength(0); i++)
             {
                 for (int j = 0; j < GameCampaign.levelMap.GetLength(1); j++)
@@ -112,6 +113,7 @@ namespace PattyPetitGiant
             GameCampaign.levelMap[0, 2].visible = false;
             GameCampaign.levelMap[GameCampaign.levelMap.GetLength(0) - 1, 0].visible = false;
             GameCampaign.levelMap[GameCampaign.levelMap.GetLength(0) - 1, 2].visible = false;
+             */
 
             selectedLevelX = GameCampaign.PlayerLevelProgress + 1;
             selectedLevelY = GameCampaign.PlayerFloorHeight;
