@@ -818,6 +818,7 @@ namespace PattyPetitGiant
                 particleSet.pushContractParticle(parent.CenterPoint);
                 particleSet.pushContractParticle(parent.CenterPoint);
                 particleSet.pushContractParticle(parent.CenterPoint);
+                AudioLib.playSoundEffect("chaching");
 
                 total_coin_count = GameCampaign.currentContract.goldPerKill;
                 drop_type = Coin.DropItemType.CoinDrop;
