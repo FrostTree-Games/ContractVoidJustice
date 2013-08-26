@@ -72,13 +72,12 @@ namespace PattyPetitGiant
         private CoinValue value = CoinValue.Loonie;
         public CoinValue Value { get { return value; } }
 
-        private Color shadeColor = Color.Yellow;
-
         private AnimationLib.FrameAnimationSet coinAnim = null;
         private AnimationLib.FrameAnimationSet medAnim = null;
         private AnimationLib.FrameAnimationSet ammoAnim = null;
         private float animationTime;
 
+        private float image_size = 0.0f;
         private bool isKnockedBack = false;
         private const float knockBackSpeed = 0.4f;
         private float knockedBackTime = 0.0f;
@@ -321,15 +320,15 @@ namespace PattyPetitGiant
             {
                 if (dropItem == DropItemType.CoinDrop)
                 {
-                    coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1)/*new Vector2((float)((int)value/2))*/, 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    coinAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(image_size), 0.5f, 0.0f, Vector2.Zero, Color.White);
                 }
                 else if (dropItem == DropItemType.MedDrop)
                 {
-                    medAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1)/*new Vector2((float)((int)med_value / 50))*/, 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    medAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(image_size), 0.5f, 0.0f, Vector2.Zero, Color.White);
                 }
                 else if (dropItem == DropItemType.AmmoDrop)
                 {
-                    ammoAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(1)/*new Vector2((float)((int)ammo_value / 50))*/, 0.5f, 0.0f, Vector2.Zero, Color.White);
+                    ammoAnim.drawAnimationFrame(animationTime, sb, this.position, new Vector2(image_size), 0.5f, 0.0f, Vector2.Zero, Color.White);
                 }
             }
         }
@@ -381,28 +380,28 @@ namespace PattyPetitGiant
                 switch (value)
                 {
                     case CoinValue.Loonie:
-                        shadeColor = Color.Brown;
+                        image_size = 0.75f;
                         break;
                     case CoinValue.Twoonie:
-                        shadeColor = Color.White;
+                        image_size = 0.75f;
                         break;
                     case CoinValue.Laurier:
-                        shadeColor = Color.LightBlue;
+                        image_size = 0.75f;
                         break;
                     case CoinValue.MacDonald:
-                        shadeColor = Color.Purple;
+                        image_size = 0.90f;
                         break;
                     case CoinValue.Elizabeth:
-                        shadeColor = Color.Green;
+                        image_size = 0.90f;
                         break;
                     case CoinValue.Mackenzie:
-                        shadeColor = Color.Red;
+                        image_size = 0.90f;
                         break;
                     case CoinValue.Borden:
-                        shadeColor = Color.Goldenrod;
+                        image_size = 1.0f;
                         break;
                     default:
-                        shadeColor = Color.Brown;
+                        image_size = 0.75f;
                         value = CoinValue.Loonie;
                         break;
                 }
@@ -423,6 +422,27 @@ namespace PattyPetitGiant
                 isKnockedBack = false;
                 float randDir = (float)(Game1.rand.NextDouble() * 3.14 * 2);
                 knockBack(new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir)), 0.0f, 0);
+
+                switch (med_value)
+                {
+                    case MedValue.smallPack:
+                        image_size = 0.65f;
+                        break;
+                    case MedValue.mediumPack:
+                        image_size = 0.80f;
+                        break;
+                    case MedValue.largePack:
+                        image_size = 0.90f;
+                        break;
+                    case MedValue.fullPack:
+                        image_size = 1.0f;
+                        break;
+                    default:
+                        image_size = 0.65f;
+                        med_value = MedValue.smallPack;
+                        break;
+                }
+
             }
             else if (drop_type == DropItemType.AmmoDrop)
             {
@@ -443,19 +463,19 @@ namespace PattyPetitGiant
                 switch (ammo_value)
                 {
                     case AmmoValue.smallAmmo:
-                        shadeColor = Color.Red;
+                        image_size = 0.65f;
                         break;
                     case AmmoValue.mediumAmmo:
-                        shadeColor = Color.Yellow;
+                        image_size = 0.80f;
                         break;
                     case AmmoValue.largeAmmo:
-                        shadeColor = Color.Yellow;
+                        image_size = 1.0f;
                         break;
                     case AmmoValue.fullAmmo:
-                        shadeColor = Color.Green;
+                        image_size = 1.0f;
                         break;
                     default:
-                        shadeColor = Color.Blue;
+                        image_size = 0.65f;
                         med_value = MedValue.smallPack;
                         break;
                 }

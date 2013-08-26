@@ -336,7 +336,6 @@ namespace PattyPetitGiant
                             storageDevicePrompted = true;
                         }
                     }
-
                     break;
                 /*****************************************************************************************************/
                 default:

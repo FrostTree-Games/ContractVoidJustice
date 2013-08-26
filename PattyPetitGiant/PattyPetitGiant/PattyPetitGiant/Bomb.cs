@@ -23,7 +23,7 @@ namespace PattyPetitGiant
         private Vector2 hitbox_placed = new Vector2(48.0f, 48.0f);
         private Vector2 hitbox_exploded = new Vector2(48.0f * 3.0f, 48.0f * 3.0f);
         private Vector2 center_placed_bomb = Vector2.Zero;
-        private int bomb_damage = 5;
+        private int bomb_damage = 15;
         private Vector2 max_hitbox = Vector2.Zero;
         private Vector2 position = Vector2.Zero;
         private float time_explosion = 0.0f;
