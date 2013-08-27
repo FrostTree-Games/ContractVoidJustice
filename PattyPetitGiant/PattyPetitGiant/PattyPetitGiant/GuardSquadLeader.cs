@@ -158,7 +158,7 @@ namespace PattyPetitGiant
                                     {
                                         continue;
                                     }
-                                    else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType)
+                                    else if (parentWorld.EntityList[i].Enemy_Type != enemy_type && parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType && parentWorld.EntityList[i].Death == false)
                                     {
                                         component.update(this, parentWorld.EntityList[i], currentTime, parentWorld);
                                         if (enemy_found)

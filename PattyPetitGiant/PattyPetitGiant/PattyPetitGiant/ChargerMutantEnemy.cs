@@ -44,7 +44,7 @@ namespace PattyPetitGiant
             disable_movement_time = 0.0f;
             windup_timer = 0.0f;
             knockback_magnitude = 8.0f;
-            enemy_damage = 20;
+            enemy_damage = 15;
             enemy_life = 25;
             enemy_found = false;
             change_direction_time = 0.0f;
