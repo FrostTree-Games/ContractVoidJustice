@@ -217,9 +217,9 @@ namespace PattyPetitGiant
 
             // lol so many game screens
             //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            currentGameScreen = new CampaignLobbyState();
+            //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
             loadBarValue = 1.0f;
@@ -312,7 +312,7 @@ namespace PattyPetitGiant
                 spriteBatch.DrawString(debugFont, currentLoadingValue, new Vector2(640, 600), Color.White);
 
                 spriteBatch.End();
-
+                
                 return;
             }
 
@@ -321,7 +321,7 @@ namespace PattyPetitGiant
             if (SaveGameModule.TouchingStorageDevice)
             {
                 spriteBatch.Begin();
-                spriteBatch.Draw(saveIcon, new Rectangle(0, 0, 54, 59), new Rectangle(3, 28, 54, 59), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+                spriteBatch.Draw(saveIcon, new Rectangle(1100, 588, 54, 59), new Rectangle(3, 28, 54, 59), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f);
                 spriteBatch.End();
             }
 
