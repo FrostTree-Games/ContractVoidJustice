@@ -19,6 +19,14 @@ namespace PattyPetitGiant
 
         private Color boxColor = Color.Green;
         private Color textColor = Color.LimeGreen;
+        private Color guardColor = Color.White;
+        private Color prisonerColor = Color.White;
+
+        private float guardColorBlink = 0.0f;
+        private float prisonerColorBlink = 0.0f;
+        private float guardColorBlinkDuration = 500.0f;
+        private float prisonColorBlinkDuration = 500.0f;
+        private const float maxColorBlink = 2000.0f;
 
         private BoxWindow[] boxWindows = new BoxWindow[10];
         private bool[] windowIsActive = new bool[10];
@@ -243,6 +251,46 @@ namespace PattyPetitGiant
         {
             flickerTime += currentTime.ElapsedGameTime.Milliseconds;
 
+            if (GameCampaign.change_guard_icon_color)
+            {
+                guardColorBlink += currentTime.ElapsedGameTime.Milliseconds;
+                if (guardColorBlink > maxColorBlink)
+                {
+                    guardColorBlink = 0.0f;
+                    guardColorBlinkDuration = 500f;
+                    guardColor = Color.White;
+                    GameCampaign.change_guard_icon_color = false;
+                }
+                else
+                {
+                    if (guardColorBlink > guardColorBlinkDuration)
+                    {
+                        guardColor = (guardColor == Color.White) ? Color.Blue : Color.White;
+                        guardColorBlinkDuration += 500f;
+                    }
+                }
+            }
+
+            if (GameCampaign.change_prisoner_icon_color)
+            {
+                prisonerColorBlink += currentTime.ElapsedGameTime.Milliseconds;
+                if (prisonerColorBlink > maxColorBlink)
+                {
+                    prisonerColorBlink = 0.0f;
+                    prisonColorBlinkDuration = 500f;
+                    prisonerColor = Color.White;
+                    GameCampaign.change_prisoner_icon_color = false;
+                }
+                else
+                {
+                    if (prisonerColorBlink > prisonColorBlinkDuration)
+                    {
+                        prisonerColor = (prisonerColor == Color.White) ? Color.Red : Color.White;
+                        prisonColorBlinkDuration += 500f;
+                    }
+                }
+            }
+
             for (int i = 0; i < windowIsActive.Length; i++)
             {
                 if (!windowIsActive[i])
@@ -368,8 +416,8 @@ namespace PattyPetitGiant
             sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5, 0), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((1 - GameCampaign.PlayerAllegiance) * 160f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5 + ((1 - GameCampaign.PlayerAllegiance) * 160f), 0), null, Color.Cyan, 0.0f, Vector2.Zero, new Vector2(GameCampaign.PlayerAllegiance * 160f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.energyOverlay, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
-            sb.Draw(Game1.prisonerIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2 + 32, 20), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.guardIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) + new Vector2(Game1.healthBar.Width / 2 + 12, -12), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.prisonerIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2 + 32, 20), null, prisonerColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.guardIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) + new Vector2(Game1.healthBar.Width / 2 + 12, -12), null, guardColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
 
             //player 1 GUI
             medAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 80), new Vector2(0.75f), 0.51f, 0.0f, Vector2.Zero, Color.White); 

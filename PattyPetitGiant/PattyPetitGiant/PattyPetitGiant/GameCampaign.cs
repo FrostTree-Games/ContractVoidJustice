@@ -134,13 +134,25 @@ namespace PattyPetitGiant
         public const int numberOfLevels = 6;
         public static int[] floorProgress = null;
 
+        public static bool change_prisoner_icon_color = false;
+        public static bool change_guard_icon_color = false;
+
         /// <summary>
-        /// Increment or decrement the player's standing between the prisoners and guards.
+        /// Increment or decrement the player's standing between the prisoners and guards. Positive value is the guards allegiance while negative value is prisoner
         /// </summary>
         /// <param name="value">Value to alter PlayerAllegiance by. Make it negative for when a guard is killed. Positive when a prisoner is killed.</param>
         public static void AlterAllegiance(float value)
         {
             allegiance += value;
+
+            if (value > 0)
+            {
+                change_guard_icon_color = true;
+            }
+            else
+            {
+                change_prisoner_icon_color = true;
+            }
 
             if (allegiance < 0.0f) { allegiance = 0.0f; }
             if (allegiance > 1.0f) { allegiance = 1.0f; }
