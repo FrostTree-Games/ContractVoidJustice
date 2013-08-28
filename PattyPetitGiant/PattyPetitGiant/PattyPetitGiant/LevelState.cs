@@ -243,61 +243,60 @@ namespace PattyPetitGiant
 
                 if (faction == Entity.EnemyType.Prisoner)
                 {
-                    if (randomSpawnValue < 0.25)
+                    if (randomSpawnValue < 0.25 && GameCampaign.AvailableEntityTypes.Contains(typeof(MolotovEnemy)))
                     {
                         entityList.Add(new MolotovEnemy(this, spawnPos));
                     }
-
-                    else if (randomSpawnValue < 0.35)
+                    else if (randomSpawnValue < 0.35 && GameCampaign.AvailableEntityTypes.Contains(typeof(HookPrisonerEnemy)))
                     {
                         entityList.Add(new HookPrisonerEnemy(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.5)
+                    else if (randomSpawnValue < 0.5 && GameCampaign.AvailableEntityTypes.Contains(typeof(ChargerMutantEnemy)))
                     {
                         entityList.Add(new ChargerMutantEnemy(this, spawnPos));
                     }
-                    else
+                    else if (GameCampaign.AvailableEntityTypes.Contains(typeof(ChaseEnemy)))
                     {
                         entityList.Add(new ChaseEnemy(this, spawnPos.X, spawnPos.Y));
                     }
                 }
                 else if (faction == Entity.EnemyType.Guard)
                 {
-                    if (randomSpawnValue < 0.1)
+                    if (randomSpawnValue < 0.17 && GameCampaign.AvailableEntityTypes.Contains(typeof(GuardSquadLeader)))
                     {
                         entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.25)
+                    else if (randomSpawnValue < 0.25 && GameCampaign.AvailableEntityTypes.Contains(typeof(GuardMech)))
                     {
                         entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.15)
+                    else if (randomSpawnValue < 0.45 && GameCampaign.AvailableEntityTypes.Contains(typeof(AntiFairy)))
                     {
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 0)));
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 1)));
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(0, 1)));
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, -1)));
                     }
-                    else
+                    else if (GameCampaign.AvailableEntityTypes.Contains(typeof(PatrolGuard)))
                     {
                         entityList.Add(new PatrolGuard(this, spawnPos));
                     }
                 }
                 else if (faction == Entity.EnemyType.Alien)
                 {
-                    if (randomSpawnValue < 0.15)
+                    if (randomSpawnValue < 0.15 && GameCampaign.AvailableEntityTypes.Contains(typeof(BroodLord)))
                     {
                         entityList.Add(new BroodLord(this, spawnPos));
                     }
-                    else if (randomSpawnValue < 0.25)
+                    else if (randomSpawnValue < 0.25 && GameCampaign.AvailableEntityTypes.Contains(typeof(BallMutant)))
                     {
                         entityList.Add(new BallMutant(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.4)
+                    else if (randomSpawnValue < 0.4 && GameCampaign.AvailableEntityTypes.Contains(typeof(AlienChaser)))
                     {
                         entityList.Add(new AlienChaser(this, spawnPos));
                     }
-                    else
+                    else if (GameCampaign.AvailableEntityTypes.Contains(typeof(MutantAcidSpitter)))
                     {
                         MutantAcidSpitter spitter = new MutantAcidSpitter(this, spawnPos.X, spawnPos.Y);
                         entityList.Add(spitter);

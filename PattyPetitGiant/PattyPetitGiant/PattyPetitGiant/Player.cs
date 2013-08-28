@@ -259,6 +259,7 @@ namespace PattyPetitGiant
             {
                 if (!parentWorld.Player1Dead)
                 {
+                    BackGroundAudio.stopAllSongs();
                     AudioLib.playSoundEffect("missionFailed");
 
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
