@@ -8,7 +8,7 @@
   <offsetY>0</offsetY>
   <frameWidth>48</frameWidth>
   <frameHeight>48</frameHeight>
-  <frameCount>0</frameCount>
+  <frameCount>1</frameCount>
   <frameSpeed>0</frameSpeed>
   <loop>false</loop>
 </SerializableAnimationData>
