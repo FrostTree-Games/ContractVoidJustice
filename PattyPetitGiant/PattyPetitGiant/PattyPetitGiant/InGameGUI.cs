@@ -29,7 +29,10 @@ namespace PattyPetitGiant
         private const float maxColorBlink = 2000.0f;
 
         private float prisonerBarPosition = 0.0f;
+        private bool prisonerBarPositionReset = false;
+
         private float guardBarPosition = 0.0f;
+        private bool guardBarPositionReset = false;
 
         private bool guardAllegianceChange = false;
         private bool prisonerAllegianceChange = false;
@@ -421,7 +424,10 @@ namespace PattyPetitGiant
             sb.Draw(Game1.healthBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5, 0), null, Color.Orange, 0.0f, Vector2.Zero, new Vector2((1 - GameCampaign.PlayerAllegiance) * 160f, 1), SpriteEffects.None, 0.51f);
             sb.Draw(Game1.greyBar, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2(5 + ((1 - GameCampaign.PlayerAllegiance) * 160f), 0), null, Color.Cyan, 0.0f, Vector2.Zero, new Vector2(GameCampaign.PlayerAllegiance * 160f, 1), SpriteEffects.None, 0.51f);
-            sb.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2((float)(5 + ((1 - guardBarPosition) * 10.0)), 0), null, Color.Cyan, 0.0f, Vector2.Zero, new Vector2(guardBarPosition * 32, 32), SpriteEffects.None, 0.53f);
+            
+            sb.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2((float)(5 + ((1 - guardBarPosition) * 160.0)), 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(5, 16), SpriteEffects.None, 0.53f);
+            sb.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2((float)(5 + ((1 - prisonerBarPosition) * 160.0)), 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(5, 16), SpriteEffects.None, 0.53f);
+            
             sb.Draw(Game1.energyOverlay, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
             sb.Draw(Game1.prisonerIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) + new Vector2(Game1.healthBar.Width / 2 + 12, -12), null, prisonerColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
             sb.Draw(Game1.guardIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2 + 32, 20), null, guardColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
@@ -431,15 +437,49 @@ namespace PattyPetitGiant
                 if (guardBarPosition >= GameCampaign.PlayerAllegiance)
                 {
                     guardBarPosition = GameCampaign.PlayerAllegiance;
+                    guardBarPositionReset = false;
                 }
                 else
                 {
-                    guardBarPosition += 0.03f;
+                    if (!guardBarPositionReset)
+                    {
+                        guardBarPosition = 0.0f;
+                        guardBarPositionReset = true;
+                    }
+                    else
+                    {
+                        guardBarPosition += 0.01f;
+                    }
                 }
             }
             else
             {
                 guardBarPosition = GameCampaign.PlayerAllegiance;
+            }
+
+            if (GameCampaign.change_prisoner_icon_color)
+            {
+                if (prisonerBarPosition <= GameCampaign.PlayerAllegiance)
+                {
+                    prisonerBarPosition = GameCampaign.PlayerAllegiance;
+                    prisonerBarPositionReset = false;
+                }
+                else
+                {
+                    if (!prisonerBarPositionReset)
+                    {
+                        prisonerBarPosition = 1.0f;
+                        prisonerBarPositionReset = true;
+                    }
+                    else
+                    {
+                        prisonerBarPosition -= 0.01f;
+                    }
+                }
+            }
+            else
+            {
+                prisonerBarPosition = GameCampaign.PlayerAllegiance;
             }
             //player 1 GUI
             medAnim.drawAnimationFrame(0.0f, sb, new Vector2(140, 80), new Vector2(0.75f), 0.51f, 0.0f, Vector2.Zero, Color.White); 
