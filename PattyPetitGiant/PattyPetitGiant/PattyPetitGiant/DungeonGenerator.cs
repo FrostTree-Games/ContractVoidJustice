@@ -513,7 +513,10 @@ namespace PattyPetitGiant
             themeRooms.Add(pickupRoom);
             model[randX, randY] = pickupRoom;
 
-            while (!isRoomFullyConnected(startingRoom, themeRooms))
+            Stopwatch s = new Stopwatch();
+            s.Start();
+
+            while (!isRoomFullyConnected(startingRoom, themeRooms) && s.Elapsed.Seconds < 10)
             {
                 int randRoom = rand.Next() % addedRooms.Count;
 
