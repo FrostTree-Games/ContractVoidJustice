@@ -267,7 +267,7 @@ namespace PattyPetitGiant
             Player_Right_Item = GlobalGameConstants.itemType.LazerGun;
             Player_Left_Item = GlobalGameConstants.itemType.Gun;
 
-            allegiance = 0.0f;
+            allegiance = 0.5f;
 
             playerName = player1Name;
             playerColor = player1Color;
