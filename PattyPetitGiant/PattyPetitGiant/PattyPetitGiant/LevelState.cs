@@ -130,6 +130,9 @@ namespace PattyPetitGiant
 
         public void fillNodeMap(Object input)
         {
+#if XBOX
+            Thread.CurrentThread.SetProcessorAffinity(4);
+#endif
             GenerateNodeMapResult result = (GenerateNodeMapResult)input;
 
             result.NodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
@@ -146,9 +149,6 @@ namespace PattyPetitGiant
             for (int i = 0; i < 4; i++)
             {
                 threads[i] = new Thread(new ParameterizedThreadStart(fillNodeMap));
-#if XBOX
-                threads[i] .SetProcessorAffinity((i % 2) + 3);
-#endif
                 threads[i] .Start(results[i]);
             }
 
