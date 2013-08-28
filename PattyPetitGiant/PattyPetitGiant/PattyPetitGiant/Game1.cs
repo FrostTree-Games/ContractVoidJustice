@@ -78,6 +78,8 @@ namespace PattyPetitGiant
         private string currentLoadingValue = "NULL";
         private SpriteFont debugFont = null;
 
+        public static bool exitGame;
+
 #if PROFILE
         private int frameCounter = 0;
         private int frameRate = 0;
@@ -97,7 +99,9 @@ namespace PattyPetitGiant
 #endif 
             // for onscreen keyboard and profiles
             GamerServicesComponent GSC = new GamerServicesComponent(this);
-            Components.Add(GSC); 
+            Components.Add(GSC);
+
+            exitGame = false;
 
             Content.RootDirectory = "Content";
         }
@@ -226,10 +230,9 @@ namespace PattyPetitGiant
             GameCampaign.ResetPlayerValues("INIT", 0);
 
             // lol so many game screens
-            //currentGameScreen = new TitleScreen(myModel, aspectRatio, shipTexture);
-            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            currentGameScreen = new CampaignLobbyState();
+            //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
             loadBarValue = 1.0f;
@@ -282,6 +285,10 @@ namespace PattyPetitGiant
                 this.Exit();
 #endif
 #endif
+
+            if(exitGame)
+                this.Exit();
+
             if (!preloadedAssets)
             {
                 //loading screen update logic

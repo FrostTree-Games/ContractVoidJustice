@@ -301,6 +301,7 @@ namespace PattyPetitGiant
                                     fade = 0.0f;
                                     break;
                                 case "QUIT":
+                                    Game1.exitGame = true;
                                     break;
                             }
                         }
