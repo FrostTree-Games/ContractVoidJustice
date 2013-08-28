@@ -261,7 +261,7 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < numberOfLevels; i++) { floorProgress[i] = -1; }
 
-            PlayerLevelProgress = -1;
+            PlayerLevelProgress = 5;
             PlayerFloorHeight = 1;
 
             Player_Right_Item = GlobalGameConstants.itemType.LazerGun;

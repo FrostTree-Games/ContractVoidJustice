@@ -71,6 +71,9 @@ namespace PattyPetitGiant
         public static Video guardEndCutScene = null;
         public static Video alienEndCutScene = null;
         public static Video prisonerEndCutScene = null;
+        public static Video guardEndCutSceneCoop = null;
+        public static Video alienEndCutSceneCoop = null;
+        public static Video prisonerEndCutSceneCoop = null;
 
         private static Texture2D saveIcon = null;
 
@@ -206,9 +209,12 @@ namespace PattyPetitGiant
             introCutSceneCoop = Content.Load<Video>("fmv/intro COOP");
             levelEnterVideoCoop = Content.Load<Video>("fmv/levelStartCOOP");
             levelExitVideoCoop = Content.Load<Video>("fmv/elevatorExitCOOP");
-            guardEndCutScene = Content.Load<Video>("fmv/elevatorExitCOOP");
-            alienEndCutScene = Content.Load<Video>("fmv/elevatorExit");
-            prisonerEndCutScene = Content.Load<Video>("fmv/elevatorExit");
+            guardEndCutScene = Content.Load<Video>("fmv/endGuardSingle");
+            alienEndCutScene = Content.Load<Video>("fmv/endAlienSingle");
+            prisonerEndCutScene = Content.Load<Video>("fmv/endPrisonerSingle");
+            guardEndCutSceneCoop = Content.Load<Video>("fmv/endGuardCoop");
+            alienEndCutSceneCoop = Content.Load<Video>("fmv/endAlienCoop");
+            prisonerEndCutSceneCoop = Content.Load<Video>("fmv/endPrisonerCoop");
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();

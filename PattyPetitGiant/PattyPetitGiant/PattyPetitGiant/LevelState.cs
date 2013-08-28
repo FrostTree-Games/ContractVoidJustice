@@ -790,7 +790,14 @@ namespace PattyPetitGiant
             {
                 if (GameCampaign.PlayerLevelProgress == 5)
                 {
-                    return ScreenStateType.EndingCutScene;
+                    if (GameCampaign.IsATwoPlayerGame)
+                    {
+                        return ScreenStateType.EndingCutSceneCoop;
+                    }
+                    else
+                    {
+                        return ScreenStateType.EndingCutScene;
+                    }
                 }
                 else
                     return ScreenStateType.FMV_ELEVATOR_EXIT;
