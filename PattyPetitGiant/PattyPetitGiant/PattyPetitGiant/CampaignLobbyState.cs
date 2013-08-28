@@ -13,6 +13,13 @@ namespace PattyPetitGiant
 {
     class CampaignLobbyState : ScreenState
     {
+
+        private enum fadeState
+        {
+            fadeIn,
+            fadeStay,
+            fadeOut,
+        }
         private struct CampaignLoadout
         {
             public InputDevice2.PlayerPad InputDevice;
@@ -33,6 +40,20 @@ namespace PattyPetitGiant
         private CampaignLoadout slot2;
 
         private ScreenState.ScreenStateType nextState;
+
+        private float alpha = 0.0f;
+        private fadeState fade_state;
+
+        private float fade_duration = 0.0f;
+        private const float max_fade_time = 1500.0f;
+
+        private float Alpha
+        {
+            get
+            {
+                return (fade_state == fadeState.fadeIn) ? (1 - (fade_duration / max_fade_time)) : (fade_state == fadeState.fadeOut) ? (fade_duration / max_fade_time) : 0.0f;
+            }
+        }
 
         private bool player1RightPressed = false;
         private bool player1LeftPressed = false;
@@ -83,12 +104,35 @@ namespace PattyPetitGiant
 
             lineOffset = 0;
 
+            fade_state = fadeState.fadeIn;
+            fade_duration = 0.0f;
+
             timePassed = 0.0f;
         }
 
         protected override void doUpdate(GameTime currentTime)
         {
             timePassed += currentTime.ElapsedGameTime.Milliseconds;
+
+            if (fade_state == fadeState.fadeIn)
+            {
+                fade_duration += currentTime.ElapsedGameTime.Milliseconds;
+                if (fade_duration > max_fade_time)
+                {
+                    fade_state = fadeState.fadeStay;
+                    fade_duration = 0.0f;
+                }
+            }
+
+            if (fade_state == fadeState.fadeOut)
+            {
+                fade_duration += currentTime.ElapsedGameTime.Milliseconds;
+                if (fade_duration > max_fade_time)
+                {
+                    nextState = ScreenStateType.TitleScreen;
+                    isComplete = true;
+                }
+            }
 
             lineOffset += (currentTime.ElapsedGameTime.Milliseconds * lineMoveSpeed);
             if (lineOffset > 16.0f) { lineOffset -= 16.0f; }
@@ -428,8 +472,7 @@ namespace PattyPetitGiant
                     else if (pressed == InputDevice2.PlayerPad.NoPad && playerCancelPressed)
                     {
                         playerCancelPressed = false;
-                        nextState = ScreenStateType.TitleScreen;
-                        isComplete = true;
+                        fade_state = fadeState.fadeOut;
                     }
                 }
             }
@@ -485,6 +528,9 @@ namespace PattyPetitGiant
 
             Vector2 linesOffset = new Vector2(lineOffset);
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
+
+            //fade square
+            sb.Draw(Game1.whitePixel, Vector2.Zero, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), new Color(1, 1, 1, Alpha), 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
 
 #if SHOW_TITLE_SAFE
 
