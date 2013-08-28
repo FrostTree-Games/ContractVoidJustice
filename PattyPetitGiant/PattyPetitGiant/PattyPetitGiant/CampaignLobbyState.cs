@@ -529,9 +529,6 @@ namespace PattyPetitGiant
             Vector2 linesOffset = new Vector2(lineOffset);
             sb.Begin(SpriteSortMode.Immediate, BlendState.NonPremultiplied);
 
-            //fade square
-            sb.Draw(Game1.whitePixel, Vector2.Zero, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), new Color(1, 1, 1, Alpha), 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
-
 #if SHOW_TITLE_SAFE
 
             for (int i = -6; i < GlobalGameConstants.GameResolutionWidth / 16 + 8; i ++)
@@ -613,7 +610,8 @@ namespace PattyPetitGiant
             AnimationLib.getFrameAnimationSet("gamepadX").drawAnimationFrame(0, sb, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 442) - (Game1.tenbyFive14.MeasureString("Rename Character") * new Vector2(0.5f, 0)) - new Vector2(38, 6), new Vector2(0.75f), 0);
             sb.DrawString(Game1.tenbyFive14, "Rename Character", new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 442) - (Game1.tenbyFive14.MeasureString("Rename Character") * new Vector2(0.5f, 0)), Color.White);
 #endif
-
+            //fade square
+            sb.Draw(Game1.whitePixel, Vector2.Zero, new Rectangle(0, 0, GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), new Color(0.0f, 0.0f, 0.0f, Alpha), 0.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.6f);
             sb.End();
         }
 
