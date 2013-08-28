@@ -122,6 +122,68 @@ namespace PattyPetitGiant
             new Thread(loadLevel).Start();
         }
 
+        private class GenerateNodeMapResult
+        {
+            public DungeonGenerator.DungeonRoom[,] NodeMap = null;
+            public bool completed = false;
+        }
+
+        public void fillNodeMap(Object input)
+        {
+            GenerateNodeMapResult result = (GenerateNodeMapResult)input;
+
+            result.NodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
+
+            result.completed = true;
+        }
+
+        private DungeonGenerator.DungeonRoom[,] generateFourDungeons()
+        {
+            Thread[] threads = new Thread[4];
+            GenerateNodeMapResult[] results = new GenerateNodeMapResult[4];
+            for (int i = 0; i < 4; i++) { results[i] = new GenerateNodeMapResult(); }
+
+            for (int i = 0; i < 4; i++)
+            {
+                threads[i] = new Thread(new ParameterizedThreadStart(fillNodeMap));
+#if XBOX
+                threads[i] .SetProcessorAffinity((i % 2) + 3);
+#endif
+                threads[i] .Start(results[i]);
+            }
+
+            bool dungeonFound = false;
+
+            while (!dungeonFound)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (results[i].completed == true)
+                    {
+                        dungeonFound = true;
+                    }
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (threads[i].IsAlive)
+                {
+                    threads[i].Abort();
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (results[i].completed == true)
+                {
+                    return results[i].NodeMap;
+                }
+            }
+
+            return null;
+        }
+
         private void loadLevel()
         {
             for (int i = 0; i < GameCampaign.CampaignIntroductionValues[GameCampaign.PlayerLevelProgress].Length; i++)
@@ -129,7 +191,7 @@ namespace PattyPetitGiant
                 GameCampaign.AvailableEntityTypes.Add(GameCampaign.CampaignIntroductionValues[GameCampaign.PlayerLevelProgress][i]);
             }
 
-            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
+            nodeMap = generateFourDungeons();
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
 
@@ -243,61 +305,60 @@ namespace PattyPetitGiant
 
                 if (faction == Entity.EnemyType.Prisoner)
                 {
-                    if (randomSpawnValue < 0.25)
+                    if (randomSpawnValue < 0.25 && GameCampaign.AvailableEntityTypes.Contains(typeof(MolotovEnemy)))
                     {
                         entityList.Add(new MolotovEnemy(this, spawnPos));
                     }
-
-                    else if (randomSpawnValue < 0.35)
+                    else if (randomSpawnValue < 0.35 && GameCampaign.AvailableEntityTypes.Contains(typeof(HookPrisonerEnemy)))
                     {
                         entityList.Add(new HookPrisonerEnemy(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.5)
+                    else if (randomSpawnValue < 0.5 && GameCampaign.AvailableEntityTypes.Contains(typeof(ChargerMutantEnemy)))
                     {
                         entityList.Add(new ChargerMutantEnemy(this, spawnPos));
                     }
-                    else
+                    else if (GameCampaign.AvailableEntityTypes.Contains(typeof(ChaseEnemy)))
                     {
                         entityList.Add(new ChaseEnemy(this, spawnPos.X, spawnPos.Y));
                     }
                 }
                 else if (faction == Entity.EnemyType.Guard)
                 {
-                    if (randomSpawnValue < 0.1)
+                    if (randomSpawnValue < 0.17 && GameCampaign.AvailableEntityTypes.Contains(typeof(GuardSquadLeader)))
                     {
                         entityList.Add(new GuardSquadLeader(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.25)
+                    else if (randomSpawnValue < 0.25 && GameCampaign.AvailableEntityTypes.Contains(typeof(GuardMech)))
                     {
                         entityList.Add(new GuardMech(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.15)
+                    else if (randomSpawnValue < 0.45 && GameCampaign.AvailableEntityTypes.Contains(typeof(AntiFairy)))
                     {
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 0)));
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, 1)));
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(0, 1)));
                         entityList.Add(new AntiFairy(this, spawnPos + new Vector2(1, -1)));
                     }
-                    else
+                    else if (GameCampaign.AvailableEntityTypes.Contains(typeof(PatrolGuard)))
                     {
                         entityList.Add(new PatrolGuard(this, spawnPos));
                     }
                 }
                 else if (faction == Entity.EnemyType.Alien)
                 {
-                    if (randomSpawnValue < 0.15)
+                    if (randomSpawnValue < 0.15 && GameCampaign.AvailableEntityTypes.Contains(typeof(BroodLord)))
                     {
                         entityList.Add(new BroodLord(this, spawnPos));
                     }
-                    else if (randomSpawnValue < 0.25)
+                    else if (randomSpawnValue < 0.25 && GameCampaign.AvailableEntityTypes.Contains(typeof(BallMutant)))
                     {
                         entityList.Add(new BallMutant(this, spawnPos.X, spawnPos.Y));
                     }
-                    else if (randomSpawnValue < 0.4)
+                    else if (randomSpawnValue < 0.4 && GameCampaign.AvailableEntityTypes.Contains(typeof(AlienChaser)))
                     {
                         entityList.Add(new AlienChaser(this, spawnPos));
                     }
-                    else
+                    else if (GameCampaign.AvailableEntityTypes.Contains(typeof(MutantAcidSpitter)))
                     {
                         MutantAcidSpitter spitter = new MutantAcidSpitter(this, spawnPos.X, spawnPos.Y);
                         entityList.Add(spitter);
@@ -386,10 +447,6 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-
-                        entityList.Add(new GuardSquadLeader(this, (currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y));
-
-                        //entityList.Add(new PatrolGuard(this, new Vector2((currentRoomX + 7) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y)));
 
                         if (GameCampaign.IsATwoPlayerGame)
                         {
@@ -827,6 +884,13 @@ namespace PattyPetitGiant
 
             if (parent.Enemy_Type == GameCampaign.currentContract.killTarget)
             {
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+                particleSet.pushContractParticle(parent.CenterPoint);
+                AudioLib.playSoundEffect("chaching");
+
                 total_coin_count = GameCampaign.currentContract.goldPerKill;
                 drop_type = Coin.DropItemType.CoinDrop;
 

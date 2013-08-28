@@ -53,6 +53,8 @@ namespace PattyPetitGiant
         public static int TilesPerRoomWide { get { return tilesPerRoomWide; } }
         public static int TilesPerRoomHigh { get { return tilesPerRoomHigh; } }
 
+        public static int LevelAliensAppearAt = 3;
+
         public class WeaponDictionary
         {
             public struct WeaponInformation

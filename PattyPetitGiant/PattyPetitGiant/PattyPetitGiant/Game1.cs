@@ -53,6 +53,7 @@ namespace PattyPetitGiant
 
         private Texture2D pleaseWaitDialog = null;
         private bool preloadedAssets = false;
+        private bool preloadedJSon = false;
 
         private static bool gameIsRunningSlowly;
         public static bool GameIsRunningSlowly { get { return gameIsRunningSlowly; } }
@@ -152,13 +153,25 @@ namespace PattyPetitGiant
 
             loadBarValue = 0;
 
+            new Thread(loadSpine2).Start();
             new Thread(loadContent2).Start();
+        }
+
+        private void loadSpine2()
+        {
+#if XBOX
+            Thread.CurrentThread.SetProcessorAffinity(5);
+#endif
+
+            AnimationLib.cacheSpineJSON();
+
+            preloadedJSon = true;
         }
 
         private void loadContent2()
         {
 #if XBOX
-            Thread.CurrentThread.SetProcessorAffinity(5);
+            Thread.CurrentThread.SetProcessorAffinity(3);
 #endif
             currentLoadingValue = "textures";
             backGroundPic = Content.Load<Texture2D>("titleScreenPic");
@@ -218,11 +231,6 @@ namespace PattyPetitGiant
             videoPlayer = new VideoPlayer();
 
             ChunkLib cs = new ChunkLib();
-
-            loadBarValue = 0.6f;
-            currentLoadingValue = "JSON files";
-
-            AnimationLib.cacheSpineJSON();
 
             loadBarValue = 0.7f;
             currentLoadingValue = "frame XML";
@@ -295,7 +303,7 @@ namespace PattyPetitGiant
             if(exitGame)
                 this.Exit();
 
-            if (!preloadedAssets)
+            if (!(preloadedAssets && preloadedJSon))
             {
                 //loading screen update logic
 
@@ -322,7 +330,7 @@ namespace PattyPetitGiant
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (!preloadedAssets)
+            if (!(preloadedAssets && preloadedJSon))
             {
                 GraphicsDevice.Clear(Color.Black);
 
@@ -330,12 +338,12 @@ namespace PattyPetitGiant
 
                 spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2 , Color.White);
 
-                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.Gray, 0.0f, Vector2.Zero, new Vector2(600, 100), SpriteEffects.None, 0.5f);
-                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.White, 0.0f, Vector2.Zero, new Vector2(600 * loadBarValue, 100), SpriteEffects.None, 0.5f);
-                spriteBatch.DrawString(debugFont, currentLoadingValue, new Vector2(640, 600), Color.White);
+                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.Gray, 0.0f, Vector2.Zero, new Vector2(300, 100), SpriteEffects.None, 0.5f);
+                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.White, 0.0f, Vector2.Zero, new Vector2(300 * loadBarValue, 100), SpriteEffects.None, 0.5f);
+                spriteBatch.DrawString(debugFont, currentLoadingValue, new Vector2(340, 600), Color.White);
 
                 spriteBatch.End();
-
+                
                 return;
             }
 
@@ -344,7 +352,7 @@ namespace PattyPetitGiant
             if (SaveGameModule.TouchingStorageDevice)
             {
                 spriteBatch.Begin();
-                spriteBatch.Draw(saveIcon, new Rectangle(0, 0, 54, 59), new Rectangle(3, 28, 54, 59), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f);
+                spriteBatch.Draw(saveIcon, new Rectangle(1100, 588, 54, 59), new Rectangle(3, 28, 54, 59), Color.White, 0.0f, Vector2.Zero, SpriteEffects.None, 0.5f);
                 spriteBatch.End();
             }
 

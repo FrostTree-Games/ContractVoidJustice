@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SerializableAnimationData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <name>gamepadX</name>
-  <sheetName>gamepadSheet.png</sheetName>
-  <initalX>48</initalX>
-  <initalY>0</initalY>
+  <name>contractParticle</name>
+  <sheetName>testParticles.png</sheetName>
+  <initalX>8</initalX>
+  <initalY>104</initalY>
   <offsetX>0</offsetX>
   <offsetY>0</offsetY>
-  <frameWidth>48</frameWidth>
-  <frameHeight>48</frameHeight>
+  <frameWidth>9</frameWidth>
+  <frameHeight>20</frameHeight>
   <frameCount>1</frameCount>
-  <frameSpeed>0</frameSpeed>
+  <frameSpeed>70</frameSpeed>
   <loop>false</loop>
 </SerializableAnimationData>

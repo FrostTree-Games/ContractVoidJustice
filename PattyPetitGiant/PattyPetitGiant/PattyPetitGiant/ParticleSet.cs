@@ -326,6 +326,27 @@ namespace PattyPetitGiant
                 p.isCasing = true;
                 p.originalPosition = p.position + new Vector2(0, 32f);
             }
+
+            public static void NewContractDollarSign(ref Particle p, Vector2 position)
+            {
+                p.active = true;
+                p.animation = AnimationLib.getFrameAnimationSet("contractParticle");
+                p.position = position;
+                p.timeAlive = 0;
+                p.maxTimeAlive = 500f;
+                p.rotation = 0;
+                p.rotationSpeed = 0;
+                p.animationTime = 0;
+                p.color = Color.White;
+                float randDir = (float)(Math.PI * 1.2 + Game1.rand.Next() * 0.3);
+                float velo = (float)(-10 * Game1.rand.NextDouble());
+                p.velocity = new Vector2((float)Math.Cos(randDir), (float)Math.Sin(randDir) + velo);
+                p.acceleration = Vector2.Zero;
+                p.scale = new Vector2(1);
+                p.isGib = false;
+                p.isCasing = false;
+                p.originalPosition = p.position + new Vector2(0, 32f);
+            }
         }
 
         private const int particlePoolSize = 300;
@@ -629,6 +650,17 @@ namespace PattyPetitGiant
                 if (particlePool[i].active) { continue; }
 
                 Particle.newShotGunCasing(ref particlePool[i], position);
+                return;
+            }
+        }
+
+        public void pushContractParticle(Vector2 position)
+        {
+            for (int i = 0; i < particlePoolSize; i++)
+            {
+                if (particlePool[i].active) { continue; }
+
+                Particle.NewContractDollarSign(ref particlePool[i], position);
                 return;
             }
         }
