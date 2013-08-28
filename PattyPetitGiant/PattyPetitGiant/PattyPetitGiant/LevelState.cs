@@ -122,6 +122,68 @@ namespace PattyPetitGiant
             new Thread(loadLevel).Start();
         }
 
+        private class GenerateNodeMapResult
+        {
+            public DungeonGenerator.DungeonRoom[,] NodeMap = null;
+            public bool completed = false;
+        }
+
+        public void fillNodeMap(Object input)
+        {
+            GenerateNodeMapResult result = (GenerateNodeMapResult)input;
+
+            result.NodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
+
+            result.completed = true;
+        }
+
+        private DungeonGenerator.DungeonRoom[,] generateFourDungeons()
+        {
+            Thread[] threads = new Thread[4];
+            GenerateNodeMapResult[] results = new GenerateNodeMapResult[4];
+            for (int i = 0; i < 4; i++) { results[i] = new GenerateNodeMapResult(); }
+
+            for (int i = 0; i < 4; i++)
+            {
+                threads[i] = new Thread(new ParameterizedThreadStart(fillNodeMap));
+#if XBOX
+                threads[i] .SetProcessorAffinity((i % 2) + 3);
+#endif
+                threads[i] .Start(results[i]);
+            }
+
+            bool dungeonFound = false;
+
+            while (!dungeonFound)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (results[i].completed == true)
+                    {
+                        dungeonFound = true;
+                    }
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (threads[i].IsAlive)
+                {
+                    threads[i].Abort();
+                }
+            }
+
+            for (int i = 0; i < 4; i++)
+            {
+                if (results[i].completed == true)
+                {
+                    return results[i].NodeMap;
+                }
+            }
+
+            return null;
+        }
+
         private void loadLevel()
         {
             for (int i = 0; i < GameCampaign.CampaignIntroductionValues[GameCampaign.PlayerLevelProgress].Length; i++)
@@ -129,7 +191,7 @@ namespace PattyPetitGiant
                 GameCampaign.AvailableEntityTypes.Add(GameCampaign.CampaignIntroductionValues[GameCampaign.PlayerLevelProgress][i]);
             }
 
-            nodeMap = DungeonGenerator.generateRoomData(GlobalGameConstants.StandardMapSize.x, GlobalGameConstants.StandardMapSize.y, currentSeed);
+            nodeMap = generateFourDungeons();
             //nodeMap = DungeonGenerator.generateEntityZoo();
             map = new TileMap(this, nodeMap, GlobalGameConstants.TileSize);
 
