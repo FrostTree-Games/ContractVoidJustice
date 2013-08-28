@@ -491,6 +491,8 @@ namespace PattyPetitGiant
             skeletonRenderer.setCameraMatrix(camera);
             skeletonRenderer.Begin();
 
+            skeletonRenderer.DrawSpriteToSpineVertexArray(Game1.whitePixel, new Rectangle(0, 0, 1, 1), new Vector2(cameraEntity.CenterPoint.X - GlobalGameConstants.GameResolutionWidth / 2, cameraEntity.CenterPoint.Y - GlobalGameConstants.GameResolutionHeight / 2), Color.Black, 0.0f, new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight));
+
             map.renderSPINEBATCHTEST(skeletonRenderer, 0.5f, spitters);
 
             for (int i = 0; i < entList.Count; i++)
