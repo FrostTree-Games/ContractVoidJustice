@@ -260,6 +260,11 @@ namespace PattyPetitGiant
         {
             flickerTime += currentTime.ElapsedGameTime.Milliseconds;
 
+            if (GameCampaign.IsATwoPlayerGame)
+            {
+                //if(Vector2.Distance()
+            }
+
             if (GameCampaign.change_guard_icon_color)
             {
                 guardColorBlink += currentTime.ElapsedGameTime.Milliseconds;

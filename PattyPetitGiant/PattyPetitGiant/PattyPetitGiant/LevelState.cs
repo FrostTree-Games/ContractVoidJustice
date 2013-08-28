@@ -105,6 +105,9 @@ namespace PattyPetitGiant
 
         private List<MutantAcidSpitter> acidSpitters = null;
 
+        public int playerOneArrayPosition = 0;
+        public int playerTwoArrayPosition = 0;
+
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -447,10 +450,11 @@ namespace PattyPetitGiant
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
                         entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-
+                        playerTwoArrayPosition = entityList.Count();
                         if (GameCampaign.IsATwoPlayerGame)
                         {
                             entityList.Add(new Player(this, (currentRoomX + 14) * GlobalGameConstants.TileSize.X, (currentRoomY + 14) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2));
+                            playerTwoArrayPosition = entityList.Count();
                         }
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
