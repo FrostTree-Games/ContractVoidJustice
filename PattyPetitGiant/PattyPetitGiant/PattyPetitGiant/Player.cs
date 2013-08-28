@@ -233,6 +233,8 @@ namespace PattyPetitGiant
             current_skeleton = walk_right;
             current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation("run");
 
+            death = false;
+
             enemy_type = EnemyType.Player;
 
             this.index = index;
@@ -259,7 +261,10 @@ namespace PattyPetitGiant
             {
                 if (!parentWorld.Player1Dead)
                 {
+                    BackGroundAudio.stopAllSongs();
                     AudioLib.playSoundEffect("missionFailed");
+
+                    death = true;
 
                     parentWorld.Particles.pushBloodParticle(CenterPoint);
                     parentWorld.Particles.pushBloodParticle(CenterPoint);

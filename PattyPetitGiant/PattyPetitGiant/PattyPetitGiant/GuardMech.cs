@@ -497,6 +497,7 @@ namespace PattyPetitGiant
 
             if (enemy_life <= 0 && death == false)
             {
+                AudioLib.stopFlameSoundEffect();
                 explode_timer += currentTime.ElapsedGameTime.Milliseconds;
                 animation_time = 0.0f;
                 death = true;
@@ -641,6 +642,7 @@ namespace PattyPetitGiant
 
                     if (!death && enemy_life < 1 && attacker != null & attacker is Player)
                     {
+                        AudioLib.stopFlameSoundEffect();
                         GameCampaign.AlterAllegiance(-0.01f);
                     }
                 }
