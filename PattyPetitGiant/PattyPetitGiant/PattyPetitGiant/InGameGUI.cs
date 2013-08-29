@@ -57,6 +57,7 @@ namespace PattyPetitGiant
         private AnimationLib.FrameAnimationSet coinAnim = null;
         private AnimationLib.FrameAnimationSet medAnim = null;
         private AnimationLib.FrameAnimationSet ammoAnim = null;
+        private AnimationLib.FrameAnimationSet arrowPointer = null;
 
         private bool playerOutOfSight = false;
         private float playerOutOfSightAngle = 0.0f;
@@ -169,6 +170,7 @@ namespace PattyPetitGiant
             coinAnim = AnimationLib.getFrameAnimationSet("testCoin");
             medAnim = AnimationLib.getFrameAnimationSet("itemHealth");
             ammoAnim = AnimationLib.getFrameAnimationSet("itemBattery");
+            arrowPointer = AnimationLib.getFrameAnimationSet("compassArrow");
 
             mapIcon = TextureLib.getLoadedTexture("mapPda.png");
 
@@ -266,7 +268,7 @@ namespace PattyPetitGiant
 
             if (GameCampaign.IsATwoPlayerGame)
             {
-                if (Vector2.Distance(GameCampaign.playerOne.CenterPoint, GameCampaign.playerTwo.CenterPoint) > GlobalGameConstants.GameResolutionWidth / 2)
+                if (Math.Abs(GameCampaign.playerOne.CenterPoint.X - GameCampaign.playerTwo.CenterPoint.X) > GlobalGameConstants.GameResolutionWidth / 2 || Math.Abs(GameCampaign.playerOne.CenterPoint.Y - GameCampaign.playerTwo.CenterPoint.Y) > GlobalGameConstants.GameResolutionHeight/2)
                 {
                     playerOutOfSight = true;
                     playerOutOfSightAngle = (float)Math.Atan2(GameCampaign.playerTwo.CenterPoint.Y - GameCampaign.playerOne.CenterPoint.Y, GameCampaign.playerTwo.CenterPoint.X - GameCampaign.playerOne.CenterPoint.X);
@@ -592,7 +594,8 @@ namespace PattyPetitGiant
 
             if (playerOutOfSight)
             {
-                sb.Draw(Game1.whitePixel, new Vector2((float)(GlobalGameConstants.GameResolutionWidth * 0.25 * Math.Cos(playerOutOfSightAngle)), (float)(GlobalGameConstants.GameResolutionWidth * 0.25f * Math.Sin(playerOutOfSightAngle))),new Rectangle(0, 0, 32, 32), Color.White, playerOutOfSightAngle, GameCampaign.playerOne.CenterPoint, 1.0f, SpriteEffects.None, 0.5f);
+                sb.Draw(Game1.p2Icon, new Vector2((float)(((GlobalGameConstants.GameResolutionWidth) * 0.25 * Math.Cos(playerOutOfSightAngle))) + (GlobalGameConstants.GameResolutionWidth / 2), (float)(((GlobalGameConstants.GameResolutionWidth) * 0.25 * Math.Sin(playerOutOfSightAngle)) + (GlobalGameConstants.GameResolutionHeight / 2))), new Rectangle(0, 0, 96, 48), Color.White, playerOutOfSightAngle, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
+                //arrowPointer.drawAnimationFrame(0.0f, sb, new Vector2((float)((GlobalGameConstants.GameResolutionWidth * 0.25 * Math.Cos(playerOutOfSightAngle))) + (GlobalGameConstants.GameResolutionWidth / 2), (float)((GlobalGameConstants.GameResolutionWidth * 0.25f * Math.Sin(playerOutOfSightAngle)) + (GlobalGameConstants.GameResolutionHeight / 2))), new Vector2(1.3f), 0.5f, playerOutOfSightAngle + (float)(Math.PI/2), Vector2.Zero, Color.White);
             }
 
             if (parent.Player1Dead)
