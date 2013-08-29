@@ -534,6 +534,126 @@
       <Name>parts</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="animation\spine\femaleJensenDown_RED\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_RED\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_RED\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_RED\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_RED\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_RED\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_PURPLE\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_PURPLE\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_PURPLE\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_PURPLE\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_PURPLE\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_PURPLE\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_BLUE\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_BLUE\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_BLUE\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_BLUE\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_BLUE\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_BLUE\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_CYAN\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_CYAN\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_CYAN\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_CYAN\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_CYAN\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_CYAN\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_BROWN\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenDown_BROWN\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_BROWN\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenRight_BROWN\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_BROWN\anims.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>anims</Name>
+    </None>
+    <None Include="animation\spine\femaleJensenUp_BROWN\parts.atlas">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>parts</Name>
+    </None>
     <None Include="animation\spine\femaleJensenDown\anims.json">
       <Name>anims</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2972,6 +3092,126 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenUp_RED\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenDown_RED\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenRight_RED\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenDown_PURPLE\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenRight_PURPLE\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenUp_PURPLE\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenDown_BLUE\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenRight_BLUE\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenUp_BLUE\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenDown_CYAN\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenRight_CYAN\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenUp_CYAN\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenDown_BROWN\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenRight_BROWN\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="animation\spine\femaleJensenUp_BROWN\img.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Name>img</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

@@ -179,54 +179,48 @@ namespace PattyPetitGiant
             }
             else if (index == InputDevice2.PPG_Player.Player_2)
             {
-                walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown");
-                walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight");
-                walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight");
-                walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp");
-
-                /*
                 if (GameCampaign.Player2Color == 0)
                 {
-                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown");
-                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight");
-                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight");
-                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp");
+                    walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown");
+                    walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight");
+                    walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight");
+                    walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp");
                 }
                 else if (GameCampaign.Player2Color == 1)
                 {
-                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_RED");
-                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_RED");
-                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_RED");
-                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_RED");
+                    walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown_RED");
+                    walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight_RED");
+                    walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight_RED");
+                    walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp_RED");
                 }
                 else if (GameCampaign.Player2Color == 2)
                 {
-                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_PURPLE");
-                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_PURPLE");
-                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_PURPLE");
-                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_PURPLE");
+                    walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown_PURPLE");
+                    walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight_PURPLE");
+                    walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight_PURPLE");
+                    walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp_PURPLE");
                 }
                 else if (GameCampaign.Player2Color == 3)
                 {
-                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_BLUE");
-                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_BLUE");
-                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_BLUE");
-                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_BLUE");
+                    walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown_BLUE");
+                    walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight_BLUE");
+                    walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight_BLUE");
+                    walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp_BLUE");
                 }
                 else if (GameCampaign.Player2Color == 4)
                 {
-                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_CYAN");
-                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_CYAN");
-                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_CYAN");
-                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_CYAN");
+                    walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown_CYAN");
+                    walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight_CYAN");
+                    walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight_CYAN");
+                    walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp_CYAN");
                 }
                 else if (GameCampaign.Player2Color == 5)
                 {
-                    walk_down = AnimationLib.loadNewAnimationSet("jensenDown_BROWN");
-                    walk_right = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
-                    walk_left = AnimationLib.loadNewAnimationSet("jensenRight_BROWN");
-                    walk_up = AnimationLib.loadNewAnimationSet("jensenUp_BROWN");
-                }*/
+                    walk_down = AnimationLib.loadNewAnimationSet("femaleJensenDown_BROWN");
+                    walk_right = AnimationLib.loadNewAnimationSet("femaleJensenRight_BROWN");
+                    walk_left = AnimationLib.loadNewAnimationSet("femaleJensenRight_BROWN");
+                    walk_up = AnimationLib.loadNewAnimationSet("femaleJensenUp_BROWN");
+                }
             }
 
             remove_from_list = false;
