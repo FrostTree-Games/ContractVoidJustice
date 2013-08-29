@@ -10,7 +10,7 @@ namespace PattyPetitGiant
     /// <summary>
     /// An alternative input device manager for PattyPetitGiant. Should allow for state management with multiple controller indexes effortlessly.
     /// </summary>
-    class InputDevice2
+    public class InputDevice2
     {
         /// <summary>
         /// Identifier for different ingame "player slots". Does not necessarily coorelate to specific gamepads.

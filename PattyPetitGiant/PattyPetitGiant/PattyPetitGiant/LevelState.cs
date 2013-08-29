@@ -105,9 +105,6 @@ namespace PattyPetitGiant
 
         private List<MutantAcidSpitter> acidSpitters = null;
 
-        public int playerOneArrayPosition = 0;
-        public int playerTwoArrayPosition = 0;
-
         public LevelState()
         {
             currentSeed = Game1.rand.Next();
@@ -449,12 +446,12 @@ namespace PattyPetitGiant
                     }
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
-                        entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-                        playerTwoArrayPosition = entityList.Count();
+                        GameCampaign.playerOne = new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1);
+                        entityList.Add(GameCampaign.playerOne);
                         if (GameCampaign.IsATwoPlayerGame)
                         {
-                            entityList.Add(new Player(this, (currentRoomX + 14) * GlobalGameConstants.TileSize.X, (currentRoomY + 14) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2));
-                            playerTwoArrayPosition = entityList.Count();
+                            GameCampaign.playerTwo = new Player(this, (currentRoomX + 14) * GlobalGameConstants.TileSize.X, (currentRoomY + 14) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2);
+                            entityList.Add(GameCampaign.playerTwo);
                         }
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))
@@ -580,7 +577,7 @@ namespace PattyPetitGiant
 
             for (int i = 0; i < entityList.Count; i++)
             {
-                if (Vector2.Distance(cameraFocus.CenterPoint, entityList[i].CenterPoint) < 800)
+                if (Vector2.Distance(cameraFocus.CenterPoint, entityList[i].CenterPoint) < 800 || entityList[i] is Player)
                 {
                     entityList[i].update(currentTime);
                 }

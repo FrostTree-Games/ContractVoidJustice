@@ -92,6 +92,9 @@ namespace PattyPetitGiant
             }
         }
 
+        public static Player playerOne = null;
+        public static Player playerTwo = null;
+
         private static float player_health = 100.00f;
         public static float Player_Health
         {

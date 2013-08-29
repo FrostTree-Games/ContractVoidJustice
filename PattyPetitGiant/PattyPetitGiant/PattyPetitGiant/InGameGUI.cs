@@ -58,6 +58,9 @@ namespace PattyPetitGiant
         private AnimationLib.FrameAnimationSet medAnim = null;
         private AnimationLib.FrameAnimationSet ammoAnim = null;
 
+        private bool playerOutOfSight = false;
+        private float playerOutOfSightAngle = 0.0f;
+
         public struct PriceDisplay
         {
             public bool active;
@@ -172,6 +175,7 @@ namespace PattyPetitGiant
             testWin = new BoxWindow("foo", 100, 100, 200, "GamePad code overflowing with madness");
 
             flickerTime = 0.0f;
+            playerOutOfSight = false;
         }
 
         public static string WrapText(SpriteFont spriteFont, string text, float maxLineWidth, ref int lineCountOut)
@@ -262,7 +266,15 @@ namespace PattyPetitGiant
 
             if (GameCampaign.IsATwoPlayerGame)
             {
-                //if(Vector2.Distance()
+                if (Vector2.Distance(GameCampaign.playerOne.CenterPoint, GameCampaign.playerTwo.CenterPoint) > GlobalGameConstants.GameResolutionWidth / 2)
+                {
+                    playerOutOfSight = true;
+                    playerOutOfSightAngle = (float)Math.Atan2(GameCampaign.playerTwo.CenterPoint.Y - GameCampaign.playerOne.CenterPoint.Y, GameCampaign.playerTwo.CenterPoint.X - GameCampaign.playerOne.CenterPoint.X);
+                }
+                else
+                {
+                    playerOutOfSight = false;
+                }
             }
 
             if (GameCampaign.change_guard_icon_color)
@@ -434,8 +446,8 @@ namespace PattyPetitGiant
             sb.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0) + new Vector2((float)(5 + ((1 - prisonerBarPosition) * 160.0)), 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(5, 16), SpriteEffects.None, 0.53f);
             
             sb.Draw(Game1.energyOverlay, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2, 0), null, Color.White, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.52f);
-            sb.Draw(Game1.prisonerIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) + new Vector2(Game1.healthBar.Width / 2 + 12, -12), null, prisonerColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
-            sb.Draw(Game1.guardIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2 + 32, 20), null, guardColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.prisonerIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) - new Vector2(Game1.healthBar.Width / 2 + 32, 20), null, prisonerColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
+            sb.Draw(Game1.guardIcon, new Vector2(GlobalGameConstants.GameResolutionWidth / 2, 100) + new Vector2(Game1.healthBar.Width / 2 + 12, -12), null, guardColor, 0.0f, Vector2.Zero, new Vector2(1, 1), SpriteEffects.None, 0.5f);
 
             if (GameCampaign.change_guard_icon_color)
             {
@@ -577,6 +589,11 @@ namespace PattyPetitGiant
             }
 
             sb.Draw(Game1.whitePixel, Vector2.Zero, null, Color.Lerp(Color.Transparent, Color.Black, blackFadeOverlay), 0.0f, Vector2.Zero, new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight), SpriteEffects.None, 0.5f);
+
+            if (playerOutOfSight)
+            {
+                sb.Draw(Game1.whitePixel, new Vector2((float)(GlobalGameConstants.GameResolutionWidth * 0.25 * Math.Cos(playerOutOfSightAngle)), (float)(GlobalGameConstants.GameResolutionWidth * 0.25f * Math.Sin(playerOutOfSightAngle))),new Rectangle(0, 0, 32, 32), Color.White, playerOutOfSightAngle, GameCampaign.playerOne.CenterPoint, 1.0f, SpriteEffects.None, 0.5f);
+            }
 
             if (parent.Player1Dead)
             {
