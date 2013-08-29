@@ -601,8 +601,6 @@ namespace PattyPetitGiant
             {
                 sb.DrawString(Game1.tenbyFive72, deathMessage, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - Game1.tenbyFive72.MeasureString(deathMessage)) / 2, Color.LightGray);
             }
-
-            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
         }
     }
 }
