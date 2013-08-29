@@ -233,9 +233,9 @@ namespace PattyPetitGiant
             GameCampaign.ResetPlayerValues("INIT", 0);
 
             // lol so many game screens
-            currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
+            //currentGameScreen = new TitleScreen(TitleScreen.titleScreens.logoScreen);
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
-            //currentGameScreen = new CampaignLobbyState();
+            currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
             preloadedAssets = true;
