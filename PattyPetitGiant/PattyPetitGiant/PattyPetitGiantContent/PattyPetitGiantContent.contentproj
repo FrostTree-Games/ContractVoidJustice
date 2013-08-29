@@ -2966,13 +2966,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Textures\ppg_asteroids.png">
-      <Name>ppg_asteroids</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="ppg_asteroids.png">
       <Name>ppg_asteroids</Name>
       <Importer>TextureImporter</Importer>

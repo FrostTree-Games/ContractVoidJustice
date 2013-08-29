@@ -80,6 +80,8 @@ namespace PattyPetitGiant
 
         private SpriteFont debugFont = null;
         private Texture2D asteroidsSpriteSheet = null;
+        private Vector2 shipPosition = Vector2.Zero;
+        private float shipRotation = 0.0f;
 
         public static bool exitGame;
 
@@ -333,7 +335,8 @@ namespace PattyPetitGiant
 
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-                drawBox(spriteBatch, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 3 - 100, 600, 300), Color.White, 2.0f);
+                drawBox(spriteBatch, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 425, GlobalGameConstants.GameResolutionHeight / 3 - 100, 850, 300), Color.White, 2.0f);
+                spriteBatch.Draw(asteroidsSpriteSheet, new Rectangle((int)shipPosition.X, (int)shipPosition.Y, 30, 30), new Rectangle(0, 172, 120, 120), Color.White);
 
                 spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight * 0.75f) - new Vector2(pleaseWaitDialog.Width / 2, pleaseWaitDialog.Height / 2)) , Color.White);
 
