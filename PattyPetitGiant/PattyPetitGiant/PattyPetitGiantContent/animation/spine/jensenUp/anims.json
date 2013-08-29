@@ -26,8 +26,8 @@
 	{ "name": "blood", "bone": "blood", "attachment": "null" },
 	{ "name": "rGunMuzzle", "bone": "rGunMuzzle", "attachment": "null" },
 	{ "name": "lGunMuzzle", "bone": "lGunMuzzle", "attachment": "null" },
-	{ "name": "rWeapon", "bone": "rHand", "attachment": "rRocket" },
-	{ "name": "lWeapon", "bone": "lHand", "attachment": "lRocket" },
+	{ "name": "rWeapon", "bone": "rHand", "attachment": "rSword" },
+	{ "name": "lWeapon", "bone": "lHand", "attachment": "lSword" },
 	{ "name": "up/lFoot", "bone": "lFoot", "attachment": "lFoot" },
 	{ "name": "up/rFoot", "bone": "rFoot", "attachment": "rFoot" },
 	{ "name": "up/lCalf", "bone": "lCalf", "attachment": "lCalf" },
@@ -599,6 +599,175 @@
 			}
 		}
 	},
+	"doubleSlash": {
+		"bones": {
+			"rForearm": {
+				"rotate": [
+					{ "time": 0, "angle": 25.49 },
+					{ "time": 0.1, "angle": 84.86 },
+					{ "time": 0.1666, "angle": 63.74 },
+					{ "time": 0.2666, "angle": 54.92 },
+					{ "time": 0.3333, "angle": 25.49 }
+				]
+			},
+			"head": {
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.3333, "x": 0, "y": 0 }
+				]
+			},
+			"lGunMuzzle": {
+				"rotate": [
+					{ "time": 0, "angle": -2.6, "curve": "stepped" },
+					{ "time": 0.3333, "angle": -2.6 }
+				]
+			},
+			"rShoulder": {
+				"rotate": [
+					{ "time": 0, "angle": 153.95 },
+					{ "time": 0.1, "angle": 17.88 },
+					{ "time": 0.1666, "angle": 175.22 },
+					{ "time": 0.2666, "angle": 190.1 },
+					{ "time": 0.3333, "angle": 153.95 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.3333, "x": 0, "y": 0 }
+				]
+			},
+			"rHand": {
+				"rotate": [
+					{ "time": 0, "angle": -1.39 },
+					{ "time": 0.1, "angle": 18.35 },
+					{ "time": 0.1666, "angle": 4.06 },
+					{ "time": 0.2666, "angle": -0.6 },
+					{ "time": 0.3333, "angle": -1.39 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 0.5, "curve": "stepped" },
+					{ "time": 0.3333, "x": 1, "y": 0.5 }
+				]
+			},
+			"pelvis": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -14.16 },
+					{ "time": 0.1666, "angle": 17.23 },
+					{ "time": 0.3333, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.1, "x": -0.9, "y": 0.39 },
+					{ "time": 0.1666, "x": -0.64, "y": 1.68 },
+					{ "time": 0.3333, "x": 0, "y": 0 }
+				]
+			},
+			"lGun": {
+				"rotate": [
+					{ "time": 0, "angle": 23.33, "curve": "stepped" },
+					{ "time": 0.3333, "angle": 23.33 }
+				]
+			},
+			"torso": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -18.06 },
+					{ "time": 0.1666, "angle": 21.66 },
+					{ "time": 0.2666, "angle": 17.98 },
+					{ "time": 0.3333, "angle": 0 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0 },
+					{ "time": 0.1, "x": 1.96, "y": 0 },
+					{ "time": 0.1666, "x": -5.63, "y": 1.91 },
+					{ "time": 0.3333, "x": 0, "y": 0 }
+				]
+			},
+			"rThigh": {
+				"rotate": [
+					{ "time": 0.1, "angle": 0 },
+					{ "time": 0.1666, "angle": 14.65 }
+				],
+				"translate": [
+					{ "time": 0, "x": -0.71, "y": 12.95 },
+					{ "time": 0.1, "x": 1.08, "y": 12.25 },
+					{ "time": 0.1666, "x": -8.29, "y": 13.97 },
+					{ "time": 0.3333, "x": -0.71, "y": 12.95 }
+				]
+			},
+			"lThigh": {
+				"rotate": [
+					{ "time": 0, "angle": 0 },
+					{ "time": 0.1, "angle": -20.53 },
+					{ "time": 0.1666, "angle": 1.85 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": -3.05 },
+					{ "time": 0.1, "x": -2.55, "y": -2.53 },
+					{ "time": 0.3333, "x": 0, "y": -3.05 }
+				]
+			},
+			"lCalf": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 0.1, "angle": 0 },
+					{ "time": 0.2666, "angle": 7.23 }
+				]
+			},
+			"rCalf": {
+				"rotate": [
+					{ "time": 0, "angle": 0, "curve": "stepped" },
+					{ "time": 0.1333, "angle": 0 },
+					{ "time": 0.2666, "angle": -16.12 }
+				]
+			},
+			"lShoulder": {
+				"rotate": [
+					{ "time": 0, "angle": -24.02 },
+					{ "time": 0.1, "angle": -86.86 },
+					{ "time": 0.1666, "angle": -206.69 },
+					{ "time": 0.2666, "angle": -176.1 },
+					{ "time": 0.3333, "angle": -24.02 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.3333, "x": 0, "y": 0 }
+				]
+			},
+			"lForearm": {
+				"rotate": [
+					{ "time": 0, "angle": -211.59 },
+					{ "time": 0.1, "angle": -100.38 },
+					{ "time": 0.1666, "angle": -59.26 },
+					{ "time": 0.2666, "angle": -80.78 },
+					{ "time": 0.3333, "angle": -211.59 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": -1, "curve": "stepped" },
+					{ "time": 0.3333, "x": 1, "y": -1 }
+				]
+			},
+			"lHand": {
+				"rotate": [
+					{ "time": 0, "angle": 36.68 },
+					{ "time": 0.1, "angle": 2.97 },
+					{ "time": 0.3333, "angle": 36.68 }
+				],
+				"scale": [
+					{ "time": 0, "x": 1, "y": 0.5, "curve": "stepped" },
+					{ "time": 0.3333, "x": 1, "y": 0.5 }
+				]
+			}
+		},
+		"slots": {
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" },
+					{ "time": 0.3333, "name": "null" }
+				]
+			}
+		}
+	},
 	"hurt": {
 		"bones": {
 			"lThigh": {
@@ -821,12 +990,12 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
+			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "null" }
 				]
 			},
-			"lGunMuzzle": {
+			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "null" }
 				]
@@ -935,16 +1104,16 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" },
-					{ "time": 0.1666, "name": "null" }
-				]
-			},
 			"lWeapon": {
 				"attachment": [
 					{ "time": 0, "name": "lEmpty" },
 					{ "time": 0.1666, "name": "lBomb" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" },
+					{ "time": 0.1666, "name": "null" }
 				]
 			}
 		}
@@ -1418,15 +1587,15 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "muzzle1" },
 					{ "time": 0.0333, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}
@@ -1546,15 +1715,15 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "muzzle2" },
 					{ "time": 0.0333, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}
@@ -1680,15 +1849,15 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.0333, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}
@@ -1816,15 +1985,15 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "muzzle1" },
 					{ "time": 0.1666, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}
@@ -1954,15 +2123,15 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.1666, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}
@@ -2084,15 +2253,15 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" }
-				]
-			},
 			"lGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.0333, "name": "null" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
 				]
 			}
 		}
@@ -2368,16 +2537,16 @@
 			}
 		},
 		"slots": {
-			"rGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" },
-					{ "time": 0.1666, "name": "null" }
-				]
-			},
 			"lWeapon": {
 				"attachment": [
 					{ "time": 0, "name": "lEmpty" },
 					{ "time": 0.1666, "name": "lWand" }
+				]
+			},
+			"rGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" },
+					{ "time": 0.1666, "name": "null" }
 				]
 			}
 		}
@@ -2892,16 +3061,16 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0.0333, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "muzzle1" },
 					{ "time": 0.0333, "name": "null" },
 					{ "time": 0.1666, "name": "null" }
-				]
-			},
-			"lGunMuzzle": {
-				"attachment": [
-					{ "time": 0.0333, "name": "null" }
 				]
 			}
 		}
@@ -2996,16 +3165,16 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0.0333, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "muzzle2" },
 					{ "time": 0.0333, "name": "null" },
 					{ "time": 0.1666, "name": "null" }
-				]
-			},
-			"lGunMuzzle": {
-				"attachment": [
-					{ "time": 0.0333, "name": "null" }
 				]
 			}
 		}
@@ -3108,16 +3277,16 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0.0333, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.0333, "name": "null" },
 					{ "time": 0.1666, "name": "null" }
-				]
-			},
-			"lGunMuzzle": {
-				"attachment": [
-					{ "time": 0.0333, "name": "null" }
 				]
 			}
 		}
@@ -3222,15 +3391,15 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0.0333, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "muzzle1" },
 					{ "time": 0.1666, "name": "null" }
-				]
-			},
-			"lGunMuzzle": {
-				"attachment": [
-					{ "time": 0.0333, "name": "null" }
 				]
 			}
 		}
@@ -3345,15 +3514,15 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0.0333, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.1666, "name": "null" }
-				]
-			},
-			"lGunMuzzle": {
-				"attachment": [
-					{ "time": 0.0333, "name": "null" }
 				]
 			}
 		}
@@ -3454,16 +3623,16 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0.0333, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "shotgunMuzzle1" },
 					{ "time": 0.0333, "name": "null" },
 					{ "time": 0.1666, "name": "null" }
-				]
-			},
-			"lGunMuzzle": {
-				"attachment": [
-					{ "time": 0.0333, "name": "null" }
 				]
 			}
 		}
@@ -3969,16 +4138,16 @@
 			}
 		},
 		"slots": {
+			"lGunMuzzle": {
+				"attachment": [
+					{ "time": 0, "name": "null" }
+				]
+			},
 			"rGunMuzzle": {
 				"attachment": [
 					{ "time": 0, "name": "null" },
 					{ "time": 0.3333, "name": "null" },
 					{ "time": 0.6666, "name": "null" }
-				]
-			},
-			"lGunMuzzle": {
-				"attachment": [
-					{ "time": 0, "name": "null" }
 				]
 			}
 		}

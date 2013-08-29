@@ -264,7 +264,7 @@ namespace PattyPetitGiant
             PlayerLevelProgress = -1;
             PlayerFloorHeight = 1;
 
-            Player_Right_Item = GlobalGameConstants.itemType.LazerGun;
+            Player_Right_Item = GlobalGameConstants.itemType.Sword;
             Player_Left_Item = GlobalGameConstants.itemType.Gun;
 
             allegiance = 0.5f;
