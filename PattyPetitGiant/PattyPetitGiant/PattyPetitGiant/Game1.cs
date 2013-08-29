@@ -81,6 +81,7 @@ namespace PattyPetitGiant
         private float loadBarValue;
         private string currentLoadingValue = "NULL";
         private SpriteFont debugFont = null;
+        private Texture2D asteroidsSpriteSheet = null;
 
         public static bool exitGame;
 
@@ -150,6 +151,7 @@ namespace PattyPetitGiant
             debugFont = Content.Load<SpriteFont>("testFont");
             whitePixel = Content.Load<Texture2D>("whitePixel");
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
+            asteroidsSpriteSheet = Content.Load<Texture2D>("ppg_asteroids");
 
             loadBarValue = 0;
 
@@ -324,6 +326,19 @@ namespace PattyPetitGiant
             base.Update(gameTime);
         }
 
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
+        {
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, width), SpriteEffects.None, 0.5f);
+        }
+
+        private void drawBox(SpriteBatch sb, Rectangle rect, Color clr, float lineWidth)
+        {
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X - lineWidth, rect.Y + rect.Height), rect.Width + lineWidth, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -336,11 +351,9 @@ namespace PattyPetitGiant
 
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2 , Color.White);
+                drawBox(spriteBatch, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 300, GlobalGameConstants.GameResolutionHeight / 3 - 100, 600, 300), Color.White, 2.0f);
 
-                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.Gray, 0.0f, Vector2.Zero, new Vector2(300, 100), SpriteEffects.None, 0.5f);
-                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.White, 0.0f, Vector2.Zero, new Vector2(300 * loadBarValue, 100), SpriteEffects.None, 0.5f);
-                spriteBatch.DrawString(debugFont, currentLoadingValue, new Vector2(340, 600), Color.White);
+                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight * 0.75f) - new Vector2(pleaseWaitDialog.Width / 2, pleaseWaitDialog.Height / 2)) , Color.White);
 
                 spriteBatch.End();
                 
