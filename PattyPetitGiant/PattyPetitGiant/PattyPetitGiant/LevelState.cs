@@ -446,11 +446,13 @@ namespace PattyPetitGiant
                     }
                     else if (rooms[i, j].attributes.Contains("start"))
                     {
-                        entityList.Add(new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1));
-
+                        GameCampaign.playerOne = new Player(this, (currentRoomX + 8) * GlobalGameConstants.TileSize.X, (currentRoomY + 8) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_1);
+                        entityList.Add(GameCampaign.playerOne);
+                        
                         if (GameCampaign.IsATwoPlayerGame)
                         {
-                            entityList.Add(new Player(this, (currentRoomX + 14) * GlobalGameConstants.TileSize.X, (currentRoomY + 14) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2));
+                            GameCampaign.playerTwo = new Player(this, (currentRoomX + 14) * GlobalGameConstants.TileSize.X, (currentRoomY + 14) * GlobalGameConstants.TileSize.Y, InputDevice2.PPG_Player.Player_2);
+                            entityList.Add(GameCampaign.playerTwo);
                         }
                     }
                     else if (rooms[i, j].attributes.Contains("pickup"))

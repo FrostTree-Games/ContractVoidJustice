@@ -49,6 +49,7 @@ namespace PattyPetitGiant
         public static Texture2D creditImage = null;
         public static Texture2D guardIcon = null;
         public static Texture2D prisonerIcon = null;
+        public static Texture2D p2Icon = null;
         public static Random rand = new Random();
 
         private Texture2D pleaseWaitDialog = null;
@@ -188,6 +189,7 @@ namespace PattyPetitGiant
             heartPic = Content.Load<Texture2D>("heartSheet");
             guardIcon = Content.Load<Texture2D>("guard");
             prisonerIcon = Content.Load<Texture2D>("prisoner");
+            p2Icon = Content.Load<Texture2D>("p2Icon");
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadFromManifest();
 
