@@ -78,8 +78,6 @@ namespace PattyPetitGiant
 
         private static Texture2D saveIcon = null;
 
-        private float loadBarValue;
-        private string currentLoadingValue = "NULL";
         private SpriteFont debugFont = null;
         private Texture2D asteroidsSpriteSheet = null;
 
@@ -153,8 +151,6 @@ namespace PattyPetitGiant
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
             asteroidsSpriteSheet = Content.Load<Texture2D>("ppg_asteroids");
 
-            loadBarValue = 0;
-
             new Thread(loadSpine2).Start();
             new Thread(loadContent2).Start();
         }
@@ -175,7 +171,6 @@ namespace PattyPetitGiant
 #if XBOX
             Thread.CurrentThread.SetProcessorAffinity(3);
 #endif
-            currentLoadingValue = "textures";
             backGroundPic = Content.Load<Texture2D>("titleScreenPic");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
@@ -192,9 +187,6 @@ namespace PattyPetitGiant
             prisonerIcon = Content.Load<Texture2D>("prisoner");
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadFromManifest();
-
-            loadBarValue = 0.2f;
-            currentLoadingValue = "music and effects";
 
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
@@ -214,9 +206,6 @@ namespace PattyPetitGiant
             font = tenbyFive14;
             testComputerFont = tenbyFive24;
 
-            loadBarValue = 0.4f;
-            currentLoadingValue = "video files and chunks";
-
             levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
             levelEnterVideo = Content.Load<Video>("fmv/levelStart");
             titleScreenVideo = Content.Load<Video>("fmv/menu");
@@ -234,11 +223,7 @@ namespace PattyPetitGiant
 
             ChunkLib cs = new ChunkLib();
 
-            loadBarValue = 0.7f;
-            currentLoadingValue = "frame XML";
-
             AnimationLib.loadFrameFromManifest();
-            loadBarValue = 0.8f;
 
             GlobalGameConstants.WeaponDictionary.InitalizePriceData();
 
@@ -250,9 +235,6 @@ namespace PattyPetitGiant
             //currentGameScreen = new CutsceneVideoState(testVideo, ScreenState.ScreenStateType.LevelReviewState);
             //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
-
-            loadBarValue = 1.0f;
-            currentLoadingValue = "done";
 
             preloadedAssets = true;
         }
