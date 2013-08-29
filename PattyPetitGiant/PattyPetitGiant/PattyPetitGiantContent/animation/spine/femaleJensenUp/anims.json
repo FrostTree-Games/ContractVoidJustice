@@ -26,8 +26,8 @@
 	{ "name": "blood", "bone": "blood", "attachment": "null" },
 	{ "name": "rGunMuzzle", "bone": "rGunMuzzle", "attachment": "null" },
 	{ "name": "lGunMuzzle", "bone": "lGunMuzzle", "attachment": "null" },
-	{ "name": "rWeapon", "bone": "rHand", "attachment": "rSword" },
-	{ "name": "lWeapon", "bone": "lHand", "attachment": "lSword" },
+	{ "name": "rWeapon", "bone": "rHand", "attachment": "rEmpty" },
+	{ "name": "lWeapon", "bone": "lHand", "attachment": "lEmpty" },
 	{ "name": "up/lFoot", "bone": "lFoot", "attachment": "lFoot" },
 	{ "name": "up/rFoot", "bone": "rFoot", "attachment": "rFoot" },
 	{ "name": "up/lCalf", "bone": "lCalf", "attachment": "lCalf" },
@@ -65,6 +65,7 @@
 			"shotgunMuzzle1": { "x": 38.02, "y": -6.51, "width": 80, "height": 56 },
 			"shotgunMuzzle2": { "x": 35.99, "y": -4.23, "width": 80, "height": 56 }
 		},
+		
 		"lWeapon": {
 			"lBomb": { "name": "bomb", "x": 16.82, "y": -2.15, "rotation": 9.9, "width": 32, "height": 27 },
 			"lCompass": { "name": "compass", "x": 14.17, "y": -1.19, "rotation": 9.9, "width": 24, "height": 31 },

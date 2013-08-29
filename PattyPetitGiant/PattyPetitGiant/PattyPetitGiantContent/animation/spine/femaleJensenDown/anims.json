@@ -67,7 +67,6 @@
 			"shotgunMuzzle1": { "x": 29.65, "y": 0.04, "rotation": 2.81, "width": 80, "height": 56 },
 			"shotgunMuzzle2": { "x": 27.5, "y": -1.82, "rotation": 2.81, "width": 80, "height": 56 }
 		},
-		
 		"lWeapon": {
 			"lBomb": { "name": "bomb", "x": 17.71, "y": 3.19, "rotation": 1.81, "width": 32, "height": 27 },
 			"lCompass": { "name": "compass", "x": 14.1, "y": 3.07, "rotation": 1.81, "width": 24, "height": 31 },
