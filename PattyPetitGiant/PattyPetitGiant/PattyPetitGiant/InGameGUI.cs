@@ -594,14 +594,15 @@ namespace PattyPetitGiant
 
             if (playerOutOfSight)
             {
-                sb.Draw(Game1.p2Icon, new Vector2((float)(((GlobalGameConstants.GameResolutionWidth) * 0.25 * Math.Cos(playerOutOfSightAngle))) + (GlobalGameConstants.GameResolutionWidth / 2), (float)(((GlobalGameConstants.GameResolutionWidth) * 0.25 * Math.Sin(playerOutOfSightAngle)) + (GlobalGameConstants.GameResolutionHeight / 2))), new Rectangle(0, 0, 96, 48), Color.White, playerOutOfSightAngle, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
-                //arrowPointer.drawAnimationFrame(0.0f, sb, new Vector2((float)((GlobalGameConstants.GameResolutionWidth * 0.25 * Math.Cos(playerOutOfSightAngle))) + (GlobalGameConstants.GameResolutionWidth / 2), (float)((GlobalGameConstants.GameResolutionWidth * 0.25f * Math.Sin(playerOutOfSightAngle)) + (GlobalGameConstants.GameResolutionHeight / 2))), new Vector2(1.3f), 0.5f, playerOutOfSightAngle + (float)(Math.PI/2), Vector2.Zero, Color.White);
+                sb.Draw(Game1.p2Icon, new Vector2((float)(((GlobalGameConstants.GameResolutionWidth) * 0.15 * Math.Cos(playerOutOfSightAngle))) + (GlobalGameConstants.GameResolutionWidth / 2), (float)(((GlobalGameConstants.GameResolutionWidth) * 0.15 * Math.Sin(playerOutOfSightAngle)) + (GlobalGameConstants.GameResolutionHeight / 2))), new Rectangle(0, 0, 96, 48), Color.White, playerOutOfSightAngle, Vector2.Zero, 1.0f, SpriteEffects.None, 0.5f);
             }
 
             if (parent.Player1Dead)
             {
                 sb.DrawString(Game1.tenbyFive72, deathMessage, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - Game1.tenbyFive72.MeasureString(deathMessage)) / 2, Color.LightGray);
             }
+
+            sb.Draw(Game1.whitePixel, XboxTools.GetTitleSafeArea(AnimationLib.GraphicsDevice, 0.8f), new Color(0.0f, 0.75f, 1.0f, 0.1f));
         }
     }
 }

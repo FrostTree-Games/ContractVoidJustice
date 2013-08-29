@@ -190,6 +190,7 @@ namespace PattyPetitGiant
             guardIcon = Content.Load<Texture2D>("guard");
             prisonerIcon = Content.Load<Texture2D>("prisoner");
             p2Icon = Content.Load<Texture2D>("P2Icon");
+
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadFromManifest();
 
