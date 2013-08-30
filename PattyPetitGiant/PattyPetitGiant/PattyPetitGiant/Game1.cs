@@ -81,7 +81,12 @@ namespace PattyPetitGiant
         private SpriteFont debugFont = null;
         private Texture2D asteroidsSpriteSheet = null;
         private Vector2 shipPosition = Vector2.Zero;
+        private Vector2 shipVelocity = Vector2.Zero;
+        private const float shipThrust = 0.007f;
         private float shipRotation = 0.0f;
+        private const int starCount = 200;
+        private Vector2[] stars = new Vector2[starCount];
+        private float[] starRotation = new float[starCount];
 
         public static bool exitGame;
 
@@ -152,6 +157,12 @@ namespace PattyPetitGiant
             whitePixel = Content.Load<Texture2D>("whitePixel");
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
             asteroidsSpriteSheet = Content.Load<Texture2D>("ppg_asteroids");
+
+            for (int i = 0; i < starCount; i++)
+            {
+                stars[i] = new Vector2(rand.Next() % 2000 - 1000, rand.Next() % 2000 - 1000);
+                starRotation[i] = (float)(rand.NextDouble() % (Math.PI * 2));
+            }
 
             new Thread(loadSpine2).Start();
             new Thread(loadContent2).Start();
@@ -238,7 +249,8 @@ namespace PattyPetitGiant
             currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
-            preloadedAssets = true;
+            // DANIEL UNCOMMMENT THIS LINE BEFORE YOU MERGE WITH MASTER
+            //preloadedAssets = true;
         }
 
         /// <summary>
@@ -291,7 +303,30 @@ namespace PattyPetitGiant
 
             if (!(preloadedAssets && preloadedJSon))
             {
-                //loading screen update logic
+                InputDevice2.Update(gameTime);
+
+                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.RightDirection) != InputDevice2.PlayerPad.NoPad)
+                {
+                    shipRotation += 0.02f;
+                }
+                else if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.LeftDirection) != InputDevice2.PlayerPad.NoPad)
+                {
+                    shipRotation -= 0.02f;
+                }
+
+                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
+                {
+                    shipVelocity += new Vector2((float)(Math.Cos(shipRotation)), (float)(Math.Sin(shipRotation))) * shipThrust;
+                    shipVelocity = Vector2.Clamp(shipVelocity, new Vector2(-0.91f), new Vector2(0.91f));
+                }
+
+                shipPosition += shipVelocity * gameTime.ElapsedGameTime.Milliseconds;
+                shipVelocity *= 0.99f;
+
+                if (shipPosition.X < -1850) { shipPosition.X = 1850; }
+                if (shipPosition.X > 1850) { shipPosition.X = -1850; }
+                if (shipPosition.Y < -1300) { shipPosition.Y = 1300; }
+                if (shipPosition.Y > 1300) { shipPosition.Y = -1300; }
 
                 return;
             }
@@ -335,8 +370,18 @@ namespace PattyPetitGiant
 
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
+                for (int i = 0; i < starCount; i++)
+                {
+                    if (stars[i].X - shipPosition.X < -425 || stars[i].X - shipPosition.X > 425 || stars[i].Y - shipPosition.Y < -150 || stars[i].Y - shipPosition.Y > 150)
+                    {
+                        continue;
+                    }
+
+                    spriteBatch.Draw(asteroidsSpriteSheet, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 425) + 425 + (int)(stars[i].X - shipPosition.X), (GlobalGameConstants.GameResolutionHeight / 3 - 100) + 150 + (int)(stars[i].Y - shipPosition.Y), 20, 16), new Rectangle(555, 172, 30, 28), Color.White, starRotation[i], new Vector2(15, 14), SpriteEffects.None, 0.0f);
+                }
+
+                spriteBatch.Draw(asteroidsSpriteSheet, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 425) + 425, (GlobalGameConstants.GameResolutionHeight / 3 - 100) + 150, 30, 30), new Rectangle(0, 172, 120, 120), Color.White, shipRotation + (float)(Math.PI / 2), new Vector2(60), SpriteEffects.None, 0.0f);
                 drawBox(spriteBatch, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 425, GlobalGameConstants.GameResolutionHeight / 3 - 100, 850, 300), Color.White, 2.0f);
-                spriteBatch.Draw(asteroidsSpriteSheet, new Rectangle((int)shipPosition.X, (int)shipPosition.Y, 30, 30), new Rectangle(0, 172, 120, 120), Color.White);
 
                 spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight * 0.75f) - new Vector2(pleaseWaitDialog.Width / 2, pleaseWaitDialog.Height / 2)) , Color.White);
 
