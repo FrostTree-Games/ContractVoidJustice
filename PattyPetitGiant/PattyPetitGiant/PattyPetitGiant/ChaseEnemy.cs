@@ -243,7 +243,7 @@ namespace PattyPetitGiant
             animation_time += currentTime.ElapsedGameTime.Milliseconds / 1000f;
 
             //decides if the animation loops or not
-            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, (wind_anim == 0) ? true : false);
+            current_skeleton.Animation.Apply(current_skeleton.Skeleton, animation_time, (wind_anim == 0 && !death) ? true : false);
 
         }
 
