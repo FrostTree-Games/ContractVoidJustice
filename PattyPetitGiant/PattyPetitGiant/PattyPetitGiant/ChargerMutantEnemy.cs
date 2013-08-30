@@ -45,7 +45,7 @@ namespace PattyPetitGiant
             windup_timer = 0.0f;
             knockback_magnitude = 8.0f;
             enemy_damage = 15;
-            enemy_life = 25;
+            enemy_life = 20;
             enemy_found = false;
             change_direction_time = 0.0f;
             range_distance = 300.0f;

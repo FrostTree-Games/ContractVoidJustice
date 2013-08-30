@@ -88,7 +88,6 @@ namespace PattyPetitGiant
                 death = true;
                 state = ChaseState.death;
                 animation_time = 0.0f;
-                wind_anim = 1;
                 current_skeleton.Animation = current_skeleton.Skeleton.Data.FindAnimation(death_anim[(int)(Game1.rand.Next()) % 3]);
 
                 parentWorld.pushCoin(this);

@@ -63,7 +63,7 @@ namespace PattyPetitGiant
             angle = 0.0f;
             range_distance = 500.0f;
 
-            prob_item_drop = 0.4;
+            prob_item_drop = 0.3;
             number_drop_items = 4;
 
             state = SpitterState.Search;
