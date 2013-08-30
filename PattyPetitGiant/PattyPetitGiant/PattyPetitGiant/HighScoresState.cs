@@ -126,7 +126,7 @@ namespace PattyPetitGiant
 
         private bool isSignedIn = false;
 
-        private static void ResetHighScores()
+        public static void ResetHighScores()
         {
             highScores = new List<HighScoreValue>(10);
 

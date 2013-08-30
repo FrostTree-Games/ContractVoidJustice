@@ -279,6 +279,8 @@ namespace PattyPetitGiant
                             pop_up_screen = true;
                             popup_item_selected = 0;
                             zoom_state = popUpZoomState.zoomIn;
+                            HighScoresState.ResetHighScores();
+                            SaveGameModule.saveGame();
                             break;
                         case "CREDITS":
                             isComplete = true;
