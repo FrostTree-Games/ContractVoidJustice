@@ -3087,6 +3087,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="P2Icon.png">
+      <Name>P2Icon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <None Include="animation\spine\jensenDown_BROWN\img.png">
       <Name>img</Name>
       <Importer>TextureImporter</Importer>

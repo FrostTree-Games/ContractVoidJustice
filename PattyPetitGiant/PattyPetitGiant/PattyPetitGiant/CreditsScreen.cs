@@ -50,7 +50,7 @@ namespace PattyPetitGiant
         {
             BackGroundAudio.stopAllSongs();
             if (end_game)
-                return ScreenStateType.TitleScreen;
+                return ScreenStateType.HighScoresStateComplete;
             else
                 return ScreenStateType.OptionsMenu;
         }

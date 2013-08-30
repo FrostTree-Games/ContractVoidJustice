@@ -123,6 +123,7 @@ namespace PattyPetitGiant
         private bool player1ConfirmPressed = false;
 
         private bool inGame = false;
+        private bool gameComplete = false;
 
         private bool isSignedIn = false;
 
@@ -148,13 +149,14 @@ namespace PattyPetitGiant
         /// Creates a new high scores screen state.
         /// </summary>
         /// <param name="inGame">If the player has died or completed the game, set this to true. If simply checking the scores from the menu, set this to false</param>
-        public HighScoresState(bool inGame)
+        public HighScoresState(bool inGame, bool gameComplete)
         {
             InitalizeHighScores();
 
             HighScoreValue newScore = new HighScoreValue(GameCampaign.PlayerName, GameCampaign.Player_Coin_Amount, GameCampaign.ElapsedCampaignTime, GameCampaign.PlayerLevelProgress, GameCampaign.PlayerFloorHeight);
 
             this.inGame = inGame;
+            this.gameComplete = gameComplete;
 
             try
             {
@@ -345,9 +347,13 @@ namespace PattyPetitGiant
 
         public override ScreenState.ScreenStateType nextLevelState()
         {
-            if (inGame)
+            if (inGame && !gameComplete)
             {
                 return ScreenStateType.GameSetupMenu;
+            }
+            else if (inGame && gameComplete)
+            {
+                return ScreenStateType.TitleScreen;
             }
             else
             {

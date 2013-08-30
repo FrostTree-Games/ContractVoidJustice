@@ -27,12 +27,19 @@ namespace PattyPetitGiant
 
         private AnimationLib.FrameAnimationSet laserAnim = AnimationLib.getFrameAnimationSet("laser");
 
+        private AnimationLib.FrameAnimationSet bulletPic = AnimationLib.getFrameAnimationSet("testBullet");
+
         public LazerGun()
         {
         }
 
         public void update(Player parent, GameTime currentTime, LevelState parentWorld)
         {
+            for (int i = 0; i < laser_projectile.Count(); i++)
+            {
+                if (laser_projectile[i].active)
+                    laser_projectile[i].update(parentWorld, currentTime, parent);
+            }
             item_direction = parent.Direction_Facing;
             if (fire_projectile)
             {
@@ -42,13 +49,22 @@ namespace PattyPetitGiant
                         continue;
                     else
                     {
-                        
+                        float bullet_angle = 0.0f;
+                        if (item_direction == GlobalGameConstants.Direction.Right || item_direction == GlobalGameConstants.Direction.Left)
+                        {
+                            bullet_angle = 0.0f;
+                        }
+                        else
+                        {
+                            bullet_angle = (float)Math.PI / 2;
+                        }
+
                         if ((GameCampaign.Player_Right_Item == ItemType() && InputDevice2.IsPlayerButtonDown(parent.Index, InputDevice2.PlayerButton.UseItem1)))
                         {
                             if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= ammo_consumption)
                             {
                                 AudioLib.playSoundEffect("lazorFire");
-                                laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -10) : new Vector2(0, 10));
+                                laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "lGunMuzzle" : "rGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-10, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -10) : new Vector2(0, 10), bullet_angle);
                                 if (parent.Index == InputDevice2.PPG_Player.Player_1)
                                 {
                                     GameCampaign.Player_Ammunition -= ammo_consumption;
@@ -64,7 +80,8 @@ namespace PattyPetitGiant
                             if ((parent.Index == InputDevice2.PPG_Player.Player_1 ? GameCampaign.Player_Ammunition : GameCampaign.Player2_Ammunition) >= ammo_consumption)
                             {
                                 AudioLib.playSoundEffect("lazorFire");
-                                laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -15) : new Vector2(0, 15));
+                                
+                                laser_projectile[i] = new laserProjectile(new Vector2(parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldX, parent.LoadAnimation.Skeleton.FindBone(parent.Direction_Facing == GlobalGameConstants.Direction.Left ? "rGunMuzzle" : "lGunMuzzle").WorldY), (parent.Direction_Facing == GlobalGameConstants.Direction.Right) ? new Vector2(15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Left) ? new Vector2(-15, 0) : (parent.Direction_Facing == GlobalGameConstants.Direction.Up) ? new Vector2(0, -15) : new Vector2(0, 15), bullet_angle);
                                 if (parent.Index == InputDevice2.PPG_Player.Player_1)
                                 {
                                     GameCampaign.Player_Ammunition -= ammo_consumption;
@@ -113,11 +130,13 @@ namespace PattyPetitGiant
         }
         public void draw(Spine.SkeletonRenderer sb)
         {
+            
             for (int i = 0; i < laser_projectile.Count(); i++)
             {
                 if (laser_projectile[i].active)
                 {
-                    sb.DrawSpriteToSpineVertexArray(Game1.laserPic, new Rectangle(1, 1, 0, 0), laser_projectile[i].position, Color.White, 0.0f, laser_projectile[i].dimensions);
+                    //sb.DrawSpriteToSpineVertexArray(Game1.laserPic, new Rectangle(1, 1, 0, 0), laser_projectile[i].position, Color.White, 0.0f, laser_projectile[i].dimensions);
+                    bulletPic.drawAnimationFrame(0.0f, sb, laser_projectile[i].position - bulletPic.FrameDimensions / 2, new Vector2(1.0f), 0.5f, laser_projectile[i].angle, Vector2.Zero, Color.Red);
                 }
             }
         }
@@ -131,6 +150,8 @@ namespace PattyPetitGiant
             private Vector2 velocity;
             private float time_passed;
 
+            public float angle;
+
             public Vector2 nextStep_temp;
             public Vector2 CenterPoint
             {
@@ -142,7 +163,7 @@ namespace PattyPetitGiant
 
             private const float max_bullet_time = 1000f;
 
-            public laserProjectile(Vector2 position, Vector2 velocity)
+            public laserProjectile(Vector2 position, Vector2 velocity, float angle)
             {
                 this.position = position;
                 dimensions = new Vector2(8, 8);
@@ -152,6 +173,8 @@ namespace PattyPetitGiant
                 knockback_magnitude = 10;
                 bullet_damage = 25;
                 time_passed = 0.0f;
+
+                this.angle = angle;
 
                 nextStep_temp = Vector2.Zero; 
             }

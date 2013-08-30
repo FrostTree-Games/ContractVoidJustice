@@ -28,6 +28,7 @@ namespace PattyPetitGiant
             EndingCutScene = 13,
             IntroCutSceneCoop = 14,
             EndingCutSceneCoop = 15,
+            HighScoresStateComplete = 16,
         }
 
         protected bool pause = false;
@@ -68,7 +69,7 @@ namespace PattyPetitGiant
                 case ScreenStateType.TitleScreen:
                     return new TitleScreen(TitleScreen.titleScreens.menuScreen);
                 case ScreenStateType.HighScoresState:
-                    return new HighScoresState(true);
+                    return new HighScoresState(true, false);
                 case ScreenStateType.OptionsMenu:
                     return new OptionsMenu();
                 case ScreenStateType.LevelReviewState:
@@ -80,7 +81,7 @@ namespace PattyPetitGiant
                 case ScreenStateType.FMV_ELEVATOR_ENTER:
                     return new CutsceneVideoState((GameCampaign.IsATwoPlayerGame)?Game1.levelEnterVideoCoop:Game1.levelEnterVideo, ScreenStateType.LevelState);
                 case ScreenStateType.HighScoresStateOptions:
-                    return new HighScoresState(false);
+                    return new HighScoresState(false, false);
                 case ScreenStateType.CreditsOptionsState:
                     return new CreditsScreen(false);
                 case ScreenStateType.CreditsEndGameState:
@@ -93,6 +94,8 @@ namespace PattyPetitGiant
                     return new CutsceneVideoState((GameCampaign.PlayerAllegiance > 0.7) ? Game1.guardEndCutScene : (GameCampaign.PlayerAllegiance < 0.3) ? Game1.prisonerEndCutScene : Game1.alienEndCutScene, ScreenStateType.CreditsEndGameState);
                 case ScreenStateType.EndingCutSceneCoop:
                     return new CutsceneVideoState((GameCampaign.PlayerAllegiance > 0.7) ? Game1.guardEndCutSceneCoop : (GameCampaign.PlayerAllegiance < 0.3) ? Game1.prisonerEndCutSceneCoop : Game1.alienEndCutSceneCoop, ScreenStateType.CreditsEndGameState);
+                case ScreenStateType.HighScoresStateComplete:
+                    return new HighScoresState(true, true);
                 default:
                     return null;
             }
