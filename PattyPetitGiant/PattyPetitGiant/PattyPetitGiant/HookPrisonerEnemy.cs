@@ -178,8 +178,25 @@ namespace PattyPetitGiant
                         chain_velocity = -1 * chain_velocity;
                     }
 
+                    for(int i =0; i < parentWorld.EntityList.Count(); i++)
+                    {
+                        if (parentWorld.EntityList[i] == this || parentWorld.EntityList[i].Enemy_Type != EnemyType.NoType || parentWorld.EntityList[i].Death == true)
+                            continue;
+                        else if (hitTestChain(parentWorld.EntityList[i], chain_position.X, chain_position.Y))
+                        {
+                            en_chained = parentWorld.EntityList[i];
+                            target.Disable_Movement = true;
+                            target.Disable_Movement_Time = 0.0f;
+                            target.Velocity = Vector2.Zero;
+                            state = ChainState.Pull;
+                            chain_velocity = -1 * chain_velocity;
+                            animation_time = 0.0f;
+                            break;
+                        }
+                    }
+
                     //checks to see if chain hits the player
-                    if (hitTestChain(target, chain_position.X, chain_position.Y))
+                    /*if (hitTestChain(target, chain_position.X, chain_position.Y))
                     {
                         en_chained = target;
                         target.Disable_Movement = true;
@@ -188,7 +205,7 @@ namespace PattyPetitGiant
                         state = ChainState.Pull;
                         chain_velocity = -1 * chain_velocity;
                         animation_time = 0.0f;
-                    }
+                    }*/
                     break;
                 //need to work on pull
                 case ChainState.Pull:
@@ -230,6 +247,7 @@ namespace PattyPetitGiant
                     }
                     break;
                 case ChainState.Death:
+                    dimensions = new Vector2(10, 10);
                     velocity = Vector2.Zero;
                     break;
                 default:
