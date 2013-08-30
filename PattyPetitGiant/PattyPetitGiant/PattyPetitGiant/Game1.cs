@@ -79,9 +79,15 @@ namespace PattyPetitGiant
 
         private static Texture2D saveIcon = null;
 
-        private float loadBarValue;
-        private string currentLoadingValue = "NULL";
         private SpriteFont debugFont = null;
+        private Texture2D asteroidsSpriteSheet = null;
+        private Vector2 shipPosition = Vector2.Zero;
+        private Vector2 shipVelocity = Vector2.Zero;
+        private const float shipThrust = 0.007f;
+        private float shipRotation = 0.0f;
+        private const int starCount = 200;
+        private Vector2[] stars = new Vector2[starCount];
+        private float[] starRotation = new float[starCount];
 
         public static bool exitGame;
 
@@ -151,8 +157,13 @@ namespace PattyPetitGiant
             debugFont = Content.Load<SpriteFont>("testFont");
             whitePixel = Content.Load<Texture2D>("whitePixel");
             pleaseWaitDialog = Content.Load<Texture2D>("pleaseWait");
+            asteroidsSpriteSheet = Content.Load<Texture2D>("ppg_asteroids");
 
-            loadBarValue = 0;
+            for (int i = 0; i < starCount; i++)
+            {
+                stars[i] = new Vector2(rand.Next() % 2000 - 1000, rand.Next() % 2000 - 1000);
+                starRotation[i] = (float)(rand.NextDouble() % (Math.PI * 2));
+            }
 
             new Thread(loadSpine2).Start();
             new Thread(loadContent2).Start();
@@ -174,7 +185,6 @@ namespace PattyPetitGiant
 #if XBOX
             Thread.CurrentThread.SetProcessorAffinity(3);
 #endif
-            currentLoadingValue = "textures";
             backGroundPic = Content.Load<Texture2D>("titleScreenPic");
             frostTreeLogo = Content.Load<Texture2D>("FrostTreeLogo");
             testArrow = Content.Load<Texture2D>("gfx/testArrow");
@@ -194,9 +204,6 @@ namespace PattyPetitGiant
             TextureLib ts = new TextureLib(GraphicsDevice);
             TextureLib.loadFromManifest();
 
-            loadBarValue = 0.2f;
-            currentLoadingValue = "music and effects";
-
             aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
 
             bloomFilter = Content.Load<Effect>("BloomShader");
@@ -215,9 +222,6 @@ namespace PattyPetitGiant
             font = tenbyFive14;
             testComputerFont = tenbyFive24;
 
-            loadBarValue = 0.4f;
-            currentLoadingValue = "video files and chunks";
-
             levelExitVideo = Content.Load<Video>("fmv/elevatorExit");
             levelEnterVideo = Content.Load<Video>("fmv/levelStart");
             titleScreenVideo = Content.Load<Video>("fmv/menu");
@@ -235,11 +239,7 @@ namespace PattyPetitGiant
 
             ChunkLib cs = new ChunkLib();
 
-            loadBarValue = 0.7f;
-            currentLoadingValue = "frame XML";
-
             AnimationLib.loadFrameFromManifest();
-            loadBarValue = 0.8f;
 
             GlobalGameConstants.WeaponDictionary.InitalizePriceData();
 
@@ -252,9 +252,7 @@ namespace PattyPetitGiant
             //currentGameScreen = new CampaignLobbyState();
             //currentGameScreen = new HighScoresState(true);
 
-            loadBarValue = 1.0f;
-            currentLoadingValue = "done";
-
+            // DANIEL UNCOMMMENT THIS LINE BEFORE YOU MERGE WITH MASTER
             preloadedAssets = true;
         }
 
@@ -308,7 +306,30 @@ namespace PattyPetitGiant
 
             if (!(preloadedAssets && preloadedJSon))
             {
-                //loading screen update logic
+                InputDevice2.Update(gameTime);
+
+                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.RightDirection) != InputDevice2.PlayerPad.NoPad)
+                {
+                    shipRotation += 0.02f;
+                }
+                else if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.LeftDirection) != InputDevice2.PlayerPad.NoPad)
+                {
+                    shipRotation -= 0.02f;
+                }
+
+                if (InputDevice2.IsAnyControllerButtonDown(InputDevice2.PlayerButton.Confirm) != InputDevice2.PlayerPad.NoPad)
+                {
+                    shipVelocity += new Vector2((float)(Math.Cos(shipRotation)), (float)(Math.Sin(shipRotation))) * shipThrust;
+                    shipVelocity = Vector2.Clamp(shipVelocity, new Vector2(-0.91f), new Vector2(0.91f));
+                }
+
+                shipPosition += shipVelocity * gameTime.ElapsedGameTime.Milliseconds;
+                shipVelocity *= 0.99f;
+
+                if (shipPosition.X < -1850) { shipPosition.X = 1850; }
+                if (shipPosition.X > 1850) { shipPosition.X = -1850; }
+                if (shipPosition.Y < -1300) { shipPosition.Y = 1300; }
+                if (shipPosition.Y > 1300) { shipPosition.Y = -1300; }
 
                 return;
             }
@@ -327,6 +348,19 @@ namespace PattyPetitGiant
             base.Update(gameTime);
         }
 
+        private void drawLine(SpriteBatch sb, Vector2 origin, float length, float rotation, Color color, float width)
+        {
+            sb.Draw(Game1.whitePixel, origin, null, color, rotation, Vector2.Zero, new Vector2(length, width), SpriteEffects.None, 0.5f);
+        }
+
+        private void drawBox(SpriteBatch sb, Rectangle rect, Color clr, float lineWidth)
+        {
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Width, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X - lineWidth, rect.Y + rect.Height), rect.Width + lineWidth, 0.0f, clr, lineWidth);
+            drawLine(sb, new Vector2(rect.X + rect.Width, rect.Y), rect.Height, (float)(Math.PI / 2), clr, lineWidth);
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -339,11 +373,20 @@ namespace PattyPetitGiant
 
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
 
-                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth, GlobalGameConstants.GameResolutionHeight) - new Vector2(pleaseWaitDialog.Width, pleaseWaitDialog.Height)) / 2 , Color.White);
+                for (int i = 0; i < starCount; i++)
+                {
+                    if (stars[i].X - shipPosition.X < -425 || stars[i].X - shipPosition.X > 425 || stars[i].Y - shipPosition.Y < -150 || stars[i].Y - shipPosition.Y > 150)
+                    {
+                        continue;
+                    }
 
-                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.Gray, 0.0f, Vector2.Zero, new Vector2(300, 100), SpriteEffects.None, 0.5f);
-                spriteBatch.Draw(Game1.whitePixel, new Vector2(GlobalGameConstants.GameResolutionWidth / 2 - 300, 500), null, Color.White, 0.0f, Vector2.Zero, new Vector2(300 * loadBarValue, 100), SpriteEffects.None, 0.5f);
-                spriteBatch.DrawString(debugFont, currentLoadingValue, new Vector2(340, 600), Color.White);
+                    spriteBatch.Draw(asteroidsSpriteSheet, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 425) + 425 + (int)(stars[i].X - shipPosition.X), (GlobalGameConstants.GameResolutionHeight / 3 - 100) + 150 + (int)(stars[i].Y - shipPosition.Y), 20, 16), new Rectangle(555, 172, 30, 28), Color.White, starRotation[i], new Vector2(15, 14), SpriteEffects.None, 0.0f);
+                }
+
+                spriteBatch.Draw(asteroidsSpriteSheet, new Rectangle((GlobalGameConstants.GameResolutionWidth / 2 - 425) + 425, (GlobalGameConstants.GameResolutionHeight / 3 - 100) + 150, 30, 30), new Rectangle(0, 172, 120, 120), Color.White, shipRotation + (float)(Math.PI / 2), new Vector2(60), SpriteEffects.None, 0.0f);
+                drawBox(spriteBatch, new Rectangle(GlobalGameConstants.GameResolutionWidth / 2 - 425, GlobalGameConstants.GameResolutionHeight / 3 - 100, 850, 300), Color.White, 2.0f);
+
+                spriteBatch.Draw(pleaseWaitDialog, (new Vector2(GlobalGameConstants.GameResolutionWidth / 2, GlobalGameConstants.GameResolutionHeight * 0.75f) - new Vector2(pleaseWaitDialog.Width / 2, pleaseWaitDialog.Height / 2)) , Color.White);
 
                 spriteBatch.End();
                 

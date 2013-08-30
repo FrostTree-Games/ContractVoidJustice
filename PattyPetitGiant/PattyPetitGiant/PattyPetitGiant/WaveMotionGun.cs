@@ -233,19 +233,22 @@ namespace PattyPetitGiant
 
                 position += motionBulletSpeed * velocity * currentTime.ElapsedGameTime.Milliseconds;
 
-                foreach (Entity en in parentWorld.EntityList)
+                for (int i = 0; i < parentWorld.EntityList.Count; i++)
                 {
-                    if (en is Player)
+                    if (parentWorld.EntityList[i] is Player)
                     {
                         continue;
                     }
 
-                    if (hitTestEntity(en))
+                    if (hitTestEntity(parentWorld.EntityList[i]))
                     {
-                        en.knockBack(Vector2.Normalize(velocity), 1.5f, 4);
+                        parentWorld.EntityList[i].knockBack(Vector2.Normalize(velocity), 1.5f, 12);
                         AudioLib.playSoundEffect("waveHit");
                         parentWorld.Particles.pushImpactEffect(position, Color.Lerp(new Color(224, 255, 255, 127), new Color(0.0f, 0.0f, 1.0f, 0.5f), (float)(Math.Sin(timePassed / 1000f + colorSpinOffset))));
-                        this.active = false;
+                        if (parentWorld.EntityList[i].Death == false)
+                        {
+                            this.active = false;
+                        }
                     }
                 }
 
